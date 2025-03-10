@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Container, Card, Button, Form } from "react-bootstrap";
+import CollaborationRequest from "../components/CollaborationRequest";
+import LikeButton from "../components/LikeButton";
 
 const ExpertProfile = () => {
   const { id } = useParams();
   const [expert, setExpert] = useState(null);
   const [comment, setComment] = useState("");
 
-  useEffect(() => {
-    fetchExpert();
-  }, []);
-
-  const fetchExpert = async () => {
+  // ✅ استفاده از useCallback برای جلوگیری از تغییر مداوم تابع در حافظه
+  const fetchExpert = useCallback(async () => {
     try {
       const response = await axios.get(
         `http://localhost:8000/api/experts/${id}/`
@@ -21,7 +20,11 @@ const ExpertProfile = () => {
     } catch (error) {
       console.error("Error fetching expert:", error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchExpert();
+  }, [fetchExpert]); // ✅ اضافه کردن `fetchExpert` به وابستگی‌ها
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -46,6 +49,8 @@ const ExpertProfile = () => {
           <Card.Title>{expert.name}</Card.Title>
           <Card.Text>{expert.specialty}</Card.Text>
           <Card.Text>{expert.bio}</Card.Text>
+          <CollaborationRequest expertId={expert.id} />
+          <LikeButton expertId={expert.id} />
         </Card.Body>
       </Card>
 
