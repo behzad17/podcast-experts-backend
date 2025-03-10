@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Experts from "./pages/Experts";
 import Podcasts from "./pages/Podcasts";
 import Navbar from "./components/Navbar";
+import ExpertProfile from "./pages/ExpertProfile";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/experts" element={<Experts />} />
         <Route path="/podcasts" element={<Podcasts />} />
+        <Route path="/expert/:id" element={<ExpertProfile />} />
       </Routes>
     </Router>
   );
