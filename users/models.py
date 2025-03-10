@@ -1,12 +1,10 @@
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
-
-# Create your models here.
 class CustomUser(AbstractUser):
-    is_expert = models.BooleanField(default=False)  # متخصص بودن کاربر
-    is_podcaster = models.BooleanField(default=False)  # پادکستر بودن کاربر
+    groups = models.ManyToManyField(Group, related_name="customuser_groups", blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name="customuser_permissions", blank=True)
 
-    def __str__(self):
-        return self.username
-
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="profile")
+    profile_picture = models.ImageField(upload_to="profiles/", blank=True, null=True)

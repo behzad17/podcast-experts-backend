@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'users',
     'experts',
     'podcasts',
+    'collaborations',
+    'comments',
+    'ratings',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +84,28 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+# Django Rest Framework Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',  # فقط کاربران لاگین کرده مجاز هستند
+    ),
+}
+
+# تنظیم CORS (Cross-Origin Resource Sharing)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # برای توسعه محلی React.js
+    "https://your-frontend-app.herokuapp.com",  # دامنه اصلی فرانت‌اند شما
+]
+
+# تنظیمات امنیتی بیشتر
+CORS_ALLOW_CREDENTIALS = True  # اجازه ارسال کوکی‌ها در درخواست‌ها
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]  # درخواست‌های مجاز
+CORS_ALLOW_HEADERS = ["Authorization", "Content-Type"]  # هدرهای مجاز در درخواست‌ها
+
 
 DATABASES = {
     'default': {
