@@ -7,6 +7,8 @@ import Experts from "./pages/Experts";
 import Podcasts from "./pages/Podcasts";
 import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path="/experts" element={<Experts />} />
         <Route path="/podcasts" element={<Podcasts />} />
         <Route path="/expert/:id" element={<ExpertProfile />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );

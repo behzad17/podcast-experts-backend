@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from admin_dashboard.views import admin_stats
+
 
 def home_view(request):
     return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
@@ -29,4 +31,5 @@ urlpatterns = [
     path('api/collaborations/', include('collaborations.urls')),
     path('api/comments/', include('comments.urls')),
     path('api/ratings/', include('ratings.urls')),
+    path("api/admin/stats/", admin_stats, name="admin-stats"),
 ]
