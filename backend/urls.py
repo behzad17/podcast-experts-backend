@@ -24,6 +24,7 @@ def home_view(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("admin/stats/", admin_stats, name="admin_stats"),
     path('', home_view),
     path('api/users/', include('users.urls')),
     path('api/podcasts/', include('podcasts.urls')),
