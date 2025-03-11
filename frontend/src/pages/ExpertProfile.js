@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Container, Card, Button, Form } from "react-bootstrap";
 import CollaborationRequest from "../components/CollaborationRequest";
 import LikeButton from "../components/LikeButton";
+import BookmarkButton from "../components/BookmarkButton";
 
 const ExpertProfile = () => {
   const { id } = useParams();
@@ -51,6 +52,7 @@ const ExpertProfile = () => {
           <Card.Text>{expert.bio}</Card.Text>
           <CollaborationRequest expertId={expert.id} />
           <LikeButton expertId={expert.id} />
+          <BookmarkButton expertId={expert.id} />
         </Card.Body>
       </Card>
 
