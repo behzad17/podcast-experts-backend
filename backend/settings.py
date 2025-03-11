@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'collaborations',
     'comments',
     'ratings',
+    'bookmarks',
 ]
 
 MIDDLEWARE = [
