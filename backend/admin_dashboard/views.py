@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from podcasts.models import Podcast
 from collaborations.models import CollaborationRequest
-from comments.models import Report
+# from comments.models import Report
 
 User = get_user_model()
 
@@ -10,7 +10,7 @@ def admin_stats(request):
     data = {
         "users": User.objects.count(),
         "podcasts": Podcast.objects.count(),
-        "reports": Report.objects.count(),
+        # "reports": Report.objects.count(),
         "collaborations": CollaborationRequest.objects.count(),
     }
     return JsonResponse(data)
