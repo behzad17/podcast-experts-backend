@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'comments',
     'ratings',
     'bookmarks',
-    'messages',
+    'user_messages',
 ]
 
 MIDDLEWARE = [
