@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -107,10 +108,13 @@ REST_FRAMEWORK = {
     ),
 }
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 # تنظیم CORS (Cross-Origin Resource Sharing)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # برای توسعه محلی React.js
-    "https://your-frontend-app.herokuapp.com",  # دامنه اصلی فرانت‌اند شما
+    "https://your-frontend-domain.com",  # دامنه اصلی فرانت‌اند شما
 ]
 
 # تنظیمات امنیتی بیشتر
