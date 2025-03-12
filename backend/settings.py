@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'ratings',
     'bookmarks',
     'user_messages',
-    'backend.admin_dashboard',
+    'admin_dashboard',
 ]
 
 MIDDLEWARE = [
