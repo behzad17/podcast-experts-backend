@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %} {% block content %}
+<div class="module">
+  <h2>📊 آمار کلی سایت</h2>
+  <table>
+    <tr>
+      <th>کاربران</th>
+      <td>{{ data.users }}</td>
+    </tr>
+    <tr>
+      <th>پادکست‌ها</th>
+      <td>{{ data.podcasts }}</td>
+    </tr>
+    <tr>
+      <th>درخواست‌های همکاری</th>
+      <td>{{ data.collaborations }}</td>
+    </tr>
+  </table>
+</div>
+{% endblock %}
