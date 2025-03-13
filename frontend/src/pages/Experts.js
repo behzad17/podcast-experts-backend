@@ -13,14 +13,14 @@ const Experts = () => {
   const fetchExperts = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/experts/");
-      setExperts(response.data);
+      setExperts(response.data || []); // جلوگیری از مقدار null
     } catch (error) {
       console.error("Error fetching experts:", error);
     }
   };
 
-  const filteredExperts = experts.filter((expert) =>
-    expert.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredExperts = (experts || []).filter((expert) =>
+    expert?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -35,20 +35,24 @@ const Experts = () => {
         />
       </Form.Group>
       <Row>
-        {filteredExperts.map((expert) => (
-          <Col key={expert.id} md={4} className="mb-4">
-            <Card className="shadow-sm">
-              <Card.Body>
-                <Card.Title>{expert.name}</Card.Title>
-                <Card.Text>{expert.specialty}</Card.Text>
-                <Card.Text>{expert.country}</Card.Text>
-                <Button variant="primary" href={`/expert/${expert.id}`}>
-                  View Profile
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+        {filteredExperts.length > 0 ? (
+          filteredExperts.map((expert) => (
+            <Col key={expert.id} md={4} className="mb-4">
+              <Card className="shadow-sm">
+                <Card.Body>
+                  <Card.Title>{expert?.name || "Unknown Expert"}</Card.Title>
+                  <Card.Text>{expert?.specialty || "No Specialty"}</Card.Text>
+                  <Card.Text>{expert?.country || "No Country Info"}</Card.Text>
+                  <Button variant="primary" href={`/expert/${expert.id}`}>
+                    View Profile
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
+        ) : (
+          <p>No experts found.</p>
+        )}
       </Row>
     </Container>
   );
