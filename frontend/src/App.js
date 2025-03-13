@@ -14,11 +14,10 @@ function App() {
   return (
     <Router>
       {/* تنظیمات امنیتی متا تگ‌ها */}
+      
       <Helmet>
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'" />
-        <meta httpEquiv="X-Frame-Options" content="deny" />
+           <meta httpEquiv="Content-Security-Policy" content="default-src 'self' data:; img-src 'self' data:;" />
       </Helmet>
-
       {/* نمایش نوار ناوبری */}
       <Navbar />
 
