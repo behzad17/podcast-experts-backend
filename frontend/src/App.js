@@ -8,30 +8,29 @@ import Podcasts from "./pages/Podcasts";
 import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
-import { Helmet } from "react-helmet";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 
 function App() {
   return (
-    <Router>
-      {/* تنظیمات امنیتی متا تگ‌ها */}
-      
+    <HelmetProvider>
       <Helmet>
-           <meta httpEquiv="Content-Security-Policy" content="default-src 'self' data:; img-src 'self' data:;" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self' data:;" />
+        <meta httpEquiv="X-Frame-Options" content="deny" />
       </Helmet>
-      {/* نمایش نوار ناوبری */}
-      <Navbar />
 
-      {/* تعریف مسیرهای برنامه */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/experts" element={<Experts />} />
-        <Route path="/podcasts" element={<Podcasts />} />
-        <Route path="/expert/:id" element={<ExpertProfile />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/experts" element={<Experts />} />
+          <Route path="/podcasts" element={<Podcasts />} />
+          <Route path="/expert/:id" element={<ExpertProfile />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </Router>
+    </HelmetProvider>
   );
 }
 
