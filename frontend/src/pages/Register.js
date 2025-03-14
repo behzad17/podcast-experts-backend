@@ -19,10 +19,22 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/api/users/register/", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/users/register/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Success:", response.data);
       navigate("/login");
     } catch (error) {
-      console.error("Registration error", error);
+      console.error(
+        "Registration error:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
