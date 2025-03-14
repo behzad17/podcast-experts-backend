@@ -60,10 +60,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -108,13 +108,13 @@ REST_FRAMEWORK = {
     ),
 }
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
 
 # تنظیم CORS (Cross-Origin Resource Sharing)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # برای توسعه محلی React.js
-    "https://your-frontend-domain.com",  # دامنه اصلی فرانت‌اند شما
+    "http://localhost:3000", 
+    "http://127.0.0.1:3000",
 ]
 
 # تنظیمات امنیتی بیشتر
