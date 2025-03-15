@@ -135,6 +135,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3004",
     "http://localhost:3005",
     "http://127.0.0.1:3005",
+    "http://localhost:3006",
+    "http://127.0.0.1:3006",
 ]
 
 # Additional CORS settings
@@ -175,6 +177,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3004",
     "http://localhost:3005",
     "http://127.0.0.1:3005",
+    "http://localhost:3006",
+    "http://127.0.0.1:3006",
 ]
 
 # Security Headers
@@ -194,9 +198,12 @@ CSP_CONNECT_SRC = [
     "'self'",
     "http://127.0.0.1:8001",
     "http://localhost:8001",
+    "ws://127.0.0.1:8001",
+    "ws://localhost:8001",
     "http://127.0.0.1:3005",
     "http://localhost:3005",
-    "ws://localhost:3005",  # Add WebSocket support if needed
+    "ws://127.0.0.1:3005",
+    "ws://localhost:3005",
 ]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
