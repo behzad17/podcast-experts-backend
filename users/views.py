@@ -28,10 +28,10 @@ class UserRegisterView(generics.CreateAPIView):
         subject = "Verify your email address"
         message = f"""
         Hi {user.username},
-        
+               
         Please verify your email address by clicking the link below:
         {verification_url}
-            
+
         If you did not create this account, please ignore this email.
         """
         send_mail(

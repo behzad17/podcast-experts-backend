@@ -128,9 +128,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3002",
     "http://127.0.0.1:3002",
+    "http://localhost:3003",
+    "http://127.0.0.1:3003",
 ]
 
+# Additional CORS settings
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False  # Don't enable in production
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
@@ -154,6 +158,14 @@ CORS_ALLOW_HEADERS = [
 # Security Settings
 CSRF_COOKIE_SECURE = False  # Set to True in production
 SESSION_COOKIE_SECURE = False  # Set to True in production
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3002",
+    "http://127.0.0.1:3002",
+    "http://localhost:3003",
+    "http://127.0.0.1:3003",
+]
 
 
 # Password validation
