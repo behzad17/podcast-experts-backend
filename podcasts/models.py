@@ -4,7 +4,11 @@ from users.models import CustomUser
 
 # Create your models here.
 class PodcasterProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='podcaster_profile')
+    user = models.OneToOneField(
+        CustomUser, 
+        on_delete=models.CASCADE, 
+        related_name='podcaster_profile'
+    )
     channel_name = models.CharField(max_length=255)
     description = models.TextField()
     website = models.URLField(blank=True, null=True)
@@ -17,7 +21,11 @@ class PodcasterProfile(models.Model):
         return f"{self.user.username} - {self.channel_name}"
 
 class Podcast(models.Model):
-    owner = models.ForeignKey(PodcasterProfile, on_delete=models.CASCADE, related_name='podcasts')
+    owner = models.ForeignKey(
+        PodcasterProfile, 
+        on_delete=models.CASCADE, 
+        related_name='podcasts'
+    )
     title = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='podcasts/', blank=True, null=True)
@@ -26,13 +34,3 @@ class Podcast(models.Model):
 
     def __str__(self):
         return self.title
-
-class ExpertProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="expert_profile")
-    specialty = models.CharField(max_length=255)
-    website = models.URLField(blank=True, null=True)
-    availability = models.CharField(max_length=50, choices=[('online', 'Online'), ('in-person', 'In-Person')])
-    created_at = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.user.username
