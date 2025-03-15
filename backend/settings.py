@@ -180,7 +180,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'  # Changed from SAMEORIGIN to DENY since we don't need frame support
+X_FRAME_OPTIONS = 'DENY'  # Changed from SAMEORIGIN
 SECURE_REFERRER_POLICY = 'same-origin'
 
 # Add these new security headers
