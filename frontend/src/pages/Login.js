@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -13,14 +14,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/users/login/",
-        formData
-      );
+      const response = await api.post("/users/login/", formData);
       localStorage.setItem("token", response.data.token.access);
       navigate("/");
     } catch (error) {
+      setError(
+        error.response?.data?.detail || "Login failed. Please try again."
+      );
       console.error("Login error", error);
     }
   };
@@ -28,6 +30,7 @@ const Login = () => {
   return (
     <Container className="mt-4">
       <h2>Login</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Username</Form.Label>
