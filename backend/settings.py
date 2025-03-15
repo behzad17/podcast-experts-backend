@@ -113,8 +113,10 @@ SESSION_COOKIE_SECURE = False
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", 
+    "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:3002",
+    "http://127.0.0.1:3002",
 ]
 
 # Additional Security Settings
@@ -123,12 +125,20 @@ CORS_ALLOW_METHODS = [
     "GET",
     "POST",
     "PUT",
+    "PATCH",
     "DELETE",
     "OPTIONS"
 ]
 CORS_ALLOW_HEADERS = [
-    "Authorization",
-    "Content-Type"
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with"
 ]
 
 DATABASES = {
