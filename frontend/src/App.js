@@ -16,7 +16,7 @@ function App() {
       <Helmet>
         <meta
           httpEquiv="Content-Security-Policy"
-          content="default-src 'self' http://localhost:8001 ws://localhost:8001; connect-src 'self' http://localhost:8001 ws://localhost:8001; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';"
+          content="default-src 'self' http://localhost:8001 ws://localhost:8001; connect-src 'self' http://localhost:8001 ws://localhost:8001; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: http://localhost:8001;"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
