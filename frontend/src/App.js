@@ -14,8 +14,16 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self' data:;" />
-        <meta httpEquiv="X-Frame-Options" content="deny" />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self' data:;"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="description"
+          content="Web site created using create-react-app"
+        />
       </Helmet>
 
       <Router>
