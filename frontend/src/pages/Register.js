@@ -1,17 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-
-// Create axios instance with default config
-const api = axios.create({
-  baseURL: "http://127.0.0.1:8001",
-  timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -46,7 +36,7 @@ const Register = () => {
 
     try {
       console.log("Sending registration request:", formData);
-      const response = await api.post("/api/users/register/", formData);
+      const response = await api.post("/users/register/", formData);
       console.log("Registration response:", response.data);
       setSuccess(true);
       setTimeout(() => {
@@ -85,19 +75,15 @@ const Register = () => {
   return (
     <Container className="mt-4">
       <h2>Register</h2>
-      {error && (
-        <Alert variant="danger" style={{ whiteSpace: "pre-line" }}>
-          {error}
-        </Alert>
-      )}
+      {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success">
-          Registration successful! Please check your email to verify your
-          account. You will be redirected to the login page in 5 seconds.
+          Registration successful! Please check your email for verification.
+          Redirecting to login page...
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Label>Username</Form.Label>
           <Form.Control
             type="text"
@@ -105,10 +91,9 @@ const Register = () => {
             value={formData.username}
             onChange={handleChange}
             required
-            disabled={isLoading}
           />
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
@@ -116,10 +101,9 @@ const Register = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            disabled={isLoading}
           />
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
@@ -127,27 +111,20 @@ const Register = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            minLength={8}
-            disabled={isLoading}
           />
-          <Form.Text className="text-muted">
-            Password must be at least 8 characters long and contain a mix of
-            letters and numbers.
-          </Form.Text>
         </Form.Group>
-        <Form.Group className="mb-3">
+        <Form.Group>
           <Form.Label>User Type</Form.Label>
           <Form.Select
             name="user_type"
             value={formData.user_type}
             onChange={handleChange}
-            disabled={isLoading}
           >
             <option value="podcaster">Podcaster</option>
             <option value="expert">Expert</option>
           </Form.Select>
         </Form.Group>
-        <Button variant="primary" type="submit" disabled={isLoading}>
+        <Button type="submit" className="mt-3" disabled={isLoading}>
           {isLoading ? "Registering..." : "Register"}
         </Button>
       </Form>
