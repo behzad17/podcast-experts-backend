@@ -24,7 +24,7 @@ class UserRegisterView(generics.CreateAPIView):
         self.send_verification_email(user, token)
 
     def send_verification_email(self, user, token):
-        verification_url = f"http://localhost:3002/verify-email/{token}"
+        verification_url = f"http://localhost:3004/verify-email/{token}"
         subject = "Verify your email address"
         message = f"""
         Hi {user.username},

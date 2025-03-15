@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axios";
 import { Container, Alert } from "react-bootstrap";
 
 const VerifyEmail = () => {
@@ -11,9 +11,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8001/api/users/verify-email/${token}/`
-        );
+        const response = await axios.get(`/users/verify-email/${token}/`);
         setStatus("success");
         setTimeout(() => {
           navigate("/login");

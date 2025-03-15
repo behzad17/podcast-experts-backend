@@ -177,6 +177,8 @@ CSRF_TRUSTED_ORIGINS = [
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # Allow frames from same origin
+SECURE_REFERRER_POLICY = 'same-origin'
 
 # CSP Settings
 CSP_DEFAULT_SRC = ["'self'"]
@@ -188,6 +190,8 @@ CSP_CONNECT_SRC = [
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_IMG_SRC = ["'self'", "data:", "https:"]
+CSP_FRAME_ANCESTORS = ["'self'"]  # Control frame embedding
+CSP_INCLUDE_NONCE_IN = ['script-src']
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
