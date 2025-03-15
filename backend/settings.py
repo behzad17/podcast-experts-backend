@@ -63,8 +63,7 @@ INSTALLED_APPS = [
 
 # Middleware configuration
 MIDDLEWARE = [
-    # CORS middleware should be at the top
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Keep this first
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -73,7 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.CSPMiddleware',  # Add CSP middleware
+    'csp.middleware.CSPMiddleware',
 ]
 
 # Custom user model
@@ -181,22 +180,29 @@ CSRF_TRUSTED_ORIGINS = [
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'SAMEORIGIN'  # Allow frames from same origin
+X_FRAME_OPTIONS = 'DENY'  # Changed from SAMEORIGIN to DENY since we don't need frame support
 SECURE_REFERRER_POLICY = 'same-origin'
 
-# CSP Settings
+# Add these new security headers
+SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
+SECURE_HSTS_PRELOAD = False  # Set to True in production
+
+# Update CSP settings to be more specific
 CSP_DEFAULT_SRC = ["'self'"]
 CSP_CONNECT_SRC = [
     "'self'",
     "http://127.0.0.1:8001",
     "http://localhost:8001",
     "http://127.0.0.1:3005",
-    "http://localhost:3005"
+    "http://localhost:3005",
+    "ws://localhost:3005",  # Add WebSocket support if needed
 ]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
 CSP_IMG_SRC = ["'self'", "data:", "https:"]
-CSP_FRAME_ANCESTORS = ["'self'"]  # Control frame embedding
+CSP_FONT_SRC = ["'self'", "data:", "https:"]
+CSP_FRAME_ANCESTORS = ["'none'"]  # Prevent framing
 CSP_INCLUDE_NONCE_IN = ['script-src']
 
 # Password validation

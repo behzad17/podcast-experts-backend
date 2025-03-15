@@ -5,7 +5,6 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:3005",
   },
   withCredentials: true,
   timeout: 10000, // 10 second timeout
@@ -45,7 +44,9 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.code === "ERR_NETWORK") {
-      console.error("Network error - please check if the server is running");
+      console.error(
+        "Network error - please check if the server is running at http://localhost:8001"
+      );
       console.error("Error details:", {
         code: error.code,
         message: error.message,
@@ -57,6 +58,8 @@ api.interceptors.response.use(
         data: error.response.data,
         headers: error.response.headers,
       });
+    } else {
+      console.error("Unexpected error:", error);
     }
     return Promise.reject(error);
   }
