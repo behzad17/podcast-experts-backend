@@ -1,10 +1,23 @@
 from django.db import models
 from django.utils import timezone
-from users.models import UserProfile
+from users.models import CustomUser
 
 # Create your models here.
+class PodcasterProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='podcaster_profile')
+    channel_name = models.CharField(max_length=255)
+    description = models.TextField()
+    website = models.URLField(blank=True, null=True)
+    social_media = models.TextField(blank=True, null=True)
+    topics = models.CharField(max_length=255)
+    is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.channel_name}"
+
 class Podcast(models.Model):
-    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='podcasts')
+    owner = models.ForeignKey(PodcasterProfile, on_delete=models.CASCADE, related_name='podcasts')
     title = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='podcasts/', blank=True, null=True)
@@ -13,8 +26,9 @@ class Podcast(models.Model):
 
     def __str__(self):
         return self.title
+
 class ExpertProfile(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="expert_profile")
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="expert_profile")
     specialty = models.CharField(max_length=255)
     website = models.URLField(blank=True, null=True)
     availability = models.CharField(max_length=50, choices=[('online', 'Online'), ('in-person', 'In-Person')])
