@@ -6,10 +6,11 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 // Create axios instance with default config
 const api = axios.create({
   baseURL: "http://127.0.0.1:8001",
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 const Register = () => {

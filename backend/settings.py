@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'csp',  # Add CSP app
     # Local apps
     'users',
     'experts',
@@ -72,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',  # Add CSP middleware
 ]
 
 # Custom user model
@@ -130,6 +132,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3002",
     "http://localhost:3003",
     "http://127.0.0.1:3003",
+    "http://localhost:3004",
+    "http://127.0.0.1:3004",
 ]
 
 # Additional CORS settings
@@ -152,7 +156,8 @@ CORS_ALLOW_HEADERS = [
     "origin",
     "user-agent",
     "x-csrftoken",
-    "x-requested-with"
+    "x-requested-with",
+    "access-control-allow-origin"
 ]
 
 # Security Settings
@@ -165,8 +170,24 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:3002",
     "http://localhost:3003",
     "http://127.0.0.1:3003",
+    "http://localhost:3004",
+    "http://127.0.0.1:3004",
 ]
 
+# Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# CSP Settings
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_CONNECT_SRC = [
+    "'self'",
+    "http://127.0.0.1:8001",
+    "http://localhost:8001",
+]
+CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
+CSP_IMG_SRC = ["'self'", "data:", "https:"]
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
