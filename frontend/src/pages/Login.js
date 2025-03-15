@@ -10,6 +10,8 @@ const Login = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -17,13 +19,30 @@ const Login = () => {
     setError("");
     try {
       const response = await api.post("/users/login/", formData);
-      localStorage.setItem("token", response.data.token.access);
+      localStorage.setItem("token", response.data.access);
       navigate("/");
     } catch (error) {
-      setError(
-        error.response?.data?.detail || "Login failed. Please try again."
-      );
-      console.error("Login error", error);
+      if (error.response) {
+        // Handle specific error cases
+        if (error.response.status === 403) {
+          setError("Please verify your email before logging in.");
+        } else if (error.response.status === 401) {
+          setError("Invalid username or password.");
+        } else {
+          setError(
+            error.response.data.detail || "Login failed. Please try again."
+          );
+        }
+      } else if (error.code === "ECONNABORTED") {
+        setError("Request timed out. Please try again.");
+      } else if (error.message.includes("Network Error")) {
+        setError(
+          "Cannot connect to server. Please check your internet connection."
+        );
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+      console.error("Login error:", error);
     }
   };
 
@@ -37,6 +56,7 @@ const Login = () => {
           <Form.Control
             type="text"
             name="username"
+            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -46,6 +66,7 @@ const Login = () => {
           <Form.Control
             type="password"
             name="password"
+            value={formData.password}
             onChange={handleChange}
             required
           />

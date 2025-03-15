@@ -67,10 +67,16 @@ class UserLoginView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
-        user = User.objects.get(username=username)
-        if not user.email_verified:
+        try:
+            user = User.objects.get(username=username)
+            if not user.email_verified:
+                return Response(
+                    {"detail": "Please verify your email before logging in."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            return super().post(request, *args, **kwargs)
+        except User.DoesNotExist:
             return Response(
-                {"detail": "Please verify your email before logging in."},
-                status=status.HTTP_403_FORBIDDEN
+                {"detail": "Invalid username or password."},
+                status=status.HTTP_401_UNAUTHORIZED
             )
-        return super().post(request, *args, **kwargs)
