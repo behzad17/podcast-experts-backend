@@ -8,6 +8,7 @@ import Podcasts from "./pages/Podcasts";
 import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
+import VerifyEmail from "./pages/VerifyEmail";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/podcasts" element={<Podcasts />} />
           <Route path="/expert/:id" element={<ExpertProfile />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
         </Routes>
       </Router>
     </HelmetProvider>
