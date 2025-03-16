@@ -1,0 +1,380 @@
+[
+  {
+    "model": "experts.expertprofile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "name": "Dr. David Wilson",
+      "bio": "Quantum physics researcher specializing in quantum computing and quantum entanglement.",
+      "expertise": "Quantum Physics",
+      "experience_years": 14,
+      "website": "https://davidwilson.science",
+      "social_media": "twitter.com/drwilson",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "name": "Dr. Lisa Park",
+      "bio": "Biotechnology expert focusing on genetic engineering and CRISPR technology.",
+      "expertise": "Biotechnology",
+      "experience_years": 11,
+      "website": "https://lisapark.bio",
+      "social_media": "linkedin.com/lisapark",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:04:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "name": "Prof. Robert Smith",
+      "bio": "Cybersecurity specialist with expertise in blockchain and cryptography.",
+      "expertise": "Cybersecurity",
+      "experience_years": 16,
+      "website": "https://robertsmith.security",
+      "social_media": "twitter.com/robsmith",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "name": "Dr. Maria Gomez",
+      "bio": "Marine biologist studying ocean ecosystems and climate change impact.",
+      "expertise": "Marine Biology",
+      "experience_years": 13,
+      "website": "https://mariagomez.org",
+      "social_media": "instagram.com/drmariagomez",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "name": "Dr. James Kim",
+      "bio": "Robotics engineer specializing in human-robot interaction and AI integration.",
+      "expertise": "Robotics",
+      "experience_years": 9,
+      "website": "https://jameskim.tech",
+      "social_media": "linkedin.com/jameskim",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "name": "Dr. Anna Lee",
+      "bio": "Psychology researcher focusing on cognitive development and learning.",
+      "expertise": "Psychology",
+      "experience_years": 12,
+      "website": "https://annalee.edu",
+      "social_media": "twitter.com/drannalee",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:08:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "name": "Dr. Thomas Anderson",
+      "bio": "Space physicist studying solar winds and magnetospheric physics.",
+      "expertise": "Space Physics",
+      "experience_years": 15,
+      "website": "https://thomasanderson.space",
+      "social_media": "twitter.com/spaceanderson",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:09:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "name": "Dr. Sarah Connor",
+      "bio": "Renewable energy expert specializing in solar and wind technologies.",
+      "expertise": "Renewable Energy",
+      "experience_years": 10,
+      "website": "https://sarahconnor.energy",
+      "social_media": "linkedin.com/sarahconnor",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:10:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "name": "Dr. Alex Turner",
+      "bio": "Data science expert focusing on big data analytics and machine learning.",
+      "expertise": "Data Science",
+      "experience_years": 8,
+      "website": "https://alexturner.data",
+      "social_media": "twitter.com/dataalex",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:11:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 13,
+    "fields": {
+      "user": 13,
+      "name": "Dr. Emma Davis",
+      "bio": "Molecular biology researcher specializing in cancer research.",
+      "expertise": "Molecular Biology",
+      "experience_years": 11,
+      "website": "https://emmadavis.bio",
+      "social_media": "linkedin.com/emmadavis",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:12:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "name": "Dr. Daniel Zhang",
+      "bio": "Materials scientist working on advanced materials and nanotechnology.",
+      "expertise": "Materials Science",
+      "experience_years": 13,
+      "website": "https://danielzhang.materials",
+      "social_media": "twitter.com/drdanzhang",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:13:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "name": "Dr. Olivia Wang",
+      "bio": "Astrophysicist studying black holes and gravitational waves.",
+      "expertise": "Astrophysics",
+      "experience_years": 12,
+      "website": "https://oliviawang.space",
+      "social_media": "twitter.com/droliviawang",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:14:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "channel_name": "Quantum World",
+      "description": "Exploring the mysteries of quantum physics",
+      "website": "https://quantumworld.science",
+      "social_media": "twitter.com/quantumworld",
+      "topics": "Physics, Quantum Mechanics, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 4,
+    "fields": {
+      "user": 6,
+      "channel_name": "Cyber Security Today",
+      "description": "Latest in cybersecurity and digital privacy",
+      "website": "https://cybersecuritytoday.com",
+      "social_media": "twitter.com/cybersectoday",
+      "topics": "Cybersecurity, Privacy, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 5,
+    "fields": {
+      "user": 8,
+      "channel_name": "Robot Revolution",
+      "description": "The future of robotics and automation",
+      "website": "https://robotrevolution.tech",
+      "social_media": "twitter.com/robotrev",
+      "topics": "Robotics, AI, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 3,
+    "fields": {
+      "owner": 3,
+      "title": "Quantum Mysteries Explained",
+      "description": "Breaking down complex quantum physics concepts for everyone",
+      "link": "https://quantumworld.science/podcast/1",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 4,
+    "fields": {
+      "owner": 3,
+      "title": "The Copenhagen Interpretation",
+      "description": "Deep dive into quantum mechanics interpretations",
+      "link": "https://quantumworld.science/podcast/2",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:30Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 5,
+    "fields": {
+      "owner": 3,
+      "title": "Quantum Computing Revolution",
+      "description": "The future of computing with quantum technology",
+      "link": "https://quantumworld.science/podcast/3",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:04:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 6,
+    "fields": {
+      "owner": 4,
+      "title": "Cybersecurity 101",
+      "description": "Essential security practices for everyone",
+      "link": "https://cybersecuritytoday.com/podcast/1",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 7,
+    "fields": {
+      "owner": 4,
+      "title": "Blockchain Revolution",
+      "description": "Understanding blockchain technology and cryptocurrencies",
+      "link": "https://cybersecuritytoday.com/podcast/2",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:30Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 8,
+    "fields": {
+      "owner": 4,
+      "title": "Digital Privacy Matters",
+      "description": "Protecting your privacy in the digital age",
+      "link": "https://cybersecuritytoday.com/podcast/3",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 9,
+    "fields": {
+      "owner": 5,
+      "title": "Rise of the Robots",
+      "description": "The latest developments in robotics",
+      "link": "https://robotrevolution.tech/podcast/1",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 10,
+    "fields": {
+      "owner": 5,
+      "title": "AI and Robotics",
+      "description": "How AI is transforming robotics",
+      "link": "https://robotrevolution.tech/podcast/2",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:30Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 11,
+    "fields": {
+      "owner": 5,
+      "title": "Future of Automation",
+      "description": "Impact of automation on society and work",
+      "link": "https://robotrevolution.tech/podcast/3",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:08:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 12,
+    "fields": {
+      "owner": 1,
+      "title": "Brain Science Weekly",
+      "description": "Weekly updates in neuroscience research",
+      "link": "https://aiinsights.com/podcast/2",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:09:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 13,
+    "fields": {
+      "owner": 1,
+      "title": "Mind and Consciousness",
+      "description": "Exploring the mysteries of consciousness",
+      "link": "https://aiinsights.com/podcast/3",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:10:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 14,
+    "fields": {
+      "owner": 2,
+      "title": "Environmental Policy Today",
+      "description": "Analysis of current environmental policies",
+      "link": "https://climatechronicles.org/podcast/2",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:11:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 15,
+    "fields": {
+      "owner": 2,
+      "title": "Sustainable Future",
+      "description": "Innovations in sustainability and green technology",
+      "link": "https://climatechronicles.org/podcast/3",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:12:00Z"
+    }
+  }
+]
