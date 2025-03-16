@@ -8,6 +8,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from .serializers import UserRegisterSerializer
 from django.contrib.auth import get_user_model
+from .models import UserProfile
 
 User = get_user_model()
 
@@ -20,6 +21,8 @@ class UserRegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save()
+        # Create UserProfile for the new user
+        UserProfile.objects.create(user=user)
         token = user.generate_verification_token()
         self.send_verification_email(user, token)
 

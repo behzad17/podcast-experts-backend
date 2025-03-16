@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/stats/', admin_stats, name='admin_stats'),
     path('', home_view),
     path('api/users/', include('users.urls')),
+    path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/collaborations/', include('collaborations.urls')),
     path('api/comments/', include('comments.urls')),
