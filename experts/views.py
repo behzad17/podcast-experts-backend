@@ -1,12 +1,22 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import serializers
+from django.db import IntegrityError
 from .models import ExpertProfile
 from .serializers import ExpertProfileSerializer
 
 # Create your views here.
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -17,6 +27,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         return obj.user == request.user
 
+
 class ExpertProfileCreateView(generics.CreateAPIView):
     """
     Create a new expert profile.
@@ -26,11 +37,17 @@ class ExpertProfileCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        if hasattr(self.request.user, 'expert_profile'):
-            raise PermissionDenied(
-                "You already have an expert profile."
-            )
-        serializer.save(user=self.request.user, is_approved=False)
+        """
+        Create a new expert profile for the authenticated user.
+        Checks for existing profile and handles potential database errors.
+        """
+        try:
+            if hasattr(self.request.user, 'expert_profile'):
+                raise PermissionDenied("You already have an expert profile.")
+            serializer.save(user=self.request.user, is_approved=False)
+        except IntegrityError:
+            raise PermissionDenied("Error creating profile. Please try again.")
+
 
 class ExpertProfileUpdateView(generics.UpdateAPIView):
     """
@@ -41,37 +58,62 @@ class ExpertProfileUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self):
-        return get_object_or_404(
-            ExpertProfile,
-            user=self.request.user
-        )
+        return get_object_or_404(ExpertProfile, user=self.request.user)
 
     def perform_update(self, serializer):
+        """
+        Update the expert profile while preserving the approval status.
+        Validates required fields before updating.
+        """
         profile = self.get_object()
+        if not serializer.validated_data.get('specialty'):
+            raise serializers.ValidationError({
+                "specialty": "This field is required."
+            })
+
         if profile.is_approved:
-            # Preserve the approved status
             serializer.save(is_approved=True)
         else:
             serializer.save()
 
-class ExpertProfileDetailView(generics.RetrieveAPIView):
+        return Response({
+            "message": "Profile updated successfully",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class ExpertProfileDetailView(generics.RetrieveDestroyAPIView):
     """
-    Retrieve an expert profile.
+    Retrieve or delete an expert profile.
     Users can view their own profile or any approved profile.
+    Only owners can delete their profiles.
     """
     serializer_class = ExpertProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self):
         profile_id = self.kwargs.get('pk')
         if profile_id:
-            # If a specific profile is requested, check if it's approved or belongs to the user
             profile = get_object_or_404(ExpertProfile, pk=profile_id)
-            if profile.user == self.request.user or profile.is_approved:
+            if (profile.user == self.request.user or
+                    profile.is_approved):
+
                 return profile
             raise PermissionDenied("You cannot view this profile.")
-        # If no specific profile is requested, return the user's own profile
         return get_object_or_404(ExpertProfile, user=self.request.user)
+
+    def perform_destroy(self, instance):
+        """
+        Delete the expert profile if the user is the owner.
+        """
+        if instance.user != self.request.user:
+            raise PermissionDenied("You can only delete your own profile.")
+        instance.delete()
+        return Response(
+            {"message": "Profile deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
 
 class ExpertProfileApprovalView(APIView):
     """
@@ -96,16 +138,26 @@ class ExpertProfileApprovalView(APIView):
             status=status.HTTP_200_OK
         )
 
+
 class ExpertProfileListView(generics.ListAPIView):
     """
     List all approved expert profiles.
+    Supports pagination, searching, and filtering.
     """
     serializer_class = ExpertProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['specialty', 'user__username', 'bio']
+    ordering_fields = ['user__username', 'specialty', 'created_at']
 
     def get_queryset(self):
-        # Only show approved profiles to regular users
+        queryset = ExpertProfile.objects.all()
         if not self.request.user.is_staff:
-            return ExpertProfile.objects.filter(is_approved=True)
-        # Show all profiles to admin users
-        return ExpertProfile.objects.all()
+            queryset = queryset.filter(is_approved=True)
+
+        specialty = self.request.query_params.get('specialty', None)
+        if specialty:
+            queryset = queryset.filter(specialty__icontains=specialty)
+
+        return queryset
