@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const ExpertProfileCreate = () => {
   const [formData, setFormData] = useState({
-    specialty: "",
+    name: "",
     bio: "",
-    participation_method: "حضوری",
-    sample_works: "",
-    contact_methods: "",
+    expertise: "",
+    experience_years: "",
+    website: "",
+    social_media: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Please log in to create an expert profile");
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
     setError("");
   };
 
@@ -34,13 +44,15 @@ const ExpertProfileCreate = () => {
 
       setSuccess(true);
       setTimeout(() => {
-        navigate("/profile");
+        navigate("/experts");
       }, 2000);
     } catch (error) {
       console.error("Profile creation error:", error);
       if (error.response) {
-        console.error("Error response:", error.response.data);
-        if (error.response.status === 400) {
+        if (error.response.status === 401) {
+          setError("Please log in to create an expert profile");
+          navigate("/login");
+        } else if (error.response.status === 400) {
           setError("Please check your input and try again");
         } else if (error.response.status === 403) {
           setError("You already have an expert profile");
@@ -48,9 +60,7 @@ const ExpertProfileCreate = () => {
           setError(error.response.data.detail || "Error creating profile");
         }
       } else if (error.code === "ERR_NETWORK") {
-        setError(
-          "Cannot connect to server. Please check if the server is running."
-        );
+        setError("Cannot connect to server. Please check if the server is running.");
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
@@ -65,23 +75,24 @@ const ExpertProfileCreate = () => {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success">
-          Profile created successfully! Redirecting to profile page...
+          Profile created successfully! Redirecting to experts page...
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Specialty</Form.Label>
+          <Form.Label>Name *</Form.Label>
           <Form.Control
             type="text"
-            name="specialty"
-            value={formData.specialty}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
+            placeholder="Enter your full name"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Bio</Form.Label>
+          <Form.Label>Bio *</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
@@ -89,44 +100,55 @@ const ExpertProfileCreate = () => {
             value={formData.bio}
             onChange={handleChange}
             required
+            placeholder="Tell us about yourself and your expertise"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Participation Method</Form.Label>
-          <Form.Select
-            name="participation_method"
-            value={formData.participation_method}
+          <Form.Label>Expertise *</Form.Label>
+          <Form.Control
+            type="text"
+            name="expertise"
+            value={formData.expertise}
             onChange={handleChange}
             required
-          >
-            <option value="حضوری">حضوری</option>
-            <option value="تصویری">تصویری</option>
-            <option value="تلفنی">تلفنی</option>
-            <option value="مکاتبه">مکاتبه</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Sample Works</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="sample_works"
-            value={formData.sample_works}
-            onChange={handleChange}
+            placeholder="e.g., Machine Learning, Web Development, Digital Marketing"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Contact Methods</Form.Label>
+          <Form.Label>Years of Experience *</Form.Label>
+          <Form.Control
+            type="number"
+            name="experience_years"
+            value={formData.experience_years}
+            onChange={handleChange}
+            required
+            min="0"
+            placeholder="Enter number of years"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Website</Form.Label>
+          <Form.Control
+            type="url"
+            name="website"
+            value={formData.website}
+            onChange={handleChange}
+            placeholder="https://your-website.com"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Social Media</Form.Label>
           <Form.Control
             as="textarea"
             rows={3}
-            name="contact_methods"
-            value={formData.contact_methods}
+            name="social_media"
+            value={formData.social_media}
             onChange={handleChange}
-            required
+            placeholder="List your social media links (LinkedIn, Twitter, etc.)"
           />
         </Form.Group>
 

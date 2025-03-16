@@ -5,12 +5,15 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Experts from "./pages/Experts";
 import Podcasts from "./pages/Podcasts";
+import PodcastCreate from "./pages/PodcastCreate";
 import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import ExpertProfileCreate from "./pages/ExpertProfileCreate";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
+import ExpertProfileDetail from "./pages/ExpertProfileDetail";
+import AdminExpertApproval from "./pages/AdminExpertApproval";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
 function App() {
@@ -36,7 +39,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/experts" element={<Experts />} />
+          <Route path="/experts/create" element={<ExpertProfileCreate />} />
+          <Route path="/experts/:id" element={<ExpertProfileDetail />} />
           <Route path="/podcasts" element={<Podcasts />} />
+          <Route path="/podcasts/create" element={<PodcastCreate />} />
           <Route path="/expert/:id" element={<ExpertProfile />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
@@ -48,6 +54,8 @@ function App() {
             path="/podcaster/profile/create"
             element={<PodcasterProfileCreate />}
           />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/experts" element={<AdminExpertApproval />} />
         </Routes>
       </Router>
     </HelmetProvider>

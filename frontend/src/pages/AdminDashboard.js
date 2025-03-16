@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
 import { Container, Row, Col, Card, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -65,6 +66,19 @@ const AdminDashboard = () => {
             <Card.Body>
               <Card.Title>Total Experts</Card.Title>
               <Card.Text>{stats?.total_experts || 0}</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={4}>
+          <Card>
+            <Card.Body>
+              <Card.Title>Pending Experts</Card.Title>
+              <Card.Text>{stats.pending_experts || 0}</Card.Text>
+              <Link to="/admin/experts" className="btn btn-primary">
+                Review Expert Profiles
+              </Link>
             </Card.Body>
           </Card>
         </Col>

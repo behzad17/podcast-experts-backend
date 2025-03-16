@@ -1,0 +1,99 @@
+[
+  {
+    "model": "experts.expertprofile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "name": "Dr. Sarah Johnson",
+      "bio": "Neuroscience researcher with 15 years of experience in brain plasticity and cognitive development.",
+      "expertise": "Neuroscience",
+      "experience_years": 15,
+      "website": "https://drsarahjohnson.com",
+      "social_media": "twitter.com/drsarah",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "name": "Prof. Michael Chen",
+      "bio": "AI and Machine Learning specialist focusing on deep learning and neural networks.",
+      "expertise": "Artificial Intelligence",
+      "experience_years": 12,
+      "website": "https://michaelchen.ai",
+      "social_media": "linkedin.com/michaelchen",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "name": "Dr. Emily Brown",
+      "bio": "Climate change researcher specializing in atmospheric science and environmental impact assessment.",
+      "expertise": "Environmental Science",
+      "experience_years": 10,
+      "website": "https://emilybrown.org",
+      "social_media": "twitter.com/dremily",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:02:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "channel_name": "AI Insights",
+      "description": "Exploring the frontiers of artificial intelligence and its impact on society",
+      "website": "https://aiinsights.com",
+      "social_media": "twitter.com/aiinsights",
+      "topics": "AI, Machine Learning, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "channel_name": "Climate Chronicles",
+      "description": "Discussing climate change and environmental challenges",
+      "website": "https://climatechronicles.org",
+      "social_media": "twitter.com/climatechronicles",
+      "topics": "Climate Change, Environment, Science",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 1,
+    "fields": {
+      "owner": 1,
+      "title": "The Future of AI",
+      "description": "Weekly discussions about artificial intelligence and its impact on society",
+      "link": "https://aiinsights.com/podcast/1",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 2,
+    "fields": {
+      "owner": 2,
+      "title": "Climate Crisis Today",
+      "description": "In-depth analysis of climate change and environmental issues",
+      "link": "https://climatechronicles.org/podcast/1",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  }
+]

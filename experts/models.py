@@ -1,23 +1,25 @@
 from django.db import models
+from django.utils import timezone
+from users.models import CustomUser
 
 # Create your models here.
 class ExpertProfile(models.Model):
-    user = models.OneToOneField('users.CustomUser', on_delete=models.CASCADE, related_name='expert_profile')
-    specialty = models.CharField(max_length=255)
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='expert_profile'
+    )
+    name = models.CharField(max_length=255)
     bio = models.TextField()
-    participation_method = models.CharField(max_length=255, choices=[
-        ('حضوری', 'حضوری'),
-        ('تصویری', 'تصویری'),
-        ('تلفنی', 'تلفنی'),
-        ('مکاتبه', 'مکاتبه'),
-    ])
-    sample_works = models.TextField(blank=True, null=True)
-    contact_methods = models.TextField()
-
-    is_approved = models.BooleanField(default=False)  # تأیید متخصص توسط ادمین
+    expertise = models.CharField(max_length=255)
+    experience_years = models.IntegerField()
+    website = models.URLField(blank=True, null=True)
+    social_media = models.TextField(blank=True, null=True)
+    is_approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.user.username} - {self.specialty}"
+        return f"{self.name} - {self.expertise}"
     
 class FavoriteExperts(models.Model):
     user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)

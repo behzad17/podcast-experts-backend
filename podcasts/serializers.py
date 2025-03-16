@@ -9,7 +9,9 @@ class PodcasterProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_approved']
 
 class PodcastSerializer(serializers.ModelSerializer):
+    owner = PodcasterProfileSerializer(read_only=True)
+    
     class Meta:
         model = Podcast
-        fields = ['id', 'title', 'description', 'image', 'link', 'created_at']
-        read_only_fields = ['owner']
+        fields = ['id', 'title', 'description', 'image', 'link', 'created_at', 'is_approved', 'owner']
+        read_only_fields = ['owner', 'is_approved']

@@ -3,13 +3,12 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
-const PodcasterProfileCreate = () => {
+const PodcastCreate = () => {
   const [formData, setFormData] = useState({
-    channel_name: "",
+    title: "",
     description: "",
-    website: "",
-    social_media: "",
-    topics: "",
+    image: null,
+    link: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -20,13 +19,18 @@ const PodcasterProfileCreate = () => {
     // Check if user is logged in
     const token = localStorage.getItem("token");
     if (!token) {
-      setError("Please log in to create a podcaster profile");
+      setError("Please log in to create a podcast");
       navigate("/login");
     }
   }, [navigate]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === "image" && files?.length > 0) {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
     setError("");
   };
 
@@ -37,27 +41,40 @@ const PodcasterProfileCreate = () => {
     setIsLoading(true);
 
     try {
-      console.log("Sending podcaster profile creation request:", formData);
-      const response = await api.post("/podcasts/profile/create/", formData);
-      console.log("Profile creation response:", response.data);
+      const form = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          form.append(key, formData[key]);
+        }
+      });
+
+      console.log("Sending podcast creation request");
+      const response = await api.post("/podcasts/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Podcast creation response:", response.data);
 
       setSuccess(true);
       setTimeout(() => {
-        navigate("/profile");
+        navigate("/podcasts");
       }, 2000);
     } catch (error) {
-      console.error("Profile creation error:", error);
+      console.error("Podcast creation error:", error);
       if (error.response) {
         console.error("Error response:", error.response.data);
         if (error.response.status === 401) {
-          setError("Please log in to create a podcaster profile");
+          setError("Please log in to create a podcast");
           navigate("/login");
         } else if (error.response.status === 400) {
           setError("Please check your input and try again");
         } else if (error.response.status === 403) {
-          setError("You already have a podcaster profile");
+          setError(
+            "Your podcaster profile must be approved before creating podcasts"
+          );
         } else {
-          setError(error.response.data.detail || "Error creating profile");
+          setError(error.response.data.detail || "Error creating podcast");
         }
       } else if (error.code === "ERR_NETWORK") {
         setError(
@@ -73,23 +90,23 @@ const PodcasterProfileCreate = () => {
 
   return (
     <Container className="mt-4">
-      <h2>Create Podcaster Profile</h2>
+      <h2>Create Podcast</h2>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success">
-          Profile created successfully! Redirecting to profile page...
+          Podcast created successfully! Redirecting to podcasts page...
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Channel Name *</Form.Label>
+          <Form.Label>Title *</Form.Label>
           <Form.Control
             type="text"
-            name="channel_name"
-            value={formData.channel_name}
+            name="title"
+            value={formData.title}
             onChange={handleChange}
             required
-            placeholder="Enter your channel name"
+            placeholder="Enter podcast title"
           />
         </Form.Group>
 
@@ -102,51 +119,37 @@ const PodcasterProfileCreate = () => {
             value={formData.description}
             onChange={handleChange}
             required
-            placeholder="Describe your podcast channel"
+            placeholder="Describe your podcast"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Website</Form.Label>
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            name="image"
+            onChange={handleChange}
+            accept="image/*"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Link</Form.Label>
           <Form.Control
             type="url"
-            name="website"
-            value={formData.website}
+            name="link"
+            value={formData.link}
             onChange={handleChange}
-            placeholder="https://your-website.com"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Social Media</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="social_media"
-            value={formData.social_media}
-            onChange={handleChange}
-            placeholder="Your social media links"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Topics *</Form.Label>
-          <Form.Control
-            type="text"
-            name="topics"
-            value={formData.topics}
-            onChange={handleChange}
-            required
-            placeholder="e.g., Technology, Business, Education"
+            placeholder="https://your-podcast-link.com"
           />
         </Form.Group>
 
         <Button type="submit" variant="primary" disabled={isLoading}>
-          {isLoading ? "Creating Profile..." : "Create Profile"}
+          {isLoading ? "Creating Podcast..." : "Create Podcast"}
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default PodcasterProfileCreate;
+export default PodcastCreate;

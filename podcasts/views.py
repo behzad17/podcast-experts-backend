@@ -2,8 +2,20 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import PermissionDenied
 from .models import Podcast, PodcasterProfile
 from .serializers import PodcastSerializer, PodcasterProfileSerializer
+
+
+class IsPodcastOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Write permissions are only allowed to the podcast owner
+        return obj.owner.user == request.user
 
 
 class PodcastListCreateView(generics.ListCreateAPIView):
@@ -14,7 +26,12 @@ class PodcastListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         if self.request.user.is_staff:
             return Podcast.objects.all()
-        return Podcast.objects.filter(is_approved=True)
+        # Show all approved podcasts and user's own podcasts
+        return Podcast.objects.filter(
+            is_approved=True
+        ) | Podcast.objects.filter(
+            owner__user=self.request.user
+        )
 
     def perform_create(self, serializer):
         podcaster_profile = get_object_or_404(
@@ -25,17 +42,23 @@ class PodcastListCreateView(generics.ListCreateAPIView):
                 "Your podcaster profile must be approved "
                 "before creating podcasts."
             )
-            raise permissions.PermissionDenied(msg)
+            raise PermissionDenied(msg)
         serializer.save(owner=podcaster_profile, is_approved=False)
 
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsPodcastOwner]
+    queryset = Podcast.objects.all()
 
-    def get_queryset(self):
-        return Podcast.objects.filter(owner__user=self.request.user)
+    def get_object(self):
+        obj = super().get_object()
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def perform_update(self, serializer):
+        # Ensure the owner can't change during update
+        serializer.save(owner=self.get_object().owner)
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -52,7 +75,7 @@ class PodcasterProfileCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # Check if user already has a profile
         if hasattr(self.request.user, 'podcaster_profile'):
-            raise permissions.PermissionDenied(
+            raise PermissionDenied(
                 "You already have a podcaster profile."
             )
         serializer.save(user=self.request.user, is_approved=False)
