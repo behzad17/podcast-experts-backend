@@ -60,7 +60,9 @@ const ExpertProfileCreate = () => {
           setError(error.response.data.detail || "Error creating profile");
         }
       } else if (error.code === "ERR_NETWORK") {
-        setError("Cannot connect to server. Please check if the server is running.");
+        setError(
+          "Cannot connect to server. Please check if the server is running."
+        );
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
