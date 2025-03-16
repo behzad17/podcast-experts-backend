@@ -6,43 +6,60 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error when user starts typing
     setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
+
     try {
+      console.log("Sending login request:", formData);
       const response = await api.post("/users/login/", formData);
-      localStorage.setItem("token", response.data.access);
-      navigate("/");
+      console.log("Login response:", response.data);
+
+      if (response.data.access) {
+        // Store the access token
+        localStorage.setItem("token", response.data.access);
+        // Store user data
+        localStorage.setItem("userData", JSON.stringify(response.data.user));
+        localStorage.setItem("userType", response.data.user.user_type);
+
+        // Update the default authorization header for future requests
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.access}`;
+
+        navigate("/");
+      } else {
+        setError("Invalid response from server");
+      }
     } catch (error) {
+      console.error("Login error:", error);
       if (error.response) {
-        // Handle specific error cases
-        if (error.response.status === 403) {
-          setError("Please verify your email before logging in.");
-        } else if (error.response.status === 401) {
-          setError("Invalid username or password.");
+        console.error("Error response:", error.response.data);
+        if (error.response.status === 401) {
+          setError("Invalid username or password");
+        } else if (error.response.status === 403) {
+          setError("Please verify your email before logging in");
         } else {
-          setError(
-            error.response.data.detail || "Login failed. Please try again."
-          );
+          setError(error.response.data.detail || "Login failed");
         }
-      } else if (error.code === "ECONNABORTED") {
-        setError("Request timed out. Please try again.");
-      } else if (error.message.includes("Network Error")) {
+      } else if (error.code === "ERR_NETWORK") {
         setError(
-          "Cannot connect to server. Please check your internet connection."
+          "Cannot connect to server. Please check if the server is running."
         );
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
-      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,8 +88,8 @@ const Login = () => {
             required
           />
         </Form.Group>
-        <Button type="submit" className="mt-3">
-          Login
+        <Button type="submit" className="mt-3" disabled={isLoading}>
+          {isLoading ? "Logging in..." : "Login"}
         </Button>
       </Form>
     </Container>

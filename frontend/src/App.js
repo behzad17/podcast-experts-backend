@@ -9,6 +9,8 @@ import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
+import ExpertProfileCreate from "./pages/ExpertProfileCreate";
+import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
 function App() {
@@ -38,6 +40,14 @@ function App() {
           <Route path="/expert/:id" element={<ExpertProfile />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          <Route
+            path="/expert/profile/create"
+            element={<ExpertProfileCreate />}
+          />
+          <Route
+            path="/podcaster/profile/create"
+            element={<PodcasterProfileCreate />}
+          />
         </Routes>
       </Router>
     </HelmetProvider>

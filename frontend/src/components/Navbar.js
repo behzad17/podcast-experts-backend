@@ -4,23 +4,24 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = !!localStorage.getItem("token");
+  const userType = localStorage.getItem("userType");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("userData");
     navigate("/login");
   };
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" className="shadow">
+    <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          🎙 Podcast Platform
+          Podcast Experts
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav className="me-auto">
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
@@ -30,7 +31,32 @@ const NavigationBar = () => {
             <Nav.Link as={Link} to="/podcasts">
               Podcasts
             </Nav.Link>
-            {!isAuthenticated ? (
+          </Nav>
+          <Nav>
+            {isAuthenticated ? (
+              <>
+                {userType === "expert" && (
+                  <Nav.Link as={Link} to="/expert/profile/create">
+                    Create Expert Profile
+                  </Nav.Link>
+                )}
+                {userType === "podcaster" && (
+                  <Nav.Link as={Link} to="/podcaster/profile/create">
+                    Create Podcaster Profile
+                  </Nav.Link>
+                )}
+                <Nav.Link as={Link} to="/profile">
+                  Profile
+                </Nav.Link>
+                <Button
+                  variant="outline-light"
+                  className="ms-2"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
               <>
                 <Nav.Link as={Link} to="/login">
                   Login
@@ -38,19 +64,6 @@ const NavigationBar = () => {
                 <Nav.Link as={Link} to="/register">
                   Register
                 </Nav.Link>
-              </>
-            ) : (
-              <>
-                <Nav.Link as={Link} to="/profile">
-                  Profile
-                </Nav.Link>
-                <Button
-                  variant="outline-light"
-                  onClick={handleLogout}
-                  className="ms-2"
-                >
-                  Logout
-                </Button>
               </>
             )}
           </Nav>

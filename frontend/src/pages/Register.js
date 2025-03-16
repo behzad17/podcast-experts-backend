@@ -17,7 +17,6 @@ const Register = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error when user starts typing
     setError("");
   };
 
@@ -39,6 +38,8 @@ const Register = () => {
       const response = await api.post("/users/register/", formData);
       console.log("Registration response:", response.data);
       setSuccess(true);
+      // Store user type for later use
+      localStorage.setItem("userType", formData.user_type);
       setTimeout(() => {
         navigate("/login");
       }, 5000);
