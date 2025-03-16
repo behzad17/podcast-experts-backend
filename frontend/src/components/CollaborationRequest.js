@@ -1,43 +1,62 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { Button, Form } from "react-bootstrap";
+import api from "../api/axios";
+import { Modal, Form, Button, Alert } from "react-bootstrap";
 
-const CollaborationRequest = ({ expertId }) => {
-  const [requestData, setRequestData] = useState({ title: "", message: "", date: "" });
-
-  const handleChange = (e) => {
-    setRequestData({ ...requestData, [e.target.name]: e.target.value });
-  };
+const CollaborationRequest = ({ expertId, podcastId, onClose }) => {
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
     try {
-      const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8000/api/collaborations/", { ...requestData, receiver: expertId }, {
-        headers: { Authorization: `Bearer ${token}` }
+      await api.post("/collaborations/", {
+        receiver: expertId,
+        podcast: podcastId,
+        message: message,
       });
-      alert("Request sent successfully!");
+      setSuccess("Collaboration request sent successfully!");
+      setMessage("");
+      setTimeout(onClose, 2000);
     } catch (error) {
-      console.error("Error sending request:", error);
+      console.error("Error sending collaboration request:", error);
+      setError(error.response?.data?.detail || "Failed to send request");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="mt-3">
-      <Form.Group>
-        <Form.Label>Title</Form.Label>
-        <Form.Control type="text" name="title" onChange={handleChange} required />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Message</Form.Label>
-        <Form.Control as="textarea" name="message" rows={3} onChange={handleChange} required />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Preferred Date</Form.Label>
-        <Form.Control type="date" name="date" onChange={handleChange} required />
-      </Form.Group>
-      <Button type="submit" className="mt-3">Send Request</Button>
-    </Form>
+    <Modal show={true} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Send Collaboration Request</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Message</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Write your message..."
+              required
+            />
+          </Form.Group>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send Request"}
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 

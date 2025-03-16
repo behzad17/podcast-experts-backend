@@ -70,18 +70,19 @@ const PodcasterProfileCreate = () => {
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Channel Name</Form.Label>
+          <Form.Label>Channel Name *</Form.Label>
           <Form.Control
             type="text"
             name="channel_name"
             value={formData.channel_name}
             onChange={handleChange}
             required
+            placeholder="Enter your channel name"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Description *</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
@@ -89,6 +90,7 @@ const PodcasterProfileCreate = () => {
             value={formData.description}
             onChange={handleChange}
             required
+            placeholder="Describe your podcast channel"
           />
         </Form.Group>
 
@@ -99,6 +101,7 @@ const PodcasterProfileCreate = () => {
             name="website"
             value={formData.website}
             onChange={handleChange}
+            placeholder="https://your-website.com"
           />
         </Form.Group>
 
@@ -110,17 +113,19 @@ const PodcasterProfileCreate = () => {
             name="social_media"
             value={formData.social_media}
             onChange={handleChange}
+            placeholder="Your social media links"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Topics</Form.Label>
+          <Form.Label>Topics *</Form.Label>
           <Form.Control
             type="text"
             name="topics"
             value={formData.topics}
             onChange={handleChange}
             required
+            placeholder="e.g., Technology, Business, Education"
           />
         </Form.Group>
 

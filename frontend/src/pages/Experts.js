@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import api from "../api/axios";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Alert,
+} from "react-bootstrap";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchExperts();
@@ -12,16 +22,36 @@ const Experts = () => {
 
   const fetchExperts = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/experts/");
-      setExperts(response.data || []); // جلوگیری از مقدار null
+      setIsLoading(true);
+      const response = await api.get("/experts/");
+      setExperts(response.data || []);
     } catch (error) {
       console.error("Error fetching experts:", error);
+      setError("Failed to load experts. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const filteredExperts = (experts || []).filter((expert) =>
     expert?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isLoading) {
+    return (
+      <Container className="mt-4">
+        <h2 className="text-center">Loading experts...</h2>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-4">
@@ -51,7 +81,7 @@ const Experts = () => {
             </Col>
           ))
         ) : (
-          <p>No experts found.</p>
+          <Alert variant="info">No experts found.</Alert>
         )}
       </Row>
     </Container>

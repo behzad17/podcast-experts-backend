@@ -11,6 +11,11 @@ class PodcastListCreateView(generics.ListCreateAPIView):
     serializer_class = PodcastSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Podcast.objects.all()
+        return Podcast.objects.filter(is_approved=True)
+
     def perform_create(self, serializer):
         podcaster_profile = get_object_or_404(
             PodcasterProfile, user=self.request.user
@@ -21,7 +26,7 @@ class PodcastListCreateView(generics.ListCreateAPIView):
                 "before creating podcasts."
             )
             raise permissions.PermissionDenied(msg)
-        serializer.save(owner=podcaster_profile)
+        serializer.save(owner=podcaster_profile, is_approved=False)
 
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):

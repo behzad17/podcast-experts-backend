@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Card, Button, Form } from "react-bootstrap";
+import api from "../api/axios";
+import { Container, Card, Form, Button, Alert } from "react-bootstrap";
 import CollaborationRequest from "../components/CollaborationRequest";
 import LikeButton from "../components/LikeButton";
 import BookmarkButton from "../components/BookmarkButton";
@@ -10,38 +10,66 @@ const ExpertProfile = () => {
   const { id } = useParams();
   const [expert, setExpert] = useState(null);
   const [comment, setComment] = useState("");
-
-  // ✅ استفاده از useCallback برای جلوگیری از تغییر مداوم تابع در حافظه
-  const fetchExpert = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/experts/${id}/`
-      );
-      setExpert(response.data);
-    } catch (error) {
-      console.error("Error fetching expert:", error);
-    }
-  }, [id]);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchExpert();
-  }, [fetchExpert]); // ✅ اضافه کردن `fetchExpert` به وابستگی‌ها
+  }, [id]);
+
+  const fetchExpert = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(`/experts/${id}/`);
+      setExpert(response.data);
+    } catch (error) {
+      console.error("Error fetching expert:", error);
+      setError("Failed to load expert profile");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:8000/api/comments/`, {
+      const response = await api.post(`/comments/`, {
         expert: id,
         text: comment,
       });
+      setSuccess("Comment added successfully");
       setComment("");
-      alert("Comment added successfully!");
+      fetchExpert(); // Refresh the expert data to show new comment
     } catch (error) {
       console.error("Error adding comment:", error);
+      setError("Failed to add comment");
     }
   };
 
-  if (!expert) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <Container className="mt-4">
+        <h2>Loading expert profile...</h2>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
+
+  if (!expert) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="warning">Expert not found</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-4">
@@ -56,21 +84,35 @@ const ExpertProfile = () => {
         </Card.Body>
       </Card>
 
-      <h4>Leave a Comment</h4>
-      <Form onSubmit={handleCommentSubmit}>
-        <Form.Group>
-          <Form.Control
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Write your comment..."
-            required
-          />
-        </Form.Group>
-        <Button type="submit" className="mt-2">
-          Submit
-        </Button>
-      </Form>
+      <Card className="mt-4">
+        <Card.Body>
+          <h3>Comments</h3>
+          {expert.comments?.map((comment) => (
+            <div key={comment.id} className="mb-3">
+              <p>{comment.text}</p>
+              <small className="text-muted">
+                By {comment.user.username} on{" "}
+                {new Date(comment.created_at).toLocaleDateString()}
+              </small>
+            </div>
+          ))}
+
+          <Form onSubmit={handleCommentSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Add a Comment</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button type="submit">Submit Comment</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+      {success && <Alert variant="success">{success}</Alert>}
     </Container>
   );
 };

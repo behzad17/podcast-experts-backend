@@ -1,32 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import api from "../api/axios";
 import { Button } from "react-bootstrap";
 
-const BookmarkButton = ({ expertId }) => {
-  const [bookmarked, setBookmarked] = useState(false);
+const BookmarkButton = ({ expertId, podcastId }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    checkBookmarkStatus();
+  }, [expertId, podcastId]);
+
+  const checkBookmarkStatus = async () => {
+    try {
+      const response = await api.get("/bookmarks/");
+      const bookmarks = response.data;
+      setIsBookmarked(
+        bookmarks.some(
+          (bookmark) =>
+            (expertId && bookmark.expert === expertId) ||
+            (podcastId && bookmark.podcast === podcastId)
+        )
+      );
+    } catch (error) {
+      console.error("Error checking bookmark status:", error);
+    }
+  };
 
   const handleBookmark = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/api/bookmarks/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ expert: expertId }),
-      });
-
-      if (response.ok) {
-        setBookmarked(!bookmarked);
+      if (isBookmarked) {
+        await api.delete("/bookmarks/", {
+          data: { expert: expertId, podcast: podcastId },
+        });
       } else {
-        console.error("Failed to bookmark");
+        await api.post("/bookmarks/", {
+          expert: expertId,
+          podcast: podcastId,
+        });
       }
+      setIsBookmarked(!isBookmarked);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error toggling bookmark:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Button onClick={handleBookmark} variant={bookmarked ? "success" : "outline-primary"}>
-      {bookmarked ? "Bookmarked" : "Bookmark"}
+    <Button
+      variant={isBookmarked ? "primary" : "outline-primary"}
+      onClick={handleBookmark}
+      disabled={isLoading}
+    >
+      {isBookmarked ? "Bookmarked" : "Bookmark"}
     </Button>
   );
 };

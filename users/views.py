@@ -49,19 +49,32 @@ class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, token):
-        user = get_object_or_404(User, verification_token=token)
-        if not user.email_verified:
-            user.email_verified = True
-            user.verification_token = ""
-            user.save()
+        try:
+            print(f"Verifying email with token: {token}")
+            user = get_object_or_404(User, verification_token=token)
+            print(f"Found user: {user.username}")
+            
+            if not user.email_verified:
+                user.email_verified = True
+                user.verification_token = ""
+                user.save()
+                print(f"Email verified for user: {user.username}")
+                return Response(
+                    {"message": "Email verified successfully"},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                print(f"Email already verified for user: {user.username}")
+                return Response(
+                    {"message": "Email already verified"},
+                    status=status.HTTP_200_OK
+                )
+        except Exception as e:
+            print(f"Error verifying email: {str(e)}")
             return Response(
-                {"message": "Email verified successfully"},
-                status=status.HTTP_200_OK
+                {"detail": "Invalid or expired verification token"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        return Response(
-            {"message": "Email already verified"},
-            status=status.HTTP_200_OK
-        )
 
 
 # ورود کاربر با JWT
@@ -77,7 +90,15 @@ class UserLoginView(TokenObtainPairView):
                     {"detail": "Please verify your email before logging in."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            return super().post(request, *args, **kwargs)
+            response = super().post(request, *args, **kwargs)
+            # Add user data to the response
+            response.data['user'] = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'user_type': user.user_type
+            }
+            return response
         except User.DoesNotExist:
             return Response(
                 {"detail": "Invalid username or password."},

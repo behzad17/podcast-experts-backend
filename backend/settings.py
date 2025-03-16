@@ -262,7 +262,7 @@ if not all([EMAIL_HOST_USER, EMAIL_HOST_PASSWORD]):
     print("Warning: Email settings not configured. Using console backend.")
 
 # Frontend URL for email verification
-FRONTEND_URL = 'http://localhost:3006'  # Update this to match your
+FRONTEND_URL = 'http://localhost:3000'  # Update this to match your frontend URL
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

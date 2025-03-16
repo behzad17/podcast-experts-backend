@@ -24,7 +24,7 @@ const Login = () => {
       const response = await api.post("/users/login/", formData);
       console.log("Login response:", response.data);
 
-      if (response.data.access) {
+      if (response.data.access && response.data.user) {
         // Store the access token
         localStorage.setItem("token", response.data.access);
         // Store user data

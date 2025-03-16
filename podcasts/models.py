@@ -30,6 +30,7 @@ class Podcast(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='podcasts/', blank=True, null=True)
     link = models.URLField(blank=True, null=True)
+    is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

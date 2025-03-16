@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import api from "../api/axios";
+import { Container, Row, Col, Card, Form, Alert } from "react-bootstrap";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchPodcasts();
@@ -12,16 +14,37 @@ const Podcasts = () => {
 
   const fetchPodcasts = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/podcasts/");
+      setIsLoading(true);
+      const response = await api.get("/api/podcasts/");
+      console.log("Fetched podcasts:", response.data);
       setPodcasts(response.data);
     } catch (error) {
       console.error("Error fetching podcasts:", error);
+      setError("Failed to load podcasts. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const filteredPodcasts = podcasts.filter((podcast) =>
     podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isLoading) {
+    return (
+      <Container className="mt-4">
+        <h2>Loading podcasts...</h2>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-4">
@@ -38,22 +61,41 @@ const Podcasts = () => {
         {filteredPodcasts.map((podcast) => (
           <Col key={podcast.id} md={4} className="mb-3">
             <Card>
-              <Card.Img variant="top" src={podcast.image} />
+              {podcast.image && (
+                <Card.Img
+                  variant="top"
+                  src={podcast.image}
+                  alt={podcast.title}
+                />
+              )}
               <Card.Body>
                 <Card.Title>{podcast.title}</Card.Title>
                 <Card.Text>{podcast.description}</Card.Text>
-                <a
-                  href={podcast.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Listen
-                </a>
+                <div className="d-flex justify-content-between align-items-center">
+                  <small className="text-muted">
+                    By {podcast.owner?.channel_name || "Unknown"}
+                  </small>
+                  {podcast.link && (
+                    <a
+                      href={podcast.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary"
+                    >
+                      Listen
+                    </a>
+                  )}
+                </div>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
+      {filteredPodcasts.length === 0 && (
+        <Alert variant="info">
+          No podcasts found. Try adjusting your search term.
+        </Alert>
+      )}
     </Container>
   );
 };
