@@ -86,11 +86,18 @@ const Experts = () => {
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Experts</h2>
-        {isAuthenticated && !hasProfile && (
-          <Link to="/experts/create">
-            <Button variant="primary">Create Expert Profile</Button>
-          </Link>
-        )}
+        <div>
+          {isAuthenticated && hasProfile && (
+            <Link to="/expert-profile" className="me-2">
+              <Button variant="primary">My Expert Profile</Button>
+            </Link>
+          )}
+          {isAuthenticated && !hasProfile && (
+            <Link to="/experts/create">
+              <Button variant="primary">Create Expert Profile</Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       <Form.Group className="mb-4">

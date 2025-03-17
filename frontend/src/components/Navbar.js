@@ -36,14 +36,9 @@ const NavigationBar = () => {
             {isAuthenticated ? (
               <>
                 {userType === "expert" && (
-                  <>
-                    <Nav.Link as={Link} to="/expert-profile">
-                      Expert Portal
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/experts/create">
-                      Create Expert Profile
-                    </Nav.Link>
-                  </>
+                  <Nav.Link as={Link} to="/experts/create">
+                    Create Expert Profile
+                  </Nav.Link>
                 )}
                 {userType === "podcaster" && (
                   <Nav.Link as={Link} to="/podcaster/profile/create">
