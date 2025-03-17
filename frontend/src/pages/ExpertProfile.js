@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import {
   Container,
@@ -42,19 +42,31 @@ import {
   FaFlag,
   FaSort,
 } from "react-icons/fa";
+import ExpertDetails from "../components/experts/ExpertDetails";
+import ReviewCard from "../components/experts/ReviewCard";
+import ExpertEditModal from "../components/experts/ExpertEditModal";
 
 const localizer = momentLocalizer(moment);
 
 const ExpertProfile = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [expertProfile, setExpertProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [expert, setExpert] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [commentsLoading, setCommentsLoading] = useState(false);
-  const [notification, setNotification] = useState({
+  const [formData, setFormData] = useState({
+    name: "",
+    expertise: "",
+    experience_years: 0,
+    bio: "",
+    website: "",
+    social_media: "",
+    profile_image: null,
+  });
+  const [loading, setLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState({
     show: false,
     message: "",
     type: "success",
@@ -64,19 +76,6 @@ const ExpertProfile = () => {
     totalBookmarks: 0,
     averageRating: 0,
   });
-  const [editFormData, setEditFormData] = useState({
-    name: "",
-    expertise: "",
-    experience_years: "",
-    bio: "",
-    website: "",
-    social_media: "",
-    profile_image: null,
-  });
-  const [activeTab, setActiveTab] = useState("profile");
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [userRating, setUserRating] = useState(0);
-  const [calendarEvents, setCalendarEvents] = useState([]);
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -108,72 +107,37 @@ const ExpertProfile = () => {
   const [reportReason, setReportReason] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const storedUserData = JSON.parse(localStorage.getItem("userData"));
-
-        if (!token || !storedUserData) {
-          setError("Please log in to view your profile");
-          setLoading(false);
-          return;
-        }
-
-        const expertResponse = await api.get("/experts/my-profile/");
-        if (expertResponse.data) {
-          setExpertProfile(expertResponse.data);
-          setEditFormData({
-            name: expertResponse.data.name,
-            expertise: expertResponse.data.expertise,
-            experience_years: expertResponse.data.experience_years,
-            bio: expertResponse.data.bio,
-            website: expertResponse.data.website || "",
-            social_media: expertResponse.data.social_media || "",
-          });
-          // Only fetch these after we have the expert profile
-          await Promise.all([
-            fetchStats(),
-            checkBookmarkStatus(),
-            fetchUserRating(),
-          ]);
-        }
-      } catch (error) {
-        console.error("Error fetching expert data:", error);
-        setError("Failed to load profile data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+    fetchExpertData();
+  }, [id]);
 
   useEffect(() => {
-    if (activeTab === "comments" && expertProfile?.id) {
-      fetchComments();
+    if (expert?.id) {
+      fetchStats();
+      checkBookmarkStatus();
+      fetchUserRating();
     }
-  }, [activeTab, expertProfile?.id]);
+  }, [expert?.id]);
 
   useEffect(() => {
-    if (comments.length > 0) {
+    if (reviews.length > 0) {
       setFilteredComments(
-        comments.filter((comment) =>
-          comment.content.toLowerCase().includes(commentSearch.toLowerCase())
+        reviews.filter((review) =>
+          review.content.toLowerCase().includes(commentSearch.toLowerCase())
         )
       );
     }
-  }, [comments, commentSearch]);
+  }, [reviews, commentSearch]);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
+  const showNotificationHandler = (message, type = "success") => {
+    setShowNotification({ show: true, message, type });
     setTimeout(
-      () => setNotification({ show: false, message: "", type: "success" }),
+      () => setShowNotification({ show: false, message: "", type: "success" }),
       3000
     );
   };
 
   const fetchStats = async () => {
-    if (!expertProfile?.id) return;
+    if (!expert?.id) return;
     try {
       const response = await api.get("/experts/stats/");
       setStats(response.data);
@@ -184,143 +148,119 @@ const ExpertProfile = () => {
 
   const fetchExpertData = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+      const [expertResponse, reviewsResponse] = await Promise.all([
+        api.get(`/experts/${id}/`),
+        api.get(`/experts/${id}/reviews/`),
+      ]);
 
-      if (!token || !storedUserData) {
-        setError("Please log in to view your profile");
-        setLoading(false);
-        return;
+      if (!expertResponse.ok || !reviewsResponse.ok) {
+        throw new Error("Failed to fetch expert data");
       }
 
-      const expertResponse = await api.get("/experts/my-profile/");
-      setExpertProfile(expertResponse.data);
-      setEditFormData({
-        name: expertResponse.data.name,
-        expertise: expertResponse.data.expertise,
-        experience_years: expertResponse.data.experience_years,
-        bio: expertResponse.data.bio,
-        website: expertResponse.data.website || "",
-        social_media: expertResponse.data.social_media || "",
+      const expertData = await expertResponse.json();
+      const reviewsData = await reviewsResponse.json();
+
+      setExpert(expertData);
+      setReviews(reviewsData);
+      setFormData({
+        name: expertData.name,
+        expertise: expertData.expertise,
+        experience_years: expertData.experience_years,
+        bio: expertData.bio,
+        website: expertData.website || "",
+        social_media: expertData.social_media || "",
+        profile_image: null,
       });
     } catch (error) {
       console.error("Error fetching expert data:", error);
-      setError("Failed to load profile data");
+      setError("Failed to load expert profile. Please try again later.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleEditProfile = () => {
+  const handleEdit = (expert) => {
+    setFormData({
+      name: expert.name,
+      expertise: expert.expertise,
+      experience_years: expert.experience_years,
+      bio: expert.bio,
+      website: expert.website || "",
+      social_media: expert.social_media || "",
+      profile_image: null,
+    });
     setShowEditModal(true);
   };
 
-  const validateForm = () => {
-    const errors = {};
-    if (!editFormData.name.trim()) errors.name = "Name is required";
-    if (!editFormData.expertise.trim())
-      errors.expertise = "Expertise is required";
-    if (!editFormData.experience_years)
-      errors.experience_years = "Experience is required";
-    if (!editFormData.bio.trim()) errors.bio = "Bio is required";
-    if (editFormData.website && !editFormData.website.match(/^https?:\/\/.+/)) {
-      errors.website = "Please enter a valid URL";
-    }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+  const handleChange = (event) => {
+    const { name, value, files } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setEditFormData({ ...editFormData, profile_image: file });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleBioChange = (e) => {
-    const value = e.target.value;
-    setEditFormData({ ...editFormData, bio: value });
-    setBioCharCount(value.length);
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      setIsEditingProfile(true);
-      const formData = new FormData();
-      Object.keys(editFormData).forEach((key) => {
-        if (editFormData[key] !== null) {
-          formData.append(key, editFormData[key]);
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          formDataToSend.append(key, formData[key]);
         }
       });
 
-      await api.patch(`/experts/${expertProfile.id}/`, formData, {
+      const response = await api.put(`/experts/${id}/`, formDataToSend, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      showNotification("Profile updated successfully");
+      if (!response.ok) {
+        throw new Error("Failed to update expert profile");
+      }
+
+      const updatedExpert = await response.json();
+      setExpert(updatedExpert);
       setShowEditModal(false);
-      fetchExpertData();
+      showNotificationHandler("Profile updated successfully");
     } catch (error) {
-      console.error("Error updating profile:", error);
-      showNotification("Failed to update profile", "danger");
-    } finally {
-      setIsEditingProfile(false);
+      console.error("Error updating expert profile:", error);
+      showNotificationHandler(
+        "Failed to update expert profile. Please try again.",
+        "danger"
+      );
     }
   };
 
   const handleViewPublicProfile = () => {
-    navigate(`/experts/${expertProfile.id}`);
+    navigate(`/experts/${expert.id}`);
   };
 
   const handleCommentChange = (e) => {
     const value = e.target.value;
-    setNewComment(value);
     setCommentCharCount(value.length);
   };
 
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (commentCharCount === 0) {
-      showNotification("Please enter a comment", "warning");
+      showNotificationHandler("Please enter a comment", "warning");
       return;
     }
     try {
       setIsSubmittingComment(true);
-      await api.post(`/experts/${expertProfile.id}/add_comment/`, {
-        content: newComment,
+      await api.post(`/experts/${expert.id}/add_comment/`, {
+        content: commentSearch,
       });
-      showNotification("Comment added successfully");
-      setNewComment("");
+      showNotificationHandler("Comment added successfully");
       setCommentCharCount(0);
-      fetchComments();
+      fetchExpertData();
     } catch (error) {
       console.error("Error adding comment:", error);
-      showNotification("Failed to add comment", "danger");
+      showNotificationHandler("Failed to add comment", "danger");
     } finally {
       setIsSubmittingComment(false);
-    }
-  };
-
-  const fetchComments = async () => {
-    try {
-      setCommentsLoading(true);
-      const response = await api.get(`/experts/${expertProfile.id}/`);
-      setComments(response.data.comments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-      showNotification("Failed to load comments", "danger");
-    } finally {
-      setCommentsLoading(false);
     }
   };
 
@@ -336,14 +276,12 @@ const ExpertProfile = () => {
 
   const confirmCommentDelete = async () => {
     try {
-      await api.delete(
-        `/experts/${expertProfile.id}/comments/${commentToDelete}/`
-      );
-      showNotification("Comment deleted successfully");
-      fetchComments();
+      await api.delete(`/experts/${expert.id}/comments/${commentToDelete}/`);
+      showNotificationHandler("Comment deleted successfully");
+      fetchExpertData();
     } catch (error) {
       console.error("Error deleting comment:", error);
-      showNotification("Failed to delete comment", "danger");
+      showNotificationHandler("Failed to delete comment", "danger");
     } finally {
       setShowCommentDeleteConfirm(false);
       setCommentToDelete(null);
@@ -354,7 +292,7 @@ const ExpertProfile = () => {
     try {
       setIsSharing(true);
       const url = window.location.href;
-      const text = `Check out ${expertProfile.name}'s expert profile!`;
+      const text = `Check out ${expert.name}'s expert profile!`;
       let shareUrl;
 
       switch (platform) {
@@ -384,7 +322,7 @@ const ExpertProfile = () => {
   };
 
   const checkBookmarkStatus = async () => {
-    if (!expertProfile?.id) return;
+    if (!expert?.id) return;
     try {
       const response = await api.get(`/experts/${expertProfile.id}/`);
       setIsBookmarked(response.data.is_bookmarked);
