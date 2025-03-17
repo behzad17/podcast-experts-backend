@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import {
   Container,
   Row,
@@ -8,15 +9,16 @@ import {
   Button,
   Alert,
   Badge,
+  Spinner,
 } from "react-bootstrap";
-import api from "../api/axios";
+import { FaPlay, FaShare } from "react-icons/fa";
 
 const PodcastDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [podcast, setPodcast] = useState(null);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPodcast = async () => {
@@ -34,10 +36,22 @@ const PodcastDetail = () => {
     fetchPodcast();
   }, [id]);
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: podcast.title,
+        text: podcast.description,
+        url: window.location.href,
+      });
+    }
+  };
+
   if (loading) {
     return (
-      <Container className="mt-4">
-        <h2>Loading podcast details...</h2>
+      <Container className="mt-4 text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </Container>
     );
   }
@@ -53,7 +67,7 @@ const PodcastDetail = () => {
   if (!podcast) {
     return (
       <Container className="mt-4">
-        <Alert variant="warning">Podcast not found</Alert>
+        <Alert variant="warning">Podcast not found.</Alert>
       </Container>
     );
   }
@@ -74,32 +88,42 @@ const PodcastDetail = () => {
             <Card.Body>
               <Card.Title className="h2 mb-3">{podcast.title}</Card.Title>
               <Card.Text className="lead mb-4">{podcast.description}</Card.Text>
-              
+
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                   <Badge bg="primary" className="me-2">
                     By {podcast.owner?.channel_name || "Unknown"}
                   </Badge>
                   <Badge bg="secondary">
-                    Created {new Date(podcast.created_at).toLocaleDateString()}
+                    {new Date(podcast.created_at).toLocaleDateString()}
                   </Badge>
                 </div>
-                {podcast.link && (
+                <div>
                   <Button
-                    variant="primary"
-                    size="lg"
-                    href={podcast.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    variant="outline-secondary"
+                    className="me-2"
+                    onClick={handleShare}
                   >
-                    Listen Now
+                    <FaShare className="me-2" />
+                    Share
                   </Button>
-                )}
+                  {podcast.link && (
+                    <Button
+                      variant="primary"
+                      href={podcast.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaPlay className="me-2" />
+                      Listen Now
+                    </Button>
+                  )}
+                </div>
               </div>
 
               {!podcast.is_approved && (
                 <Alert variant="warning">
-                  This podcast is pending approval
+                  This podcast is pending approval.
                 </Alert>
               )}
             </Card.Body>
@@ -110,4 +134,4 @@ const PodcastDetail = () => {
   );
 };
 
-export default PodcastDetail; 
+export default PodcastDetail;

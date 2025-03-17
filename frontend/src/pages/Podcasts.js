@@ -173,13 +173,6 @@ const Podcasts = () => {
                     By {podcast.owner?.channel_name || "Unknown"}
                   </small>
                   <div>
-                    <Button
-                      variant="outline-primary"
-                      className="me-2"
-                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
-                    >
-                      View
-                    </Button>
                     {podcast.link && (
                       <a
                         href={podcast.link}
@@ -190,6 +183,13 @@ const Podcasts = () => {
                         Listen
                       </a>
                     )}
+                    <Button
+                      variant="outline-primary"
+                      className="me-2"
+                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
+                    >
+                      View
+                    </Button>
                     {console.log("Podcast owner:", podcast.owner)}
                     {console.log("Current user:", currentUser)}
                     {console.log("Comparison:", {
