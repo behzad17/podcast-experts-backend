@@ -11,7 +11,6 @@ import {
   Modal,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Comments from "../components/Comments";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -21,8 +20,6 @@ const Podcasts = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [showCommentsModal, setShowCommentsModal] = useState(false);
-  const [selectedPodcast, setSelectedPodcast] = useState(null);
   const [editFormData, setEditFormData] = useState({
     title: "",
     description: "",
@@ -176,6 +173,13 @@ const Podcasts = () => {
                     By {podcast.owner?.channel_name || "Unknown"}
                   </small>
                   <div>
+                    <Button
+                      variant="outline-primary"
+                      className="me-2"
+                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
+                    >
+                      View
+                    </Button>
                     {podcast.link && (
                       <a
                         href={podcast.link}
@@ -186,16 +190,6 @@ const Podcasts = () => {
                         Listen
                       </a>
                     )}
-                    <Button
-                      variant="outline-info"
-                      className="me-2"
-                      onClick={() => {
-                        setSelectedPodcast(podcast);
-                        setShowCommentsModal(true);
-                      }}
-                    >
-                      Comments
-                    </Button>
                     {console.log("Podcast owner:", podcast.owner)}
                     {console.log("Current user:", currentUser)}
                     {console.log("Comparison:", {
@@ -293,21 +287,6 @@ const Podcasts = () => {
               </Button>
             </div>
           </Form>
-        </Modal.Body>
-      </Modal>
-
-      <Modal
-        show={showCommentsModal}
-        onHide={() => setShowCommentsModal(false)}
-        size="lg"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Comments for {selectedPodcast?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedPodcast && (
-            <Comments entityType="podcasts" entityId={selectedPodcast.id} />
-          )}
         </Modal.Body>
       </Modal>
     </Container>

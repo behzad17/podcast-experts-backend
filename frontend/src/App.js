@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Experts from "./pages/Experts";
 import Podcasts from "./pages/Podcasts";
 import PodcastCreate from "./pages/PodcastCreate";
+import PodcastDetail from "./pages/PodcastDetail";
 import Navbar from "./components/Navbar";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -42,6 +43,7 @@ function App() {
           <Route path="/experts" element={<Experts />} />
           <Route path="/podcasts" element={<Podcasts />} />
           <Route path="/podcasts/create" element={<PodcastCreate />} />
+          <Route path="/podcasts/:id" element={<PodcastDetail />} />
           <Route path="/expert-profile" element={<ExpertProfile />} />
           <Route path="/experts/create" element={<ExpertProfileCreate />} />
           <Route path="/experts/:id" element={<ExpertProfileDetail />} />
