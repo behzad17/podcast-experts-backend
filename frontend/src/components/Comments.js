@@ -8,6 +8,7 @@ const Comments = ({ type, id }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchComments();
@@ -30,7 +31,11 @@ const Comments = ({ type, id }) => {
     try {
       setLoading(true);
       const response = await api.get(`/${type}/${id}/comments/`);
-      setComments(response.data);
+      // Sort comments by creation date, newest first
+      const sortedComments = response.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setComments(sortedComments);
     } catch (error) {
       console.error("Error fetching comments:", error);
       setError("Failed to load comments. Please try again later.");
@@ -43,15 +48,22 @@ const Comments = ({ type, id }) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
+    setIsSubmitting(true);
+    setError("");
+
     try {
       const response = await api.post(`/${type}/${id}/comments/`, {
         content: newComment.trim(),
       });
-      setComments([...comments, response.data]);
+
+      // Add the new comment to the beginning of the list
+      setComments([response.data, ...comments]);
       setNewComment("");
     } catch (error) {
       console.error("Error posting comment:", error);
       setError("Failed to post comment. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -66,7 +78,16 @@ const Comments = ({ type, id }) => {
   };
 
   if (loading) {
-    return <div>Loading comments...</div>;
+    return (
+      <Card className="mt-4">
+        <Card.Header>
+          <h5 className="mb-0">Comments</h5>
+        </Card.Header>
+        <Card.Body>
+          <div>Loading comments...</div>
+        </Card.Body>
+      </Card>
+    );
   }
 
   return (
@@ -87,10 +108,16 @@ const Comments = ({ type, id }) => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 required
+                disabled={isSubmitting}
               />
             </Form.Group>
-            <Button type="submit" variant="primary" className="mt-2">
-              Post Comment
+            <Button
+              type="submit"
+              variant="primary"
+              className="mt-2"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Posting..." : "Post Comment"}
             </Button>
           </Form>
         ) : (
@@ -101,20 +128,23 @@ const Comments = ({ type, id }) => {
 
         <ListGroup>
           {comments.map((comment) => (
-            <ListGroup.Item key={comment.id}>
+            <ListGroup.Item key={comment.id} className="comment-item">
               <div className="d-flex justify-content-between align-items-start">
-                <div>
-                  <h6 className="mb-1">{comment.user_name}</h6>
-                  <p className="mb-1">{comment.content}</p>
-                  <small className="text-muted">
-                    {new Date(comment.created_at).toLocaleString()}
-                  </small>
+                <div className="flex-grow-1">
+                  <div className="d-flex align-items-center mb-2">
+                    <h6 className="mb-0 me-2">{comment.user_name}</h6>
+                    <small className="text-muted">
+                      {new Date(comment.created_at).toLocaleString()}
+                    </small>
+                  </div>
+                  <p className="mb-0">{comment.content}</p>
                 </div>
                 {currentUser && comment.user_id === currentUser.user_id && (
                   <Button
                     variant="outline-danger"
                     size="sm"
                     onClick={() => handleDelete(comment.id)}
+                    className="ms-2"
                   >
                     Delete
                   </Button>
