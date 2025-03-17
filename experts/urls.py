@@ -4,11 +4,15 @@ from .views import (
     ExpertProfileCreateView,
     ExpertProfileDetailView,
     ExpertProfileApprovalView,
+    MyExpertProfileView,
+    ExpertStatsView,
 )
 
 urlpatterns = [
     path('', ExpertListView.as_view(), name='expert-list'),
-    path('profile/create/', ExpertProfileCreateView.as_view(), name='expert-profile-create'),
-    path('profile/<int:pk>/', ExpertProfileDetailView.as_view(), name='expert-profile-detail'),
-    path('profile/approve/<int:pk>/', ExpertProfileApprovalView.as_view(), name='expert-profile-approve'),
+    path('create/', ExpertProfileCreateView.as_view(), name='expert-profile-create'),
+    path('<int:pk>/', ExpertProfileDetailView.as_view(), name='expert-profile-detail'),
+    path('approve/<int:pk>/', ExpertProfileApprovalView.as_view(), name='expert-profile-approve'),
+    path('my-profile/', MyExpertProfileView.as_view(), name='expert-my-profile'),
+    path('stats/', ExpertStatsView.as_view(), name='expert-stats'),
 ] 

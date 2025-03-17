@@ -24,18 +24,24 @@ const ExpertProfileDetail = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get(`/experts/profile/${id}/`);
+        console.log("Fetching expert profile for ID:", id);
+        const response = await api.get(`/experts/${id}/`);
+        console.log("Expert profile response:", response.data);
         setProfile(response.data);
         setFormData(response.data);
 
         // Check if the current user is the owner
         const token = localStorage.getItem("token");
-        if (token) {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (token && userData) {
           try {
-            const userResponse = await api.get("/users/me/");
-            setIsOwner(userResponse.data.id === response.data.user);
+            console.log("Checking user ownership...");
+            const userResponse = await api.get(`/users/${userData.id}/`);
+            console.log("User response:", userResponse.data);
+            setIsOwner(userResponse.data.id === response.data.user.id);
           } catch (userError) {
             console.error("Error fetching user data:", userError);
+            console.error("User error response:", userError.response?.data);
             setIsOwner(false);
           }
         }
@@ -43,6 +49,7 @@ const ExpertProfileDetail = () => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching profile:", error);
+        console.error("Error response:", error.response?.data);
         if (error.response) {
           if (error.response.status === 404) {
             setError("Profile not found");
@@ -78,12 +85,15 @@ const ExpertProfileDetail = () => {
     setIsLoading(true);
 
     try {
-      const response = await api.put(`/experts/profile/${id}/`, formData);
+      console.log("Updating expert profile...");
+      const response = await api.patch(`/experts/${id}/`, formData);
+      console.log("Update response:", response.data);
       setProfile(response.data);
       setSuccess(true);
       setIsEditing(false);
     } catch (error) {
       console.error("Profile update error:", error);
+      console.error("Update error response:", error.response?.data);
       if (error.response) {
         if (error.response.status === 401) {
           setError("Please log in to update the profile");

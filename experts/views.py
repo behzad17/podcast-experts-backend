@@ -6,6 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import serializers
 from django.db import IntegrityError
+from django.db.models import Count, Avg
 from .models import ExpertProfile
 from .serializers import ExpertProfileSerializer
 
@@ -27,7 +28,7 @@ class IsExpertOwner(permissions.BasePermission):
 
 class ExpertListView(generics.ListAPIView):
     serializer_class = ExpertProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -86,7 +87,7 @@ class ExpertProfileListView(generics.ListAPIView):
     Supports pagination, searching, and filtering.
     """
     serializer_class = ExpertProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['specialty', 'user__username', 'bio']
@@ -102,3 +103,40 @@ class ExpertProfileListView(generics.ListAPIView):
             queryset = queryset.filter(specialty__icontains=specialty)
 
         return queryset
+
+
+class MyExpertProfileView(generics.RetrieveUpdateAPIView):
+    """
+    Get and update the current user's expert profile.
+    """
+    serializer_class = ExpertProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return get_object_or_404(ExpertProfile, user=self.request.user)
+
+
+class ExpertStatsView(APIView):
+    """
+    Get statistics for the current expert's profile.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        expert_profile = get_object_or_404(ExpertProfile, user=request.user)
+        
+        # Get total views
+        total_views = expert_profile.views.count()
+        
+        # Get total collaborations
+        total_collaborations = expert_profile.collaborations.count()
+        
+        # Get average rating
+        ratings = expert_profile.ratings.all()
+        average_rating = ratings.aggregate(Avg('rating'))['rating__avg'] or 0
+        
+        return Response({
+            'total_views': total_views,
+            'total_collaborations': total_collaborations,
+            'average_rating': round(average_rating, 2),
+        })

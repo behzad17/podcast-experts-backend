@@ -29,14 +29,22 @@ const Experts = () => {
           setIsAuthenticated(true);
           // Check if user has an expert profile
           try {
-            await api.get("/experts/profile/me/");
+            await api.get("/experts/my-profile/");
             setHasProfile(true);
           } catch (error) {
+            console.log(
+              "Expert profile check error:",
+              error.response?.data || error.message
+            );
             if (error.response && error.response.status === 404) {
               setHasProfile(false);
             }
           }
         } catch (error) {
+          console.log(
+            "Auth check error:",
+            error.response?.data || error.message
+          );
           setIsAuthenticated(false);
         }
       }
@@ -48,12 +56,15 @@ const Experts = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
+        console.log("Fetching experts...");
         const response = await api.get("/experts/");
+        console.log("Experts response:", response.data);
         setExperts(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching experts:", error);
-        setError("Error loading experts");
+        console.error("Error response:", error.response?.data);
+        setError(error.response?.data?.detail || "Error loading experts");
         setIsLoading(false);
       }
     };
