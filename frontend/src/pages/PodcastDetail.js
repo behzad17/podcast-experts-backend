@@ -22,7 +22,7 @@ const PodcastDetail = () => {
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
-        const response = await api.get(`/podcasts/${id}/`);
+        const response = await api.get(`/podcasts/podcasts/${id}/`);
         setPodcast(response.data);
       } catch (error) {
         console.error("Error fetching podcast:", error);
