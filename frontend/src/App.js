@@ -15,6 +15,7 @@ import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import ExpertProfileDetail from "./pages/ExpertProfileDetail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/experts" element={<AdminExpertApproval />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </HelmetProvider>

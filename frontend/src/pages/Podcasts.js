@@ -19,6 +19,7 @@ const Podcasts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [editFormData, setEditFormData] = useState({
     title: "",
     description: "",
@@ -29,7 +30,25 @@ const Podcasts = () => {
 
   useEffect(() => {
     fetchPodcasts();
+    fetchCurrentUser();
   }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log("No token found");
+        return;
+      }
+
+      // Decode the JWT token to get user information
+      const tokenData = JSON.parse(atob(token.split(".")[1]));
+      console.log("Token data:", tokenData);
+      setCurrentUser(tokenData);
+    } catch (error) {
+      console.error("Error getting current user:", error);
+    }
+  };
 
   const fetchPodcasts = async () => {
     try {
@@ -164,14 +183,22 @@ const Podcasts = () => {
                         Listen
                       </a>
                     )}
-                    {podcast.owner && (
-                      <Button
-                        variant="outline-primary"
-                        onClick={() => handleEditClick(podcast)}
-                      >
-                        Edit
-                      </Button>
-                    )}
+                    {console.log("Podcast owner:", podcast.owner)}
+                    {console.log("Current user:", currentUser)}
+                    {console.log("Comparison:", {
+                      podcastOwnerId: podcast.owner?.user,
+                      currentUserId: currentUser?.user_id,
+                      isMatch: podcast.owner?.user === currentUser?.user_id,
+                    })}
+                    {currentUser &&
+                      podcast.owner?.user === currentUser.user_id && (
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => handleEditClick(podcast)}
+                        >
+                          Edit
+                        </Button>
+                      )}
                   </div>
                 </div>
                 {!podcast.is_approved && (
