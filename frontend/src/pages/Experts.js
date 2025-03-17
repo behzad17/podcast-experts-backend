@@ -60,12 +60,10 @@ const Experts = () => {
         const response = await api.get("/experts/");
         console.log("Experts response:", response.data);
         setExperts(response.data);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching experts:", error);
         console.error("Error response:", error.response?.data);
         setError(error.response?.data?.detail || "Error loading experts");
-        setIsLoading(false);
       }
     };
 
@@ -75,10 +73,6 @@ const Experts = () => {
   const filteredExperts = experts.filter((expert) =>
     expert.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  if (isLoading) {
-    return <Container className="mt-4">Loading...</Container>;
-  }
 
   if (error) {
     return (
