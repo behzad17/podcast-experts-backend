@@ -770,6 +770,25 @@ const ExpertProfile = () => {
                           padding: "2px 5px",
                         },
                       })}
+                      defaultView="month"
+                      views={["month", "week", "day"]}
+                      messages={{
+                        next: "Next",
+                        previous: "Previous",
+                        today: "Today",
+                        month: "Month",
+                        week: "Week",
+                        day: "Day",
+                        agenda: "Agenda",
+                        date: "Date",
+                        time: "Time",
+                        event: "Event",
+                        noEventsInRange: "No events in this range",
+                        allDay: "All Day",
+                        more: "More",
+                        showMore: (total) => `+${total} more`,
+                        work_week: "Work Week",
+                      }}
                     />
                   )}
                 </TabPane>
@@ -913,15 +932,16 @@ const ExpertProfile = () => {
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleEditSubmit} onChange={handleEditFormChange}>
+          <Form onSubmit={handleEditSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
                 value={editFormData.name}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, name: e.target.value })
-                }
+                onChange={(e) => {
+                  setEditFormData({ ...editFormData, name: e.target.value });
+                  handleEditFormChange();
+                }}
                 isInvalid={!!formErrors.name}
               />
               <Form.Control.Feedback type="invalid">
