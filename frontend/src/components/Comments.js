@@ -30,7 +30,9 @@ const Comments = ({ type, id }) => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/${type}/${id}/comments/`);
+      const response = await api.get(
+        `/api/comments/?content_type=${type}&object_id=${id}`
+      );
       // Sort comments by creation date, newest first
       const sortedComments = response.data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
@@ -52,8 +54,10 @@ const Comments = ({ type, id }) => {
     setError("");
 
     try {
-      const response = await api.post(`/${type}/${id}/comments/`, {
+      const response = await api.post(`/api/comments/`, {
         content: newComment.trim(),
+        content_type: type,
+        object_id: id,
       });
 
       // Add the new comment to the beginning of the list
@@ -61,7 +65,14 @@ const Comments = ({ type, id }) => {
       setNewComment("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      setError("Failed to post comment. Please try again.");
+      if (error.response?.data) {
+        setError(
+          error.response.data.detail ||
+            "Failed to post comment. Please try again."
+        );
+      } else {
+        setError("Failed to post comment. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -69,7 +80,7 @@ const Comments = ({ type, id }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      await api.delete(`/${type}/${id}/comments/${commentId}/`);
+      await api.delete(`/api/comments/${commentId}/`);
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Error deleting comment:", error);
