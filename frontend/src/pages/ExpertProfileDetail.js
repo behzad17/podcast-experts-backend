@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert, Card, Badge } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import Comments from "../components/Comments";
 
 const ExpertProfileDetail = () => {
   const { id } = useParams();
@@ -133,141 +134,152 @@ const ExpertProfileDetail = () => {
 
   return (
     <Container className="mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Expert Profile</h2>
-        {isOwner && !isEditing && (
-          <Button variant="primary" onClick={() => setIsEditing(true)}>
-            Edit Profile
-          </Button>
-        )}
-      </div>
-
-      {success && (
-        <Alert variant="success">Profile updated successfully!</Alert>
-      )}
-
-      {isEditing ? (
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Name *</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Bio *</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={4}
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Expertise *</Form.Label>
-            <Form.Control
-              type="text"
-              name="expertise"
-              value={formData.expertise}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Years of Experience *</Form.Label>
-            <Form.Control
-              type="number"
-              name="experience_years"
-              value={formData.experience_years}
-              onChange={handleChange}
-              required
-              min="0"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Website</Form.Label>
-            <Form.Control
-              type="url"
-              name="website"
-              value={formData.website}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Social Media</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="social_media"
-              value={formData.social_media}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
-          <div className="d-flex gap-2">
-            <Button type="submit" variant="primary" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                setIsEditing(false);
-                setFormData(profile);
-              }}
-            >
-              Cancel
-            </Button>
+      <Card>
+        <Card.Body>
+          <div className="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h2>{profile.name}</h2>
+              <Badge bg="primary" className="me-2">
+                {profile.expertise}
+              </Badge>
+              <Badge bg="secondary">
+                {profile.experience_years} years of experience
+              </Badge>
+            </div>
+            {isOwner && (
+              <Button
+                variant={isEditing ? "secondary" : "primary"}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                {isEditing ? "Cancel" : "Edit Profile"}
+              </Button>
+            )}
           </div>
-        </Form>
-      ) : (
-        <div>
-          <h4>{profile.name}</h4>
-          <p className="text-muted">
-            Experience: {profile.experience_years} years
-          </p>
-          <h5>Expertise</h5>
-          <p>{profile.expertise}</p>
-          <h5>Bio</h5>
-          <p>{profile.bio}</p>
-          {profile.website && (
-            <>
-              <h5>Website</h5>
-              <p>
-                <a
-                  href={profile.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
+
+          {isEditing ? (
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Name *</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Bio *</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={4}
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Expertise *</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="expertise"
+                  value={formData.expertise}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Years of Experience *</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="experience_years"
+                  value={formData.experience_years}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Website</Form.Label>
+                <Form.Control
+                  type="url"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Social Media</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="social_media"
+                  value={formData.social_media}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <div className="d-flex gap-2">
+                <Button type="submit" variant="primary" disabled={isLoading}>
+                  {isLoading ? "Saving..." : "Save Changes"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => {
+                    setIsEditing(false);
+                    setFormData(profile);
+                  }}
                 >
-                  {profile.website}
-                </a>
-              </p>
-            </>
-          )}
-          {profile.social_media && (
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          ) : (
             <>
-              <h5>Social Media</h5>
-              <p style={{ whiteSpace: "pre-wrap" }}>{profile.social_media}</p>
+              <div className="mb-4">
+                <h4>About</h4>
+                <p>{profile.bio}</p>
+              </div>
+
+              {profile.website && (
+                <div className="mb-4">
+                  <h4>Website</h4>
+                  <a
+                    href={profile.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {profile.website}
+                  </a>
+                </div>
+              )}
+
+              {profile.social_media && (
+                <div className="mb-4">
+                  <h4>Social Media</h4>
+                  <a
+                    href={profile.social_media}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {profile.social_media}
+                  </a>
+                </div>
+              )}
             </>
           )}
-          {!profile.is_approved && (
-            <Alert variant="warning">
-              This profile is pending admin approval
-            </Alert>
-          )}
-        </div>
-      )}
+        </Card.Body>
+      </Card>
+
+      {/* Comments Section */}
+      <Comments type="experts" id={id} />
     </Container>
   );
 };

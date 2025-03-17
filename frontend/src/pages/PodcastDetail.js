@@ -10,6 +10,7 @@ import {
   Badge,
 } from "react-bootstrap";
 import api from "../api/axios";
+import Comments from "../components/Comments";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -74,7 +75,7 @@ const PodcastDetail = () => {
             <Card.Body>
               <Card.Title className="h2 mb-3">{podcast.title}</Card.Title>
               <Card.Text className="lead mb-4">{podcast.description}</Card.Text>
-              
+
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                   <Badge bg="primary" className="me-2">
@@ -104,10 +105,13 @@ const PodcastDetail = () => {
               )}
             </Card.Body>
           </Card>
+
+          {/* Comments Section */}
+          <Comments type="podcasts" id={id} />
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default PodcastDetail; 
+export default PodcastDetail;
