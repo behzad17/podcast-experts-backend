@@ -9,6 +9,7 @@ import {
   Alert,
   Button,
   Modal,
+  Spinner,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,6 @@ const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -29,44 +29,32 @@ const Podcasts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPodcasts();
-    fetchCurrentUser();
+    const fetchData = async () => {
+      try {
+        // Fetch podcasts and user data in parallel
+        const [podcastsResponse, token] = await Promise.all([
+          api.get("/podcasts/"),
+          localStorage.getItem("token"),
+        ]);
+
+        setPodcasts(podcastsResponse.data);
+
+        if (token) {
+          const tokenData = JSON.parse(atob(token.split(".")[1]));
+          setCurrentUser(tokenData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        if (error.response?.status === 401) {
+          setError("Please log in to view podcasts.");
+        } else {
+          setError("Failed to load podcasts. Please try again later.");
+        }
+      }
+    };
+
+    fetchData();
   }, []);
-
-  const fetchCurrentUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.log("No token found");
-        return;
-      }
-
-      // Decode the JWT token to get user information
-      const tokenData = JSON.parse(atob(token.split(".")[1]));
-      console.log("Token data:", tokenData);
-      setCurrentUser(tokenData);
-    } catch (error) {
-      console.error("Error getting current user:", error);
-    }
-  };
-
-  const fetchPodcasts = async () => {
-    try {
-      setIsLoading(true);
-      const response = await api.get("/podcasts/");
-      console.log("Fetched podcasts:", response.data);
-      setPodcasts(response.data);
-    } catch (error) {
-      console.error("Error fetching podcasts:", error);
-      if (error.response?.status === 401) {
-        setError("Please log in to view podcasts.");
-      } else {
-        setError("Failed to load podcasts. Please try again later.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleCreatePodcast = () => {
     navigate("/podcasts/create");
@@ -109,7 +97,12 @@ const Podcasts = () => {
       });
 
       setShowEditModal(false);
-      fetchPodcasts(); // Refresh the podcasts list
+      // Update the podcast in the local state instead of refetching
+      setPodcasts(
+        podcasts.map((p) =>
+          p.id === editingPodcast.id ? { ...p, ...editFormData } : p
+        )
+      );
     } catch (error) {
       console.error("Error updating podcast:", error);
       setError("Failed to update podcast. Please try again.");
@@ -119,14 +112,6 @@ const Podcasts = () => {
   const filteredPodcasts = podcasts.filter((podcast) =>
     podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  if (isLoading) {
-    return (
-      <Container className="mt-4">
-        <h2>Loading podcasts...</h2>
-      </Container>
-    );
-  }
 
   if (error) {
     return (
@@ -163,6 +148,7 @@ const Podcasts = () => {
                   variant="top"
                   src={podcast.image}
                   alt={podcast.title}
+                  loading="lazy"
                 />
               )}
               <Card.Body>
@@ -190,13 +176,6 @@ const Podcasts = () => {
                     >
                       View
                     </Button>
-                    {console.log("Podcast owner:", podcast.owner)}
-                    {console.log("Current user:", currentUser)}
-                    {console.log("Comparison:", {
-                      podcastOwnerId: podcast.owner?.user,
-                      currentUserId: currentUser?.user_id,
-                      isMatch: podcast.owner?.user === currentUser?.user_id,
-                    })}
                     {currentUser &&
                       podcast.owner?.user === currentUser.user_id && (
                         <Button

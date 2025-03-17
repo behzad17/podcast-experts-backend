@@ -17,7 +17,6 @@ const PodcastDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [podcast, setPodcast] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -28,8 +27,6 @@ const PodcastDetail = () => {
       } catch (error) {
         console.error("Error fetching podcast:", error);
         setError("Failed to load podcast details. Please try again later.");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -46,16 +43,6 @@ const PodcastDetail = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Container className="mt-4 text-center">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </Container>
-    );
-  }
-
   if (error) {
     return (
       <Container className="mt-4">
@@ -66,8 +53,10 @@ const PodcastDetail = () => {
 
   if (!podcast) {
     return (
-      <Container className="mt-4">
-        <Alert variant="warning">Podcast not found.</Alert>
+      <Container className="mt-4 text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </Container>
     );
   }
@@ -83,6 +72,7 @@ const PodcastDetail = () => {
                 src={podcast.image}
                 alt={podcast.title}
                 style={{ height: "300px", objectFit: "cover" }}
+                loading="lazy"
               />
             )}
             <Card.Body>
