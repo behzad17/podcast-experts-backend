@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status, filters
+from rest_framework import generics, permissions, status, filters, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
@@ -7,8 +7,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import serializers
 from django.db import IntegrityError
 from django.db.models import Count, Avg
-from .models import ExpertProfile
-from .serializers import ExpertProfileSerializer
+from .models import ExpertProfile, ExpertComment, ExpertRating
+from .serializers import ExpertProfileSerializer, ExpertCommentSerializer, ExpertRatingSerializer
+from rest_framework.decorators import action
 
 # Create your views here.
 
@@ -126,17 +127,94 @@ class ExpertStatsView(APIView):
         expert_profile = get_object_or_404(ExpertProfile, user=request.user)
         
         # Get total views
-        total_views = expert_profile.views.count()
+        total_views = expert_profile.get_total_views()
         
-        # Get total collaborations
-        total_collaborations = expert_profile.collaborations.count()
+        # Get total bookmarks
+        total_bookmarks = expert_profile.get_total_bookmarks()
         
         # Get average rating
-        ratings = expert_profile.ratings.all()
-        average_rating = ratings.aggregate(Avg('rating'))['rating__avg'] or 0
+        average_rating = expert_profile.get_average_rating()
         
         return Response({
             'total_views': total_views,
-            'total_collaborations': total_collaborations,
+            'total_bookmarks': total_bookmarks,
             'average_rating': round(average_rating, 2),
         })
+
+
+class ExpertProfileViewSet(viewsets.ModelViewSet):
+    queryset = ExpertProfile.objects.all()
+    serializer_class = ExpertProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_queryset(self):
+        queryset = ExpertProfile.objects.all()
+        if self.action == 'list':
+            queryset = queryset.filter(is_approved=True)
+        return queryset
+
+    @action(detail=True, methods=['post'])
+    def add_comment(self, request, pk=None):
+        expert = self.get_object()
+        serializer = ExpertCommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(expert=expert, user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def rate(self, request, pk=None):
+        expert = self.get_object()
+        serializer = ExpertRatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(expert=expert, user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def bookmark(self, request, pk=None):
+        expert = self.get_object()
+        if request.user in expert.bookmarks.all():
+            expert.bookmarks.remove(request.user)
+            return Response({'status': 'unbookmarked'})
+        expert.bookmarks.add(request.user)
+        return Response({'status': 'bookmarked'})
+
+    @action(detail=True, methods=['post'])
+    def view(self, request, pk=None):
+        expert = self.get_object()
+        expert.views.add(request.user)
+        return Response({'status': 'viewed'})
+
+    @action(detail=False, methods=['get'])
+    def my_profile(self, request):
+        try:
+            expert_profile = ExpertProfile.objects.get(user=request.user)
+            serializer = self.get_serializer(expert_profile)
+            return Response(serializer.data)
+        except ExpertProfile.DoesNotExist:
+            return Response(
+                {'error': 'Expert profile not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        try:
+            expert_profile = ExpertProfile.objects.get(user=request.user)
+            stats = {
+                'total_views': expert_profile.get_total_views(),
+                'total_bookmarks': expert_profile.get_total_bookmarks(),
+                'average_rating': expert_profile.get_average_rating(),
+            }
+            return Response(stats)
+        except ExpertProfile.DoesNotExist:
+            return Response(
+                {'error': 'Expert profile not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
