@@ -115,7 +115,7 @@ const Podcasts = () => {
       });
 
       const response = await api.patch(
-        `/podcasts/${editingPodcast.id}/`,
+        `/podcasts/podcasts/${editingPodcast.id}/`,
         formData,
         {
           headers: {
@@ -164,9 +164,11 @@ const Podcasts = () => {
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Podcasts</h2>
-        <Button variant="primary" onClick={handleCreatePodcast}>
-          Create Podcast
-        </Button>
+        {currentUser && (
+          <Button variant="primary" onClick={handleCreatePodcast}>
+            Create Podcast
+          </Button>
+        )}
       </div>
 
       <Form.Group className="mb-3">

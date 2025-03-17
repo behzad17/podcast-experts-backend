@@ -4,18 +4,18 @@ from .models import UserProfile, CustomUser
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'user_type', 'email_verified', 'is_staff')
-    list_filter = ('user_type', 'email_verified', 'is_staff', 'is_superuser')
+    list_display = ('username', 'email', 'email_verified', 'is_staff')
+    list_filter = ('email_verified', 'is_staff', 'is_superuser')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('email', 'user_type')}),
+        ('Personal info', {'fields': ('email',)}),
         ('Status', {'fields': ('email_verified', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'user_type'),
+            'fields': ('username', 'email', 'password1', 'password2'),
         }),
     )
     search_fields = ('username', 'email')

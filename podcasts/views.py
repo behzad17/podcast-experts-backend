@@ -44,15 +44,7 @@ class PodcastListCreateView(generics.ListCreateAPIView):
             return Podcast.objects.filter(is_approved=True)
 
     def perform_create(self, serializer):
-        podcaster_profile = get_object_or_404(
-            PodcasterProfile, user=self.request.user
-        )
-        if not podcaster_profile.is_approved:
-            msg = (
-                "Your podcaster profile must be approved "
-                "before creating podcasts."
-            )
-            raise PermissionDenied(msg)
+        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
         serializer.save(owner=podcaster_profile, is_approved=False)
 
 
@@ -167,10 +159,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
         return queryset.filter(is_approved=True)
 
     def perform_create(self, serializer):
-        podcaster_profile = get_object_or_404(
-            PodcasterProfile,
-            user=self.request.user
-        )
+        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
         serializer.save(owner=podcaster_profile)
 
     @action(detail=True, methods=['post'])

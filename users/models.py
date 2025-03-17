@@ -4,15 +4,6 @@ from django.utils.crypto import get_random_string
 
 
 class CustomUser(AbstractUser):
-    USER_TYPE_CHOICES = [
-        ('podcaster', 'Podcaster'),
-        ('expert', 'Expert'),
-    ]
-    user_type = models.CharField(
-        max_length=10,
-        choices=USER_TYPE_CHOICES,
-        default='podcaster'
-    )
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_groups",
@@ -30,6 +21,12 @@ class CustomUser(AbstractUser):
         self.verification_token = get_random_string(64)
         self.save()
         return self.verification_token
+
+    def has_expert_profile(self):
+        return hasattr(self, 'expert_profile')
+
+    def has_podcaster_profile(self):
+        return hasattr(self, 'podcaster_profile')
 
 
 class UserProfile(models.Model):

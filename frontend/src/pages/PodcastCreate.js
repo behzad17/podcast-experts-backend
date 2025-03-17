@@ -49,7 +49,7 @@ const PodcastCreate = () => {
       });
 
       console.log("Sending podcast creation request");
-      const response = await api.post("/podcasts/", form, {
+      const response = await api.post("/podcasts/podcasts/", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -70,9 +70,7 @@ const PodcastCreate = () => {
         } else if (error.response.status === 400) {
           setError("Please check your input and try again");
         } else if (error.response.status === 403) {
-          setError(
-            "Your podcaster profile must be approved before creating podcasts"
-          );
+          setError("You don't have permission to create podcasts");
         } else {
           setError(error.response.data.detail || "Error creating podcast");
         }

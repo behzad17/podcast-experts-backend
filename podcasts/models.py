@@ -35,6 +35,18 @@ class PodcasterProfile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Podcaster Profile"
 
+    @classmethod
+    def get_or_create_profile(cls, user):
+        profile, created = cls.objects.get_or_create(
+            user=user,
+            defaults={
+                'bio': '',
+                'website': '',
+                'social_links': {}
+            }
+        )
+        return profile
+
 class Podcast(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
