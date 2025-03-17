@@ -107,10 +107,44 @@ const ExpertProfile = () => {
   const [reportReason, setReportReason] = useState("");
 
   useEffect(() => {
-    fetchExpertData();
-    fetchStats();
-    checkBookmarkStatus();
-    fetchUserRating();
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const storedUserData = JSON.parse(localStorage.getItem("userData"));
+
+        if (!token || !storedUserData) {
+          setError("Please log in to view your profile");
+          setLoading(false);
+          return;
+        }
+
+        const expertResponse = await api.get("/experts/my-profile/");
+        if (expertResponse.data) {
+          setExpertProfile(expertResponse.data);
+          setEditFormData({
+            name: expertResponse.data.name,
+            expertise: expertResponse.data.expertise,
+            experience_years: expertResponse.data.experience_years,
+            bio: expertResponse.data.bio,
+            website: expertResponse.data.website || "",
+            social_media: expertResponse.data.social_media || "",
+          });
+          // Only fetch these after we have the expert profile
+          await Promise.all([
+            fetchStats(),
+            checkBookmarkStatus(),
+            fetchUserRating(),
+          ]);
+        }
+      } catch (error) {
+        console.error("Error fetching expert data:", error);
+        setError("Failed to load profile data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -138,6 +172,7 @@ const ExpertProfile = () => {
   };
 
   const fetchStats = async () => {
+    if (!expertProfile?.id) return;
     try {
       const response = await api.get("/experts/stats/");
       setStats(response.data);
@@ -347,8 +382,9 @@ const ExpertProfile = () => {
   };
 
   const checkBookmarkStatus = async () => {
+    if (!expertProfile?.id) return;
     try {
-      const response = await api.get(`/experts/${expertProfile?.id}/`);
+      const response = await api.get(`/experts/${expertProfile.id}/`);
       setIsBookmarked(response.data.is_bookmarked);
     } catch (error) {
       console.error("Error checking bookmark status:", error);
@@ -356,8 +392,9 @@ const ExpertProfile = () => {
   };
 
   const fetchUserRating = async () => {
+    if (!expertProfile?.id) return;
     try {
-      const response = await api.get(`/experts/${expertProfile?.id}/`);
+      const response = await api.get(`/experts/${expertProfile.id}/`);
       setUserRating(response.data.user_rating || 0);
     } catch (error) {
       console.error("Error fetching user rating:", error);
@@ -588,13 +625,15 @@ const ExpertProfile = () => {
                       </Tooltip>
                     }
                   >
-                    <FaStar
-                      className={`me-1 ${
-                        star <= userRating ? "text-warning" : "text-muted"
-                      }`}
-                      style={{ cursor: isRating ? "not-allowed" : "pointer" }}
-                      onClick={() => !isRating && handleRate(star)}
-                    />
+                    <span>
+                      <FaStar
+                        className={`me-1 ${
+                          star <= userRating ? "text-warning" : "text-muted"
+                        }`}
+                        style={{ cursor: isRating ? "not-allowed" : "pointer" }}
+                        onClick={() => !isRating && handleRate(star)}
+                      />
+                    </span>
                   </OverlayTrigger>
                 ))}
               </div>
@@ -701,8 +740,8 @@ const ExpertProfile = () => {
               </Nav>
             </Card.Header>
             <Card.Body>
-              <TabContent activeKey={activeTab}>
-                <TabPane eventKey="profile">
+              <TabContent>
+                <TabPane eventKey="profile" active={activeTab === "profile"}>
                   <h5>About</h5>
                   <p>{expertProfile?.bio}</p>
                   <p>
@@ -729,7 +768,7 @@ const ExpertProfile = () => {
                   )}
                 </TabPane>
 
-                <TabPane eventKey="calendar">
+                <TabPane eventKey="calendar" active={activeTab === "calendar"}>
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h5>Calendar</h5>
                     <Button
@@ -793,7 +832,7 @@ const ExpertProfile = () => {
                   )}
                 </TabPane>
 
-                <TabPane eventKey="comments">
+                <TabPane eventKey="comments" active={activeTab === "comments"}>
                   <Form onSubmit={handleAddComment} className="mb-4">
                     <Form.Group>
                       <Form.Control
