@@ -1,18 +1,24 @@
 from django.db import models
 from django.utils import timezone
 from users.models import CustomUser
-from django.conf import settings
 
 # Create your models here.
 class PodcasterProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        CustomUser, 
+        on_delete=models.CASCADE, 
+        related_name='podcaster_profile'
+    )
     channel_name = models.CharField(max_length=255)
-    bio = models.TextField(blank=True)
+    description = models.TextField()
+    website = models.URLField(blank=True, null=True)
+    social_media = models.TextField(blank=True, null=True)
+    topics = models.CharField(max_length=255)
     is_approved = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return self.channel_name
+        return f"{self.user.username} - {self.channel_name}"
 
 class Podcast(models.Model):
     owner = models.ForeignKey(
@@ -32,7 +38,7 @@ class Podcast(models.Model):
 
 class Comment(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -40,4 +46,4 @@ class Comment(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f'Comment by {self.user.username} on {self.podcast.title}'
+        return f'Comment by {self.user.username} on {self.podcast.title}'[:79]
