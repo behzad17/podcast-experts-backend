@@ -639,7 +639,9 @@ const ExpertProfile = () => {
               <ListGroup.Item>
                 <FaStar className="me-2" />
                 Average Rating:{" "}
-                <Badge bg="warning">{stats.averageRating.toFixed(1)}</Badge>
+                <Badge bg="warning">
+                  {stats.averageRating ? stats.averageRating.toFixed(1) : "0.0"}
+                </Badge>
               </ListGroup.Item>
             </ListGroup>
           </Card>

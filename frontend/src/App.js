@@ -40,23 +40,17 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/experts" element={<Experts />} />
-          <Route path="/experts/create" element={<ExpertProfileCreate />} />
-          <Route path="/experts/:id" element={<ExpertProfileDetail />} />
           <Route path="/podcasts" element={<Podcasts />} />
           <Route path="/podcasts/create" element={<PodcastCreate />} />
-          <Route path="/expert/:id" element={<ExpertProfile />} />
+          <Route path="/expert-profile" element={<ExpertProfile />} />
+          <Route path="/experts/create" element={<ExpertProfileCreate />} />
+          <Route path="/experts/:id" element={<ExpertProfileDetail />} />
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/verify-email/:token" element={<VerifyEmail />} />
           <Route
-            path="/expert/profile/create"
-            element={<ExpertProfileCreate />}
+            path="/admin/expert-approval"
+            element={<AdminExpertApproval />}
           />
-          <Route
-            path="/podcaster/profile/create"
-            element={<PodcasterProfileCreate />}
-          />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/experts" element={<AdminExpertApproval />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
