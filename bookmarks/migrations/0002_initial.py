@@ -9,24 +9,24 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('comments', '0001_initial'),
+        ('bookmarks', '0001_initial'),
         ('podcasts', '0001_initial'),
         ('users', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='comment',
+            model_name='bookmark',
             name='expert',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='expert_comments', to='users.userprofile'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bookmarked_experts', to='users.userprofile'),
         ),
         migrations.AddField(
-            model_name='comment',
+            model_name='bookmark',
             name='podcast',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='podcasts.podcast'),
         ),
         migrations.AddField(
-            model_name='comment',
+            model_name='bookmark',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.userprofile'),
         ),

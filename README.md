@@ -1,6 +1,6 @@
 # Podcast Experts Backend
 
-A Django-based backend system for the Podcast Experts platform. This application manages podcast experts, user interactions, ratings, comments, and collaborations.
+A Django-based backend system for the Podcast Experts platform. This application manages podcast experts, user interactions, ratings, and comments.
 
 ## Features
 
@@ -9,7 +9,6 @@ A Django-based backend system for the Podcast Experts platform. This application
 - Podcast expert profiles
 - User messages and bookmarks
 - Rating and comment system
-- Collaboration management
 
 ## Setup
 

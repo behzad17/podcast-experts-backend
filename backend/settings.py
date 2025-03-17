@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'users',
     'experts',
     'podcasts',
-    'collaborations',
     'comments',
     'ratings',
     'bookmarks',

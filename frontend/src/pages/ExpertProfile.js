@@ -81,6 +81,8 @@ const ExpertProfile = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [isRating, setIsRating] = useState(false);
   const [isBookmarking, setIsBookmarking] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [userRating, setUserRating] = useState(0);
   const [formErrors, setFormErrors] = useState({});
   const [imageLoading, setImageLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -105,6 +107,10 @@ const ExpertProfile = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [commentToReport, setCommentToReport] = useState(null);
   const [reportReason, setReportReason] = useState("");
+  const [activeTab, setActiveTab] = useState("profile");
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [commentsLoading, setCommentsLoading] = useState(false);
 
   useEffect(() => {
     fetchExpertData();
@@ -239,6 +245,7 @@ const ExpertProfile = () => {
 
   const handleCommentChange = (e) => {
     const value = e.target.value;
+    setNewComment(value);
     setCommentCharCount(value.length);
   };
 
@@ -251,9 +258,10 @@ const ExpertProfile = () => {
     try {
       setIsSubmittingComment(true);
       await api.post(`/experts/${expert.id}/add_comment/`, {
-        content: commentSearch,
+        content: newComment,
       });
       showNotificationHandler("Comment added successfully");
+      setNewComment("");
       setCommentCharCount(0);
       fetchExpertData();
     } catch (error) {
@@ -324,7 +332,7 @@ const ExpertProfile = () => {
   const checkBookmarkStatus = async () => {
     if (!expert?.id) return;
     try {
-      const response = await api.get(`/experts/${expertProfile.id}/`);
+      const response = await api.get(`/experts/${expert.id}/`);
       setIsBookmarked(response.data.is_bookmarked);
     } catch (error) {
       console.error("Error checking bookmark status:", error);
@@ -332,9 +340,9 @@ const ExpertProfile = () => {
   };
 
   const fetchUserRating = async () => {
-    if (!expertProfile?.id) return;
+    if (!expert?.id) return;
     try {
-      const response = await api.get(`/experts/${expertProfile.id}/`);
+      const response = await api.get(`/experts/${expert.id}/`);
       setUserRating(response.data.user_rating || 0);
     } catch (error) {
       console.error("Error fetching user rating:", error);
@@ -344,15 +352,15 @@ const ExpertProfile = () => {
   const handleBookmark = async () => {
     try {
       setIsBookmarking(true);
-      await api.post(`/experts/${expertProfile.id}/bookmark/`);
+      await api.post(`/experts/${expert.id}/bookmark/`);
       setIsBookmarked(!isBookmarked);
-      showNotification(
+      showNotificationHandler(
         isBookmarked ? "Profile unbookmarked" : "Profile bookmarked"
       );
       fetchStats();
     } catch (error) {
       console.error("Error toggling bookmark:", error);
-      showNotification("Failed to update bookmark", "danger");
+      showNotificationHandler("Failed to update bookmark", "danger");
     } finally {
       setIsBookmarking(false);
     }
@@ -361,13 +369,13 @@ const ExpertProfile = () => {
   const handleRate = async (rating) => {
     try {
       setIsRating(true);
-      await api.post(`/experts/${expertProfile.id}/rate/`, { rating });
+      await api.post(`/experts/${expert.id}/rate/`, { rating });
       setUserRating(rating);
-      showNotification("Rating updated successfully");
+      showNotificationHandler("Rating updated successfully");
       fetchStats();
     } catch (error) {
       console.error("Error updating rating:", error);
-      showNotification("Failed to update rating", "danger");
+      showNotificationHandler("Failed to update rating", "danger");
     } finally {
       setIsRating(false);
     }
@@ -375,7 +383,7 @@ const ExpertProfile = () => {
 
   const handleView = async () => {
     try {
-      await api.post(`/experts/${expertProfile.id}/view/`);
+      await api.post(`/experts/${expert.id}/view/`);
       fetchStats();
     } catch (error) {
       console.error("Error recording view:", error);
@@ -394,12 +402,12 @@ const ExpertProfile = () => {
       id: Date.now().toString(),
     };
     setCalendarEvents([...calendarEvents, newEvent]);
-    showNotification("Event added successfully");
+    showNotificationHandler("Event added successfully");
   };
 
   const handleDeleteEvent = (event) => {
     setCalendarEvents(calendarEvents.filter((e) => e.id !== event.id));
-    showNotification("Event deleted successfully");
+    showNotificationHandler("Event deleted successfully");
   };
 
   const handleEventDelete = (event) => {
@@ -416,10 +424,10 @@ const ExpertProfile = () => {
     try {
       const url = window.location.href;
       await navigator.clipboard.writeText(url);
-      showNotification("Profile link copied to clipboard");
+      showNotificationHandler("Profile link copied to clipboard");
     } catch (error) {
       console.error("Error copying link:", error);
-      showNotification("Failed to copy link", "danger");
+      showNotificationHandler("Failed to copy link", "danger");
     }
   };
 
@@ -447,7 +455,7 @@ const ExpertProfile = () => {
 
   const confirmClearEvents = () => {
     setCalendarEvents([]);
-    showNotification("All events cleared successfully");
+    showNotificationHandler("All events cleared successfully");
     setShowClearEventsConfirm(false);
   };
 
@@ -459,17 +467,17 @@ const ExpertProfile = () => {
   const submitReport = async () => {
     try {
       await api.post(
-        `/experts/${expertProfile.id}/comments/${commentToReport}/report/`,
+        `/experts/${expert.id}/comments/${commentToReport}/report/`,
         {
           reason: reportReason,
         }
       );
-      showNotification("Comment reported successfully");
+      showNotificationHandler("Comment reported successfully");
       setShowReportModal(false);
       setReportReason("");
     } catch (error) {
       console.error("Error reporting comment:", error);
-      showNotification("Failed to report comment", "danger");
+      showNotificationHandler("Failed to report comment", "danger");
     }
   };
 
@@ -514,22 +522,24 @@ const ExpertProfile = () => {
     <Container className="mt-5">
       <ToastContainer position="top-end">
         <Toast
-          show={notification.show}
-          onClose={() => setNotification({ ...notification, show: false })}
+          show={showNotification.show}
+          onClose={() =>
+            setShowNotification({ ...showNotification, show: false })
+          }
           delay={3000}
           autohide
         >
           <Toast.Header>
             <strong className="me-auto">Notification</strong>
           </Toast.Header>
-          <Toast.Body>{notification.message}</Toast.Body>
+          <Toast.Body>{showNotification.message}</Toast.Body>
         </Toast>
       </ToastContainer>
 
       <Row>
         <Col md={4}>
           <Card className="mb-4">
-            <Card.Body>
+        <Card.Body>
               <div className="text-center mb-4">
                 {imageLoading && !imageLoaded && (
                   <div className="position-absolute top-50 start-50 translate-middle">
@@ -539,7 +549,7 @@ const ExpertProfile = () => {
                   </div>
                 )}
                 <img
-                  src={expertProfile?.profile_image || "/default-avatar.png"}
+                  src={expert?.profile_image || "/default-avatar.png"}
                   alt="Profile"
                   className="rounded-circle"
                   style={{
@@ -551,10 +561,8 @@ const ExpertProfile = () => {
                   onLoad={handleImageLoad}
                 />
               </div>
-              <h3 className="text-center">{expertProfile?.name}</h3>
-              <p className="text-center text-muted">
-                {expertProfile?.expertise}
-              </p>
+              <h3 className="text-center">{expert?.name}</h3>
+              <p className="text-center text-muted">{expert?.expertise}</p>
               <div className="d-flex justify-content-center mb-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <OverlayTrigger
@@ -579,7 +587,7 @@ const ExpertProfile = () => {
                 ))}
               </div>
               <div className="d-grid gap-2">
-                <Button variant="primary" onClick={handleEditProfile}>
+                <Button variant="primary" onClick={handleEdit}>
                   Edit Profile
                 </Button>
                 <Button
@@ -601,8 +609,8 @@ const ExpertProfile = () => {
                     : "Bookmark"}
                 </Button>
               </div>
-            </Card.Body>
-          </Card>
+        </Card.Body>
+      </Card>
 
           <Card className="mb-4">
             <Card.Header>Statistics</Card.Header>
@@ -684,27 +692,26 @@ const ExpertProfile = () => {
               <TabContent>
                 <TabPane eventKey="profile" active={activeTab === "profile"}>
                   <h5>About</h5>
-                  <p>{expertProfile?.bio}</p>
+                  <p>{expert?.bio}</p>
                   <p>
-                    <strong>Experience:</strong>{" "}
-                    {expertProfile?.experience_years} years
+                    <strong>Experience:</strong> {expert?.experience_years}{" "}
+                    years
                   </p>
-                  {expertProfile?.website && (
+                  {expert?.website && (
                     <p>
                       <strong>Website:</strong>{" "}
                       <a
-                        href={expertProfile.website}
+                        href={expert.website}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {expertProfile.website}
+                        {expert.website}
                       </a>
                     </p>
                   )}
-                  {expertProfile?.social_media && (
+                  {expert?.social_media && (
                     <p>
-                      <strong>Social Media:</strong>{" "}
-                      {expertProfile.social_media}
+                      <strong>Social Media:</strong> {expert.social_media}
                     </p>
                   )}
                 </TabPane>
@@ -775,7 +782,7 @@ const ExpertProfile = () => {
 
                 <TabPane eventKey="comments" active={activeTab === "comments"}>
                   <Form onSubmit={handleAddComment} className="mb-4">
-                    <Form.Group>
+        <Form.Group>
                       <Form.Control
                         as="textarea"
                         rows={3}
@@ -912,14 +919,14 @@ const ExpertProfile = () => {
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleEditSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                value={editFormData.name}
+                value={formData.name}
                 onChange={(e) => {
-                  setEditFormData({ ...editFormData, name: e.target.value });
+                  setFormData({ ...formData, name: e.target.value });
                   handleEditFormChange();
                 }}
                 isInvalid={!!formErrors.name}
@@ -932,13 +939,11 @@ const ExpertProfile = () => {
               <Form.Label>Expertise</Form.Label>
               <Form.Control
                 type="text"
-                value={editFormData.expertise}
-                onChange={(e) =>
-                  setEditFormData({
-                    ...editFormData,
-                    expertise: e.target.value,
-                  })
-                }
+                value={formData.expertise}
+                onChange={(e) => {
+                  setFormData({ ...formData, expertise: e.target.value });
+                  handleEditFormChange();
+                }}
                 isInvalid={!!formErrors.expertise}
               />
               <Form.Control.Feedback type="invalid">
@@ -949,13 +954,14 @@ const ExpertProfile = () => {
               <Form.Label>Experience (years)</Form.Label>
               <Form.Control
                 type="number"
-                value={editFormData.experience_years}
-                onChange={(e) =>
-                  setEditFormData({
-                    ...editFormData,
+                value={formData.experience_years}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
                     experience_years: e.target.value,
-                  })
-                }
+                  });
+                  handleEditFormChange();
+                }}
                 isInvalid={!!formErrors.experience_years}
               />
               <Form.Control.Feedback type="invalid">
@@ -967,8 +973,11 @@ const ExpertProfile = () => {
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={editFormData.bio}
-                onChange={handleBioChange}
+                value={formData.bio}
+                onChange={(e) => {
+                  setFormData({ ...formData, bio: e.target.value });
+                  handleEditFormChange();
+                }}
                 isInvalid={!!formErrors.bio}
                 maxLength={500}
               />
@@ -985,10 +994,11 @@ const ExpertProfile = () => {
               <Form.Label>Website</Form.Label>
               <Form.Control
                 type="url"
-                value={editFormData.website}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, website: e.target.value })
-                }
+                value={formData.website}
+                onChange={(e) => {
+                  setFormData({ ...formData, website: e.target.value });
+                  handleEditFormChange();
+                }}
                 isInvalid={!!formErrors.website}
               />
               <Form.Control.Feedback type="invalid">
@@ -999,20 +1009,22 @@ const ExpertProfile = () => {
               <Form.Label>Social Media</Form.Label>
               <Form.Control
                 type="text"
-                value={editFormData.social_media}
-                onChange={(e) =>
-                  setEditFormData({
-                    ...editFormData,
-                    social_media: e.target.value,
-                  })
-                }
+                value={formData.social_media}
+                onChange={(e) => {
+                  setFormData({ ...formData, social_media: e.target.value });
+                  handleEditFormChange();
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Profile Image</Form.Label>
               <Form.Control
                 type="file"
-                onChange={handleImageChange}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setFormData({ ...formData, profile_image: file });
+                  handleEditFormChange();
+                }}
                 accept="image/*"
               />
               {imagePreview && (
@@ -1076,8 +1088,8 @@ const ExpertProfile = () => {
           >
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
+          <Form.Control
+            type="text"
                 value={selectedEvent?.title || ""}
                 onChange={(e) =>
                   setSelectedEvent({ ...selectedEvent, title: e.target.value })
@@ -1132,9 +1144,9 @@ const ExpertProfile = () => {
                     end: new Date(e.target.value),
                   })
                 }
-                required
-              />
-            </Form.Group>
+            required
+          />
+        </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Event Color</Form.Label>
               <Form.Control
@@ -1154,10 +1166,10 @@ const ExpertProfile = () => {
                   onClick={() => setShowEventModal(false)}
                 >
                   Cancel
-                </Button>
+        </Button>
               )}
             </div>
-          </Form>
+      </Form>
         </Modal.Body>
       </Modal>
 

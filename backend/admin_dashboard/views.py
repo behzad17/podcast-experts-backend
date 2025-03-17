@@ -1,14 +1,26 @@
-from django.http import JsonResponse
-from django.contrib.auth import get_user_model
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from users.models import CustomUser
 from podcasts.models import Podcast
-from collaborations.models import CollaborationRequest
+from experts.models import ExpertProfile
+from comments.models import Comment
+from ratings.models import Rating
+from bookmarks.models import Bookmark
+from user_messages.models import Message
 
-User = get_user_model()
-
+@login_required
 def admin_stats(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+    
     data = {
-        "users": User.objects.count(),
+        "users": CustomUser.objects.count(),
         "podcasts": Podcast.objects.count(),
-        "collaborations": CollaborationRequest.objects.count(),
+        "experts": ExpertProfile.objects.count(),
+        "comments": Comment.objects.count(),
+        "ratings": Rating.objects.count(),
+        "bookmarks": Bookmark.objects.count(),
+        "messages": Message.objects.count(),
     }
-    return JsonResponse(data)
+    return render(request, 'admin/stats.html', {'data': data})

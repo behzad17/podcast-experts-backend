@@ -21,17 +21,21 @@ class IsPodcastOwner(permissions.BasePermission):
 class PodcastListCreateView(generics.ListCreateAPIView):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return Podcast.objects.all()
-        # Show all approved podcasts and user's own podcasts
-        return Podcast.objects.filter(
-            is_approved=True
-        ) | Podcast.objects.filter(
-            owner__user=self.request.user
-        )
+        elif self.request.user.is_authenticated:
+            # Show all approved podcasts and user's own podcasts
+            return Podcast.objects.filter(
+                is_approved=True
+            ) | Podcast.objects.filter(
+                owner__user=self.request.user
+            )
+        else:
+            # For unauthenticated users, only show approved podcasts
+            return Podcast.objects.filter(is_approved=True)
 
     def perform_create(self, serializer):
         podcaster_profile = get_object_or_404(

@@ -12,6 +12,7 @@ const Podcasts = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [editFormData, setEditFormData] = useState({
     title: "",
     description: "",
@@ -23,24 +24,36 @@ const Podcasts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [podcastsResponse, token] = await Promise.all([
-          api.get("/podcasts/"),
-          localStorage.getItem("token"),
-        ]);
-
+        setIsLoading(true);
+        setError("");
+        
+        // Fetch podcasts
+        const podcastsResponse = await api.get("/podcasts/");
         setPodcasts(podcastsResponse.data);
 
+        // Get current user if token exists
+        const token = localStorage.getItem("token");
         if (token) {
-          const tokenData = JSON.parse(atob(token.split(".")[1]));
-          setCurrentUser(tokenData);
+          try {
+            const userData = JSON.parse(localStorage.getItem("user"));
+            if (userData) {
+              setCurrentUser(userData);
+            }
+          } catch (error) {
+            console.error("Error parsing user data:", error);
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
         if (error.response?.status === 401) {
           setError("Please log in to view podcasts.");
+        } else if (error.response?.status === 404) {
+          setError("No podcasts found.");
         } else {
           setError("Failed to load podcasts. Please try again later.");
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -81,7 +94,7 @@ const Podcasts = () => {
         }
       });
 
-      await api.patch(`/podcasts/${editingPodcast.id}/`, formData, {
+      const response = await api.patch(`/podcasts/${editingPodcast.id}/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -90,7 +103,7 @@ const Podcasts = () => {
       setShowEditModal(false);
       setPodcasts(
         podcasts.map((p) =>
-          p.id === editingPodcast.id ? { ...p, ...editFormData } : p
+          p.id === editingPodcast.id ? { ...p, ...response.data } : p
         )
       );
     } catch (error) {
@@ -102,6 +115,18 @@ const Podcasts = () => {
   const filteredPodcasts = podcasts.filter((podcast) =>
     podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isLoading) {
+    return (
+      <Container className="mt-4">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   if (error) {
     return (

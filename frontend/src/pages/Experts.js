@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ExpertCard from "../components/experts/ExpertCard";
 import ExpertEditModal from "../components/experts/ExpertEditModal";
+import api from "../api/axios";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
@@ -35,15 +36,15 @@ const Experts = () => {
 
   const checkProfile = async () => {
     try {
-      const response = await fetch("/experts/my-profile/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setHasProfile(response.ok);
+      await api.get("/experts/my-profile/");
+      setHasProfile(true);
     } catch (error) {
-      console.error("Error checking profile:", error);
-      setHasProfile(false);
+      if (error.response && error.response.status === 404) {
+        setHasProfile(false);
+      } else {
+        console.error("Error checking profile:", error);
+        setHasProfile(false);
+      }
     }
   };
 
@@ -53,12 +54,8 @@ const Experts = () => {
 
   const fetchExperts = async () => {
     try {
-      const response = await fetch("/experts/");
-      if (!response.ok) {
-        throw new Error("Failed to fetch experts");
-      }
-      const data = await response.json();
-      setExperts(data);
+      const response = await api.get("/experts/");
+      setExperts(response.data);
     } catch (error) {
       setError("Failed to load experts. Please try again later.");
       console.error("Error fetching experts:", error);
@@ -101,19 +98,17 @@ const Experts = () => {
         }
       });
 
-      const response = await fetch(`/experts/${editingExpert.id}/`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formDataToSend,
-      });
+      const response = await api.put(
+        `/experts/${editingExpert.id}/`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error("Failed to update expert profile");
-      }
-
-      const updatedExpert = await response.json();
+      const updatedExpert = response.data;
       setExperts((prev) =>
         prev.map((expert) =>
           expert.id === updatedExpert.id ? updatedExpert : expert
