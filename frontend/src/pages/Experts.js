@@ -1,149 +1,199 @@
-import React, { useEffect, useState } from "react";
-import api from "../api/axios";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Form,
-  Button,
-  Alert,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Alert, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import ExpertCard from "../components/experts/ExpertCard";
+import ExpertEditModal from "../components/experts/ExpertEditModal";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasProfile, setHasProfile] = useState(false);
+  const [editingExpert, setEditingExpert] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    expertise: "",
+    experience_years: 0,
+    bio: "",
+    website: "",
+    social_media: "",
+    profile_image: null,
+  });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem("token");
-      const userData = JSON.parse(localStorage.getItem("userData"));
-      if (token && userData) {
-        try {
-          const response = await api.get(`/users/${userData.id}/`);
-          setIsAuthenticated(true);
-          // Check if user has an expert profile
-          try {
-            await api.get("/experts/my-profile/");
-            setHasProfile(true);
-          } catch (error) {
-            console.log(
-              "Expert profile check error:",
-              error.response?.data || error.message
-            );
-            if (error.response && error.response.status === 404) {
-              setHasProfile(false);
-            }
-          }
-        } catch (error) {
-          console.log(
-            "Auth check error:",
-            error.response?.data || error.message
-          );
-          setIsAuthenticated(false);
-        }
-      }
-    };
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
 
-    checkAuth();
+    if (token) {
+      checkProfile();
+    }
   }, []);
 
-  useEffect(() => {
-    const fetchExperts = async () => {
-      try {
-        console.log("Fetching experts...");
-        const response = await api.get("/experts/");
-        console.log("Experts response:", response.data);
-        setExperts(response.data);
-      } catch (error) {
-        console.error("Error fetching experts:", error);
-        console.error("Error response:", error.response?.data);
-        setError(error.response?.data?.detail || "Error loading experts");
-      }
-    };
+  const checkProfile = async () => {
+    try {
+      const response = await fetch("/experts/my-profile/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setHasProfile(response.ok);
+    } catch (error) {
+      console.error("Error checking profile:", error);
+      setHasProfile(false);
+    }
+  };
 
+  useEffect(() => {
     fetchExperts();
   }, []);
+
+  const fetchExperts = async () => {
+    try {
+      const response = await fetch("/experts/");
+      if (!response.ok) {
+        throw new Error("Failed to fetch experts");
+      }
+      const data = await response.json();
+      setExperts(data);
+    } catch (error) {
+      setError("Failed to load experts. Please try again later.");
+      console.error("Error fetching experts:", error);
+    }
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleEdit = (expert) => {
+    setEditingExpert(expert);
+    setFormData({
+      name: expert.name,
+      expertise: expert.expertise,
+      experience_years: expert.experience_years,
+      bio: expert.bio,
+      website: expert.website || "",
+      social_media: expert.social_media || "",
+      profile_image: null,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleChange = (event) => {
+    const { name, value, files } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+
+      const response = await fetch(`/experts/${editingExpert.id}/`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update expert profile");
+      }
+
+      const updatedExpert = await response.json();
+      setExperts((prev) =>
+        prev.map((expert) =>
+          expert.id === updatedExpert.id ? updatedExpert : expert
+        )
+      );
+      setShowEditModal(false);
+      setEditingExpert(null);
+    } catch (error) {
+      console.error("Error updating expert profile:", error);
+      setError("Failed to update expert profile. Please try again.");
+    }
+  };
 
   const filteredExperts = experts.filter((expert) =>
     expert.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (error) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="danger">{error}</Alert>
-      </Container>
-    );
-  }
-
   return (
-    <Container className="mt-4">
+    <Container className="py-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Experts</h2>
-        <div>
-          {isAuthenticated && hasProfile && (
-            <Link to="/expert-profile" className="me-2">
-              <Button variant="primary">My Expert Profile</Button>
-            </Link>
-          )}
-          {isAuthenticated && !hasProfile && (
-            <Link to="/experts/create">
-              <Button variant="primary">Create Expert Profile</Button>
-            </Link>
-          )}
-        </div>
+        <h1>Experts</h1>
+        {isAuthenticated && (
+          <div>
+            {hasProfile ? (
+              <Button
+                variant="primary"
+                onClick={() => navigate("/expert-profile")}
+              >
+                My Expert Profile
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                onClick={() => navigate("/experts/create")}
+              >
+                Create Expert Profile
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
-      <Form.Group className="mb-4">
+      <Form className="mb-4">
         <Form.Control
           type="text"
-          placeholder="Search experts by name..."
+          placeholder="Search experts..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearch}
         />
-      </Form.Group>
+      </Form>
 
-      {filteredExperts.length === 0 ? (
-        <Alert variant="info">No experts found</Alert>
-      ) : (
-        <Row xs={1} md={2} lg={3} className="g-4">
-          {filteredExperts.map((expert) => (
-            <Col key={expert.id}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    <Link
-                      to={`/experts/${expert.id}`}
-                      className="text-decoration-none text-dark"
-                    >
-                      {expert.name}
-                    </Link>
-                  </Card.Title>
-                  <Card.Text className="text-muted mb-2">
-                    Experience: {expert.experience_years} years
-                  </Card.Text>
-                  <Card.Text className="mb-2">
-                    <strong>Expertise:</strong> {expert.expertise}
-                  </Card.Text>
-                  <Card.Text className="text-truncate">{expert.bio}</Card.Text>
-                  <Link
-                    to={`/experts/${expert.id}`}
-                    className="btn btn-outline-primary"
-                  >
-                    View Profile
-                  </Link>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      <Row>
+        {filteredExperts.map((expert) => (
+          <Col key={expert.id} md={4} className="mb-4">
+            <ExpertCard
+              expert={expert}
+              currentUser={JSON.parse(localStorage.getItem("user"))}
+              onEdit={handleEdit}
+            />
+          </Col>
+        ))}
+      </Row>
+
+      {filteredExperts.length === 0 && (
+        <Alert variant="info">No experts found matching your search.</Alert>
       )}
+
+      <ExpertEditModal
+        show={showEditModal}
+        onHide={() => {
+          setShowEditModal(false);
+          setEditingExpert(null);
+        }}
+        expert={editingExpert}
+        formData={formData}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
     </Container>
   );
 };
