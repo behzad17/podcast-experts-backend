@@ -3,8 +3,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from .models import Podcast, PodcasterProfile
-from .serializers import PodcastSerializer, PodcasterProfileSerializer
+from .models import Podcast, PodcasterProfile, Comment
+from .serializers import PodcastSerializer, PodcasterProfileSerializer, CommentSerializer
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -117,3 +117,32 @@ class MyPodcastsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Podcast.objects.filter(owner__user=self.request.user)
+
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        podcast_id = self.kwargs.get('podcast_id')
+        return Comment.objects.filter(podcast_id=podcast_id)
+
+    def perform_create(self, serializer):
+        podcast_id = self.kwargs.get('podcast_id')
+        podcast = get_object_or_404(Podcast, id=podcast_id)
+        serializer.save(podcast=podcast, user=self.request.user)
+
+
+class CommentDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        podcast_id = self.kwargs.get('podcast_id')
+        return Comment.objects.filter(podcast_id=podcast_id)
+
+    def destroy(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.user != request.user:
+            raise PermissionDenied("You can only delete your own comments.")
+        return super().destroy(request, *args, **kwargs)

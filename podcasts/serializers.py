@@ -5,30 +5,17 @@ from .models import PodcasterProfile, Podcast, Comment
 class PodcasterProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PodcasterProfile
-        fields = [
-            'id',
-            'channel_name',
-            'description',
-            'website',
-            'social_media',
-            'topics',
-            'is_approved'
-        ]
-        read_only_fields = ['is_approved']
+        fields = ['id', 'channel_name', 'bio', 'is_approved', 'created_at']
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField()
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'created_at', 'user', 'user_name']
-        read_only_fields = ['user']
-
-    def get_user_name(self, obj):
-        if obj.user:
-            return obj.user.username
-        return None
+        fields = ['id', 'content', 'created_at', 'user_name', 'user_id']
+        read_only_fields = ['created_at']
 
 
 class PodcastSerializer(serializers.ModelSerializer):

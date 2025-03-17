@@ -7,10 +7,12 @@ from .views import (
     PodcasterProfileDetailView,
     PodcasterProfileApprovalView,
     MyPodcastsView,
+    CommentListCreateView,
+    CommentDetailView,
 )
 
 urlpatterns = [
-    path('', PodcastListCreateView.as_view(), name='podcast-list'),
+    path('', PodcastListCreateView.as_view(), name='podcast-list-create'),
     path('my-podcasts/', MyPodcastsView.as_view(), name='my-podcasts'),
     path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
     path(
@@ -33,4 +35,6 @@ urlpatterns = [
         PodcasterProfileApprovalView.as_view(),
         name='podcaster-profile-approve'
     ),
+    path('<int:podcast_id>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
+    path('<int:podcast_id>/comments/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
 ]
