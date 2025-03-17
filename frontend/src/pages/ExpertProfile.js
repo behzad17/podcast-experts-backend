@@ -591,7 +591,7 @@ const ExpertProfile = () => {
       <Row>
         <Col md={4}>
           <Card className="mb-4">
-            <Card.Body>
+        <Card.Body>
               <div className="text-center mb-4">
                 {imageLoading && !imageLoaded && (
                   <div className="position-absolute top-50 start-50 translate-middle">
@@ -663,8 +663,8 @@ const ExpertProfile = () => {
                     : "Bookmark"}
                 </Button>
               </div>
-            </Card.Body>
-          </Card>
+        </Card.Body>
+      </Card>
 
           <Card className="mb-4">
             <Card.Header>Statistics</Card.Header>
@@ -837,7 +837,7 @@ const ExpertProfile = () => {
 
                 <TabPane eventKey="comments" active={activeTab === "comments"}>
                   <Form onSubmit={handleAddComment} className="mb-4">
-                    <Form.Group>
+        <Form.Group>
                       <Form.Control
                         as="textarea"
                         rows={3}
@@ -1138,8 +1138,8 @@ const ExpertProfile = () => {
           >
             <Form.Group className="mb-3">
               <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
+          <Form.Control
+            type="text"
                 value={selectedEvent?.title || ""}
                 onChange={(e) =>
                   setSelectedEvent({ ...selectedEvent, title: e.target.value })
@@ -1194,9 +1194,9 @@ const ExpertProfile = () => {
                     end: new Date(e.target.value),
                   })
                 }
-                required
-              />
-            </Form.Group>
+            required
+          />
+        </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Event Color</Form.Label>
               <Form.Control
@@ -1216,10 +1216,10 @@ const ExpertProfile = () => {
                   onClick={() => setShowEventModal(false)}
                 >
                   Cancel
-                </Button>
+        </Button>
               )}
             </div>
-          </Form>
+      </Form>
         </Modal.Body>
       </Modal>
 
