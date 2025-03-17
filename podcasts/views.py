@@ -3,6 +3,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.pagination import PageNumberPagination
 from .models import Podcast, PodcasterProfile, Comment
 from .serializers import PodcastSerializer, PodcasterProfileSerializer, CommentSerializer
 
@@ -119,9 +120,16 @@ class MyPodcastsView(generics.ListAPIView):
         return Podcast.objects.filter(owner__user=self.request.user)
 
 
+class CommentPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+
 class CommentListCreateView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = CommentPagination
 
     def get_queryset(self):
         podcast_id = self.kwargs.get('podcast_id')
@@ -131,6 +139,16 @@ class CommentListCreateView(generics.ListCreateAPIView):
         podcast_id = self.kwargs.get('podcast_id')
         podcast = get_object_or_404(Podcast, id=podcast_id)
         serializer.save(podcast=podcast, user=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        response.data = {
+            'comments': response.data['results'],
+            'total': response.data['count'],
+            'next': response.data['next'],
+            'previous': response.data['previous']
+        }
+        return response
 
 
 class CommentDetailView(generics.RetrieveDestroyAPIView):
