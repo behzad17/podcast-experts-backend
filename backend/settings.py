@@ -126,70 +126,54 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True  # Temporarily allow all origins for testing
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
     "http://localhost:3002",
+    "http://localhost:3004",
+    "http://127.0.0.1:3000",
     "http://127.0.0.1:3002",
+    "http://127.0.0.1:3004",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
     "http://localhost:3002",
+    "http://localhost:3004",
+    "http://127.0.0.1:3000",
     "http://127.0.0.1:3002",
+    "http://127.0.0.1:3004",
 ]
 
 # Security Settings
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = None  # Changed from 'Lax' to None for testing
-SESSION_COOKIE_SAMESITE = None  # Changed from 'Lax' to None for testing
+CSRF_COOKIE_SAMESITE = None
+SESSION_COOKIE_SAMESITE = None
 CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 
 # Temporarily disable CSP for testing
 CSP_ENABLED = False
 
-# Comment out CSP settings temporarily
-# CSP_DEFAULT_SRC = ["'self'", "http://127.0.0.1:8000", "http://localhost:8000"]
-# CSP_CONNECT_SRC = [
-#     "'self'",
-#     "http://127.0.0.1:8000",
-#     "http://localhost:8000",
-#     "ws://127.0.0.1:8000",
-#     "ws://localhost:8000",
-#     "http://127.0.0.1:3002",
-#     "http://localhost:3002",
-#     "ws://127.0.0.1:3002",
-#     "ws://localhost:3002",
-# ]
+# Remove all CSP settings temporarily
+CSP_DEFAULT_SRC = None
+CSP_CONNECT_SRC = None
+CSP_SCRIPT_SRC = None
+CSP_STYLE_SRC = None
+CSP_IMG_SRC = None
+CSP_FONT_SRC = None
+CSP_FRAME_ANCESTORS = None
+CSP_INCLUDE_NONCE_IN = None
 
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'  # Changed from SAMEORIGIN
+X_FRAME_OPTIONS = 'DENY'
 SECURE_REFERRER_POLICY = 'same-origin'
 
 # Add these new security headers
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
-
-# CSP settings
-# CSP_DEFAULT_SRC = ["'self'", "http://127.0.0.1:8000", "http://localhost:8000"]
-# CSP_CONNECT_SRC = [
-#     "'self'",
-#     "http://127.0.0.1:8000",
-#     "http://localhost:8000",
-#     "ws://127.0.0.1:8000",
-#     "ws://localhost:8000",
-#     "http://127.0.0.1:3002",
-#     "http://localhost:3002",
-#     "ws://127.0.0.1:3002",
-#     "ws://localhost:3002",
-# ]
-CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
-CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
-CSP_IMG_SRC = ["'self'", "data:", "blob:", "http://127.0.0.1:8000", "http://localhost:8000"]
-CSP_FONT_SRC = ["'self'", "data:", "blob:"]
-CSP_FRAME_ANCESTORS = ["'none'"]  # Prevent framing
-CSP_INCLUDE_NONCE_IN = ['script-src']
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

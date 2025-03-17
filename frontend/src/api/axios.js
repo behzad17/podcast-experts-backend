@@ -20,6 +20,7 @@ api.interceptors.request.use(
       url: config.url,
       method: config.method,
       headers: config.headers,
+      data: config.data,
     });
     return config;
   },
@@ -43,6 +44,7 @@ api.interceptors.response.use(
       console.error("Response error:", {
         status: error.response.status,
         data: error.response.data,
+        headers: error.response.headers,
       });
     } else if (error.request) {
       console.error(
