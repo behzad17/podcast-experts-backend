@@ -123,25 +123,23 @@ REST_FRAMEWORK = {
 
 
 # CORS Configuration
-# Allow frontend to make requests to the backend
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
     "http://localhost:3002",
     "http://127.0.0.1:3002",
-    "http://localhost:3003",
-    "http://127.0.0.1:3003",
-    "http://localhost:3004",
-    "http://127.0.0.1:3004",
-    "http://localhost:3005",
-    "http://127.0.0.1:3005",
-    "http://localhost:3006",
-    "http://127.0.0.1:3006",
 ]
 
-# Additional CORS settings
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = False  # Don't enable in production
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:3002",
+    "http://127.0.0.1:3002",
+]
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
@@ -150,6 +148,7 @@ CORS_ALLOW_METHODS = [
     "DELETE",
     "OPTIONS"
 ]
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -160,26 +159,19 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "access-control-allow-origin"
+    "access-control-allow-origin",
+    "access-control-allow-credentials"
+]
+
+# Additional security settings
+CORS_EXPOSE_HEADERS = [
+    "Content-Type",
+    "X-CSRFToken",
 ]
 
 # Security Settings
 CSRF_COOKIE_SECURE = False  # Set to True in production
 SESSION_COOKIE_SECURE = False  # Set to True in production
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3002",
-    "http://127.0.0.1:3002",
-    "http://localhost:3003",
-    "http://127.0.0.1:3003",
-    "http://localhost:3004",
-    "http://127.0.0.1:3004",
-    "http://localhost:3005",
-    "http://127.0.0.1:3005",
-    "http://localhost:3006",
-    "http://127.0.0.1:3006",
-]
 
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
@@ -192,18 +184,22 @@ SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
 
-# Update CSP settings to be more specific
+# CSP settings
 CSP_DEFAULT_SRC = ["'self'"]
 CSP_CONNECT_SRC = [
     "'self'",
-    "http://127.0.0.1:8001",
-    "http://localhost:8001",
-    "ws://127.0.0.1:8001",
-    "ws://localhost:8001",
-    "http://127.0.0.1:3005",
-    "http://localhost:3005",
-    "ws://127.0.0.1:3005",
-    "ws://localhost:3005",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "ws://127.0.0.1:8000",
+    "ws://localhost:8000",
+    "http://127.0.0.1:3001",
+    "http://localhost:3001",
+    "ws://127.0.0.1:3001",
+    "ws://localhost:3001",
+    "http://127.0.0.1:3002",
+    "http://localhost:3002",
+    "ws://127.0.0.1:3002",
+    "ws://localhost:3002",
 ]
 CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
 CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
@@ -262,7 +258,7 @@ if not all([EMAIL_HOST_USER, EMAIL_HOST_PASSWORD]):
     print("Warning: Email settings not configured. Using console backend.")
 
 # Frontend URL for email verification
-FRONTEND_URL = 'http://localhost:3000'  # Update this to match your frontend URL
+FRONTEND_URL = 'http://localhost:3002'  # Update this to match your frontend URL
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

@@ -1,11 +1,14 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8001/api",
+  baseURL: "http://127.0.0.1:8000/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+  withCredentials: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
 });
 
 // Add a request interceptor
@@ -44,7 +47,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.code === "ERR_NETWORK") {
       console.error(
-        "Network error - please check if the server is running at http://localhost:8001"
+        "Network error - please check if the server is running at http://127.0.0.1:8000"
       );
       console.error("Error details:", {
         code: error.code,
