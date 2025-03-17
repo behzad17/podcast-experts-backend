@@ -8,8 +8,10 @@ import {
   Form,
   Button,
   Alert,
+  Modal,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Comments from "../components/Comments";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
@@ -18,6 +20,8 @@ const Experts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasProfile, setHasProfile] = useState(false);
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+  const [selectedExpert, setSelectedExpert] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -132,18 +136,45 @@ const Experts = () => {
                     <strong>Expertise:</strong> {expert.expertise}
                   </Card.Text>
                   <Card.Text className="text-truncate">{expert.bio}</Card.Text>
-                  <Link
-                    to={`/experts/${expert.id}`}
-                    className="btn btn-outline-primary"
-                  >
-                    View Profile
-                  </Link>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Link
+                      to={`/experts/${expert.id}`}
+                      className="btn btn-outline-primary"
+                    >
+                      View Profile
+                    </Link>
+                    <Button
+                      variant="outline-info"
+                      onClick={() => {
+                        setSelectedExpert(expert);
+                        setShowCommentsModal(true);
+                      }}
+                    >
+                      Comments
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
           ))}
         </Row>
       )}
+
+      {/* Comments Modal */}
+      <Modal
+        show={showCommentsModal}
+        onHide={() => setShowCommentsModal(false)}
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Comments for {selectedExpert?.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedExpert && (
+            <Comments entityType="experts" entityId={selectedExpert.id} />
+          )}
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };
