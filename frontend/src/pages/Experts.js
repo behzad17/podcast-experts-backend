@@ -22,9 +22,10 @@ const Experts = () => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
-      if (token) {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if (token && userData) {
         try {
-          const response = await api.get("/auth/user/");
+          const response = await api.get(`/users/${userData.id}/`);
           setIsAuthenticated(true);
           // Check if user has an expert profile
           try {

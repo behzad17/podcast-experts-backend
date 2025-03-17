@@ -36,7 +36,8 @@ const Login = () => {
           "Authorization"
         ] = `Bearer ${response.data.access}`;
 
-        navigate("/");
+        // Navigate to profile page
+        navigate("/profile");
       } else {
         setError("Invalid response from server");
       }

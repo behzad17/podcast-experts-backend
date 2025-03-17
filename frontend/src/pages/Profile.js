@@ -100,35 +100,28 @@ const Profile = () => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
+      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+
+      if (!token || !storedUserData) {
         setError("Please log in to view your profile");
         setLoading(false);
         return;
       }
 
-      // Decode token to get user info
-      const tokenData = JSON.parse(atob(token.split(".")[1]));
-      console.log("User data from token:", tokenData);
-
       // Get user details from backend
-      const userResponse = await api.get(`/users/${tokenData.user_id}/`);
+      const userResponse = await api.get(`/users/${storedUserData.id}/`);
       console.log("User details from backend:", userResponse.data);
 
-      // Combine token data with user details
-      const userData = {
-        ...tokenData,
-        user_type: userResponse.data.user_type,
-      };
-      console.log("Combined user data:", userData);
-      setUserData(userData);
+      // Set user data
+      setUserData(userResponse.data);
 
       // Fetch user's content based on their type
-      if (userData.user_type === "podcaster") {
+      if (userResponse.data.user_type === "podcaster") {
         console.log("Fetching podcasts for podcaster...");
         const podcastsResponse = await api.get("/podcasts/my-podcasts/");
         console.log("Podcasts response:", podcastsResponse.data);
         setPodcasts(podcastsResponse.data);
-      } else if (userData.user_type === "expert") {
+      } else if (userResponse.data.user_type === "expert") {
         const expertResponse = await api.get("/experts/my-profile/");
         setExpertProfile(expertResponse.data);
         setExpertFormData({
