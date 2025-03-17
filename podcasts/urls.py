@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import (
     PodcastListCreateView,
     PodcastDetailView,
@@ -7,10 +8,18 @@ from .views import (
     PodcasterProfileDetailView,
     PodcasterProfileApprovalView,
     MyPodcastsView,
+    CategoryViewSet,
+    PodcasterProfileViewSet,
+    PodcastViewSet,
 )
 
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'profiles', PodcasterProfileViewSet)
+router.register(r'podcasts', PodcastViewSet)
+
 urlpatterns = [
-    path('', PodcastListCreateView.as_view(), name='podcast-list'),
+    path('', include(router.urls)),
     path('my-podcasts/', MyPodcastsView.as_view(), name='my-podcasts'),
     path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
     path(

@@ -1,43 +1,77 @@
 from django.db import models
-from django.utils import timezone
 from users.models import CustomUser
+from django.conf import settings
+from django.utils.text import slugify
 
 # Create your models here.
-class PodcasterProfile(models.Model):
-    user = models.OneToOneField(
-        CustomUser, 
-        on_delete=models.CASCADE, 
-        related_name='podcaster_profile'
-    )
-    channel_name = models.CharField(max_length=255)
-    description = models.TextField()
-    website = models.URLField(blank=True, null=True)
-    social_media = models.TextField(blank=True, null=True)
-    topics = models.CharField(max_length=255)
-    is_approved = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now)
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} - {self.channel_name}"
+        return self.name
+
+class PodcasterProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='podcaster_profile'
+    )
+    bio = models.TextField(blank=True)
+    website = models.URLField(blank=True, null=True, default='')
+    social_links = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s Podcaster Profile"
 
 class Podcast(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
     owner = models.ForeignKey(
-        PodcasterProfile, 
-        on_delete=models.CASCADE, 
+        PodcasterProfile,
+        on_delete=models.CASCADE,
         related_name='podcasts'
     )
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    image = models.ImageField(upload_to='podcasts/', blank=True, null=True)
-    link = models.URLField(blank=True, null=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='podcasts'
+    )
+    image = models.ImageField(
+        upload_to='podcast_images/',
+        null=True,
+        blank=True
+    )
+    link = models.URLField(null=True, blank=True, default='')
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.title
 
 class Comment(models.Model):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='comments')
+    podcast = models.ForeignKey(
+        Podcast,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

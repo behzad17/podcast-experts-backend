@@ -1,10 +1,16 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from .models import Podcast, PodcasterProfile
-from .serializers import PodcastSerializer, PodcasterProfileSerializer
+from .models import Podcast, PodcasterProfile, Category
+from .serializers import (
+    PodcastSerializer,
+    PodcasterProfileSerializer,
+    CategorySerializer
+)
+from .permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
+from rest_framework.decorators import action
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -121,3 +127,60 @@ class MyPodcastsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Podcast.objects.filter(owner__user=self.request.user)
+
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class PodcasterProfileViewSet(viewsets.ModelViewSet):
+    queryset = PodcasterProfile.objects.all()
+    serializer_class = PodcasterProfileSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return PodcasterProfile.objects.all()
+        return PodcasterProfile.objects.filter(user=self.request.user)
+
+
+class PodcastViewSet(viewsets.ModelViewSet):
+    queryset = Podcast.objects.all()
+    serializer_class = PodcastSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Podcast.objects.all()
+        category = self.request.query_params.get('category', None)
+        
+        if category:
+            queryset = queryset.filter(category_id=category)
+            
+        if self.request.user.is_staff:
+            return queryset
+        elif self.request.user.is_authenticated:
+            return queryset.filter(
+                is_approved=True
+            ) | queryset.filter(owner__user=self.request.user)
+        return queryset.filter(is_approved=True)
+
+    def perform_create(self, serializer):
+        podcaster_profile = get_object_or_404(
+            PodcasterProfile,
+            user=self.request.user
+        )
+        serializer.save(owner=podcaster_profile)
+
+    @action(detail=True, methods=['post'])
+    def approve(self, request, pk=None):
+        if not request.user.is_staff:
+            return Response(
+                {'detail': 'Permission denied'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        podcast = self.get_object()
+        podcast.is_approved = True
+        podcast.save()
+        return Response({'status': 'podcast approved'})

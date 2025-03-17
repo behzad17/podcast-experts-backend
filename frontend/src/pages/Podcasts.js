@@ -26,10 +26,30 @@ const Podcasts = () => {
       try {
         setIsLoading(true);
         setError("");
-        
+
         // Fetch podcasts
-        const podcastsResponse = await api.get("/podcasts/");
-        setPodcasts(podcastsResponse.data);
+        const podcastsResponse = await api.get("/podcasts/podcasts/");
+        console.log("Podcasts response:", podcastsResponse);
+        console.log("Response status:", podcastsResponse.status);
+        console.log("Response headers:", podcastsResponse.headers);
+        console.log("Response data:", podcastsResponse.data);
+
+        // Handle different response structures
+        let podcastsData;
+        if (Array.isArray(podcastsResponse.data)) {
+          podcastsData = podcastsResponse.data;
+        } else if (podcastsResponse.data.results) {
+          podcastsData = podcastsResponse.data.results;
+        } else {
+          console.error(
+            "Unexpected response structure:",
+            podcastsResponse.data
+          );
+          throw new Error("Invalid response format from server");
+        }
+
+        console.log("Processed podcasts data:", podcastsData);
+        setPodcasts(podcastsData);
 
         // Get current user if token exists
         const token = localStorage.getItem("token");
@@ -94,11 +114,15 @@ const Podcasts = () => {
         }
       });
 
-      const response = await api.patch(`/podcasts/${editingPodcast.id}/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await api.patch(
+        `/podcasts/${editingPodcast.id}/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       setShowEditModal(false);
       setPodcasts(

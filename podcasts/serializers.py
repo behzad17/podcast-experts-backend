@@ -1,20 +1,19 @@
 from rest_framework import serializers
-from .models import PodcasterProfile, Podcast, Comment
+from .models import Category, PodcasterProfile, Podcast, Comment
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'description']
 
 
 class PodcasterProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
     class Meta:
         model = PodcasterProfile
-        fields = [
-            'id',
-            'channel_name',
-            'description',
-            'website',
-            'social_media',
-            'topics',
-            'is_approved'
-        ]
-        read_only_fields = ['is_approved']
+        fields = ['id', 'username', 'bio', 'website', 'social_links']
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -33,6 +32,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PodcastSerializer(serializers.ModelSerializer):
     owner = PodcasterProfileSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    category_id = serializers.IntegerField(write_only=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     views = serializers.IntegerField(read_only=True, default=0)
     average_rating = serializers.FloatField(read_only=True)
@@ -47,15 +48,19 @@ class PodcastSerializer(serializers.ModelSerializer):
             'image',
             'link',
             'created_at',
+            'updated_at',
             'is_approved',
             'owner',
+            'category',
+            'category_id',
             'views',
             'average_rating',
             'total_bookmarks',
             'comments'
         ]
         read_only_fields = [
-            'owner',
+            'created_at',
+            'updated_at',
             'is_approved',
             'views',
             'average_rating',
