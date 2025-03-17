@@ -1,45 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { Card, Form, Button, ListGroup, Alert, Badge } from "react-bootstrap";
+import {
+  Card,
+  Form,
+  Button,
+  ListGroup,
+  Alert,
+  Badge,
+  Spinner,
+} from "react-bootstrap";
 import api from "../api/axios";
+import { useAuth } from "../contexts/AuthContext";
 
 const Comments = ({ type, id }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     fetchComments();
-    fetchCurrentUser();
   }, [type, id]);
 
-  const fetchCurrentUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const tokenData = JSON.parse(atob(token.split(".")[1]));
-      setCurrentUser(tokenData);
-    } catch (error) {
-      console.error("Error getting current user:", error);
-    }
-  };
-
-  const fetchComments = async () => {
+  const fetchComments = async (pageNum = 1) => {
     try {
       setLoading(true);
       const response = await api.get(
-        `/api/comments/?content_type=${type}&object_id=${id}`
+        `/${type}/${id}/comments/?page=${pageNum}`
       );
-      // Sort comments by creation date, newest first
-      const sortedComments = response.data.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-      setComments(sortedComments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
+      const data = await response.data;
+
+      if (pageNum === 1) {
+        setComments(data.comments);
+      } else {
+        setComments((prev) => [...prev, ...data.comments]);
+      }
+
+      setHasMore(!!data.next);
+      setPage(pageNum);
+    } catch (err) {
+      console.error("Error fetching comments:", err);
       setError("Failed to load comments. Please try again later.");
     } finally {
       setLoading(false);
@@ -54,25 +57,18 @@ const Comments = ({ type, id }) => {
     setError("");
 
     try {
-      const response = await api.post(`/api/comments/`, {
+      const response = await api.post(`/${type}/${id}/comments/`, {
         content: newComment.trim(),
-        content_type: type,
-        object_id: id,
       });
 
-      // Add the new comment to the beginning of the list
-      setComments([response.data, ...comments]);
+      if (!response.ok) throw new Error("Failed to post comment");
+
+      const data = await response.data;
+      setComments((prev) => [data, ...prev]);
       setNewComment("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      if (error.response?.data) {
-        setError(
-          error.response.data.detail ||
-            "Failed to post comment. Please try again."
-        );
-      } else {
-        setError("Failed to post comment. Please try again.");
-      }
+      setError("Failed to post comment. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -80,7 +76,7 @@ const Comments = ({ type, id }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      await api.delete(`/api/comments/${commentId}/`);
+      await api.delete(`/${type}/${id}/comments/${commentId}/`);
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -109,7 +105,7 @@ const Comments = ({ type, id }) => {
       <Card.Body>
         {error && <Alert variant="danger">{error}</Alert>}
 
-        {currentUser ? (
+        {isAuthenticated ? (
           <Form onSubmit={handleSubmit} className="mb-4">
             <Form.Group>
               <Form.Control
@@ -150,16 +146,18 @@ const Comments = ({ type, id }) => {
                   </div>
                   <p className="mb-0">{comment.content}</p>
                 </div>
-                {currentUser && comment.user_id === currentUser.user_id && (
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => handleDelete(comment.id)}
-                    className="ms-2"
-                  >
-                    Delete
-                  </Button>
-                )}
+                {isAuthenticated &&
+                  user &&
+                  comment.user_id === user.user_id && (
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDelete(comment.id)}
+                      className="ms-2"
+                    >
+                      Delete
+                    </Button>
+                  )}
               </div>
             </ListGroup.Item>
           ))}
