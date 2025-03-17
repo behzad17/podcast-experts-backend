@@ -108,13 +108,27 @@ const Profile = () => {
 
       // Decode token to get user info
       const tokenData = JSON.parse(atob(token.split(".")[1]));
-      setUserData(tokenData);
+      console.log("User data from token:", tokenData);
+
+      // Get user details from backend
+      const userResponse = await api.get(`/users/${tokenData.user_id}/`);
+      console.log("User details from backend:", userResponse.data);
+
+      // Combine token data with user details
+      const userData = {
+        ...tokenData,
+        user_type: userResponse.data.user_type,
+      };
+      console.log("Combined user data:", userData);
+      setUserData(userData);
 
       // Fetch user's content based on their type
-      if (tokenData.user_type === "podcaster") {
+      if (userData.user_type === "podcaster") {
+        console.log("Fetching podcasts for podcaster...");
         const podcastsResponse = await api.get("/podcasts/my-podcasts/");
+        console.log("Podcasts response:", podcastsResponse.data);
         setPodcasts(podcastsResponse.data);
-      } else if (tokenData.user_type === "expert") {
+      } else if (userData.user_type === "expert") {
         const expertResponse = await api.get("/experts/my-profile/");
         setExpertProfile(expertResponse.data);
         setExpertFormData({
@@ -128,6 +142,9 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+      }
       setError("Failed to load profile data");
     } finally {
       setLoading(false);
@@ -436,72 +453,71 @@ const Profile = () => {
   );
 
   const renderPodcastCard = (podcast) => (
-    <Col key={podcast.id} md={4} className="mb-3">
-      <Card>
-        {podcast.image && (
-          <Card.Img variant="top" src={podcast.image} alt={podcast.title} />
-        )}
-        <Card.Body>
-          <Card.Title>{podcast.title}</Card.Title>
-          <Card.Text>{podcast.description}</Card.Text>
-          <div className="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <Badge bg="info" className="me-2">
-                Views: {podcast.views || 0}
-              </Badge>
-              <Badge bg="success">
-                Rating: {podcast.average_rating?.toFixed(1) || 0}
-              </Badge>
-            </div>
+    <Card className="h-100">
+      {podcast.image && (
+        <Card.Img
+          variant="top"
+          src={podcast.image}
+          alt={podcast.title}
+          style={{ height: "200px", objectFit: "cover" }}
+        />
+      )}
+      <Card.Body>
+        <Card.Title>{podcast.title}</Card.Title>
+        <Card.Text>{podcast.description}</Card.Text>
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <Badge bg="primary">Views: {podcast.views || 0}</Badge>
+          <Badge bg="success">
+            Rating: {podcast.rating?.toFixed(1) || "N/A"}
+          </Badge>
+        </div>
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="btn-group">
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => handleEditPodcast(podcast)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={() => handleDeletePodcast(podcast)}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="outline-info"
+              size="sm"
+              onClick={() => {
+                setSelectedPodcast(podcast);
+                fetchComments(podcast.id);
+                setShowComments(true);
+              }}
+            >
+              Comments
+            </Button>
           </div>
-          {renderSocialSharing(podcast)}
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              {podcast.link && (
-                <Button
-                  variant="primary"
-                  href={podcast.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="me-2"
-                >
-                  Listen
-                </Button>
-              )}
-              <Button
-                variant="outline-primary"
-                onClick={() => handleEditPodcast(podcast)}
-                className="me-2"
-              >
-                Edit
-              </Button>
-              <Button
-                variant="outline-danger"
-                onClick={() => handleDeletePodcast(podcast)}
-                className="me-2"
-              >
-                Delete
-              </Button>
-              <Button
-                variant="outline-info"
-                onClick={() => {
-                  setSelectedPodcast(podcast);
-                  fetchComments(podcast.id);
-                  setShowComments(true);
-                }}
-              >
-                Comments
-              </Button>
-            </div>
-            {!podcast.is_approved && (
-              <Alert variant="warning" className="mb-0">
-                Pending approval
-              </Alert>
-            )}
-          </div>
-        </Card.Body>
-      </Card>
-    </Col>
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-secondary" size="sm">
+              Share
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => handleShare("facebook", podcast)}>
+                <FaFacebook className="me-2" /> Facebook
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleShare("twitter", podcast)}>
+                <FaTwitter className="me-2" /> Twitter
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleShare("linkedin", podcast)}>
+                <FaLinkedin className="me-2" /> LinkedIn
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </Card.Body>
+    </Card>
   );
 
   if (loading) {
@@ -522,343 +538,194 @@ const Profile = () => {
 
   return (
     <Container className="mt-4">
-      <ToastContainer position="top-end" className="p-3">
+      <ToastContainer position="top-end">
         <Toast
           show={notification.show}
-          bg={notification.type}
-          autohide
+          onClose={() => setNotification({ ...notification, show: false })}
           delay={3000}
+          autohide
         >
-          <Toast.Body
-            className={notification.type === "success" ? "text-white" : ""}
-          >
-            {notification.message}
-          </Toast.Body>
+          <Toast.Header>
+            <strong className="me-auto">
+              {notification.type === "success" ? "Success" : "Error"}
+            </strong>
+          </Toast.Header>
+          <Toast.Body>{notification.message}</Toast.Body>
         </Toast>
       </ToastContainer>
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>My Profile</h2>
-        <Button variant="outline-primary" onClick={handleViewPublicProfile}>
-          View Public Profile
-        </Button>
-      </div>
-
-      <Card className="mb-4">
-        <Card.Body>
-          <Card.Title>User Information</Card.Title>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <strong>User Type:</strong> {userData?.user_type}
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <strong>User ID:</strong> {userData?.user_id}
-            </ListGroup.Item>
-          </ListGroup>
-        </Card.Body>
-      </Card>
-
-      {/* Stats Card */}
-      <Card className="mb-4">
-        <Card.Body>
-          <Card.Title>Statistics</Card.Title>
-          <Row>
-            <Col md={4}>
-              <div className="text-center">
-                <h3>{stats.totalViews}</h3>
-                <p>Total Views</p>
-              </div>
-            </Col>
-            <Col md={4}>
-              <div className="text-center">
-                <h3>{stats.totalBookmarks}</h3>
-                <p>Total Bookmarks</p>
-              </div>
-            </Col>
-            <Col md={4}>
-              <div className="text-center">
-                <h3>{stats.averageRating?.toFixed(1) || 0}</h3>
-                <p>Average Rating</p>
-              </div>
+      {error && <Alert variant="danger">{error}</Alert>}
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <Row className="mb-4">
+            <Col>
+              <h2>My Profile</h2>
+              <Button
+                variant="outline-primary"
+                className="me-2"
+                onClick={handleViewPublicProfile}
+              >
+                View Public Profile
+              </Button>
+              {userData?.user_type === "podcaster" && (
+                <Button variant="primary" onClick={handleCreateNew}>
+                  Create New Podcast
+                </Button>
+              )}
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
 
-      {userData?.user_type === "podcaster" && (
-        <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <h3 className="mt-4">My Podcasts</h3>
-            <Button variant="primary" onClick={handleCreateNew}>
-              Create New Podcast
-            </Button>
-          </div>
-          {renderSortingAndFiltering()}
-          {showCalendar ? (
-            renderCalendarView()
-          ) : (
-            <Row>
-              {filterPodcasts(sortPodcasts(podcasts)).map((podcast) =>
-                renderPodcastCard(podcast)
-              )}
-            </Row>
-          )}
-          {podcasts.length === 0 && (
-            <Alert variant="info">
-              You haven't created any podcasts yet.
-              <Button
-                variant="link"
-                className="ms-2"
-                onClick={() => navigate("/podcasts/create")}
-              >
-                Create your first podcast
-              </Button>
-            </Alert>
-          )}
-        </div>
-      )}
+          {userData?.user_type === "podcaster" && (
+            <>
+              <Card className="mb-4">
+                <Card.Header>
+                  <h4>Podcast Statistics</h4>
+                </Card.Header>
+                <Card.Body>
+                  <Row>
+                    <Col md={4}>
+                      <h5>Total Views</h5>
+                      <p className="h3">{stats.totalViews}</p>
+                    </Col>
+                    <Col md={4}>
+                      <h5>Total Bookmarks</h5>
+                      <p className="h3">{stats.totalBookmarks}</p>
+                    </Col>
+                    <Col md={4}>
+                      <h5>Average Rating</h5>
+                      <p className="h3">{stats.averageRating.toFixed(1)}</p>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
 
-      {userData?.user_type === "expert" && expertProfile && (
-        <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <h3 className="mt-4">Expert Profile</h3>
-            <Button variant="primary" onClick={handleEditExpertProfile}>
-              Edit Profile
-            </Button>
-          </div>
-          <Card>
-            <Card.Body>
-              <Card.Title>{expertProfile.name}</Card.Title>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <strong>Expertise:</strong> {expertProfile.expertise}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <strong>Experience:</strong> {expertProfile.experience_years}{" "}
-                  years
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <strong>Bio:</strong> {expertProfile.bio}
-                </ListGroup.Item>
-                {expertProfile.website && (
-                  <ListGroup.Item>
-                    <strong>Website:</strong>{" "}
-                    <a
-                      href={expertProfile.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
+              <Card>
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                  <h4>My Podcasts</h4>
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      className="me-2"
+                      onClick={() => setShowCalendar(!showCalendar)}
                     >
-                      {expertProfile.website}
-                    </a>
-                  </ListGroup.Item>
-                )}
-                {expertProfile.social_media && (
-                  <ListGroup.Item>
-                    <strong>Social Media:</strong> {expertProfile.social_media}
-                  </ListGroup.Item>
-                )}
-              </ListGroup>
-              {!expertProfile.is_approved && (
-                <Alert variant="warning" className="mt-3">
-                  Your expert profile is pending approval
-                </Alert>
-              )}
-            </Card.Body>
-          </Card>
-        </div>
+                      {showCalendar ? "List View" : "Calendar View"}
+                    </Button>
+                    {renderSortingAndFiltering()}
+                  </div>
+                </Card.Header>
+                <Card.Body>
+                  {showCalendar ? (
+                    renderCalendarView()
+                  ) : (
+                    <Row>
+                      {filterPodcasts(sortPodcasts(podcasts)).map((podcast) => (
+                        <Col key={podcast.id} md={6} lg={4} className="mb-4">
+                          {renderPodcastCard(podcast)}
+                        </Col>
+                      ))}
+                    </Row>
+                  )}
+                </Card.Body>
+              </Card>
+            </>
+          )}
+
+          {/* Edit Podcast Modal */}
+          <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Podcast</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={handlePodcastEditSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Title</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editFormData.title}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        title: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={editFormData.description}
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        description: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Link</Form.Label>
+                  <Form.Control
+                    type="url"
+                    value={editFormData.link}
+                    onChange={(e) =>
+                      setEditFormData({ ...editFormData, link: e.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    type="file"
+                    onChange={(e) =>
+                      setEditFormData({
+                        ...editFormData,
+                        image: e.target.files[0],
+                      })
+                    }
+                  />
+                </Form.Group>
+                <Button type="submit" variant="primary">
+                  Save Changes
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
+
+          {/* Delete Confirmation Modal */}
+          <Modal
+            show={showDeleteModal}
+            onHide={() => setShowDeleteModal(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Podcast</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Are you sure you want to delete this podcast? This action cannot
+              be undone.
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Comments Modal */}
+          {renderCommentsModal()}
+        </>
       )}
-
-      {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Podcast</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete "{deletingPodcast?.title}"? This
-          action cannot be undone.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={confirmDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Podcast Edit Modal */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Podcast</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handlePodcastEditSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                value={editFormData.title}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, title: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={editFormData.description}
-                onChange={(e) =>
-                  setEditFormData({
-                    ...editFormData,
-                    description: e.target.value,
-                  })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Link</Form.Label>
-              <Form.Control
-                type="url"
-                value={editFormData.link}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, link: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>New Image</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, image: e.target.files[0] })
-                }
-                accept="image/*"
-              />
-            </Form.Group>
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="secondary"
-                onClick={() => setShowEditModal(false)}
-                className="me-2"
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" type="submit">
-                Save Changes
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
-      {/* Expert Profile Edit Modal */}
-      <Modal
-        show={showExpertEditModal}
-        onHide={() => setShowExpertEditModal(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Expert Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleExpertEditSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={expertFormData.name}
-                onChange={(e) =>
-                  setExpertFormData({ ...expertFormData, name: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Expertise</Form.Label>
-              <Form.Control
-                type="text"
-                value={expertFormData.expertise}
-                onChange={(e) =>
-                  setExpertFormData({
-                    ...expertFormData,
-                    expertise: e.target.value,
-                  })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Experience (years)</Form.Label>
-              <Form.Control
-                type="number"
-                value={expertFormData.experience_years}
-                onChange={(e) =>
-                  setExpertFormData({
-                    ...expertFormData,
-                    experience_years: e.target.value,
-                  })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Bio</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={expertFormData.bio}
-                onChange={(e) =>
-                  setExpertFormData({ ...expertFormData, bio: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Website</Form.Label>
-              <Form.Control
-                type="url"
-                value={expertFormData.website}
-                onChange={(e) =>
-                  setExpertFormData({
-                    ...expertFormData,
-                    website: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Social Media</Form.Label>
-              <Form.Control
-                type="text"
-                value={expertFormData.social_media}
-                onChange={(e) =>
-                  setExpertFormData({
-                    ...expertFormData,
-                    social_media: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="secondary"
-                onClick={() => setShowExpertEditModal(false)}
-                className="me-2"
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" type="submit">
-                Save Changes
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
-      {renderCommentsModal()}
     </Container>
   );
 };

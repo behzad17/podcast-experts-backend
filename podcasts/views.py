@@ -109,3 +109,11 @@ class PodcasterProfileApprovalView(APIView):
             {'message': 'Profile approved successfully'},
             status=status.HTTP_200_OK
         )
+
+
+class MyPodcastsView(generics.ListAPIView):
+    serializer_class = PodcastSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Podcast.objects.filter(owner__user=self.request.user)

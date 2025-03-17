@@ -6,10 +6,12 @@ from .views import (
     PodcasterProfileUpdateView,
     PodcasterProfileDetailView,
     PodcasterProfileApprovalView,
+    MyPodcastsView,
 )
 
 urlpatterns = [
     path('', PodcastListCreateView.as_view(), name='podcast-list'),
+    path('my-podcasts/', MyPodcastsView.as_view(), name='my-podcasts'),
     path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
     path(
         'profile/create/',

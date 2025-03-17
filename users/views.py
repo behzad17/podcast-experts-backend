@@ -1,14 +1,15 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from .serializers import UserRegisterSerializer
+from .serializers import UserRegisterSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from .models import UserProfile
+from rest_framework.exceptions import PermissionDenied
 
 User = get_user_model()
 
@@ -104,3 +105,14 @@ class UserLoginView(TokenObtainPairView):
                 {"detail": "Invalid username or password."},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_object(self):
+        user_id = self.kwargs.get('pk')
+        if user_id == self.request.user.id:
+            return self.request.user
+        raise PermissionDenied("You can only view your own user details.")
