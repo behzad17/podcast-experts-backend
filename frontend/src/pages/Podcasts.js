@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Form,
-  Alert,
-  Button,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
+import { Container, Row, Col, Form, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import PodcastCard from "../components/podcasts/PodcastCard";
+import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -31,7 +23,6 @@ const Podcasts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch podcasts and user data in parallel
         const [podcastsResponse, token] = await Promise.all([
           api.get("/podcasts/"),
           localStorage.getItem("token"),
@@ -97,7 +88,6 @@ const Podcasts = () => {
       });
 
       setShowEditModal(false);
-      // Update the podcast in the local state instead of refetching
       setPodcasts(
         podcasts.map((p) =>
           p.id === editingPodcast.id ? { ...p, ...editFormData } : p
@@ -142,58 +132,11 @@ const Podcasts = () => {
       <Row>
         {filteredPodcasts.map((podcast) => (
           <Col key={podcast.id} md={4} className="mb-3">
-            <Card>
-              {podcast.image && (
-                <Card.Img
-                  variant="top"
-                  src={podcast.image}
-                  alt={podcast.title}
-                  loading="lazy"
-                />
-              )}
-              <Card.Body>
-                <Card.Title>{podcast.title}</Card.Title>
-                <Card.Text>{podcast.description}</Card.Text>
-                <div className="d-flex justify-content-between align-items-center">
-                  <small className="text-muted">
-                    By {podcast.owner?.channel_name || "Unknown"}
-                  </small>
-                  <div>
-                    {podcast.link && (
-                      <a
-                        href={podcast.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-primary me-2"
-                      >
-                        Listen
-                      </a>
-                    )}
-                    <Button
-                      variant="outline-primary"
-                      className="me-2"
-                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
-                    >
-                      View
-                    </Button>
-                    {currentUser &&
-                      podcast.owner?.user === currentUser.user_id && (
-                        <Button
-                          variant="outline-primary"
-                          onClick={() => handleEditClick(podcast)}
-                        >
-                          Edit
-                        </Button>
-                      )}
-                  </div>
-                </div>
-                {!podcast.is_approved && (
-                  <Alert variant="warning" className="mt-2 mb-0">
-                    Pending approval
-                  </Alert>
-                )}
-              </Card.Body>
-            </Card>
+            <PodcastCard
+              podcast={podcast}
+              currentUser={currentUser}
+              onEdit={handleEditClick}
+            />
           </Col>
         ))}
       </Row>
@@ -204,70 +147,14 @@ const Podcasts = () => {
         </Alert>
       )}
 
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Podcast</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleEditSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                name="title"
-                value={editFormData.title}
-                onChange={handleEditChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={4}
-                name="description"
-                value={editFormData.description}
-                onChange={handleEditChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Link</Form.Label>
-              <Form.Control
-                type="url"
-                name="link"
-                value={editFormData.link}
-                onChange={handleEditChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>New Image</Form.Label>
-              <Form.Control
-                type="file"
-                name="image"
-                onChange={handleEditChange}
-                accept="image/*"
-              />
-            </Form.Group>
-
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="secondary"
-                className="me-2"
-                onClick={() => setShowEditModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" type="submit">
-                Save Changes
-              </Button>
-            </div>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <PodcastEditModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        podcast={editingPodcast}
+        formData={editFormData}
+        onChange={handleEditChange}
+        onSubmit={handleEditSubmit}
+      />
     </Container>
   );
 };
