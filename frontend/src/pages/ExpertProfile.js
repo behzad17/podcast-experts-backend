@@ -84,6 +84,7 @@ const ExpertProfile = () => {
   const [isBookmarking, setIsBookmarking] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [imageLoading, setImageLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
@@ -325,6 +326,7 @@ const ExpertProfile = () => {
 
   const handleImageLoad = () => {
     setImageLoading(false);
+    setImageLoaded(true);
   };
 
   const handleDeleteComment = (commentId) => {
@@ -591,7 +593,7 @@ const ExpertProfile = () => {
           <Card className="mb-4">
             <Card.Body>
               <div className="text-center mb-4">
-                {imageLoading && (
+                {imageLoading && !imageLoaded && (
                   <div className="position-absolute top-50 start-50 translate-middle">
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>
@@ -606,6 +608,7 @@ const ExpertProfile = () => {
                     width: "150px",
                     height: "150px",
                     objectFit: "cover",
+                    display: imageLoaded ? "block" : "none",
                   }}
                   onLoad={handleImageLoad}
                 />
