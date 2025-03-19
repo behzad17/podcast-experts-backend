@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 
 const Home = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userType, setUserType] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+    const userType = localStorage.getItem("userType");
+    if (userType) {
+      setUserType(userType);
+    }
+  }, []);
+
   return (
     <Container className="mt-4">
       <h1>Welcome to Podcast Platform</h1>
+      {isAuthenticated && (
+        <div className="text-muted mb-4">
+          You are logged in as{" "}
+          {userType === "expert" ? "an Expert" : "a Podcaster"}
+        </div>
+      )}
       <Row>
         <Col md={6}>
           <Card className="p-3">

@@ -22,12 +22,17 @@ const Experts = () => {
     social_media: "",
     profile_image: null,
   });
+  const [userType, setUserType] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
+    const userType = localStorage.getItem("userType");
+    if (userType) {
+      setUserType(userType);
+    }
 
     if (token) {
       checkProfile();
@@ -129,7 +134,15 @@ const Experts = () => {
   return (
     <Container className="py-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Experts</h1>
+        <div>
+          <h1>Experts</h1>
+          {isAuthenticated && (
+            <div className="text-muted">
+              You are logged in as{" "}
+              {userType === "expert" ? "an Expert" : "a Podcaster"}
+            </div>
+          )}
+        </div>
         {isAuthenticated && (
           <div>
             {hasProfile ? (
