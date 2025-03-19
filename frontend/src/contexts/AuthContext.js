@@ -40,13 +40,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      console.log("Attempting login with:", { email });
+      console.log("Attempting login with username:", username);
       const response = await axios.post(
         "http://localhost:8000/api/users/login/",
         {
-          email,
+          username,
           password,
         }
       );
@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }) => {
         const { access: token, user: userData } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("userData", JSON.stringify(userData));
-        localStorage.setItem("userType", userData.user_type);
         setUser(userData);
 
         // Set default authorization header for future requests
@@ -69,13 +68,17 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Login error:", error);
       if (error.response?.status === 401) {
-        throw { message: "Invalid email or password" };
+        throw new Error("Invalid username or password");
       } else if (error.response?.status === 403) {
-        throw { message: "Please verify your email before logging in" };
+        throw new Error("Please verify your email before logging in");
+      } else if (error.response?.data?.detail) {
+        throw new Error(error.response.data.detail);
       } else if (error.response?.data) {
-        throw error.response.data;
+        throw new Error(Object.values(error.response.data)[0]);
+      } else if (error.message) {
+        throw new Error(error.message);
       } else {
-        throw { message: "Login failed. Please try again." };
+        throw new Error("Login failed. Please try again");
       }
     }
   };
@@ -100,7 +103,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userData");
-    localStorage.removeItem("userType");
     delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };

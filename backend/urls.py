@@ -17,15 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
-from backend.admin_dashboard.views import admin_stats
 
 def home_view(request):
     return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('admin_dashboard/', include('backend.admin_dashboard.urls')),
-    path('admin/stats/', admin_stats, name='admin_stats'),
     path('', home_view),
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),

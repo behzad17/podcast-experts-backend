@@ -204,7 +204,7 @@ const Podcasts = () => {
                 <div className="d-flex justify-content-between">
                   <Button
                     variant="outline-primary"
-                    onClick={() => navigate(`/podcasts/${podcast.id}`)}
+                    onClick={() => navigate(`/podcasts/${podcast.id}/`)}
                   >
                     View Details
                   </Button>

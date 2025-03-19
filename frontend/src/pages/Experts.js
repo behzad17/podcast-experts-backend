@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Alert, Pagination, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Alert,
+  Pagination,
+  Spinner,
+} from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
@@ -16,9 +25,13 @@ const Experts = () => {
     const fetchExperts = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/experts/?page=${currentPage}&page_size=${pageSize}`);
+        const response = await api.get(
+          `/experts/?page=${currentPage}&page_size=${pageSize}`
+        );
         setExperts(response.data.results || response.data);
-        setTotalPages(Math.ceil((response.data.count || response.data.length) / pageSize));
+        setTotalPages(
+          Math.ceil((response.data.count || response.data.length) / pageSize)
+        );
       } catch (error) {
         console.error("Error fetching experts:", error);
         setError("Failed to load experts. Please try again later.");
@@ -41,7 +54,10 @@ const Experts = () => {
   if (loading) {
     return (
       <Container className="mt-4">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
@@ -84,7 +100,7 @@ const Experts = () => {
                 <Card.Text>{expert.bio?.substring(0, 100)}...</Card.Text>
                 <Button
                   variant="outline-primary"
-                  onClick={() => navigate(`/experts/${expert.id}`)}
+                  onClick={() => navigate(`/experts/${expert.id}/`)}
                 >
                   View Profile
                 </Button>
