@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import PodcastCreate from "./pages/PodcastCreate";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
               element={<AdminExpertApproval />}
             />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={3000} />
         </div>

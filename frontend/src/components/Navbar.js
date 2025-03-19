@@ -5,7 +5,8 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 const NavigationBar = () => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("token");
-  const userType = localStorage.getItem("userType");
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+  const userType = userData.user_type;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,10 +42,13 @@ const NavigationBar = () => {
                   </Nav.Link>
                 )}
                 {userType === "podcaster" && (
-                  <Nav.Link as={Link} to="/podcaster/create">
+                  <Nav.Link as={Link} to="/podcasts/profile/create">
                     Create Podcaster Profile
                   </Nav.Link>
                 )}
+                <Nav.Link as={Link} to="/profile">
+                  My Profile
+                </Nav.Link>
                 <Button
                   variant="outline-light"
                   className="ms-2"
