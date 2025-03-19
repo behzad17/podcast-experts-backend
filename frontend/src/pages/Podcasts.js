@@ -55,7 +55,7 @@ const Podcasts = () => {
         const token = localStorage.getItem("token");
         if (token) {
           try {
-            const userData = JSON.parse(localStorage.getItem("user"));
+            const userData = JSON.parse(localStorage.getItem("userData"));
             if (userData) {
               setCurrentUser(userData);
             }

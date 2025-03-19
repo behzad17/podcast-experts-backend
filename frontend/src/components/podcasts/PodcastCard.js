@@ -40,7 +40,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
             >
               View
             </Button>
-            {currentUser && podcast.owner?.user === currentUser.user_id && (
+            {currentUser && podcast.owner?.user === currentUser.id && (
               <Button variant="outline-primary" onClick={() => onEdit(podcast)}>
                 Edit
               </Button>
