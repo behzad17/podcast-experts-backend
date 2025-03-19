@@ -1,18 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Alert,
+  Pagination,
+  Spinner,
+  Form,
+} from "react-bootstrap";
 import api from "../api/axios";
-import { Container, Row, Col, Form, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import PodcastCard from "../components/podcasts/PodcastCard";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize] = useState(9);
+  const [searchTerm, setSearchTerm] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [editFormData, setEditFormData] = useState({
     title: "",
     description: "",
@@ -22,46 +34,18 @@ const Podcasts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPodcasts = async () => {
       try {
-        setIsLoading(true);
-        setError("");
-
-        // Fetch podcasts
-        const podcastsResponse = await api.get("/podcasts/podcasts/");
-        console.log("Podcasts response:", podcastsResponse);
-
-        // Handle different response structures
-        let podcastsData;
-        if (Array.isArray(podcastsResponse.data)) {
-          podcastsData = podcastsResponse.data;
-        } else if (podcastsResponse.data.results) {
-          podcastsData = podcastsResponse.data.results;
-        } else {
-          console.error(
-            "Unexpected response structure:",
-            podcastsResponse.data
-          );
-          throw new Error("Invalid response format from server");
-        }
-
-        console.log("Processed podcasts data:", podcastsData);
-        setPodcasts(podcastsData);
-
-        // Get current user if token exists
-        const token = localStorage.getItem("token");
-        if (token) {
-          try {
-            const userData = JSON.parse(localStorage.getItem("userData"));
-            if (userData) {
-              setCurrentUser(userData);
-            }
-          } catch (error) {
-            console.error("Error parsing user data:", error);
-          }
-        }
+        setLoading(true);
+        const response = await api.get(
+          `/podcasts/podcasts/?page=${currentPage}&page_size=${pageSize}&search=${searchTerm}`
+        );
+        setPodcasts(response.data.results || response.data);
+        setTotalPages(
+          Math.ceil((response.data.count || response.data.length) / pageSize)
+        );
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching podcasts:", error);
         if (error.response?.status === 401) {
           setError("Please log in to view podcasts.");
         } else if (error.response?.status === 404) {
@@ -70,15 +54,36 @@ const Podcasts = () => {
           setError("Failed to load podcasts. Please try again later.");
         }
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    fetchData();
+    const debounceTimer = setTimeout(() => {
+      fetchPodcasts();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [currentPage, pageSize, searchTerm]);
+
+  useEffect(() => {
+    // Get current user if token exists
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData) {
+      setCurrentUser(userData);
+    }
   }, []);
 
   const handleCreatePodcast = () => {
     navigate("/podcasts/create");
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleEditClick = (podcast) => {
@@ -122,6 +127,7 @@ const Podcasts = () => {
       );
 
       setShowEditModal(false);
+      // Update only the edited podcast in the current page
       setPodcasts(
         podcasts.map((p) =>
           p.id === editingPodcast.id ? { ...p, ...response.data } : p
@@ -133,26 +139,17 @@ const Podcasts = () => {
     }
   };
 
-  const filteredPodcasts = podcasts.filter((podcast) =>
-    podcast.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  if (isLoading) {
+  if (loading) {
     return (
       <Container className="mt-4">
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
+          <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
-          </div>
+          </Spinner>
         </div>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="danger">{error}</Alert>
       </Container>
     );
   }
@@ -176,31 +173,92 @@ const Podcasts = () => {
         )}
       </div>
 
-      <Form.Group className="mb-3">
+      <Form.Group className="mb-4">
         <Form.Control
           type="text"
-          placeholder="Search by podcast name..."
+          placeholder="Search podcasts..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearch}
         />
       </Form.Group>
 
+      {error && <Alert variant="danger">{error}</Alert>}
+
       <Row>
-        {filteredPodcasts.map((podcast) => (
-          <Col key={podcast.id} md={4} className="mb-3">
-            <PodcastCard
-              podcast={podcast}
-              currentUser={currentUser}
-              onEdit={handleEditClick}
-            />
+        {podcasts.map((podcast) => (
+          <Col key={podcast.id} md={4} className="mb-4">
+            <Card>
+              {podcast.image && (
+                <Card.Img
+                  variant="top"
+                  src={podcast.image}
+                  alt={podcast.title}
+                  style={{ height: "200px", objectFit: "cover" }}
+                />
+              )}
+              <Card.Body>
+                <Card.Title>{podcast.title}</Card.Title>
+                <Card.Text>
+                  {podcast.description?.substring(0, 100)}...
+                </Card.Text>
+                <div className="d-flex justify-content-between">
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => navigate(`/podcasts/${podcast.id}`)}
+                  >
+                    View Details
+                  </Button>
+                  {currentUser && podcast.user === currentUser.id && (
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => handleEditClick(podcast)}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
+              </Card.Body>
+            </Card>
           </Col>
         ))}
       </Row>
-      {filteredPodcasts.length === 0 && (
+
+      {podcasts.length === 0 && !loading && (
         <Alert variant="info">
-          No podcasts found. Try adjusting your search term or create a new
-          podcast.
+          No podcasts found. Try adjusting your search term.
         </Alert>
+      )}
+
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-center mt-4">
+          <Pagination>
+            <Pagination.First
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(1)}
+            />
+            <Pagination.Prev
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            />
+            {[...Array(totalPages)].map((_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            />
+            <Pagination.Last
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(totalPages)}
+            />
+          </Pagination>
+        </div>
       )}
 
       <PodcastEditModal

@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import Profile from "./pages/Profile";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
@@ -36,32 +37,34 @@ function App() {
         />
       </Helmet>
 
-      <Router>
-        <div>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/podcasts" element={<Podcasts />} />
-            <Route path="/podcasts/create" element={<CreatePodcast />} />
-            <Route path="/podcasts/:id" element={<PodcastDetail />} />
-            <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
-            <Route path="/experts" element={<Experts />} />
-            <Route path="/experts/create" element={<CreateExpert />} />
-            <Route path="/experts/:id" element={<ExpertDetail />} />
-            <Route path="/experts/:id/edit" element={<EditExpert />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route
-              path="/admin/expert-approval"
-              element={<AdminExpertApproval />}
-            />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-          <ToastContainer position="top-right" autoClose={3000} />
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <div>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/podcasts" element={<Podcasts />} />
+              <Route path="/podcasts/create" element={<CreatePodcast />} />
+              <Route path="/podcasts/:id" element={<PodcastDetail />} />
+              <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
+              <Route path="/experts" element={<Experts />} />
+              <Route path="/experts/create" element={<CreateExpert />} />
+              <Route path="/experts/:id" element={<ExpertDetail />} />
+              <Route path="/experts/:id/edit" element={<EditExpert />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route
+                path="/admin/expert-approval"
+                element={<AdminExpertApproval />}
+              />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+            <ToastContainer position="top-right" autoClose={3000} />
+          </div>
+        </Router>
+      </AuthProvider>
     </HelmetProvider>
   );
 }
