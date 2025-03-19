@@ -50,31 +50,37 @@ class VerifyEmailView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, token):
+        print(f"[DEBUG] Received verification request with token: {token}")
         try:
-            print(f"Verifying email with token: {token}")
-            user = get_object_or_404(User, verification_token=token)
-            print(f"Found user: {user.username}")
+            user = User.objects.get(verification_token=token)
+            print(f"[DEBUG] Found user: {user.username}, Current email_verified status: {user.email_verified}")
             
             if not user.email_verified:
+                print(f"[DEBUG] Verifying email for user: {user.username}")
                 user.email_verified = True
-                user.verification_token = ""
+                user.verification_token = ""  # Clear the token
                 user.save()
-                print(f"Email verified for user: {user.username}")
+                print(f"[DEBUG] After save - email_verified: {user.email_verified}, token: {user.verification_token}")
                 return Response(
                     {"message": "Email verified successfully"},
                     status=status.HTTP_200_OK
                 )
-            else:
-                print(f"Email already verified for user: {user.username}")
-                return Response(
-                    {"message": "Email already verified"},
-                    status=status.HTTP_200_OK
-                )
-        except Exception as e:
-            print(f"Error verifying email: {str(e)}")
+            print(f"[DEBUG] Email already verified for user: {user.username}")
             return Response(
-                {"detail": "Invalid or expired verification token"},
+                {"message": "Email already verified"},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            print(f"[DEBUG] No user found with token: {token}")
+            return Response(
+                {"detail": "Invalid verification token"},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            print(f"[DEBUG] Unexpected error during verification: {str(e)}")
+            return Response(
+                {"detail": "An error occurred during verification"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 
@@ -84,26 +90,37 @@ class UserLoginView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
+        print(f"[DEBUG] Login attempt for username: {username}")
         try:
             user = User.objects.get(username=username)
+            print(f"[DEBUG] Found user, email_verified status: {user.email_verified}")
+            
             if not user.email_verified:
+                print(f"[DEBUG] Email not verified for user: {username}")
                 return Response(
                     {"detail": "Please verify your email before logging in."},
                     status=status.HTTP_403_FORBIDDEN
                 )
+            print(f"[DEBUG] Email verified, proceeding with login")
             response = super().post(request, *args, **kwargs)
-            # Add user data to the response
             response.data['user'] = {
                 'id': user.id,
                 'username': user.username,
-                'email': user.email,
-                'user_type': user.user_type
+                'email': user.email
             }
+            print(f"[DEBUG] Login successful for user: {username}")
             return response
         except User.DoesNotExist:
+            print(f"[DEBUG] User not found: {username}")
             return Response(
                 {"detail": "Invalid username or password."},
                 status=status.HTTP_401_UNAUTHORIZED
+            )
+        except Exception as e:
+            print(f"[DEBUG] Unexpected error during login: {str(e)}")
+            return Response(
+                {"detail": "An error occurred during login"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 
