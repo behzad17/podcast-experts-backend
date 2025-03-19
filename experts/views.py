@@ -232,3 +232,14 @@ class PendingExpertProfilesView(generics.ListAPIView):
 
     def get_queryset(self):
         return ExpertProfile.objects.filter(is_approved=False)
+
+
+class ExpertProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = ExpertProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ExpertProfile.objects.filter(user=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)

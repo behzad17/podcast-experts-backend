@@ -11,19 +11,22 @@ import {
   Badge,
   Spinner,
 } from "react-bootstrap";
-import { FaPlay, FaShare } from "react-icons/fa";
+import { FaPlay, FaShare, FaEdit } from "react-icons/fa";
 
 const PodcastDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [podcast, setPodcast] = useState(null);
   const [error, setError] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
         const response = await api.get(`/podcasts/podcasts/${id}/`);
         setPodcast(response.data);
+        setIsOwner(response.data.creator === user?.id);
       } catch (error) {
         console.error("Error fetching podcast:", error);
         setError("Failed to load podcast details. Please try again later.");
@@ -31,7 +34,7 @@ const PodcastDetail = () => {
     };
 
     fetchPodcast();
-  }, [id]);
+  }, [id, user]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -76,7 +79,18 @@ const PodcastDetail = () => {
               />
             )}
             <Card.Body>
-              <Card.Title className="h2 mb-3">{podcast.title}</Card.Title>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <Card.Title className="h2 mb-0">{podcast.title}</Card.Title>
+                {isOwner && (
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => navigate(`/podcasts/${id}/edit`)}
+                  >
+                    <FaEdit className="me-2" />
+                    Edit Podcast
+                  </Button>
+                )}
+              </div>
               <Card.Text className="lead mb-4">{podcast.description}</Card.Text>
 
               <div className="d-flex justify-content-between align-items-center mb-4">

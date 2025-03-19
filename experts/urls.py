@@ -9,18 +9,20 @@ from .views import (
     ExpertStatsView,
     ExpertProfileViewSet,
     PendingExpertProfilesView,
+    ExpertProfileUpdateView,
 )
 
 router = DefaultRouter()
 router.register(r'experts', ExpertProfileViewSet, basename='expert')
 
 urlpatterns = [
-    path('pending/', PendingExpertProfilesView.as_view(), name='pending-experts'),
+    path('', ExpertListView.as_view(), name='expert-list'),
     path('create/', ExpertProfileCreateView.as_view(), name='expert-profile-create'),
+    path('pending/', PendingExpertProfilesView.as_view(), name='pending-experts'),
+    path('update/', ExpertProfileUpdateView.as_view(), name='expert-profile-update'),
+    path('<int:pk>/', ExpertProfileDetailView.as_view(), name='expert-profile-detail'),
+    path('approve/<int:pk>/', ExpertProfileApprovalView.as_view(), name='expert-profile-approve'),
     path('my-profile/', MyExpertProfileView.as_view(), name='expert-my-profile'),
     path('stats/', ExpertStatsView.as_view(), name='expert-stats'),
-    path('approve/<int:pk>/', ExpertProfileApprovalView.as_view(), name='expert-profile-approve'),
-    path('<int:pk>/', ExpertProfileDetailView.as_view(), name='expert-profile-detail'),
-    path('', ExpertListView.as_view(), name='expert-list'),
     path('', include(router.urls)),
 ] 

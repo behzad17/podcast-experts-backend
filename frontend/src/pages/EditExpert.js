@@ -2,22 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditExpert = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
+    name: "",
     bio: "",
-    specialization: "",
-    experience: "",
-    hourly_rate: "",
+    expertise: "",
+    experience_years: "",
+    website: "",
+    social_media: "",
   });
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
-    const fetchExpert = async () => {
+    const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -35,6 +38,7 @@ const EditExpert = () => {
         setFormData(response.data);
         setFetching(false);
       } catch (error) {
+        toast.error("Failed to load profile");
         setError(
           error.response?.data?.detail ||
             "An error occurred while fetching the expert profile."
@@ -43,7 +47,7 @@ const EditExpert = () => {
       }
     };
 
-    fetchExpert();
+    fetchProfile();
   }, [id, navigate]);
 
   const handleChange = (e) => {
@@ -69,12 +73,10 @@ const EditExpert = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      toast.success("Profile updated successfully");
       navigate(`/experts/${id}`);
     } catch (error) {
-      setError(
-        error.response?.data?.detail ||
-          "An error occurred while updating the expert profile."
-      );
+      toast.error(error.response?.data?.detail || "Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -103,6 +105,17 @@ const EditExpert = () => {
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
           <Form.Label>Bio</Form.Label>
           <Form.Control
             as="textarea"
@@ -115,35 +128,45 @@ const EditExpert = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Specialization</Form.Label>
+          <Form.Label>Expertise</Form.Label>
           <Form.Control
             type="text"
-            name="specialization"
-            value={formData.specialization}
+            name="expertise"
+            value={formData.expertise}
             onChange={handleChange}
             required
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Experience (years)</Form.Label>
+          <Form.Label>Years of Experience</Form.Label>
           <Form.Control
             type="number"
-            name="experience"
-            value={formData.experience}
+            name="experience_years"
+            value={formData.experience_years}
             onChange={handleChange}
             required
+            min="0"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Hourly Rate ($)</Form.Label>
+          <Form.Label>Website</Form.Label>
           <Form.Control
-            type="number"
-            name="hourly_rate"
-            value={formData.hourly_rate}
+            type="url"
+            name="website"
+            value={formData.website || ""}
             onChange={handleChange}
-            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Social Media</Form.Label>
+          <Form.Control
+            type="text"
+            name="social_media"
+            value={formData.social_media || ""}
+            onChange={handleChange}
           />
         </Form.Group>
 

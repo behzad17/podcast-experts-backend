@@ -179,3 +179,14 @@ class PodcastViewSet(viewsets.ModelViewSet):
         podcast.is_approved = True
         podcast.save()
         return Response({'status': 'podcast approved'})
+
+
+class PodcastUpdateView(generics.UpdateAPIView):
+    serializer_class = PodcastSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Podcast.objects.filter(creator=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(creator=self.request.user)

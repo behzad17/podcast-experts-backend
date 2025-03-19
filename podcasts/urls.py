@@ -9,6 +9,8 @@ from .views import (
     CategoryViewSet,
     PodcasterProfileViewSet,
     PodcastViewSet,
+    PodcastCreateView,
+    PodcastUpdateView,
 )
 
 router = DefaultRouter()
@@ -39,4 +41,6 @@ urlpatterns = [
         PodcasterProfileApprovalView.as_view(),
         name='podcaster-profile-approve'
     ),
+    path('create/', PodcastCreateView.as_view(), name='podcast-create'),
+    path('update/', PodcastUpdateView.as_view(), name='podcast-update'),
 ]

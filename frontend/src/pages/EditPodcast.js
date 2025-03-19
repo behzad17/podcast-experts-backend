@@ -1,47 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
+import { toast } from "react-toastify";
 
 const EditPodcast = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "",
-    target_audience: "",
-    duration: "",
-    price: "",
+    language: "",
+    website: "",
+    social_media: "",
   });
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get(
-          `http://localhost:8000/api/podcasts/${id}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
+        const response = await api.get(`/podcasts/${id}/`);
         setFormData(response.data);
-        setFetching(false);
+        setLoading(false);
       } catch (error) {
-        setError(
-          error.response?.data?.detail ||
-            "An error occurred while fetching the podcast."
-        );
-        setFetching(false);
+        toast.error("Failed to load podcast");
+        navigate("/podcasts");
       }
     };
 
@@ -57,127 +42,122 @@ const EditPodcast = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      await axios.put(`http://localhost:8000/api/podcasts/${id}/`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await api.put("/podcasts/update/", formData);
+      toast.success("Podcast updated successfully");
       navigate(`/podcasts/${id}`);
     } catch (error) {
-      setError(
-        error.response?.data?.detail ||
-          "An error occurred while updating the podcast."
-      );
-    } finally {
-      setLoading(false);
+      toast.error(error.response?.data?.detail || "Failed to update podcast");
     }
   };
 
-  if (fetching) {
-    return (
-      <Container className="mt-4">
-        <div>Loading...</div>
-      </Container>
-    );
+  if (loading) {
+    return <div className="container mx-auto p-4">Loading...</div>;
   }
 
   return (
-    <Container className="mt-4">
-      <h1 className="mb-4">Edit Podcast</h1>
-
-      {error && <Alert variant="danger">{error}</Alert>}
-
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Edit Podcast</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Title *
+          </label>
+          <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Description *
+          </label>
+          <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             required
+            rows="4"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Category *
+          </label>
+          <input
             type="text"
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Target Audience</Form.Label>
-          <Form.Control
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Language *
+          </label>
+          <input
             type="text"
-            name="target_audience"
-            value={formData.target_audience}
+            name="language"
+            value={formData.language}
             onChange={handleChange}
             required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Duration (minutes)</Form.Label>
-          <Form.Control
-            type="number"
-            name="duration"
-            value={formData.duration}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Website
+          </label>
+          <input
+            type="url"
+            name="website"
+            value={formData.website || ""}
             onChange={handleChange}
-            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Price ($)</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={formData.price}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Social Media
+          </label>
+          <input
+            type="text"
+            name="social_media"
+            value={formData.social_media || ""}
             onChange={handleChange}
-            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </Form.Group>
+        </div>
 
-        <div className="d-flex gap-2">
-          <Button type="submit" variant="primary" disabled={loading}>
-            {loading ? "Saving..." : "Save Changes"}
-          </Button>
-          <Button
+        <div className="flex justify-end space-x-4">
+          <button
             type="button"
-            variant="outline-secondary"
             onClick={() => navigate(`/podcasts/${id}`)}
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Cancel
-          </Button>
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Save Changes
+          </button>
         </div>
-      </Form>
-    </Container>
+      </form>
+    </div>
   );
 };
 
