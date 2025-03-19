@@ -220,3 +220,15 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
                 {'error': 'Expert profile not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+class PendingExpertProfilesView(generics.ListAPIView):
+    """
+    List all pending expert profiles.
+    Only accessible by admin users.
+    """
+    serializer_class = ExpertProfileSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def get_queryset(self):
+        return ExpertProfile.objects.filter(is_approved=False)

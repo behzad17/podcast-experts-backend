@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "http://localhost:8000/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -48,7 +48,7 @@ api.interceptors.response.use(
       });
     } else if (error.request) {
       console.error(
-        "Network error - please check if the server is running at http://127.0.0.1:8000"
+        "Network error - please check if the server is running at http://localhost:8000"
       );
       console.error("Error details:", error);
     } else {

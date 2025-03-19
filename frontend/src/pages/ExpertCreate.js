@@ -3,17 +3,18 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const PodcastCreate = () => {
+const ExpertCreate = () => {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    specialty: "",
+    bio: "",
+    experience: "",
+    hourly_rate: "",
     image: null,
-    link: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [needsProfile, setNeedsProfile] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ const PodcastCreate = () => {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("Please log in to create a podcast");
+        setError("Please log in to create an expert profile");
         setIsAuthenticated(false);
         setTimeout(() => {
           navigate("/login");
@@ -31,23 +32,22 @@ const PodcastCreate = () => {
 
       setIsAuthenticated(true);
       try {
-        // First check if user has a podcaster profile
-        const profileResponse = await axios.get(
-          "http://localhost:8000/api/podcasts/profiles/",
+        // Check if user already has an expert profile
+        const response = await axios.get(
+          "http://localhost:8000/api/experts/my-profile/",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        // If we get here, user has a profile
-        setNeedsProfile(false);
+        setHasProfile(true);
+        setError("You already have an expert profile");
       } catch (error) {
-        console.error("Error checking profile:", error);
         if (error.response?.status === 404) {
-          setNeedsProfile(true);
+          setHasProfile(false);
         } else {
+          console.error("Error checking profile:", error);
           setError("Failed to check profile status");
         }
       }
@@ -75,14 +75,13 @@ const PodcastCreate = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("Please log in to create a podcast");
+        setError("Please log in to create an expert profile");
         navigate("/login");
         return;
       }
 
-      if (needsProfile) {
-        setError("Please create a podcaster profile first");
-        navigate("/podcasts/profile/create");
+      if (hasProfile) {
+        setError("You already have an expert profile");
         return;
       }
 
@@ -93,9 +92,9 @@ const PodcastCreate = () => {
         }
       });
 
-      console.log("Sending podcast creation request");
+      console.log("Sending expert profile creation request");
       const response = await axios.post(
-        "http://localhost:8000/api/podcasts/podcasts/",
+        "http://localhost:8000/api/experts/create/",
         form,
         {
           headers: {
@@ -104,27 +103,29 @@ const PodcastCreate = () => {
           },
         }
       );
-      console.log("Podcast creation response:", response.data);
+      console.log("Expert profile creation response:", response.data);
 
       setSuccess(true);
       setTimeout(() => {
-        navigate("/podcasts");
+        navigate("/experts");
       }, 2000);
     } catch (error) {
-      console.error("Podcast creation error:", error);
+      console.error("Expert profile creation error:", error);
       if (error.response) {
         console.error("Error response:", error.response.data);
         if (error.response.status === 401) {
-          setError("Please log in to create a podcast");
+          setError("Please log in to create an expert profile");
           navigate("/login");
         } else if (error.response.status === 400) {
           setError("Please check your input and try again");
         } else if (error.response.status === 403) {
-          setError("You don't have permission to create podcasts");
+          setError("You don't have permission to create an expert profile");
         } else if (error.response.status === 405) {
           setError("Invalid request method. Please try again.");
         } else {
-          setError(error.response.data.detail || "Error creating podcast");
+          setError(
+            error.response.data.detail || "Error creating expert profile"
+          );
         }
       } else if (error.code === "ERR_NETWORK") {
         setError(
@@ -142,23 +143,21 @@ const PodcastCreate = () => {
     return (
       <Container className="mt-4">
         <Alert variant="warning">
-          Please log in to create a podcast. Redirecting to login page...
+          Please log in to create an expert profile. Redirecting to login
+          page...
         </Alert>
       </Container>
     );
   }
 
-  if (needsProfile) {
+  if (hasProfile) {
     return (
       <Container className="mt-4">
         <Alert variant="warning">
-          You need to create a podcaster profile before creating a podcast.
+          You already have an expert profile. You cannot create another one.
         </Alert>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/podcasts/profile/create")}
-        >
-          Create Podcaster Profile
+        <Button variant="primary" onClick={() => navigate("/experts")}>
+          View My Profile
         </Button>
       </Container>
     );
@@ -166,41 +165,68 @@ const PodcastCreate = () => {
 
   return (
     <Container className="mt-4">
-      <h2>Create Podcast</h2>
+      <h2>Create Expert Profile</h2>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success">
-          Podcast created successfully! Redirecting to podcasts page...
+          Expert profile created successfully! Redirecting to experts page...
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Title *</Form.Label>
+          <Form.Label>Specialty *</Form.Label>
           <Form.Control
             type="text"
-            name="title"
-            value={formData.title}
+            name="specialty"
+            value={formData.specialty}
             onChange={handleChange}
             required
-            placeholder="Enter podcast title"
+            placeholder="Enter your specialty"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Description *</Form.Label>
+          <Form.Label>Bio *</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
-            name="description"
-            value={formData.description}
+            name="bio"
+            value={formData.bio}
             onChange={handleChange}
             required
-            placeholder="Describe your podcast"
+            placeholder="Tell us about yourself"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Image</Form.Label>
+          <Form.Label>Experience (years) *</Form.Label>
+          <Form.Control
+            type="number"
+            name="experience"
+            value={formData.experience}
+            onChange={handleChange}
+            required
+            min="0"
+            placeholder="Enter years of experience"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Hourly Rate ($) *</Form.Label>
+          <Form.Control
+            type="number"
+            name="hourly_rate"
+            value={formData.hourly_rate}
+            onChange={handleChange}
+            required
+            min="0"
+            step="0.01"
+            placeholder="Enter your hourly rate"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Profile Image</Form.Label>
           <Form.Control
             type="file"
             name="image"
@@ -209,23 +235,12 @@ const PodcastCreate = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Link</Form.Label>
-          <Form.Control
-            type="url"
-            name="link"
-            value={formData.link}
-            onChange={handleChange}
-            placeholder="https://your-podcast-link.com"
-          />
-        </Form.Group>
-
         <Button type="submit" variant="primary" disabled={isLoading}>
-          {isLoading ? "Creating Podcast..." : "Create Podcast"}
+          {isLoading ? "Creating Profile..." : "Create Expert Profile"}
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default PodcastCreate;
+export default ExpertCreate;

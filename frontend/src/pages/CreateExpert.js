@@ -6,10 +6,12 @@ import axios from "axios";
 const CreateExpert = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    name: "",
     bio: "",
-    specialization: "",
-    experience: "",
-    hourly_rate: "",
+    expertise: "",
+    experience_years: "",
+    website: "",
+    social_media: "",
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +36,7 @@ const CreateExpert = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/api/experts/",
+        "http://localhost:8000/api/experts/create/",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -60,7 +62,19 @@ const CreateExpert = () => {
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Bio</Form.Label>
+          <Form.Label>Name *</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            placeholder="Enter your full name"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Bio *</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
@@ -68,39 +82,54 @@ const CreateExpert = () => {
             value={formData.bio}
             onChange={handleChange}
             required
+            placeholder="Tell us about yourself"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Specialization</Form.Label>
+          <Form.Label>Expertise *</Form.Label>
           <Form.Control
             type="text"
-            name="specialization"
-            value={formData.specialization}
+            name="expertise"
+            value={formData.expertise}
             onChange={handleChange}
             required
+            placeholder="Enter your area of expertise"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Experience (years)</Form.Label>
+          <Form.Label>Experience (years) *</Form.Label>
           <Form.Control
             type="number"
-            name="experience"
-            value={formData.experience}
+            name="experience_years"
+            value={formData.experience_years}
             onChange={handleChange}
             required
+            min="0"
+            placeholder="Enter years of experience"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Hourly Rate ($)</Form.Label>
+          <Form.Label>Website</Form.Label>
           <Form.Control
-            type="number"
-            name="hourly_rate"
-            value={formData.hourly_rate}
+            type="url"
+            name="website"
+            value={formData.website}
             onChange={handleChange}
-            required
+            placeholder="Enter your website URL"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Social Media</Form.Label>
+          <Form.Control
+            type="text"
+            name="social_media"
+            value={formData.social_media}
+            onChange={handleChange}
+            placeholder="Enter your social media links"
           />
         </Form.Group>
 
