@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
-import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const Experts = () => {
@@ -12,7 +12,7 @@ const Experts = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/experts/");
+        const response = await api.get("/experts/");
         setExperts(response.data);
       } catch (error) {
         console.error("Error fetching experts:", error);

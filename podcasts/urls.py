@@ -9,7 +9,7 @@ from .views import (
     CategoryViewSet,
     PodcasterProfileViewSet,
     PodcastViewSet,
-    PodcastCreateView,
+    PodcastListCreateView,
     PodcastUpdateView,
 )
 
@@ -41,6 +41,6 @@ urlpatterns = [
         PodcasterProfileApprovalView.as_view(),
         name='podcaster-profile-approve'
     ),
-    path('create/', PodcastCreateView.as_view(), name='podcast-create'),
+    path('create/', PodcastListCreateView.as_view(), name='podcast-create'),
     path('update/', PodcastUpdateView.as_view(), name='podcast-update'),
 ]

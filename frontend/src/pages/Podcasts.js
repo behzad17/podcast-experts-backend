@@ -30,9 +30,6 @@ const Podcasts = () => {
         // Fetch podcasts
         const podcastsResponse = await api.get("/podcasts/podcasts/");
         console.log("Podcasts response:", podcastsResponse);
-        console.log("Response status:", podcastsResponse.status);
-        console.log("Response headers:", podcastsResponse.headers);
-        console.log("Response data:", podcastsResponse.data);
 
         // Handle different response structures
         let podcastsData;
