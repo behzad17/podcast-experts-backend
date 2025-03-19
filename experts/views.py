@@ -118,6 +118,17 @@ class MyExpertProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return get_object_or_404(ExpertProfile, user=self.request.user)
 
+    def perform_update(self, serializer):
+        # Handle profile picture upload
+        profile_picture = self.request.FILES.get('profile_picture')
+        if profile_picture:
+            # Delete old profile picture if it exists
+            instance = self.get_object()
+            if instance.profile_picture:
+                instance.profile_picture.delete()
+        
+        serializer.save(user=self.request.user)
+
 
 class ExpertStatsView(APIView):
     """

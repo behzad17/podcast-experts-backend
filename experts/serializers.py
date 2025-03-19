@@ -15,7 +15,8 @@ class ExpertCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExpertComment
-        fields = ['id', 'user', 'content', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'content', 'created_at']
+        read_only_fields = ['created_at']
 
 
 class ExpertRatingSerializer(serializers.ModelSerializer):
@@ -33,14 +34,15 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     comments = ExpertCommentSerializer(many=True, read_only=True)
     ratings = ExpertRatingSerializer(many=True, read_only=True)
+    profile_picture_url = serializers.SerializerMethodField()
     
     class Meta:
         model = ExpertProfile
         fields = [
             'id', 'user', 'name', 'bio', 'expertise', 'experience_years',
-            'website', 'social_media', 'is_approved', 'created_at',
-            'total_views', 'total_bookmarks', 'average_rating',
-            'comments', 'ratings'
+            'website', 'social_media', 'profile_picture', 'profile_picture_url',
+            'is_approved', 'created_at', 'total_views', 'total_bookmarks',
+            'average_rating', 'comments', 'ratings'
         ]
         read_only_fields = ['is_approved']
 
@@ -51,4 +53,11 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return obj.get_total_bookmarks()
 
     def get_average_rating(self, obj):
-        return obj.get_average_rating() 
+        return obj.get_average_rating()
+
+    def get_profile_picture_url(self, obj):
+        if obj.profile_picture:
+            return self.context['request'].build_absolute_uri(
+                obj.profile_picture.url
+            )
+        return None 
