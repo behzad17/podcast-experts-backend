@@ -16,13 +16,15 @@ const Home = () => {
 
   return (
     <Container className="mt-4">
-      <h1>Welcome to Podcast Platform</h1>
-      {isAuthenticated && (
-        <div className="text-muted mb-4">
-          You are logged in as{" "}
-          {userType === "expert" ? "an Expert" : "a Podcaster"}
-        </div>
-      )}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1>Welcome to Podcast Platform</h1>
+        {isAuthenticated && (
+          <div className="text-muted">
+            You are logged in as{" "}
+            {userType === "expert" ? "an Expert" : "a Podcaster"}
+          </div>
+        )}
+      </div>
       <Row>
         <Col md={6}>
           <Card className="p-3">
