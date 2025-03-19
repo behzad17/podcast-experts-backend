@@ -49,7 +49,7 @@ const PodcastCreate = () => {
       });
 
       console.log("Sending podcast creation request");
-      const response = await api.post("/podcasts/podcasts/", form, {
+      const response = await api.post("/podcasts/", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

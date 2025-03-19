@@ -115,7 +115,7 @@ const Podcasts = () => {
       });
 
       const response = await api.patch(
-        `/podcasts/podcasts/${editingPodcast.id}/`,
+        `/podcasts/${editingPodcast.id}/`,
         formData,
         {
           headers: {
