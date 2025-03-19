@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,19 +8,68 @@ const CreatePodcast = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "",
-    target_audience: "",
-    duration: "",
-    price: "",
+    category_id: "",
+    link: "",
+    image: null,
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const checkPodcasterProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        // Check if user has a podcaster profile
+        try {
+          await axios.get("http://localhost:8000/api/podcasts/profile/", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error) {
+          if (error.response?.status === 404) {
+            navigate("/podcaster/create", {
+              state: {
+                message: "You need to create a podcaster profile first",
+              },
+            });
+            return;
+          }
+        }
+
+        // Fetch categories
+        const response = await axios.get(
+          "http://localhost:8000/api/podcasts/categories/"
+        );
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to load categories");
+      }
+    };
+
+    checkPodcasterProfile();
+  }, [navigate]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, files } = e.target;
+    if (name === "image") {
+      setFormData({
+        ...formData,
+        [name]: files[0],
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,18 +84,30 @@ const CreatePodcast = () => {
         return;
       }
 
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null && formData[key] !== "") {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+
       const response = await axios.post(
         "http://localhost:8000/api/podcasts/",
-        formData,
+        formDataToSend,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
       navigate(`/podcasts/${response.data.id}`);
     } catch (error) {
+      console.error("Error creating podcast:", error);
       setError(
         error.response?.data?.detail ||
+          error.response?.data?.message ||
           "An error occurred while creating the podcast."
       );
     } finally {
@@ -86,45 +147,38 @@ const CreatePodcast = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            name="category"
-            value={formData.category}
+          <Form.Select
+            name="category_id"
+            value={formData.category_id}
             onChange={handleChange}
-            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Link</Form.Label>
+          <Form.Control
+            type="url"
+            name="link"
+            value={formData.link}
+            onChange={handleChange}
+            placeholder="https://example.com"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Target Audience</Form.Label>
+          <Form.Label>Image</Form.Label>
           <Form.Control
-            type="text"
-            name="target_audience"
-            value={formData.target_audience}
+            type="file"
+            name="image"
             onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Duration (minutes)</Form.Label>
-          <Form.Control
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Price ($)</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
+            accept="image/*"
           />
         </Form.Group>
 

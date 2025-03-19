@@ -1,30 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import api from "../api/axios";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("token");
   const userType = localStorage.getItem("userType");
-  const [hasProfile, setHasProfile] = useState(false);
-
-  useEffect(() => {
-    const checkProfile = async () => {
-      if (isAuthenticated && userType === "expert") {
-        try {
-          await api.get("/experts/my-profile/");
-          setHasProfile(true);
-        } catch (error) {
-          if (error.response && error.response.status === 404) {
-            setHasProfile(false);
-          }
-        }
-      }
-    };
-
-    checkProfile();
-  }, [isAuthenticated, userType]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -55,27 +36,15 @@ const NavigationBar = () => {
             {isAuthenticated ? (
               <>
                 {userType === "expert" && (
-                  <>
-                    {hasProfile && (
-                      <Nav.Link as={Link} to="/expert-profile">
-                        Expert Profile
-                      </Nav.Link>
-                    )}
-                    {!hasProfile && (
-                      <Nav.Link as={Link} to="/experts/create">
-                        Create Expert Profile
-                      </Nav.Link>
-                    )}
-                  </>
+                  <Nav.Link as={Link} to="/experts/create">
+                    Create Expert Profile
+                  </Nav.Link>
                 )}
                 {userType === "podcaster" && (
-                  <Nav.Link as={Link} to="/podcaster/profile/create">
+                  <Nav.Link as={Link} to="/podcaster/create">
                     Create Podcaster Profile
                   </Nav.Link>
                 )}
-                <Nav.Link as={Link} to="/profile">
-                  Profile
-                </Nav.Link>
                 <Button
                   variant="outline-light"
                   className="ms-2"

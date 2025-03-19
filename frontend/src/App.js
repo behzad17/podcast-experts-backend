@@ -12,16 +12,11 @@ import Experts from "./pages/Experts";
 import ExpertDetail from "./pages/ExpertDetail";
 import CreateExpert from "./pages/CreateExpert";
 import EditExpert from "./pages/EditExpert";
-import UserProfile from "./pages/UserProfile";
 import { HelmetProvider, Helmet } from "react-helmet-async";
-import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
-import ExpertProfileCreate from "./pages/ExpertProfileCreate";
-import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
-import ExpertProfileDetail from "./pages/ExpertProfileDetail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
-import Profile from "./pages/Profile";
+import PodcastCreate from "./pages/PodcastCreate";
 
 function App() {
   return (
@@ -47,24 +42,19 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/podcasts" element={<Podcasts />} />
-            <Route path="/podcasts/create" element={<CreatePodcast />} />
+            <Route path="/podcasts/create" element={<PodcastCreate />} />
             <Route path="/podcasts/:id" element={<PodcastDetail />} />
             <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/create" element={<CreateExpert />} />
             <Route path="/experts/:id" element={<ExpertDetail />} />
             <Route path="/experts/:id/edit" element={<EditExpert />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/expert-profile" element={<ExpertProfile />} />
-            <Route path="/experts/create" element={<ExpertProfileCreate />} />
-            <Route path="/experts/:id" element={<ExpertProfileDetail />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route
               path="/admin/expert-approval"
               element={<AdminExpertApproval />}
             />
             <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </Router>
