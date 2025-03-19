@@ -1,17 +1,19 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { useAuth } from "../contexts/AuthContext";
 
-const NavigationBar = () => {
+function Navigation() {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("token");
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const userType = userData.user_type;
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userData");
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
   };
 
   return (
@@ -23,40 +25,40 @@ const NavigationBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
-              Home
+            <Nav.Link as={Link} to="/podcasts">
+              Podcasts
             </Nav.Link>
             <Nav.Link as={Link} to="/experts">
               Experts
             </Nav.Link>
-            <Nav.Link as={Link} to="/podcasts">
-              Podcasts
-            </Nav.Link>
-          </Nav>
-          <Nav>
-            {isAuthenticated ? (
+            {user && (
               <>
-                {userType === "expert" && (
+                <Nav.Link as={Link} to="/profile">
+                  Profile
+                </Nav.Link>
+                {user.user_type === "podcaster" && (
+                  <Nav.Link as={Link} to="/podcasts/create">
+                    Create Podcast
+                  </Nav.Link>
+                )}
+                {user.user_type === "expert" && (
                   <Nav.Link as={Link} to="/experts/create">
                     Create Expert Profile
                   </Nav.Link>
                 )}
-                {userType === "podcaster" && (
-                  <Nav.Link as={Link} to="/podcasts/profile/create">
-                    Create Podcaster Profile
+                {user.is_admin && (
+                  <Nav.Link as={Link} to="/admin">
+                    Admin Dashboard
                   </Nav.Link>
                 )}
-                <Nav.Link as={Link} to="/profile">
-                  My Profile
-                </Nav.Link>
-                <Button
-                  variant="outline-light"
-                  className="ms-2"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Button>
               </>
+            )}
+          </Nav>
+          <Nav>
+            {user ? (
+              <Button variant="outline-light" onClick={handleLogout}>
+                Logout
+              </Button>
             ) : (
               <>
                 <Nav.Link as={Link} to="/login">
@@ -72,6 +74,6 @@ const NavigationBar = () => {
       </Container>
     </Navbar>
   );
-};
+}
 
-export default NavigationBar;
+export default Navigation;

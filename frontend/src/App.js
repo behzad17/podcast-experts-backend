@@ -8,17 +8,16 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Podcasts from "./pages/Podcasts";
 import PodcastDetail from "./pages/PodcastDetail";
-import CreatePodcast from "./pages/CreatePodcast";
+import CreatePodcast from "./pages/PodcastCreate";
 import EditPodcast from "./pages/EditPodcast";
 import Experts from "./pages/Experts";
 import ExpertDetail from "./pages/ExpertDetail";
-import CreateExpert from "./pages/CreateExpert";
+import CreateExpert from "./pages/ExpertCreate";
 import EditExpert from "./pages/EditExpert";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
-import PodcastCreate from "./pages/PodcastCreate";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -45,7 +44,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/podcasts" element={<Podcasts />} />
-            <Route path="/podcasts/create" element={<PodcastCreate />} />
+            <Route path="/podcasts/create" element={<CreatePodcast />} />
             <Route path="/podcasts/:id" element={<PodcastDetail />} />
             <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
             <Route path="/experts" element={<Experts />} />
