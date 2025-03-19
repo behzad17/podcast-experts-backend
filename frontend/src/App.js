@@ -1,13 +1,19 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Experts from "./pages/Experts";
 import Podcasts from "./pages/Podcasts";
-import PodcastCreate from "./pages/PodcastCreate";
 import PodcastDetail from "./pages/PodcastDetail";
-import Navbar from "./components/Navbar";
+import CreatePodcast from "./pages/CreatePodcast";
+import EditPodcast from "./pages/EditPodcast";
+import Experts from "./pages/Experts";
+import ExpertDetail from "./pages/ExpertDetail";
+import CreateExpert from "./pages/CreateExpert";
+import EditExpert from "./pages/EditExpert";
+import UserProfile from "./pages/UserProfile";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import ExpertProfile from "./pages/ExpertProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -15,7 +21,6 @@ import ExpertProfileCreate from "./pages/ExpertProfileCreate";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import ExpertProfileDetail from "./pages/ExpertProfileDetail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
-import { HelmetProvider, Helmet } from "react-helmet-async";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -35,26 +40,33 @@ function App() {
       </Helmet>
 
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/experts" element={<Experts />} />
-          <Route path="/podcasts" element={<Podcasts />} />
-          <Route path="/podcasts/create" element={<PodcastCreate />} />
-          <Route path="/podcasts/:id" element={<PodcastDetail />} />
-          <Route path="/expert-profile" element={<ExpertProfile />} />
-          <Route path="/experts/create" element={<ExpertProfileCreate />} />
-          <Route path="/experts/:id" element={<ExpertProfileDetail />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route
-            path="/admin/expert-approval"
-            element={<AdminExpertApproval />}
-          />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <div>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/podcasts" element={<Podcasts />} />
+            <Route path="/podcasts/create" element={<CreatePodcast />} />
+            <Route path="/podcasts/:id" element={<PodcastDetail />} />
+            <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
+            <Route path="/experts" element={<Experts />} />
+            <Route path="/experts/create" element={<CreateExpert />} />
+            <Route path="/experts/:id" element={<ExpertDetail />} />
+            <Route path="/experts/:id/edit" element={<EditExpert />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/expert-profile" element={<ExpertProfile />} />
+            <Route path="/experts/create" element={<ExpertProfileCreate />} />
+            <Route path="/experts/:id" element={<ExpertProfileDetail />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/admin/expert-approval"
+              element={<AdminExpertApproval />}
+            />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </div>
       </Router>
     </HelmetProvider>
   );
