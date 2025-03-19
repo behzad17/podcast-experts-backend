@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
-from django.shortcuts import get_object_or_404
 from .serializers import UserRegisterSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from .models import UserProfile
@@ -53,14 +52,25 @@ class VerifyEmailView(APIView):
         print(f"[DEBUG] Received verification request with token: {token}")
         try:
             user = User.objects.get(verification_token=token)
-            print(f"[DEBUG] Found user: {user.username}, Current email_verified status: {user.email_verified}")
+            debug_msg = (
+                f"[DEBUG] Found user: {user.username}, "
+                f"Current email_verified status: {user.email_verified}"
+            )
+            print(debug_msg)
             
             if not user.email_verified:
-                print(f"[DEBUG] Verifying email for user: {user.username}")
+                print(
+                    f"[DEBUG] Verifying email for user: "
+                    f"{user.username}"
+                )
                 user.email_verified = True
                 user.verification_token = ""  # Clear the token
                 user.save()
-                print(f"[DEBUG] After save - email_verified: {user.email_verified}, token: {user.verification_token}")
+                debug_msg = (
+                    f"[DEBUG] After save - email_verified: "
+                    f"{user.email_verified}, token: {user.verification_token}"
+                )
+                print(debug_msg)
                 return Response(
                     {"message": "Email verified successfully"},
                     status=status.HTTP_200_OK
@@ -93,7 +103,11 @@ class UserLoginView(TokenObtainPairView):
         print(f"[DEBUG] Login attempt for username: {username}")
         try:
             user = User.objects.get(username=username)
-            print(f"[DEBUG] Found user, email_verified status: {user.email_verified}")
+            debug_msg = (
+                f"[DEBUG] Found user, email_verified status: "
+                f"{user.email_verified}"
+            )
+            print(debug_msg)
             
             if not user.email_verified:
                 print(f"[DEBUG] Email not verified for user: {username}")
@@ -101,7 +115,7 @@ class UserLoginView(TokenObtainPairView):
                     {"detail": "Please verify your email before logging in."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            print(f"[DEBUG] Email verified, proceeding with login")
+            print("[DEBUG] Email verified, proceeding with login")
             response = super().post(request, *args, **kwargs)
             response.data['user'] = {
                 'id': user.id,

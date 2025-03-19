@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import ExpertProfile, ExpertRating, ExpertComment
 from users.models import CustomUser
+from .models import ExpertProfile, ExpertRating, ExpertComment
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

@@ -9,7 +9,7 @@ from .serializers import (
     PodcasterProfileSerializer,
     CategorySerializer
 )
-from .permissions import IsOwnerOrReadOnly, IsStaffOrReadOnly
+from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import action
 
 
@@ -34,18 +34,17 @@ class PodcastListCreateView(generics.ListCreateAPIView):
             return Podcast.objects.all()
         elif self.request.user.is_authenticated:
             # Show all approved podcasts and user's own podcasts
-            return Podcast.objects.filter(
-                is_approved=True
-            ) | Podcast.objects.filter(
-                owner__user=self.request.user
+            return (
+                Podcast.objects.filter(is_approved=True) |
+                Podcast.objects.filter(owner__user=self.request.user)
             )
         else:
             # For unauthenticated users, only show approved podcasts
             return Podcast.objects.filter(is_approved=True)
 
     def perform_create(self, serializer):
-        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
-        serializer.save(owner=podcaster_profile, is_approved=False)
+        profile = PodcasterProfile.get_or_create_profile(self.request.user)
+        serializer.save(owner=profile, is_approved=False)
 
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -55,7 +54,11 @@ class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         obj = super().get_object()
-        if not obj.is_approved and not self.request.user.is_staff and obj.owner.user != self.request.user:
+        if (
+            not obj.is_approved and 
+            not self.request.user.is_staff and 
+            obj.owner.user != self.request.user
+        ):
             raise PermissionDenied("This podcast is not approved yet.")
         self.check_object_permissions(self.request, obj)
         return obj
@@ -63,13 +66,6 @@ class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         # Ensure the owner can't change during update
         serializer.save(owner=self.get_object().owner)
-
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.user == request.user
 
 
 class PodcasterProfileCreateView(generics.CreateAPIView):
@@ -160,14 +156,15 @@ class PodcastViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return queryset
         elif self.request.user.is_authenticated:
-            return queryset.filter(
-                is_approved=True
-            ) | queryset.filter(owner__user=self.request.user)
+            return (
+                queryset.filter(is_approved=True) |
+                queryset.filter(owner__user=self.request.user)
+            )
         return queryset.filter(is_approved=True)
 
     def perform_create(self, serializer):
-        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
-        serializer.save(owner=podcaster_profile)
+        profile = PodcasterProfile.get_or_create_profile(self.request.user)
+        serializer.save(owner=profile)
 
     @action(detail=True, methods=['post'])
     def approve(self, request, pk=None):

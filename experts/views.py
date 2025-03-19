@@ -4,11 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import serializers
-from django.db import IntegrityError
-from django.db.models import Count, Avg
 from .models import ExpertProfile, ExpertComment, ExpertRating
-from .serializers import ExpertProfileSerializer, ExpertCommentSerializer, ExpertRatingSerializer
+from .serializers import (
+    ExpertProfileSerializer,
+    ExpertCommentSerializer,
+    ExpertRatingSerializer
+)
 from rest_framework.decorators import action
 
 # Create your views here.
@@ -56,14 +57,17 @@ class ExpertProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         obj = super().get_object()
-        if not obj.is_approved and not self.request.user.is_staff and obj.user != self.request.user:
+        if (not obj.is_approved and not self.request.user.is_staff and 
+            obj.user != self.request.user):
             raise PermissionDenied("This profile is not approved yet.")
         return obj
 
     def check_object_permissions(self, request, obj):
         if request.method not in permissions.SAFE_METHODS:
             if not (request.user.is_staff or obj.user == request.user):
-                raise PermissionDenied("You don't have permission to modify this profile.")
+                raise PermissionDenied(
+                    "You don't have permission to modify this profile."
+                )
         return super().check_object_permissions(request, obj)
 
 
