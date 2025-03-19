@@ -163,7 +163,15 @@ const Podcasts = () => {
   return (
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Podcasts</h2>
+        <div>
+          <h2>Podcasts</h2>
+          {currentUser && (
+            <div className="text-muted">
+              You are logged in as{" "}
+              {currentUser.user_type === "expert" ? "an Expert" : "a Podcaster"}
+            </div>
+          )}
+        </div>
         {currentUser && (
           <Button variant="primary" onClick={handleCreatePodcast}>
             Create Podcast
