@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from .models import ExpertProfile, ExpertRating, ExpertComment
-from users.serializers import UserSerializer
+from users.models import CustomUser
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email']
+        read_only_fields = ['id', 'username', 'email']
 
 
 class ExpertCommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = SimpleUserSerializer(read_only=True)
 
     class Meta:
         model = ExpertComment
@@ -12,7 +19,7 @@ class ExpertCommentSerializer(serializers.ModelSerializer):
 
 
 class ExpertRatingSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = SimpleUserSerializer(read_only=True)
 
     class Meta:
         model = ExpertRating
@@ -20,7 +27,7 @@ class ExpertRatingSerializer(serializers.ModelSerializer):
 
 
 class ExpertProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = SimpleUserSerializer(read_only=True)
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()

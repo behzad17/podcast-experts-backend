@@ -50,11 +50,13 @@ class PodcastListCreateView(generics.ListCreateAPIView):
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticated, IsPodcastOwner]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Podcast.objects.all()
 
     def get_object(self):
         obj = super().get_object()
+        if not obj.is_approved and not self.request.user.is_staff and obj.owner.user != self.request.user:
+            raise PermissionDenied("This podcast is not approved yet.")
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -141,7 +143,12 @@ class PodcasterProfileViewSet(viewsets.ModelViewSet):
 class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 
     def get_queryset(self):
         queryset = Podcast.objects.all()

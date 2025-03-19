@@ -51,19 +51,17 @@ class ExpertProfileCreateView(generics.CreateAPIView):
 
 class ExpertProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ExpertProfileSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = ExpertProfile.objects.all()
 
     def get_object(self):
         obj = super().get_object()
-        if not obj.is_approved and not self.request.user.is_staff and (not self.request.user.is_authenticated or obj.user != self.request.user):
+        if not obj.is_approved and not self.request.user.is_staff and obj.user != self.request.user:
             raise PermissionDenied("This profile is not approved yet.")
         return obj
 
     def check_object_permissions(self, request, obj):
         if request.method not in permissions.SAFE_METHODS:
-            if not request.user.is_authenticated:
-                raise PermissionDenied("Authentication required to modify profile.")
             if not (request.user.is_staff or obj.user == request.user):
                 raise PermissionDenied("You don't have permission to modify this profile.")
         return super().check_object_permissions(request, obj)
