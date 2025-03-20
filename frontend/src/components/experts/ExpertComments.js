@@ -19,7 +19,7 @@ const ExpertComments = ({ expertId }) => {
       setComments(response.data.comments || []);
     } catch (error) {
       console.error("Error fetching comments:", error);
-      setError("Failed to load comments");
+      setError("خطا در بارگذاری نظرات");
     }
   };
 
@@ -36,7 +36,7 @@ const ExpertComments = ({ expertId }) => {
       setNewComment("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      setError("Failed to post comment");
+      setError("خطا در ارسال نظر. لطفاً دوباره تلاش کنید.");
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,9 @@ const ExpertComments = ({ expertId }) => {
 
   const handleLike = async (commentId) => {
     try {
-      const response = await api.post(`/comments/${commentId}/like/`);
+      const response = await api.post(
+        `/experts/${expertId}/comments/${commentId}/like/`
+      );
       setComments(
         comments.map((comment) =>
           comment.id === commentId
@@ -54,13 +56,15 @@ const ExpertComments = ({ expertId }) => {
       );
     } catch (error) {
       console.error("Error liking comment:", error);
-      setError("Failed to like comment");
+      setError("خطا در لایک کردن نظر");
     }
   };
 
   const handleDislike = async (commentId) => {
     try {
-      const response = await api.post(`/comments/${commentId}/dislike/`);
+      const response = await api.post(
+        `/experts/${expertId}/comments/${commentId}/dislike/`
+      );
       setComments(
         comments.map((comment) =>
           comment.id === commentId
@@ -70,13 +74,13 @@ const ExpertComments = ({ expertId }) => {
       );
     } catch (error) {
       console.error("Error disliking comment:", error);
-      setError("Failed to dislike comment");
+      setError("خطا در دیسلایک کردن نظر");
     }
   };
 
   return (
     <div className="mt-4">
-      <h3>Comments</h3>
+      <h3>نظرات</h3>
       {error && <div className="text-danger mb-3">{error}</div>}
 
       <Form onSubmit={handleSubmit} className="mb-4">
@@ -86,7 +90,7 @@ const ExpertComments = ({ expertId }) => {
             rows={3}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Write a comment..."
+            placeholder="نظر خود را بنویسید..."
           />
         </Form.Group>
         <Button
@@ -95,7 +99,7 @@ const ExpertComments = ({ expertId }) => {
           disabled={loading || !newComment.trim()}
           className="mt-2"
         >
-          Post Comment
+          ارسال نظر
         </Button>
       </Form>
 
@@ -107,7 +111,7 @@ const ExpertComments = ({ expertId }) => {
                 <h6 className="mb-1">{comment.user.username}</h6>
                 <p className="mb-1">{comment.content}</p>
                 <small className="text-muted">
-                  {new Date(comment.created_at).toLocaleDateString()}
+                  {new Date(comment.created_at).toLocaleDateString("fa-IR")}
                 </small>
               </div>
               <div className="d-flex gap-2">
