@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Alert, Spinner } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -10,34 +10,18 @@ const ExpertDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchExpert = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get(
-          `http://localhost:8000/api/experts/${id}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
+        const response = await api.get(`/experts/${id}/`);
         setExpert(response.data);
 
         // Check if the current user is the owner
-        const userResponse = await axios.get(
-          "http://localhost:8000/api/users/me/",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setIsOwner(response.data.user === userResponse.data.id);
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && response.data.user.id === user.id) {
+          setIsOwner(true);
+        }
 
         setLoading(false);
       } catch (error) {
@@ -50,7 +34,7 @@ const ExpertDetail = () => {
     };
 
     fetchExpert();
-  }, [id, navigate]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -105,23 +89,60 @@ const ExpertDetail = () => {
       <Card className="shadow-sm">
         <Card.Body>
           <div className="row">
+            <div className="col-md-4">
+              {expert.profile_picture && (
+                <img
+                  src={expert.profile_picture}
+                  alt={expert.name}
+                  className="img-fluid rounded mb-4"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
+              )}
+            </div>
             <div className="col-md-8">
-              <h2 className="mb-3">{expert.user_name}</h2>
+              <h2 className="mb-3">{expert.name}</h2>
               <p className="lead mb-4">{expert.bio}</p>
 
               <div className="mb-4">
-                <h4>Specialization</h4>
-                <p>{expert.specialization}</p>
+                <h4>Expertise</h4>
+                <p>{expert.expertise}</p>
               </div>
 
               <div className="mb-4">
                 <h4>Experience</h4>
-                <p>{expert.experience} years</p>
+                <p>{expert.experience_years} years</p>
+              </div>
+
+              {expert.website && (
+                <div className="mb-4">
+                  <h4>Website</h4>
+                  <p>
+                    <a
+                      href={expert.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {expert.website}
+                    </a>
+                  </p>
+                </div>
+              )}
+
+              {expert.social_media && (
+                <div className="mb-4">
+                  <h4>Social Media</h4>
+                  <p>{expert.social_media}</p>
+                </div>
+              )}
+
+              <div className="mb-4">
+                <h4>Rating</h4>
+                <p>{expert.average_rating?.toFixed(1) || "No ratings yet"}</p>
               </div>
 
               <div className="mb-4">
-                <h4>Hourly Rate</h4>
-                <p>${expert.hourly_rate}/hour</p>
+                <h4>Views</h4>
+                <p>{expert.total_views || 0}</p>
               </div>
             </div>
           </div>
