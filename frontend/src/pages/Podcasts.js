@@ -9,10 +9,12 @@ import {
   Pagination,
   Spinner,
   Form,
+  Badge,
 } from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
+import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -139,6 +141,50 @@ const Podcasts = () => {
     }
   };
 
+  const handleLike = async (podcastId) => {
+    try {
+      const response = await api.post(`/podcasts/podcasts/${podcastId}/like/`);
+      setPodcasts(
+        podcasts.map((p) =>
+          p.id === podcastId
+            ? {
+                ...p,
+                is_liked: response.data.is_liked,
+                likes_count: response.data.likes_count,
+                dislikes_count: response.data.dislikes_count,
+              }
+            : p
+        )
+      );
+    } catch (error) {
+      console.error("Error liking podcast:", error);
+      setError("Failed to like podcast. Please try again.");
+    }
+  };
+
+  const handleDislike = async (podcastId) => {
+    try {
+      const response = await api.post(
+        `/podcasts/podcasts/${podcastId}/dislike/`
+      );
+      setPodcasts(
+        podcasts.map((p) =>
+          p.id === podcastId
+            ? {
+                ...p,
+                is_disliked: response.data.is_disliked,
+                likes_count: response.data.likes_count,
+                dislikes_count: response.data.dislikes_count,
+              }
+            : p
+        )
+      );
+    } catch (error) {
+      console.error("Error disliking podcast:", error);
+      setError("Failed to dislike podcast. Please try again.");
+    }
+  };
+
   if (loading) {
     return (
       <Container className="mt-4">
@@ -201,13 +247,22 @@ const Podcasts = () => {
                 <Card.Text>
                   {podcast.description?.substring(0, 100)}...
                 </Card.Text>
-                <div className="d-flex justify-content-between">
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => navigate(`/podcasts/${podcast.id}/`)}
-                  >
-                    View Details
-                  </Button>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <Badge
+                      bg={podcast.is_liked ? "success" : "outline-success"}
+                      className="me-2"
+                    >
+                      <FaThumbsUp className="me-1" />
+                      {podcast.likes_count}
+                    </Badge>
+                    <Badge
+                      bg={podcast.is_disliked ? "danger" : "outline-danger"}
+                    >
+                      <FaThumbsDown className="me-1" />
+                      {podcast.dislikes_count}
+                    </Badge>
+                  </div>
                   {currentUser && podcast.user === currentUser.id && (
                     <Button
                       variant="outline-secondary"
@@ -216,6 +271,33 @@ const Podcasts = () => {
                       Edit
                     </Button>
                   )}
+                </div>
+                <div className="d-flex justify-content-between">
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => navigate(`/podcasts/${podcast.id}/`)}
+                  >
+                    View Details
+                  </Button>
+                  <div>
+                    <Button
+                      variant={podcast.is_liked ? "success" : "outline-success"}
+                      className="me-2"
+                      onClick={() => handleLike(podcast.id)}
+                    >
+                      <FaThumbsUp className="me-2" />
+                      Like
+                    </Button>
+                    <Button
+                      variant={
+                        podcast.is_disliked ? "danger" : "outline-danger"
+                      }
+                      onClick={() => handleDislike(podcast.id)}
+                    >
+                      <FaThumbsDown className="me-2" />
+                      Dislike
+                    </Button>
+                  </div>
                 </div>
               </Card.Body>
             </Card>
