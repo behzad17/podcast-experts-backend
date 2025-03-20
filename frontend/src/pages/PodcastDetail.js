@@ -11,7 +11,13 @@ import {
   Badge,
   Spinner,
 } from "react-bootstrap";
-import { FaPlay, FaShare, FaEdit } from "react-icons/fa";
+import {
+  FaPlay,
+  FaShare,
+  FaEdit,
+  FaThumbsUp,
+  FaThumbsDown,
+} from "react-icons/fa";
 import Comments from "../components/Comments";
 
 const PodcastDetail = () => {
@@ -44,6 +50,36 @@ const PodcastDetail = () => {
         text: podcast.description,
         url: window.location.href,
       });
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      const response = await api.post(`/podcasts/podcasts/${id}/like/`);
+      setPodcast((prev) => ({
+        ...prev,
+        is_liked: response.data.is_liked,
+        likes_count: response.data.likes_count,
+        dislikes_count: response.data.dislikes_count,
+      }));
+    } catch (error) {
+      console.error("Error liking podcast:", error);
+      setError("Failed to like podcast. Please try again.");
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const response = await api.post(`/podcasts/podcasts/${id}/dislike/`);
+      setPodcast((prev) => ({
+        ...prev,
+        is_disliked: response.data.is_disliked,
+        likes_count: response.data.likes_count,
+        dislikes_count: response.data.dislikes_count,
+      }));
+    } catch (error) {
+      console.error("Error disliking podcast:", error);
+      setError("Failed to dislike podcast. Please try again.");
     }
   };
 
@@ -99,11 +135,38 @@ const PodcastDetail = () => {
                   <Badge bg="primary" className="me-2">
                     By {podcast.owner?.channel_name || "Unknown"}
                   </Badge>
-                  <Badge bg="secondary">
+                  <Badge bg="secondary" className="me-2">
                     {new Date(podcast.created_at).toLocaleDateString()}
+                  </Badge>
+                  <Badge
+                    bg={podcast.is_liked ? "success" : "outline-success"}
+                    className="me-2"
+                  >
+                    <FaThumbsUp className="me-1" />
+                    {podcast.likes_count}
+                  </Badge>
+                  <Badge bg={podcast.is_disliked ? "danger" : "outline-danger"}>
+                    <FaThumbsDown className="me-1" />
+                    {podcast.dislikes_count}
                   </Badge>
                 </div>
                 <div>
+                  <Button
+                    variant={podcast.is_liked ? "success" : "outline-success"}
+                    className="me-2"
+                    onClick={handleLike}
+                  >
+                    <FaThumbsUp className="me-2" />
+                    Like
+                  </Button>
+                  <Button
+                    variant={podcast.is_disliked ? "danger" : "outline-danger"}
+                    className="me-2"
+                    onClick={handleDislike}
+                  >
+                    <FaThumbsDown className="me-2" />
+                    Dislike
+                  </Button>
                   <Button
                     variant="outline-secondary"
                     className="me-2"
