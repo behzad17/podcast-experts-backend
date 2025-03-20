@@ -22,6 +22,8 @@ class ExpertProfile(models.Model):
     views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
     bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
     ratings = models.ManyToManyField('users.CustomUser', through='ExpertRating', related_name='rated_experts')
+    likes = models.ManyToManyField('users.CustomUser', related_name='liked_experts', blank=True)
+    dislikes = models.ManyToManyField('users.CustomUser', related_name='disliked_experts', blank=True)
 
     def __str__(self):
         return f"{self.name} - {self.expertise}"
@@ -34,6 +36,36 @@ class ExpertProfile(models.Model):
 
     def get_average_rating(self):
         return ExpertRating.objects.filter(expert=self).aggregate(Avg('rating'))['rating__avg'] or 0
+
+    def get_likes_count(self):
+        return self.likes.count()
+
+    def get_dislikes_count(self):
+        return self.dislikes.count()
+
+    def is_liked_by(self, user):
+        return self.likes.filter(id=user.id).exists()
+
+    def is_disliked_by(self, user):
+        return self.dislikes.filter(id=user.id).exists()
+
+    def toggle_like(self, user):
+        if self.is_liked_by(user):
+            self.likes.remove(user)
+            return False
+        else:
+            self.likes.add(user)
+            self.dislikes.remove(user)
+            return True
+
+    def toggle_dislike(self, user):
+        if self.is_disliked_by(user):
+            self.dislikes.remove(user)
+            return False
+        else:
+            self.dislikes.add(user)
+            self.likes.remove(user)
+            return True
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

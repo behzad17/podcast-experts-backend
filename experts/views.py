@@ -163,6 +163,8 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
+        elif self.action in ['like', 'dislike']:
+            return [permissions.IsAuthenticated()]
         return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
@@ -203,6 +205,26 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
         expert = self.get_object()
         expert.views.add(request.user)
         return Response({'status': 'viewed'})
+
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        expert = self.get_object()
+        is_liked = expert.toggle_like(request.user)
+        return Response({
+            'is_liked': is_liked,
+            'likes_count': expert.get_likes_count(),
+            'dislikes_count': expert.get_dislikes_count()
+        })
+
+    @action(detail=True, methods=['post'])
+    def dislike(self, request, pk=None):
+        expert = self.get_object()
+        is_disliked = expert.toggle_dislike(request.user)
+        return Response({
+            'is_disliked': is_disliked,
+            'likes_count': expert.get_likes_count(),
+            'dislikes_count': expert.get_dislikes_count()
+        })
 
     @action(detail=False, methods=['get'])
     def my_profile(self, request):

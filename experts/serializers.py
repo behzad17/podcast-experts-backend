@@ -35,6 +35,10 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     comments = ExpertCommentSerializer(many=True, read_only=True)
     ratings = ExpertRatingSerializer(many=True, read_only=True)
     profile_picture_url = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
+    dislikes_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
+    is_disliked = serializers.SerializerMethodField()
     
     class Meta:
         model = ExpertProfile
@@ -42,7 +46,8 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
             'id', 'user', 'name', 'bio', 'expertise', 'experience_years',
             'website', 'social_media', 'profile_picture', 'profile_picture_url',
             'is_approved', 'created_at', 'total_views', 'total_bookmarks',
-            'average_rating', 'comments', 'ratings'
+            'average_rating', 'comments', 'ratings', 'likes_count',
+            'dislikes_count', 'is_liked', 'is_disliked'
         ]
         read_only_fields = ['is_approved']
 
@@ -60,4 +65,22 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
             return self.context['request'].build_absolute_uri(
                 obj.profile_picture.url
             )
-        return None 
+        return None
+
+    def get_likes_count(self, obj):
+        return obj.get_likes_count()
+
+    def get_dislikes_count(self, obj):
+        return obj.get_dislikes_count()
+
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.is_liked_by(request.user)
+        return False
+
+    def get_is_disliked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.is_disliked_by(request.user)
+        return False 
