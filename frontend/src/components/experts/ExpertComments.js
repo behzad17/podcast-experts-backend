@@ -29,7 +29,7 @@ const ExpertComments = ({ expertId }) => {
 
     setLoading(true);
     try {
-      const response = await api.post(`/experts/${expertId}/add_comment/`, {
+      const response = await api.post(`/experts/${expertId}/comments/`, {
         content: newComment,
       });
       setComments([response.data, ...comments]);
