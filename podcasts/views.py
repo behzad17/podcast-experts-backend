@@ -146,6 +146,8 @@ class PodcastViewSet(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         elif self.action == 'create':
             return [permissions.IsAuthenticated()]
+        elif self.action in ['like', 'dislike']:
+            return [permissions.IsAuthenticated()]
         return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
 
     def get_queryset(self):
