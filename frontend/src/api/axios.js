@@ -28,13 +28,16 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      // Store the current URL before redirecting
-      const currentPath = window.location.pathname;
-      localStorage.setItem("redirectAfterLogin", currentPath);
+      // فقط در صورتی که در صفحه لاگین نباشیم، به صفحه لاگین هدایت کنیم
+      if (!window.location.pathname.includes("/login")) {
+        // Store the current URL before redirecting
+        const currentPath = window.location.pathname;
+        localStorage.setItem("redirectAfterLogin", currentPath);
 
-      // Remove token and redirect to login
-      localStorage.removeItem("token");
-      window.location.href = "/login";
+        // Remove token and redirect to login
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
