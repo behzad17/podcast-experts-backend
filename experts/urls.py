@@ -18,6 +18,7 @@ router.register(r'experts', ExpertProfileViewSet, basename='expert')
 router.register(r'experts/(?P<expert_pk>\d+)/comments', ExpertCommentViewSet, basename='expert-comment')
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('', ExpertListView.as_view(), name='expert-list'),
     path('create/', ExpertProfileCreateView.as_view(), name='expert-profile-create'),
     path('pending/', PendingExpertProfilesView.as_view(), name='pending-experts'),
@@ -26,5 +27,4 @@ urlpatterns = [
     path('approve/<int:pk>/', ExpertProfileApprovalView.as_view(), name='expert-profile-approve'),
     path('my-profile/', MyExpertProfileView.as_view(), name='expert-my-profile'),
     path('stats/', ExpertStatsView.as_view(), name='expert-stats'),
-    path('', include(router.urls)),
 ] 

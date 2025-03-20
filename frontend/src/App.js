@@ -20,6 +20,8 @@ import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
+import Podcast2 from "./pages/Podcast2";
+import Podcast2Detail from "./pages/Podcast2Detail";
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
               <Route path="/podcasts/create" element={<CreatePodcast />} />
               <Route path="/podcasts/:id" element={<PodcastDetail />} />
               <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
+              <Route path="/podcast2" element={<Podcast2 />} />
+              <Route path="/podcast2/:id" element={<Podcast2Detail />} />
               <Route path="/experts" element={<Experts />} />
               <Route path="/experts/create" element={<CreateExpert />} />
               <Route path="/experts/:id" element={<ExpertDetail />} />

@@ -16,10 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
-
-def home_view(request):
-    return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
+from .views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +24,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
+    path('api/podcast2/', include('podcast2.urls')),
     path('api/comments/', include('comments.urls')),
     path('api/ratings/', include('ratings.urls')),
 ]

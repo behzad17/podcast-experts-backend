@@ -3,7 +3,6 @@ import { Container, Card, Button, Alert, Spinner } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import api from "../api/axios";
-import ExpertComments from "../components/experts/ExpertComments";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -40,6 +39,14 @@ const ExpertDetail = () => {
 
   const handleLike = async () => {
     try {
+      // Check if user is logged in
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Please log in to like this profile");
+        setTimeout(() => navigate("/login"), 2000);
+        return;
+      }
+
       const response = await api.post(`/experts/${id}/like/`);
       setExpert({
         ...expert,
@@ -47,14 +54,28 @@ const ExpertDetail = () => {
         likes_count: response.data.likes_count,
         dislikes_count: response.data.dislikes_count,
       });
+      setError(null);
     } catch (error) {
       console.error("Error liking expert:", error);
-      setError("Failed to like expert profile");
+      if (error.response?.status === 401) {
+        setError("Please log in to like this profile");
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        setError("Failed to like expert profile. Please try again.");
+      }
     }
   };
 
   const handleDislike = async () => {
     try {
+      // Check if user is logged in
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Please log in to dislike this profile");
+        setTimeout(() => navigate("/login"), 2000);
+        return;
+      }
+
       const response = await api.post(`/experts/${id}/dislike/`);
       setExpert({
         ...expert,
@@ -62,9 +83,15 @@ const ExpertDetail = () => {
         likes_count: response.data.likes_count,
         dislikes_count: response.data.dislikes_count,
       });
+      setError(null);
     } catch (error) {
       console.error("Error disliking expert:", error);
-      setError("Failed to dislike expert profile");
+      if (error.response?.status === 401) {
+        setError("Please log in to dislike this profile");
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        setError("Failed to dislike expert profile. Please try again.");
+      }
     }
   };
 
@@ -200,8 +227,6 @@ const ExpertDetail = () => {
           </div>
         </Card.Body>
       </Card>
-
-      <ExpertComments expertId={id} />
     </Container>
   );
 };
