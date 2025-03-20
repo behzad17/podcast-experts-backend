@@ -26,8 +26,13 @@ api.interceptors.request.use(
 // Add response interceptor
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
+      // Store the current URL before redirecting
+      const currentPath = window.location.pathname;
+      localStorage.setItem("redirectAfterLogin", currentPath);
+
+      // Remove token and redirect to login
       localStorage.removeItem("token");
       window.location.href = "/login";
     }

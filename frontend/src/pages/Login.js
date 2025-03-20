@@ -22,7 +22,12 @@ const Login = () => {
 
     try {
       await login(formData.username, formData.password);
-      navigate("/");
+      // Get the redirect path from localStorage
+      const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+      // Clear the redirect path
+      localStorage.removeItem("redirectAfterLogin");
+      // Navigate to the previous page
+      navigate(redirectPath);
     } catch (error) {
       console.error("Login error:", error);
       setError(error.message || "Login failed. Please try again.");
