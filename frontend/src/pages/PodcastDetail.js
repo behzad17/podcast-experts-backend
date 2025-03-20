@@ -12,6 +12,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { FaPlay, FaShare, FaEdit } from "react-icons/fa";
+import Comments from "../components/Comments";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -132,6 +133,8 @@ const PodcastDetail = () => {
               )}
             </Card.Body>
           </Card>
+
+          <Comments podcastId={id} />
         </Col>
       </Row>
     </Container>
