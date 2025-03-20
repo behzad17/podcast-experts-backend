@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -10,6 +10,11 @@ class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
     def get_queryset(self):
         queryset = Comment.objects.filter(parent=None)
