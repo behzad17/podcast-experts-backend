@@ -10,10 +10,12 @@ from .views import (
     ExpertProfileViewSet,
     PendingExpertProfilesView,
     ExpertProfileUpdateView,
+    ExpertCommentViewSet,
 )
 
 router = DefaultRouter()
 router.register(r'experts', ExpertProfileViewSet, basename='expert')
+router.register(r'experts/(?P<expert_pk>\d+)/comments', ExpertCommentViewSet, basename='expert-comment')
 
 urlpatterns = [
     path('', ExpertListView.as_view(), name='expert-list'),

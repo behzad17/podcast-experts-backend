@@ -82,9 +82,31 @@ class ExpertComment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(CustomUser, related_name='liked_expert_comments', blank=True)
+    dislikes = models.ManyToManyField(CustomUser, related_name='disliked_expert_comments', blank=True)
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.expert.name}"
+
+    def toggle_like(self, user):
+        if user in self.likes.all():
+            self.likes.remove(user)
+            return False
+        else:
+            self.likes.add(user)
+            if user in self.dislikes.all():
+                self.dislikes.remove(user)
+            return True
+
+    def toggle_dislike(self, user):
+        if user in self.dislikes.all():
+            self.dislikes.remove(user)
+            return False
+        else:
+            self.dislikes.add(user)
+            if user in self.likes.all():
+                self.likes.remove(user)
+            return True
 
 class FavoriteExperts(models.Model):
     user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)

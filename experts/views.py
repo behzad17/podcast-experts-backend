@@ -276,3 +276,52 @@ class ExpertProfileUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class ExpertCommentViewSet(viewsets.ModelViewSet):
+    queryset = ExpertComment.objects.all()
+    serializer_class = ExpertCommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        expert_id = self.kwargs.get('expert_pk')
+        return ExpertComment.objects.filter(expert_id=expert_id)
+
+    def perform_create(self, serializer):
+        expert_id = self.kwargs.get('expert_pk')
+        expert = get_object_or_404(ExpertProfile, id=expert_id)
+        serializer.save(expert=expert, user=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def like(self, request, expert_pk=None, pk=None):
+        comment = self.get_object()
+        if request.user in comment.likes.all():
+            comment.likes.remove(request.user)
+            return Response({
+                'is_liked': False,
+                'likes_count': comment.likes.count()
+            })
+        else:
+            comment.likes.add(request.user)
+            comment.dislikes.remove(request.user)
+            return Response({
+                'is_liked': True,
+                'likes_count': comment.likes.count()
+            })
+
+    @action(detail=True, methods=['post'])
+    def dislike(self, request, expert_pk=None, pk=None):
+        comment = self.get_object()
+        if request.user in comment.dislikes.all():
+            comment.dislikes.remove(request.user)
+            return Response({
+                'is_disliked': False,
+                'dislikes_count': comment.dislikes.count()
+            })
+        else:
+            comment.dislikes.add(request.user)
+            comment.likes.remove(request.user)
+            return Response({
+                'is_disliked': True,
+                'dislikes_count': comment.dislikes.count()
+            })
