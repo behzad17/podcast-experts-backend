@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Alert, Spinner } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import api from "../api/axios";
+import ExpertComments from "../components/experts/ExpertComments";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -35,6 +37,36 @@ const ExpertDetail = () => {
 
     fetchExpert();
   }, [id]);
+
+  const handleLike = async () => {
+    try {
+      const response = await api.post(`/experts/${id}/like/`);
+      setExpert({
+        ...expert,
+        is_liked: response.data.is_liked,
+        likes_count: response.data.likes_count,
+        dislikes_count: response.data.dislikes_count,
+      });
+    } catch (error) {
+      console.error("Error liking expert:", error);
+      setError("Failed to like expert profile");
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const response = await api.post(`/experts/${id}/dislike/`);
+      setExpert({
+        ...expert,
+        is_disliked: response.data.is_disliked,
+        likes_count: response.data.likes_count,
+        dislikes_count: response.data.dislikes_count,
+      });
+    } catch (error) {
+      console.error("Error disliking expert:", error);
+      setError("Failed to dislike expert profile");
+    }
+  };
 
   if (loading) {
     return (
@@ -86,7 +118,7 @@ const ExpertDetail = () => {
         </div>
       </div>
 
-      <Card className="shadow-sm">
+      <Card className="shadow-sm mb-4">
         <Card.Body>
           <div className="row">
             <div className="col-md-4">
@@ -100,8 +132,28 @@ const ExpertDetail = () => {
               )}
             </div>
             <div className="col-md-8">
-              <h2 className="mb-3">{expert.name}</h2>
-              <p className="lead mb-4">{expert.bio}</p>
+              <div className="d-flex justify-content-between align-items-start">
+                <div>
+                  <h2 className="mb-3">{expert.name}</h2>
+                  <p className="lead mb-4">{expert.bio}</p>
+                </div>
+                <div className="d-flex gap-2">
+                  <Button
+                    variant={expert.is_liked ? "primary" : "outline-primary"}
+                    onClick={handleLike}
+                  >
+                    <FaThumbsUp className="me-1" />
+                    <span>{expert.likes_count || 0}</span>
+                  </Button>
+                  <Button
+                    variant={expert.is_disliked ? "danger" : "outline-danger"}
+                    onClick={handleDislike}
+                  >
+                    <FaThumbsDown className="me-1" />
+                    <span>{expert.dislikes_count || 0}</span>
+                  </Button>
+                </div>
+              </div>
 
               <div className="mb-4">
                 <h4>Expertise</h4>
@@ -148,6 +200,8 @@ const ExpertDetail = () => {
           </div>
         </Card.Body>
       </Card>
+
+      <ExpertComments expertId={id} />
     </Container>
   );
 };
