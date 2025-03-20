@@ -219,7 +219,7 @@ const Comments = ({ podcastId }) => {
 
   const fetchComments = useCallback(async () => {
     try {
-      const response = await api.get(`/api/comments/?podcast=${podcastId}`);
+      const response = await api.get(`/comments/?podcast=${podcastId}`);
       setComments(response.data || []);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -237,7 +237,7 @@ const Comments = ({ podcastId }) => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await api.post("/api/comments/", {
+      const response = await api.post("/comments/", {
         podcast: podcastId,
         text: newComment,
       });
@@ -251,7 +251,7 @@ const Comments = ({ podcastId }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      await api.delete(`/api/comments/${commentId}/`);
+      await api.delete(`/comments/${commentId}/`);
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -261,7 +261,7 @@ const Comments = ({ podcastId }) => {
 
   const handleEdit = async (commentId, newText) => {
     try {
-      const response = await api.patch(`/api/comments/${commentId}/`, {
+      const response = await api.patch(`/comments/${commentId}/`, {
         text: newText,
       });
       setComments(
@@ -278,7 +278,7 @@ const Comments = ({ podcastId }) => {
 
   const handleReply = async (commentId, replyText) => {
     try {
-      const response = await api.post("/api/comments/", {
+      const response = await api.post("/comments/", {
         podcast: podcastId,
         text: replyText,
         parent: commentId,
@@ -301,7 +301,7 @@ const Comments = ({ podcastId }) => {
 
   const handleLike = async (commentId) => {
     try {
-      const response = await api.post(`/api/comments/${commentId}/like/`);
+      const response = await api.post(`/comments/${commentId}/like/`);
       setComments(
         comments.map((comment) =>
           comment.id === commentId
@@ -322,7 +322,7 @@ const Comments = ({ podcastId }) => {
 
   const handleDislike = async (commentId) => {
     try {
-      const response = await api.post(`/api/comments/${commentId}/dislike/`);
+      const response = await api.post(`/comments/${commentId}/dislike/`);
       setComments(
         comments.map((comment) =>
           comment.id === commentId
