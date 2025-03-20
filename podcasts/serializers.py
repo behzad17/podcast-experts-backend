@@ -38,6 +38,10 @@ class PodcastSerializer(serializers.ModelSerializer):
     views = serializers.IntegerField(read_only=True, default=0)
     average_rating = serializers.FloatField(read_only=True)
     total_bookmarks = serializers.IntegerField(read_only=True, default=0)
+    likes_count = serializers.SerializerMethodField()
+    dislikes_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
+    is_disliked = serializers.SerializerMethodField()
 
     class Meta:
         model = Podcast
@@ -56,7 +60,11 @@ class PodcastSerializer(serializers.ModelSerializer):
             'views',
             'average_rating',
             'total_bookmarks',
-            'comments'
+            'comments',
+            'likes_count',
+            'dislikes_count',
+            'is_liked',
+            'is_disliked'
         ]
         read_only_fields = [
             'created_at',
@@ -66,6 +74,24 @@ class PodcastSerializer(serializers.ModelSerializer):
             'average_rating',
             'total_bookmarks'
         ]
+
+    def get_likes_count(self, obj):
+        return obj.likes_count
+
+    def get_dislikes_count(self, obj):
+        return obj.dislikes_count
+
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.is_liked_by(request.user)
+        return False
+
+    def get_is_disliked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.is_disliked_by(request.user)
+        return False
 
 
 class PodcastStatsSerializer(serializers.ModelSerializer):

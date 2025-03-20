@@ -71,12 +71,56 @@ class Podcast(models.Model):
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(
+        CustomUser,
+        related_name='liked_podcasts',
+        blank=True
+    )
+    dislikes = models.ManyToManyField(
+        CustomUser,
+        related_name='disliked_podcasts',
+        blank=True
+    )
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return self.title
+
+    def toggle_like(self, user):
+        if user in self.likes.all():
+            self.likes.remove(user)
+            return False
+        else:
+            self.likes.add(user)
+            if user in self.dislikes.all():
+                self.dislikes.remove(user)
+            return True
+
+    def toggle_dislike(self, user):
+        if user in self.dislikes.all():
+            self.dislikes.remove(user)
+            return False
+        else:
+            self.dislikes.add(user)
+            if user in self.likes.all():
+                self.likes.remove(user)
+            return True
+
+    @property
+    def likes_count(self):
+        return self.likes.count()
+
+    @property
+    def dislikes_count(self):
+        return self.dislikes.count()
+
+    def is_liked_by(self, user):
+        return user in self.likes.all()
+
+    def is_disliked_by(self, user):
+        return user in self.dislikes.all()
 
 class Comment(models.Model):
     podcast = models.ForeignKey(

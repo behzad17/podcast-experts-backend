@@ -180,6 +180,26 @@ class PodcastViewSet(viewsets.ModelViewSet):
         podcast.save()
         return Response({'status': 'podcast approved'})
 
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        podcast = self.get_object()
+        is_liked = podcast.toggle_like(request.user)
+        return Response({
+            'is_liked': is_liked,
+            'likes_count': podcast.likes_count,
+            'dislikes_count': podcast.dislikes_count
+        })
+
+    @action(detail=True, methods=['post'])
+    def dislike(self, request, pk=None):
+        podcast = self.get_object()
+        is_disliked = podcast.toggle_dislike(request.user)
+        return Response({
+            'is_disliked': is_disliked,
+            'likes_count': podcast.likes_count,
+            'dislikes_count': podcast.dislikes_count
+        })
+
 
 class PodcastUpdateView(generics.UpdateAPIView):
     serializer_class = PodcastSerializer
