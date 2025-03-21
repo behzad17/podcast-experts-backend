@@ -50,19 +50,18 @@ api.interceptors.response.use(
         // Retry the original request
         return api(originalRequest);
       } catch (refreshError) {
-        // If refresh fails, clear auth data
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userData");
-
-        // Only redirect to login if we're not already on the login page
+        // If refresh fails, only clear data if we're not on the login page
         if (!window.location.pathname.includes("/login")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("userData");
           window.location.href = "/login";
         }
         return Promise.reject(refreshError);
       }
     }
 
+    // For other errors, don't clear auth data
     return Promise.reject(error);
   }
 );

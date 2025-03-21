@@ -26,8 +26,13 @@ export const AuthProvider = ({ children }) => {
       const userData = JSON.parse(localStorage.getItem("userData"));
 
       if (token && refreshToken) {
+        // Set initial user data from localStorage
+        if (userData) {
+          setUser(userData);
+        }
+
         try {
-          // Try to get user data
+          // Try to get fresh user data
           const response = await api.get("/users/me/");
           setUser(response.data);
         } catch (error) {
@@ -53,7 +58,11 @@ export const AuthProvider = ({ children }) => {
               setUser(null);
             }
           } else {
-            throw error;
+            // If it's not a 401 error, keep the user logged in with stored data
+            console.error("Error fetching user data:", error);
+            if (userData) {
+              setUser(userData);
+            }
           }
         }
       } else {
@@ -65,10 +74,11 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Auth check failed:", error);
-      localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("userData");
-      setUser(null);
+      // Don't clear data on general errors, try to keep the user logged in
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      if (userData) {
+        setUser(userData);
+      }
     } finally {
       setLoading(false);
     }
