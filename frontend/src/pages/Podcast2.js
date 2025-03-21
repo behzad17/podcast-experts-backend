@@ -31,14 +31,14 @@ function Podcast2() {
 
   return (
     <Container className="mt-4">
-      <h1>Podcasts 2.0</h1>
-      {user && user.user_type === "podcaster" && (
-        <Link to="/podcast2/create">
-          <Button variant="primary" className="mb-3">
-            Create New Podcast
-          </Button>
-        </Link>
-      )}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1>Podcasts 2.0</h1>
+        {user && user.user_type === "podcaster" && (
+          <Link to="/podcast2/create">
+            <Button variant="primary">Add a Podcast</Button>
+          </Link>
+        )}
+      </div>
       <Row>
         {podcasts.map((podcast) => (
           <Col key={podcast.id} md={4} className="mb-4">

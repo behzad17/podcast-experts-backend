@@ -12,9 +12,10 @@ import {
   Badge,
 } from "react-bootstrap";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { useAuth } from "../contexts/AuthContext";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -34,6 +35,7 @@ const Podcasts = () => {
     image: null,
   });
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchPodcasts = async () => {
@@ -212,10 +214,10 @@ const Podcasts = () => {
             </div>
           )}
         </div>
-        {currentUser && (
-          <Button variant="primary" onClick={handleCreatePodcast}>
-            Create Podcast
-          </Button>
+        {user && user.user_type === "podcaster" && (
+          <Link to="/podcasts/create">
+            <Button variant="primary">Add a Podcast</Button>
+          </Link>
         )}
       </div>
 

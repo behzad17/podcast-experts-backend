@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import axios from "axios";
+import api from "../api/axios";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
@@ -16,10 +16,11 @@ function Podcast2Detail() {
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
-        const response = await axios.get(`/api/podcast2/podcasts2/${id}/`);
+        const response = await api.get(`/podcast2/podcasts2/${id}/`);
         setPodcast(response.data);
         setLoading(false);
       } catch (err) {
+        console.error("Error fetching podcast details:", err);
         setError("Failed to fetch podcast details");
         setLoading(false);
       }
@@ -30,7 +31,7 @@ function Podcast2Detail() {
 
   const handleLike = async () => {
     try {
-      const response = await axios.post(`/api/podcast2/podcasts2/${id}/like/`);
+      const response = await api.post(`/podcast2/podcasts2/${id}/like/`);
       setPodcast((prev) => ({
         ...prev,
         likes_count: response.data.likes_count,
@@ -39,15 +40,14 @@ function Podcast2Detail() {
       }));
       toast.success(response.data.is_liked ? "Podcast liked!" : "Like removed");
     } catch (err) {
+      console.error("Error liking podcast:", err);
       toast.error("Failed to like podcast");
     }
   };
 
   const handleDislike = async () => {
     try {
-      const response = await axios.post(
-        `/api/podcast2/podcasts2/${id}/dislike/`
-      );
+      const response = await api.post(`/podcast2/podcasts2/${id}/dislike/`);
       setPodcast((prev) => ({
         ...prev,
         likes_count: response.data.likes_count,
@@ -58,6 +58,7 @@ function Podcast2Detail() {
         response.data.is_disliked ? "Podcast disliked!" : "Dislike removed"
       );
     } catch (err) {
+      console.error("Error disliking podcast:", err);
       toast.error("Failed to dislike podcast");
     }
   };
