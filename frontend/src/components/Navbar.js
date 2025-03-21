@@ -31,9 +31,6 @@ function Navigation() {
             <Nav.Link as={Link} to="/podcast2">
               Podcast2
             </Nav.Link>
-            <Nav.Link as={Link} to="/experts">
-              Experts
-            </Nav.Link>
             {user && (
               <>
                 <Nav.Link as={Link} to="/profile">
@@ -42,16 +39,6 @@ function Navigation() {
                 <Nav.Link as={Link} to="/podcasts/create">
                   Create Podcast
                 </Nav.Link>
-                {user.user_type === "podcaster" && (
-                  <Nav.Link as={Link} to="/podcasts/create">
-                    Create Podcast
-                  </Nav.Link>
-                )}
-                {user.user_type === "expert" && (
-                  <Nav.Link as={Link} to="/experts/create">
-                    Create Expert Profile
-                  </Nav.Link>
-                )}
                 {user.is_admin && (
                   <Nav.Link as={Link} to="/admin">
                     Admin Dashboard
@@ -82,4 +69,4 @@ function Navigation() {
   );
 }
 
-export default Navigation;
+export default Navigation; 
