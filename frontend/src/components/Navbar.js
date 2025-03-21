@@ -20,7 +20,7 @@ function Navigation() {
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          Podcast App
+          Podcast Experts
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -30,6 +30,9 @@ function Navigation() {
             </Nav.Link>
             <Nav.Link as={Link} to="/podcast2">
               Podcast2
+            </Nav.Link>
+            <Nav.Link as={Link} to="/experts">
+              Experts
             </Nav.Link>
             {user && (
               <>
@@ -69,4 +72,4 @@ function Navigation() {
   );
 }
 
-export default Navigation; 
+export default Navigation;
