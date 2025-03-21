@@ -9,6 +9,8 @@ from .serializers import UserRegisterSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from .models import UserProfile
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import action
+from rest_framework import viewsets
 
 User = get_user_model()
 
@@ -116,14 +118,33 @@ class UserLoginView(TokenObtainPairView):
                     status=status.HTTP_403_FORBIDDEN
                 )
             print("[DEBUG] Email verified, proceeding with login")
+            
+            # Get the token response
             response = super().post(request, *args, **kwargs)
-            response.data['user'] = {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email
+            print(f"[DEBUG] Raw response data: {response.data}")
+            
+            # Ensure we have the access token
+            if 'access' not in response.data:
+                print("[DEBUG] No access token in response")
+                return Response(
+                    {"detail": "Invalid response from authentication service"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            
+            # Format the response to match what the frontend expects
+            formatted_response = {
+                'access': response.data['access'],
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name or '',
+                    'last_name': user.last_name or ''
+                }
             }
-            print(f"[DEBUG] Login successful for user: {username}")
-            return response
+            
+            print(f"[DEBUG] Formatted response: {formatted_response}")
+            return Response(formatted_response)
         except User.DoesNotExist:
             print(f"[DEBUG] User not found: {username}")
             return Response(
@@ -132,6 +153,8 @@ class UserLoginView(TokenObtainPairView):
             )
         except Exception as e:
             print(f"[DEBUG] Unexpected error during login: {str(e)}")
+            import traceback
+            print(f"[DEBUG] Traceback: {traceback.format_exc()}")
             return Response(
                 {"detail": "An error occurred during login"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -147,3 +170,14 @@ class UserDetailView(generics.RetrieveAPIView):
         if user_id == self.request.user.id:
             return self.request.user
         raise PermissionDenied("You can only view your own user details.")
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)

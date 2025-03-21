@@ -32,8 +32,12 @@ function Podcast2() {
   return (
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Podcasts 2.0</h1>
-        {user && user.user_type === "podcaster" && (
+        <div>
+          <h1>Podcasts 2.0</h1>
+          {user && <div className="text-muted">Welcome, {user.username}!</div>}
+          {!user && <div className="text-muted">You are not logged in</div>}
+        </div>
+        {user && (
           <Link to="/podcast2/create">
             <Button variant="primary">Add a Podcast</Button>
           </Link>

@@ -208,13 +208,13 @@ const Podcasts = () => {
         <div>
           <h2>Podcasts</h2>
           {currentUser && (
-            <div className="text-muted">
-              You are logged in as{" "}
-              {currentUser.user_type === "expert" ? "an Expert" : "a Podcaster"}
-            </div>
+            <div className="text-muted">Welcome, {currentUser.username}!</div>
+          )}
+          {!currentUser && (
+            <div className="text-muted">You are not logged in</div>
           )}
         </div>
-        {user && user.user_type === "podcaster" && (
+        {user && (
           <Link to="/podcasts/create">
             <Button variant="primary">Add a Podcast</Button>
           </Link>

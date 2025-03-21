@@ -22,12 +22,6 @@ class CustomUser(AbstractUser):
         self.save()
         return self.verification_token
 
-    def has_expert_profile(self):
-        return hasattr(self, 'expert_profile')
-
-    def has_podcaster_profile(self):
-        return hasattr(self, 'podcaster_profile')
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
