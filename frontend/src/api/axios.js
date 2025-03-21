@@ -27,18 +27,45 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      // فقط در صورتی که در صفحه لاگین نباشیم، به صفحه لاگین هدایت کنیم
-      if (!window.location.pathname.includes("/login")) {
-        // Store the current URL before redirecting
-        const currentPath = window.location.pathname;
-        localStorage.setItem("redirectAfterLogin", currentPath);
+    const originalRequest = error.config;
 
-        // Remove token and redirect to login
+    // If the error is 401 and we haven't tried to refresh the token yet
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // Try to refresh the token
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
+        const response = await axios.post("/api/users/token/refresh/", {
+          refresh: refreshToken,
+        });
+
+        const { access } = response.data;
+        localStorage.setItem("token", access);
+        api.defaults.headers.common["Authorization"] = `Bearer ${access}`;
+        originalRequest.headers["Authorization"] = `Bearer ${access}`;
+
+        // Retry the original request
+        return api(originalRequest);
+      } catch (refreshError) {
+        // If refresh fails, clear auth data but don't redirect
         localStorage.removeItem("token");
-        window.location.href = "/login";
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userData");
+        delete api.defaults.headers.common["Authorization"];
+
+        // Only redirect to login if we're not already on the login page
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
+        return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
