@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'csp',  # Add CSP app
     # Local apps
     'users',
-    'experts',
     'podcasts',
     'podcast2',  # Add the new app
     'comments',

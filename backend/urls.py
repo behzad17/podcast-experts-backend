@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view),
     path('api/users/', include('users.urls')),
-    path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/podcast2/', include('podcast2.urls')),
     path('api/comments/', include('comments.urls')),

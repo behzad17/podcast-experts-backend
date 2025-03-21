@@ -20,7 +20,7 @@ function Navigation() {
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          Podcast Experts
+          Podcast App
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -38,6 +38,9 @@ function Navigation() {
               <>
                 <Nav.Link as={Link} to="/profile">
                   Profile
+                </Nav.Link>
+                <Nav.Link as={Link} to="/podcasts/create">
+                  Create Podcast
                 </Nav.Link>
                 {user.user_type === "podcaster" && (
                   <Nav.Link as={Link} to="/podcasts/create">
