@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 const AuthContext = createContext(null);
 
@@ -26,32 +26,23 @@ export const AuthProvider = ({ children }) => {
       const userData = JSON.parse(localStorage.getItem("userData"));
 
       if (token && refreshToken) {
-        // Set default authorization header
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
         try {
           // Try to get user data
-          const response = await axios.get("/api/users/me/");
+          const response = await api.get("/users/me/");
           setUser(response.data);
         } catch (error) {
           if (error.response?.status === 401) {
             // Token expired, try to refresh
             try {
-              const refreshResponse = await axios.post(
-                "/api/users/token/refresh/",
-                {
-                  refresh: refreshToken,
-                }
-              );
+              const refreshResponse = await api.post("/users/token/refresh/", {
+                refresh: refreshToken,
+              });
 
               const { access } = refreshResponse.data;
               localStorage.setItem("token", access);
-              axios.defaults.headers.common[
-                "Authorization"
-              ] = `Bearer ${access}`;
 
               // Retry getting user data
-              const userResponse = await axios.get("/api/users/me/");
+              const userResponse = await api.get("/users/me/");
               setUser(userResponse.data);
             } catch (refreshError) {
               // If refresh fails, clear everything and set user to null
@@ -59,7 +50,6 @@ export const AuthProvider = ({ children }) => {
               localStorage.removeItem("token");
               localStorage.removeItem("refreshToken");
               localStorage.removeItem("userData");
-              delete axios.defaults.headers.common["Authorization"];
               setUser(null);
             }
           } else {
@@ -71,7 +61,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData");
-        delete axios.defaults.headers.common["Authorization"];
         setUser(null);
       }
     } catch (error) {
@@ -79,7 +68,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("userData");
-      delete axios.defaults.headers.common["Authorization"];
       setUser(null);
     } finally {
       setLoading(false);
@@ -89,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       console.log("Attempting login with username:", username);
-      const response = await axios.post("/api/users/login/", {
+      const response = await api.post("/users/login/", {
         username,
         password,
       });
@@ -105,9 +93,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userData", JSON.stringify(userData));
         setUser(userData);
-
-        // Set default authorization header for future requests
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         return userData;
       } else {
@@ -133,7 +118,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post("/api/users/register/", userData);
+      const response = await api.post("/users/register/", userData);
       return response.data;
     } catch (error) {
       console.error("Registration error:", error);
@@ -149,7 +134,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userData");
-    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 

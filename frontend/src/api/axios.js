@@ -6,7 +6,6 @@ const api = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  withCredentials: true,
 });
 
 // Add request interceptor
@@ -40,23 +39,21 @@ api.interceptors.response.use(
           throw new Error("No refresh token available");
         }
 
-        const response = await axios.post("/api/users/token/refresh/", {
+        const response = await api.post("/users/token/refresh/", {
           refresh: refreshToken,
         });
 
         const { access } = response.data;
         localStorage.setItem("token", access);
-        api.defaults.headers.common["Authorization"] = `Bearer ${access}`;
         originalRequest.headers["Authorization"] = `Bearer ${access}`;
 
         // Retry the original request
         return api(originalRequest);
       } catch (refreshError) {
-        // If refresh fails, clear auth data but don't redirect
+        // If refresh fails, clear auth data
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData");
-        delete api.defaults.headers.common["Authorization"];
 
         // Only redirect to login if we're not already on the login page
         if (!window.location.pathname.includes("/login")) {
