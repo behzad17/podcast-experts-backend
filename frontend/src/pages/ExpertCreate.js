@@ -6,27 +6,22 @@ import api from "../api/axios";
 const ExpertCreate = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    audio_file: null,
-    cover_image: null,
+    name: "",
+    bio: "",
+    expertise: "",
+    experience_years: "",
+    website: "",
+    social_media: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: files[0],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -35,28 +30,12 @@ const ExpertCreate = () => {
     setError("");
 
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      if (formData.audio_file) {
-        formDataToSend.append("audio_file", formData.audio_file);
-      }
-      if (formData.cover_image) {
-        formDataToSend.append("cover_image", formData.cover_image);
-      }
-
-      const response = await api.post("/experts/", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
+      const response = await api.post("/api/experts/", formData);
       navigate(`/experts/${response.data.id}`);
     } catch (err) {
       console.error("Error creating expert profile:", err);
       setError(
-        err.response?.data?.detail ||
-          "Failed to create expert profile. Please try again."
+        err.response?.data?.message || "Failed to create expert profile"
       );
     } finally {
       setLoading(false);
@@ -65,63 +44,79 @@ const ExpertCreate = () => {
 
   return (
     <Container className="mt-4">
-      <h2>Create Expert Profile</h2>
+      <h2 className="mb-4">Create Expert Profile</h2>
       {error && <Alert variant="danger">{error}</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>Name</Form.Label>
           <Form.Control
             type="text"
-            name="title"
-            value={formData.title}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
-            placeholder="Your expertise title"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Expertise</Form.Label>
+          <Form.Control
+            type="text"
+            name="expertise"
+            value={formData.expertise}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Years of Experience</Form.Label>
+          <Form.Control
+            type="number"
+            name="experience_years"
+            value={formData.experience_years}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Bio</Form.Label>
           <Form.Control
             as="textarea"
-            rows={3}
-            name="description"
-            value={formData.description}
+            name="bio"
+            value={formData.bio}
             onChange={handleChange}
+            rows={4}
             required
-            placeholder="Describe your expertise and experience"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Audio Introduction</Form.Label>
+          <Form.Label>Website</Form.Label>
           <Form.Control
-            type="file"
-            name="audio_file"
+            type="url"
+            name="website"
+            value={formData.website}
             onChange={handleChange}
-            accept="audio/*"
-            required
+            placeholder="https://your-website.com"
           />
-          <Form.Text className="text-muted">
-            Add a brief audio introduction of yourself
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Profile Picture</Form.Label>
+          <Form.Label>Social Media</Form.Label>
           <Form.Control
-            type="file"
-            name="cover_image"
+            type="text"
+            name="social_media"
+            value={formData.social_media}
             onChange={handleChange}
-            accept="image/*"
+            placeholder="twitter.com/yourhandle"
           />
-          <Form.Text className="text-muted">
-            Add a professional profile picture
-          </Form.Text>
         </Form.Group>
 
         <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Expert Profile"}
+          {loading ? "Creating..." : "Create Profile"}
         </Button>
       </Form>
     </Container>

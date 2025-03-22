@@ -15,7 +15,7 @@ const ExpertDetail = () => {
   useEffect(() => {
     const fetchExpert = async () => {
       try {
-        const response = await api.get(`/experts/${id}/`);
+        const response = await api.get(`/api/experts/${id}/`);
         setExpert(response.data);
         setLoading(false);
       } catch (err) {
@@ -33,7 +33,7 @@ const ExpertDetail = () => {
       window.confirm("Are you sure you want to delete this expert profile?")
     ) {
       try {
-        await api.delete(`/experts/${id}/`);
+        await api.delete(`/api/experts/${id}/`);
         navigate("/experts");
       } catch (err) {
         console.error("Error deleting expert:", err);
@@ -53,27 +53,49 @@ const ExpertDetail = () => {
       <Row>
         <Col md={8} className="mx-auto">
           <Card>
-            {expert.cover_image && (
-              <Card.Img
-                variant="top"
-                src={expert.cover_image}
-                alt={expert.title}
-                style={{ height: "300px", objectFit: "cover" }}
-              />
-            )}
             <Card.Body>
-              <Card.Title className="h2">{expert.title}</Card.Title>
-              <Card.Text>{expert.description}</Card.Text>
+              <Card.Title className="h2">{expert.name}</Card.Title>
+              <Card.Subtitle className="mb-3 text-muted">
+                {expert.expertise}
+              </Card.Subtitle>
 
-              {expert.audio_file && (
-                <div className="mb-4">
-                  <h4>Audio Introduction</h4>
-                  <audio controls className="w-100">
-                    <source src={expert.audio_file} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              )}
+              <div className="mb-4">
+                <h5>About</h5>
+                <p>{expert.bio}</p>
+              </div>
+
+              <div className="mb-4">
+                <h5>Experience</h5>
+                <p>{expert.experience_years} years of experience</p>
+              </div>
+
+              <div className="mb-4">
+                <h5>Contact & Links</h5>
+                {expert.website && (
+                  <p>
+                    <strong>Website:</strong>{" "}
+                    <a
+                      href={expert.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {expert.website}
+                    </a>
+                  </p>
+                )}
+                {expert.social_media && (
+                  <p>
+                    <strong>Social Media:</strong>{" "}
+                    <a
+                      href={`https://${expert.social_media}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {expert.social_media}
+                    </a>
+                  </p>
+                )}
+              </div>
 
               {isOwner && (
                 <div className="d-flex gap-2 mt-3">

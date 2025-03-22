@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'users',
     'podcasts',
     'podcast2',  # Add the new app
+    'experts',
     'comments',
     'ratings',
     'bookmarks',
