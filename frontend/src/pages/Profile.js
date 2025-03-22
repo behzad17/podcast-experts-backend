@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 import ProfileEditModal from "../components/profile/ProfileEditModal";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [userPodcasts, setUserPodcasts] = useState([]);
+  const [userPodcasts2, setUserPodcasts2] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -24,15 +26,24 @@ const Profile = () => {
         }
 
         // Fetch user's profile
-        const profileResponse = await api.get("/podcasts/profile/");
+        const profileResponse = await api.get("/users/profile/");
         setProfile(profileResponse.data);
 
         // Fetch user's podcasts
-        const podcastsResponse = await api.get("/podcasts/podcasts/");
+        const [podcastsResponse, podcasts2Response] = await Promise.all([
+          api.get("/podcasts/podcasts/"),
+          api.get("/podcast2/podcasts2/"),
+        ]);
+
         const userPodcastsList = podcastsResponse.data.results.filter(
           (podcast) => podcast.user === userData.id
         );
         setUserPodcasts(userPodcastsList);
+
+        const userPodcasts2List = podcasts2Response.data.results.filter(
+          (podcast) => podcast.user === userData.id
+        );
+        setUserPodcasts2(userPodcasts2List);
       } catch (error) {
         console.error("Error fetching profile:", error);
         setError("Failed to load profile. Please try again later.");
@@ -50,6 +61,27 @@ const Profile = () => {
 
   const handleProfileUpdate = (updatedProfile) => {
     setProfile(updatedProfile);
+  };
+
+  const handleDeletePodcast = async (podcastId, type) => {
+    if (window.confirm("Are you sure you want to delete this podcast?")) {
+      try {
+        const endpoint =
+          type === "podcast2"
+            ? `/podcast2/podcasts2/${podcastId}/`
+            : `/podcasts/podcasts/${podcastId}/`;
+        await api.delete(endpoint);
+
+        if (type === "podcast2") {
+          setUserPodcasts2((prev) => prev.filter((p) => p.id !== podcastId));
+        } else {
+          setUserPodcasts((prev) => prev.filter((p) => p.id !== podcastId));
+        }
+      } catch (error) {
+        console.error("Error deleting podcast:", error);
+        alert("Failed to delete podcast. Please try again.");
+      }
+    }
   };
 
   if (isLoading) {
@@ -72,16 +104,6 @@ const Profile = () => {
     );
   }
 
-  if (!profile) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="info">
-          No profile found. Please create a profile first.
-        </Alert>
-      </Container>
-    );
-  }
-
   return (
     <Container className="mt-4">
       <Row>
@@ -94,7 +116,7 @@ const Profile = () => {
               </Button>
             </Card.Header>
             <Card.Body>
-              {profile.profile_picture && (
+              {profile?.profile_picture && (
                 <div className="text-center mb-4">
                   <img
                     src={profile.profile_picture}
@@ -111,18 +133,18 @@ const Profile = () => {
 
               <div className="mb-3">
                 <h5>Name</h5>
-                <p>{profile.name || "Not set"}</p>
+                <p>{profile?.name || "Not set"}</p>
               </div>
 
               <div className="mb-3">
                 <h5>Bio</h5>
-                <p>{profile.bio || "Not set"}</p>
+                <p>{profile?.bio || "Not set"}</p>
               </div>
 
               <div className="mb-3">
                 <h5>Website</h5>
                 <p>
-                  {profile.website ? (
+                  {profile?.website ? (
                     <a
                       href={profile.website}
                       target="_blank"
@@ -139,15 +161,18 @@ const Profile = () => {
               <div className="mb-3">
                 <h5>Social Links</h5>
                 <pre>
-                  {JSON.stringify(profile.social_links, null, 2) || "Not set"}
+                  {JSON.stringify(profile?.social_links, null, 2) || "Not set"}
                 </pre>
               </div>
             </Card.Body>
           </Card>
 
-          <Card>
-            <Card.Header>
+          <Card className="mb-4">
+            <Card.Header className="d-flex justify-content-between align-items-center">
               <h3 className="mb-0">My Podcasts</h3>
+              <Link to="/podcasts/create" className="btn btn-success">
+                Create New Podcast
+              </Link>
             </Card.Header>
             <Card.Body>
               {userPodcasts.length === 0 ? (
@@ -167,12 +192,84 @@ const Profile = () => {
                         <Card.Body>
                           <Card.Title>{podcast.title}</Card.Title>
                           <Card.Text>{podcast.description}</Card.Text>
-                          <Button
-                            variant="primary"
-                            href={`/podcasts/${podcast.id}`}
-                          >
-                            View Details
-                          </Button>
+                          <div className="d-flex gap-2">
+                            <Link
+                              to={`/podcasts/${podcast.id}`}
+                              className="btn btn-primary"
+                            >
+                              View
+                            </Link>
+                            <Link
+                              to={`/podcasts/${podcast.id}/edit`}
+                              className="btn btn-warning"
+                            >
+                              Edit
+                            </Link>
+                            <Button
+                              variant="danger"
+                              onClick={() =>
+                                handleDeletePodcast(podcast.id, "podcast")
+                              }
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </Card.Body>
+          </Card>
+
+          <Card>
+            <Card.Header className="d-flex justify-content-between align-items-center">
+              <h3 className="mb-0">My Podcast2s</h3>
+              <Link to="/podcast2/create" className="btn btn-success">
+                Create New Podcast2
+              </Link>
+            </Card.Header>
+            <Card.Body>
+              {userPodcasts2.length === 0 ? (
+                <Alert variant="info">
+                  You haven't created any podcast2s yet.
+                </Alert>
+              ) : (
+                <Row>
+                  {userPodcasts2.map((podcast) => (
+                    <Col key={podcast.id} md={6} className="mb-4">
+                      <Card>
+                        <Card.Img
+                          variant="top"
+                          src={podcast.cover_image || "/default-podcast.jpg"}
+                          alt={podcast.title}
+                        />
+                        <Card.Body>
+                          <Card.Title>{podcast.title}</Card.Title>
+                          <Card.Text>{podcast.description}</Card.Text>
+                          <div className="d-flex gap-2">
+                            <Link
+                              to={`/podcast2/${podcast.id}`}
+                              className="btn btn-primary"
+                            >
+                              View
+                            </Link>
+                            <Link
+                              to={`/podcast2/${podcast.id}/edit`}
+                              className="btn btn-warning"
+                            >
+                              Edit
+                            </Link>
+                            <Button
+                              variant="danger"
+                              onClick={() =>
+                                handleDeletePodcast(podcast.id, "podcast2")
+                              }
+                            >
+                              Delete
+                            </Button>
+                          </div>
                         </Card.Body>
                       </Card>
                     </Col>
