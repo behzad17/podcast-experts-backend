@@ -29,7 +29,7 @@ const Experts = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">Expert Profiles</h2>
+      <h2 className="mb-4">Experts</h2>
       <Link to="/experts/create">
         <Button variant="primary" className="mb-4">
           Add Expert Profile
@@ -39,38 +39,20 @@ const Experts = () => {
         {experts.map((expert) => (
           <Col key={expert.id} md={4} className="mb-4">
             <Card>
+              {expert.cover_image && (
+                <Card.Img
+                  variant="top"
+                  src={expert.cover_image}
+                  alt={expert.title}
+                  style={{ height: "200px", objectFit: "cover" }}
+                />
+              )}
               <Card.Body>
-                <Card.Title>{expert.name}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  {expert.expertise}
-                </Card.Subtitle>
-                <Card.Text>
-                  <strong>Experience:</strong> {expert.experience_years} years
-                </Card.Text>
-                <Card.Text>{expert.bio}</Card.Text>
-                {expert.website && (
-                  <Card.Link
-                    href={expert.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Website
-                  </Card.Link>
-                )}
-                {expert.social_media && (
-                  <Card.Link
-                    href={`https://${expert.social_media}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Social Media
-                  </Card.Link>
-                )}
-                <div className="mt-3">
-                  <Link to={`/experts/${expert.id}`}>
-                    <Button variant="primary">View Profile</Button>
-                  </Link>
-                </div>
+                <Card.Title>{expert.title}</Card.Title>
+                <Card.Text>{expert.description.substring(0, 150)}...</Card.Text>
+                <Link to={`/experts/${expert.id}`}>
+                  <Button variant="primary">View Profile</Button>
+                </Link>
               </Card.Body>
             </Card>
           </Col>

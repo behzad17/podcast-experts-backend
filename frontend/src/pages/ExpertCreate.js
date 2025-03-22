@@ -6,22 +6,27 @@ import api from "../api/axios";
 const ExpertCreate = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
-    bio: "",
-    expertise: "",
-    experience_years: "",
-    website: "",
-    social_media: "",
+    title: "",
+    description: "",
+    audio_file: null,
+    cover_image: null,
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,8 +34,22 @@ const ExpertCreate = () => {
     setLoading(true);
     setError("");
 
+    const formDataToSend = new FormData();
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("description", formData.description);
+    if (formData.audio_file) {
+      formDataToSend.append("audio_file", formData.audio_file);
+    }
+    if (formData.cover_image) {
+      formDataToSend.append("cover_image", formData.cover_image);
+    }
+
     try {
-      const response = await api.post("/api/experts/", formData);
+      const response = await api.post("/api/experts/", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       navigate(`/experts/${response.data.id}`);
     } catch (err) {
       console.error("Error creating expert profile:", err);
@@ -49,44 +68,22 @@ const ExpertCreate = () => {
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
-            name="name"
-            value={formData.name}
+            name="title"
+            value={formData.title}
             onChange={handleChange}
             required
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Expertise</Form.Label>
-          <Form.Control
-            type="text"
-            name="expertise"
-            value={formData.expertise}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Years of Experience</Form.Label>
-          <Form.Control
-            type="number"
-            name="experience_years"
-            value={formData.experience_years}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Bio</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Control
             as="textarea"
-            name="bio"
-            value={formData.bio}
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             rows={4}
             required
@@ -94,24 +91,22 @@ const ExpertCreate = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Website</Form.Label>
+          <Form.Label>Audio Introduction</Form.Label>
           <Form.Control
-            type="url"
-            name="website"
-            value={formData.website}
+            type="file"
+            name="audio_file"
             onChange={handleChange}
-            placeholder="https://your-website.com"
+            accept="audio/*"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Social Media</Form.Label>
+          <Form.Label>Cover Image</Form.Label>
           <Form.Control
-            type="text"
-            name="social_media"
-            value={formData.social_media}
+            type="file"
+            name="cover_image"
             onChange={handleChange}
-            placeholder="twitter.com/yourhandle"
+            accept="image/*"
           />
         </Form.Group>
 
