@@ -28,8 +28,8 @@ function Navigation() {
             <Nav.Link as={Link} to="/podcasts">
               Podcasts
             </Nav.Link>
-            <Nav.Link as={Link} to="/podcast2">
-              Podcast2
+            <Nav.Link as={Link} to="/experts">
+              Experts
             </Nav.Link>
             {user && (
               <>
