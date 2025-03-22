@@ -9,7 +9,8 @@ class ExpertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expert
         fields = [
-            'id', 'user', 'username', 'title', 'description',
-            'audio_file', 'cover_image', 'created_at', 'updated_at'
+            'id', 'user', 'username', 'name', 'expertise',
+            'experience_years', 'bio', 'website', 'social_media',
+            'profile_image', 'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at'] 

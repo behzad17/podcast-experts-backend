@@ -11,7 +11,7 @@ const Experts = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const response = await api.get("/api/experts/");
+        const response = await api.get("/experts/");
         setExperts(response.data.results || []);
         setLoading(false);
       } catch (err) {
@@ -29,35 +29,76 @@ const Experts = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="mb-4">Experts</h2>
-      <Link to="/experts/create">
-        <Button variant="primary" className="mb-4">
-          Add Expert Profile
-        </Button>
-      </Link>
-      <Row>
-        {experts.map((expert) => (
-          <Col key={expert.id} md={4} className="mb-4">
-            <Card>
-              {expert.cover_image && (
-                <Card.Img
-                  variant="top"
-                  src={expert.cover_image}
-                  alt={expert.title}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-              )}
-              <Card.Body>
-                <Card.Title>{expert.title}</Card.Title>
-                <Card.Text>{expert.description.substring(0, 150)}...</Card.Text>
-                <Link to={`/experts/${expert.id}`}>
-                  <Button variant="primary">View Profile</Button>
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Expert Profiles</h2>
+        <Link to="/experts/create">
+          <Button variant="primary">
+            Add Expert Profile
+          </Button>
+        </Link>
+      </div>
+
+      {experts.length === 0 ? (
+        <Alert variant="info">
+          No expert profiles found. Be the first to create one!
+        </Alert>
+      ) : (
+        <Row>
+          {experts.map((expert) => (
+            <Col key={expert.id} md={4} className="mb-4">
+              <Card className="h-100">
+                {expert.profile_image && (
+                  <Card.Img
+                    variant="top"
+                    src={expert.profile_image}
+                    alt={expert.name}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
+                )}
+                <Card.Body>
+                  <Card.Title className="h4">{expert.name}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    {expert.expertise}
+                  </Card.Subtitle>
+                  <Card.Text>
+                    <strong>Experience:</strong> {expert.experience_years} years
+                  </Card.Text>
+                  <Card.Text className="text-truncate">
+                    {expert.bio}
+                  </Card.Text>
+                  <div className="d-flex gap-2 mb-3">
+                    {expert.website && (
+                      <Card.Link
+                        href={expert.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-primary btn-sm"
+                      >
+                        Website
+                      </Card.Link>
+                    )}
+                    {expert.social_media && (
+                      <Card.Link
+                        href={`https://${expert.social_media}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-primary btn-sm"
+                      >
+                        Social Media
+                      </Card.Link>
+                    )}
+                  </div>
+                  <Link to={`/experts/${expert.id}`} className="d-block">
+                    <Button variant="primary" className="w-100">
+                      View Profile
+                    </Button>
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </Container>
   );
 };
