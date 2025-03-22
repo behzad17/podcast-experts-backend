@@ -26,7 +26,7 @@ const Profile = () => {
         }
 
         // Fetch user's profile
-        const profileResponse = await api.get("/users/profile/");
+        const profileResponse = await api.get("/podcasts/profile/");
         setProfile(profileResponse.data);
 
         // Fetch user's podcasts
