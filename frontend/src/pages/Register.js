@@ -8,7 +8,6 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    user_type: "podcaster",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -38,8 +37,6 @@ const Register = () => {
       const response = await api.post("/users/register/", formData);
       console.log("Registration response:", response.data);
       setSuccess(true);
-      // Store user type for later use
-      localStorage.setItem("userType", formData.user_type);
       setTimeout(() => {
         navigate("/login");
       }, 5000);
@@ -113,17 +110,6 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>User Type</Form.Label>
-          <Form.Select
-            name="user_type"
-            value={formData.user_type}
-            onChange={handleChange}
-          >
-            <option value="podcaster">Podcaster</option>
-            <option value="expert">Expert</option>
-          </Form.Select>
         </Form.Group>
         <Button type="submit" className="mt-3" disabled={isLoading}>
           {isLoading ? "Registering..." : "Register"}
