@@ -17,6 +17,7 @@ import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
 import Podcast2 from "./pages/Podcast2";
 import Podcast2Detail from "./pages/Podcast2Detail";
+import Podcast2Create from "./pages/Podcast2Create";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               <Route path="/podcasts/:id" element={<PodcastDetail />} />
               <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
               <Route path="/podcast2" element={<Podcast2 />} />
+              <Route path="/podcast2/create" element={<Podcast2Create />} />
               <Route path="/podcast2/:id" element={<Podcast2Detail />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/verify-email" element={<VerifyEmail />} />
