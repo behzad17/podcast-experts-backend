@@ -21,12 +21,20 @@ const Profile = () => {
 
         // Get current user data
         const userData = JSON.parse(localStorage.getItem("userData"));
-        if (userData) {
-          setCurrentUser(userData);
+        if (!userData) {
+          setError("Please log in to view your profile.");
+          setIsLoading(false);
+          return;
         }
+        setCurrentUser(userData);
 
         // Fetch user's profile
         const profileResponse = await api.get("/podcasts/profile/");
+        if (!profileResponse.data) {
+          setError("Profile data not found. Please try again later.");
+          setIsLoading(false);
+          return;
+        }
         setProfile(profileResponse.data);
 
         // Fetch user's podcasts
@@ -35,14 +43,16 @@ const Profile = () => {
           api.get("/podcast2/podcasts2/"),
         ]);
 
-        const userPodcastsList = podcastsResponse.data.results.filter(
-          (podcast) => podcast.user === userData.id
-        );
+        const userPodcastsList =
+          podcastsResponse.data?.results?.filter(
+            (podcast) => podcast.user === userData.id
+          ) || [];
         setUserPodcasts(userPodcastsList);
 
-        const userPodcasts2List = podcasts2Response.data.results.filter(
-          (podcast) => podcast.user === userData.id
-        );
+        const userPodcasts2List =
+          podcasts2Response.data?.results?.filter(
+            (podcast) => podcast.user === userData.id
+          ) || [];
         setUserPodcasts2(userPodcasts2List);
       } catch (error) {
         console.error("Error fetching profile:", error);
