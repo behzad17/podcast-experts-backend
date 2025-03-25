@@ -1,0 +1,43 @@
+from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin
+from users.models import CustomUser
+from backend.admin_dashboard.views import admin_stats
+from django.urls import path
+from django.shortcuts import render
+from django.template.response import TemplateResponse
+
+
+class CustomAdminSite(admin.AdminSite):
+    """اضافه کردن صفحه‌ی آمار به پنل ادمین"""
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path("stats/", self.admin_view(self.stats_view), name="admin_stats"),
+        ]
+        return custom_urls + urls
+
+    def stats_view(self, request):
+        """دریافت اطلاعات آمار و نمایش در پنل مدیریت"""
+        data = admin_stats(request)  # دریافت داده‌ها از ویو `admin_stats`
+        context = {"data": data.json()}  # داده‌ها را به قالب ارسال می‌کنیم
+        return TemplateResponse(request, "admin/stats.html", context)
+
+
+# تعریف یک نمونه از CustomAdminSite
+custom_admin_site = CustomAdminSite(name="custom_admin")
+
+# جایگزینی `admin.site` پیش‌فرض با `custom_admin_site`
+admin.site = custom_admin_site
+admin.autodiscover()
+
+# Customize the admin site header and title
+admin.site.site_header = 'Podcast Experts Admin'
+admin.site.site_title = 'Podcast Experts Admin Portal'
+admin.site.index_title = (
+    'Welcome to Podcast Experts Admin Portal'
+)
+
+# Unregister the Group model from admin
+admin.site.unregister(Group)

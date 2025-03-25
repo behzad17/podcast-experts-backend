@@ -1,0 +1,254 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "davidwilson",
+      "first_name": "David",
+      "last_name": "Wilson",
+      "email": "david@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:03:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lisapark",
+      "first_name": "Lisa",
+      "last_name": "Park",
+      "email": "lisa@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:04:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "robertsmith",
+      "first_name": "Robert",
+      "last_name": "Smith",
+      "email": "robert@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:05:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "mariagomez",
+      "first_name": "Maria",
+      "last_name": "Gomez",
+      "email": "maria@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:06:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jameskim",
+      "first_name": "James",
+      "last_name": "Kim",
+      "email": "james@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:07:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "annalee",
+      "first_name": "Anna",
+      "last_name": "Lee",
+      "email": "anna@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:08:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "thomasanderson",
+      "first_name": "Thomas",
+      "last_name": "Anderson",
+      "email": "thomas@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:09:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sarahconnor",
+      "first_name": "Sarah",
+      "last_name": "Connor",
+      "email": "sconnor@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:10:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "alexturner",
+      "first_name": "Alex",
+      "last_name": "Turner",
+      "email": "alex@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:11:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emmadavis",
+      "first_name": "Emma",
+      "last_name": "Davis",
+      "email": "emma@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:12:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "danielzhang",
+      "first_name": "Daniel",
+      "last_name": "Zhang",
+      "email": "daniel@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:13:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 15,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$salt$hashvalue",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "oliviawang",
+      "first_name": "Olivia",
+      "last_name": "Wang",
+      "email": "olivia@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-03-16T10:14:00Z",
+      "user_type": "expert",
+      "email_verified": true,
+      "verification_token": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

@@ -1,0 +1,519 @@
+[
+  {
+    "model": "experts.expertprofile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "name": "Dr. Sarah Johnson",
+      "bio": "Neuroscience researcher with 15 years of experience in brain plasticity and cognitive development.",
+      "expertise": "Neuroscience",
+      "experience_years": 15,
+      "website": "https://drsarahjohnson.com",
+      "social_media": "twitter.com/drsarah",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "name": "Prof. Michael Chen",
+      "bio": "AI and Machine Learning specialist focusing on deep learning and neural networks.",
+      "expertise": "Artificial Intelligence",
+      "experience_years": 12,
+      "website": "https://michaelchen.ai",
+      "social_media": "linkedin.com/michaelchen",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "name": "Dr. Emily Brown",
+      "bio": "Climate change researcher specializing in atmospheric science and environmental impact assessment.",
+      "expertise": "Environmental Science",
+      "experience_years": 10,
+      "website": "https://emilybrown.org",
+      "social_media": "twitter.com/dremily",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:02:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "name": "Dr. David Wilson",
+      "bio": "Quantum physics researcher specializing in quantum computing and quantum entanglement.",
+      "expertise": "Quantum Physics",
+      "experience_years": 14,
+      "website": "https://davidwilson.science",
+      "social_media": "twitter.com/drwilson",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "name": "Dr. Lisa Park",
+      "bio": "Molecular biologist focusing on gene therapy and CRISPR technology.",
+      "expertise": "Molecular Biology",
+      "experience_years": 11,
+      "website": "https://lisapark.bio",
+      "social_media": "linkedin.com/lisapark",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:04:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "name": "Prof. Robert Lee",
+      "bio": "Cybersecurity expert specializing in blockchain and cryptography.",
+      "expertise": "Cybersecurity",
+      "experience_years": 16,
+      "website": "https://robertlee.security",
+      "social_media": "twitter.com/robertlee",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "name": "Dr. Maria Gomez",
+      "bio": "Psychologist specializing in cognitive behavioral therapy and trauma recovery.",
+      "expertise": "Psychology",
+      "experience_years": 13,
+      "website": "https://drmariagomez.com",
+      "social_media": "linkedin.com/mariagomez",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "name": "Dr. James Kim",
+      "bio": "Robotics engineer specializing in human-robot interaction and artificial intelligence.",
+      "expertise": "Robotics",
+      "experience_years": 9,
+      "website": "https://jameskim.tech",
+      "social_media": "twitter.com/roboticskim",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "name": "Dr. Anna Smith",
+      "bio": "Marine biologist studying ocean ecosystems and climate change impacts.",
+      "expertise": "Marine Biology",
+      "experience_years": 12,
+      "website": "https://annasmith.marine",
+      "social_media": "twitter.com/marineanna",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:08:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "name": "Dr. Thomas White",
+      "bio": "Astrophysicist researching black holes and gravitational waves.",
+      "expertise": "Astrophysics",
+      "experience_years": 15,
+      "website": "https://thomaswhite.space",
+      "social_media": "twitter.com/spacewhite",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:09:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "name": "Dr. Sophia Wang",
+      "bio": "Nutritionist specializing in personalized nutrition and metabolic health.",
+      "expertise": "Nutrition",
+      "experience_years": 10,
+      "website": "https://sophiawang.health",
+      "social_media": "instagram.com/nutritionsophia",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:10:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "name": "Dr. Daniel Miller",
+      "bio": "Archaeologist specializing in ancient civilizations and digital archaeology.",
+      "expertise": "Archaeology",
+      "experience_years": 18,
+      "website": "https://danielmiller.arch",
+      "social_media": "twitter.com/archaeodaniel",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:11:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 13,
+    "fields": {
+      "user": 13,
+      "name": "Dr. Olivia Green",
+      "bio": "Renewable energy expert focusing on solar technology and energy storage.",
+      "expertise": "Renewable Energy",
+      "experience_years": 11,
+      "website": "https://oliviagreen.energy",
+      "social_media": "linkedin.com/oliviagreen",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:12:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "name": "Dr. William Taylor",
+      "bio": "Immunologist researching vaccine development and autoimmune diseases.",
+      "expertise": "Immunology",
+      "experience_years": 14,
+      "website": "https://williamtaylor.med",
+      "social_media": "twitter.com/immunotaylor",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:13:00Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "name": "Dr. Emma Davis",
+      "bio": "Data scientist specializing in machine learning and predictive analytics.",
+      "expertise": "Data Science",
+      "experience_years": 9,
+      "website": "https://emmadavis.data",
+      "social_media": "linkedin.com/emmadavis",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:14:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "channel_name": "AI Insights",
+      "description": "Exploring the frontiers of artificial intelligence and its impact on society",
+      "website": "https://aiinsights.com",
+      "social_media": "twitter.com/aiinsights",
+      "topics": "AI, Machine Learning, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "channel_name": "Climate Chronicles",
+      "description": "Discussing climate change and environmental challenges",
+      "website": "https://climatechronicles.org",
+      "social_media": "twitter.com/climatechronicles",
+      "topics": "Climate Change, Environment, Science",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "channel_name": "Quantum Quest",
+      "description": "Exploring the mysteries of quantum physics",
+      "website": "https://quantumquest.science",
+      "social_media": "twitter.com/quantumquest",
+      "topics": "Physics, Quantum Mechanics, Science",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:02:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 4,
+    "fields": {
+      "user": 5,
+      "channel_name": "BioTech Today",
+      "description": "Latest developments in biotechnology and genetics",
+      "website": "https://biotechtoday.bio",
+      "social_media": "twitter.com/biotechtoday",
+      "topics": "Biology, Genetics, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "channel_name": "Cyber Security Now",
+      "description": "Latest in cybersecurity and digital privacy",
+      "website": "https://cybersecnow.com",
+      "social_media": "twitter.com/cybersecnow",
+      "topics": "Cybersecurity, Privacy, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:04:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 6,
+    "fields": {
+      "user": 7,
+      "channel_name": "Mind Matters",
+      "description": "Exploring psychology and mental health",
+      "website": "https://mindmatters.psy",
+      "social_media": "twitter.com/mindmatters",
+      "topics": "Psychology, Mental Health, Wellness",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 7,
+    "fields": {
+      "user": 8,
+      "channel_name": "Robot Revolution",
+      "description": "The latest in robotics and automation",
+      "website": "https://robotrev.tech",
+      "social_media": "twitter.com/robotrev",
+      "topics": "Robotics, AI, Technology",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 8,
+    "fields": {
+      "user": 9,
+      "channel_name": "Ocean Explorer",
+      "description": "Discovering the mysteries of marine life",
+      "website": "https://oceanexplorer.org",
+      "social_media": "twitter.com/oceanexplorer",
+      "topics": "Marine Biology, Ocean, Environment",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 1,
+    "fields": {
+      "owner": 1,
+      "title": "The Future of AI",
+      "description": "Weekly discussions about artificial intelligence and its impact on society",
+      "link": "https://aiinsights.com/podcast/future-ai",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 2,
+    "fields": {
+      "owner": 1,
+      "title": "Machine Learning Revolution",
+      "description": "Deep dive into machine learning technologies and applications",
+      "link": "https://aiinsights.com/podcast/ml-revolution",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:01:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 3,
+    "fields": {
+      "owner": 2,
+      "title": "Climate Crisis Today",
+      "description": "In-depth analysis of climate change and environmental issues",
+      "link": "https://climatechronicles.org/podcast/crisis-today",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:02:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 4,
+    "fields": {
+      "owner": 2,
+      "title": "Environmental Solutions",
+      "description": "Exploring innovative solutions to environmental challenges",
+      "link": "https://climatechronicles.org/podcast/solutions",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:03:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 5,
+    "fields": {
+      "owner": 3,
+      "title": "Quantum Mysteries",
+      "description": "Exploring the strange world of quantum physics",
+      "link": "https://quantumquest.science/podcast/mysteries",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:04:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 6,
+    "fields": {
+      "owner": 3,
+      "title": "Computing Tomorrow",
+      "description": "The future of quantum computing and its applications",
+      "link": "https://quantumquest.science/podcast/computing",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 7,
+    "fields": {
+      "owner": 4,
+      "title": "Gene Therapy Revolution",
+      "description": "Latest developments in gene therapy and genetic engineering",
+      "link": "https://biotechtoday.bio/podcast/gene-therapy",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 8,
+    "fields": {
+      "owner": 4,
+      "title": "CRISPR Frontiers",
+      "description": "Exploring the cutting edge of CRISPR technology",
+      "link": "https://biotechtoday.bio/podcast/crispr",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 9,
+    "fields": {
+      "owner": 5,
+      "title": "Cyber Defense Weekly",
+      "description": "Weekly updates on cybersecurity threats and defenses",
+      "link": "https://cybersecnow.com/podcast/defense",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:08:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 10,
+    "fields": {
+      "owner": 5,
+      "title": "Privacy Matters",
+      "description": "Discussing digital privacy in the modern age",
+      "link": "https://cybersecnow.com/podcast/privacy",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:09:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 11,
+    "fields": {
+      "owner": 6,
+      "title": "Mental Health Today",
+      "description": "Contemporary issues in mental health and wellness",
+      "link": "https://mindmatters.psy/podcast/health",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:10:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 12,
+    "fields": {
+      "owner": 6,
+      "title": "Therapy Talk",
+      "description": "Conversations about therapeutic approaches and healing",
+      "link": "https://mindmatters.psy/podcast/therapy",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:11:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 13,
+    "fields": {
+      "owner": 7,
+      "title": "Robot World",
+      "description": "Exploring the latest developments in robotics",
+      "link": "https://robotrev.tech/podcast/world",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:12:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 14,
+    "fields": {
+      "owner": 7,
+      "title": "AI & Robotics",
+      "description": "The intersection of AI and robotics technology",
+      "link": "https://robotrev.tech/podcast/ai",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:13:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 15,
+    "fields": {
+      "owner": 8,
+      "title": "Ocean Life",
+      "description": "Discovering the amazing diversity of marine life",
+      "link": "https://oceanexplorer.org/podcast/life",
+      "is_approved": true,
+      "created_at": "2024-03-16T10:14:00Z"
+    }
+  }
+]
