@@ -127,7 +127,8 @@ class UserLoginView(TokenObtainPairView):
             response.data['user'] = {
                 'id': user.id,
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                'user_type': user.user_type
             }
             print(f"[DEBUG] Login successful for user: {email}")
             return response
@@ -154,3 +155,20 @@ class UserDetailView(generics.RetrieveAPIView):
         if user_id == self.request.user.id:
             return self.request.user
         raise PermissionDenied("You can only view your own user details.")
+
+
+class UserMeView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_object(self):
+        return self.request.user
+
+
+class UserLogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        # Since we're using JWT, we don't need to do anything server-side
+        # The client will handle token removal
+        return Response({"message": "Successfully logged out."})

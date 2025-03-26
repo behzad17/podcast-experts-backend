@@ -43,6 +43,10 @@ class ExpertProfileCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
+        if self.request.user.user_type != 'expert':
+            raise PermissionDenied(
+                "Only users registered as experts can create expert profiles."
+            )
         if hasattr(self.request.user, 'expert_profile'):
             raise PermissionDenied(
                 "You already have an expert profile."

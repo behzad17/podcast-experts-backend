@@ -24,10 +24,10 @@ const Profile = () => {
 
         // Fetch profile based on user type
         if (userData?.user_type === "expert") {
-          const response = await api.get("/experts/my_profile/");
+          const response = await api.get("/experts/my-profile/");
           setProfile(response.data);
         } else if (userData?.user_type === "podcaster") {
-          const response = await api.get("/podcasts/profile/");
+          const response = await api.get("/podcasters/profile/");
           setProfile(response.data);
         }
       } catch (error) {

@@ -4,6 +4,11 @@ from django.utils.crypto import get_random_string
 
 
 class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('podcaster', 'Podcaster'),
+        ('expert', 'Expert'),
+    )
+    
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_groups",
@@ -16,6 +21,7 @@ class CustomUser(AbstractUser):
     )
     email_verified = models.BooleanField(default=False)
     verification_token = models.CharField(max_length=100, blank=True)
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='podcaster')
 
     def generate_verification_token(self):
         self.verification_token = get_random_string(64)

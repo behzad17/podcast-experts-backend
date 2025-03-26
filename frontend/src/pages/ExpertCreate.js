@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 const ExpertCreate = () => {
   const [formData, setFormData] = useState({
-    specialty: "",
+    name: "",
     bio: "",
-    experience: "",
-    hourly_rate: "",
-    image: null,
+    expertise: "",
+    experience_years: "",
+    website: "",
+    social_media: "",
+    profile_picture: null,
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -21,11 +23,22 @@ const ExpertCreate = () => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+
       if (!token) {
         setError("Please log in to create an expert profile");
         setIsAuthenticated(false);
         setTimeout(() => {
           navigate("/login");
+        }, 2000);
+        return;
+      }
+
+      if (userType !== "expert") {
+        setError("Only users registered as experts can create expert profiles");
+        setIsAuthenticated(false);
+        setTimeout(() => {
+          navigate("/");
         }, 2000);
         return;
       }
@@ -58,7 +71,7 @@ const ExpertCreate = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image" && files?.length > 0) {
+    if (name === "profile_picture" && files?.length > 0) {
       setFormData({ ...formData, [name]: files[0] });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -174,14 +187,14 @@ const ExpertCreate = () => {
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Specialty *</Form.Label>
+          <Form.Label>Name *</Form.Label>
           <Form.Control
             type="text"
-            name="specialty"
-            value={formData.specialty}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
-            placeholder="Enter your specialty"
+            placeholder="Enter your name"
           />
         </Form.Group>
 
@@ -199,11 +212,23 @@ const ExpertCreate = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
+          <Form.Label>Expertise *</Form.Label>
+          <Form.Control
+            type="text"
+            name="expertise"
+            value={formData.expertise}
+            onChange={handleChange}
+            required
+            placeholder="Enter your expertise"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
           <Form.Label>Experience (years) *</Form.Label>
           <Form.Control
             type="number"
-            name="experience"
-            value={formData.experience}
+            name="experience_years"
+            value={formData.experience_years}
             onChange={handleChange}
             required
             min="0"
@@ -212,24 +237,32 @@ const ExpertCreate = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Hourly Rate ($) *</Form.Label>
+          <Form.Label>Website</Form.Label>
           <Form.Control
-            type="number"
-            name="hourly_rate"
-            value={formData.hourly_rate}
+            type="text"
+            name="website"
+            value={formData.website}
             onChange={handleChange}
-            required
-            min="0"
-            step="0.01"
-            placeholder="Enter your hourly rate"
+            placeholder="Enter your website URL"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Profile Image</Form.Label>
+          <Form.Label>Social Media</Form.Label>
+          <Form.Control
+            type="text"
+            name="social_media"
+            value={formData.social_media}
+            onChange={handleChange}
+            placeholder="Enter your social media URL"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Profile Picture</Form.Label>
           <Form.Control
             type="file"
-            name="image"
+            name="profile_picture"
             onChange={handleChange}
             accept="image/*"
           />

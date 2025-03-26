@@ -10,7 +10,7 @@ const ExpertDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchExpert = async () => {

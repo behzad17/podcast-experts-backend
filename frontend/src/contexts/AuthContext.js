@@ -29,11 +29,20 @@ export const AuthProvider = ({ children }) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setUser(response.data);
+        const userData = response.data;
+        setUser(userData);
+        localStorage.setItem("userData", JSON.stringify(userData));
+        localStorage.setItem("userType", userData.user_type);
+      } else {
+        localStorage.removeItem("userData");
+        localStorage.removeItem("userType");
+        setUser(null);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
       localStorage.removeItem("token");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("userType");
       setUser(null);
     } finally {
       setLoading(false);
