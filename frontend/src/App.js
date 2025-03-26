@@ -58,7 +58,7 @@ function App() {
                 path="/admin/expert-approval"
                 element={<AdminExpertApproval />}
               />
-              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
             <ToastContainer position="top-right" autoClose={3000} />
