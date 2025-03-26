@@ -27,8 +27,15 @@ const Profile = () => {
           const response = await api.get("/experts/my-profile/");
           setProfile(response.data);
         } else if (userData?.user_type === "podcaster") {
-          const response = await api.get("/podcasters/profile/");
-          setProfile(response.data);
+          const response = await api.get("/podcasts/profiles/");
+          // Since the ViewSet returns a list, we need to get the first item
+          if (response.data && response.data.length > 0) {
+            setProfile(response.data[0]);
+          } else {
+            setError(
+              "No podcaster profile found. Please create a profile first."
+            );
+          }
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -155,6 +162,11 @@ const Profile = () => {
               {currentUser?.user_type === "podcaster" && (
                 <>
                   <div className="mb-3">
+                    <h5>Bio</h5>
+                    <p>{profile.bio || "Not set"}</p>
+                  </div>
+
+                  <div className="mb-3">
                     <h5>Website</h5>
                     <p>
                       {profile.website ? (
@@ -173,10 +185,21 @@ const Profile = () => {
 
                   <div className="mb-3">
                     <h5>Social Links</h5>
-                    <pre>
-                      {JSON.stringify(profile.social_links, null, 2) ||
-                        "Not set"}
+                    <pre className="bg-light p-3 rounded">
+                      {profile.social_links
+                        ? JSON.stringify(profile.social_links, null, 2)
+                        : "Not set"}
                     </pre>
+                  </div>
+
+                  <div className="mb-3">
+                    <h5>Member Since</h5>
+                    <p>{new Date(profile.created_at).toLocaleDateString()}</p>
+                  </div>
+
+                  <div className="mb-3">
+                    <h5>Last Updated</h5>
+                    <p>{new Date(profile.updated_at).toLocaleDateString()}</p>
                   </div>
                 </>
               )}

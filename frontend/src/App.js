@@ -19,6 +19,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import Profile from "./pages/Profile";
+import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
@@ -49,6 +50,10 @@ function App() {
               <Route path="/podcasts/create" element={<CreatePodcast />} />
               <Route path="/podcasts/:id" element={<PodcastDetail />} />
               <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
+              <Route
+                path="/podcasts/profile/create"
+                element={<PodcasterProfileCreate />}
+              />
               <Route path="/experts" element={<Experts />} />
               <Route path="/experts/create" element={<CreateExpert />} />
               <Route path="/experts/:id" element={<ExpertDetail />} />
