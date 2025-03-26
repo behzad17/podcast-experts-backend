@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from users.models import CustomUser
-from .models import ExpertProfile, ExpertRating, ExpertComment, ExpertCategory
+from .models import ExpertProfile, ExpertRating, ExpertComment, ExpertCategory, ExpertReaction
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -87,3 +87,13 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
                 obj.profile_picture.url
             )
         return None 
+
+
+class ExpertReactionSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+    expert = serializers.ReadOnlyField(source='expert.id')
+
+    class Meta:
+        model = ExpertReaction
+        fields = ['id', 'expert', 'user', 'reaction_type', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at'] 

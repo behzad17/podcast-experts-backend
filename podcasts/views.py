@@ -3,12 +3,13 @@ from rest_framework import generics, permissions, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from .models import Podcast, PodcasterProfile, Category, PodcastComment
+from .models import Podcast, PodcasterProfile, Category, PodcastComment, PodcastReaction
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
     CategorySerializer,
-    PodcastCommentSerializer
+    PodcastCommentSerializer,
+    PodcastReactionSerializer
 )
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import action
@@ -270,6 +271,44 @@ class PodcastViewSet(viewsets.ModelViewSet):
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=True, methods=['post'])
+    def react(self, request, pk=None):
+        podcast = self.get_object()
+        reaction_type = request.data.get('reaction_type')
+        
+        if reaction_type not in ['like', 'dislike']:
+            return Response(
+                {'detail': 'Invalid reaction type'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # Get or create reaction
+        reaction, created = PodcastReaction.objects.get_or_create(
+            podcast=podcast,
+            user=request.user,
+            defaults={'reaction_type': reaction_type}
+        )
+        
+        if not created:
+            if reaction.reaction_type == reaction_type:
+                # If same reaction type, remove the reaction
+                reaction.delete()
+                return Response({'status': 'reaction removed'})
+            else:
+                # Update existing reaction
+                reaction.reaction_type = reaction_type
+                reaction.save()
+                
+        serializer = PodcastReactionSerializer(reaction)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def reactions(self, request, pk=None):
+        podcast = self.get_object()
+        reactions = PodcastReaction.objects.filter(podcast=podcast)
+        serializer = PodcastReactionSerializer(reactions, many=True)
+        return Response(serializer.data)
+
 
 class PodcastUpdateView(generics.UpdateAPIView):
     serializer_class = PodcastSerializer
@@ -280,3 +319,27 @@ class PodcastUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(creator=self.request.user)
+
+
+class PodcastReactionViewSet(viewsets.ModelViewSet):
+    serializer_class = PodcastReactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PodcastReaction.objects.filter(podcast_id=self.kwargs.get('podcast_pk'))
+
+    def perform_create(self, serializer):
+        podcast = get_object_or_404(Podcast, pk=self.kwargs.get('podcast_pk'))
+        serializer.save(podcast=podcast, user=self.request.user)
+
+
+class PodcastCommentViewSet(viewsets.ModelViewSet):
+    serializer_class = PodcastCommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PodcastComment.objects.filter(podcast_id=self.kwargs.get('podcast_pk'))
+
+    def perform_create(self, serializer):
+        podcast = get_object_or_404(Podcast, pk=self.kwargs.get('podcast_pk'))
+        serializer.save(podcast=podcast, user=self.request.user)

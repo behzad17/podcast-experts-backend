@@ -11,6 +11,8 @@ from .views import (
     PodcastViewSet,
     PodcastListCreateView,
     PodcastUpdateView,
+    PodcastCommentViewSet,
+    PodcastReactionViewSet,
 )
 
 router = DefaultRouter()
@@ -18,8 +20,14 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'profiles', PodcasterProfileViewSet)
 router.register(r'podcasts', PodcastViewSet)
 
+# Nested router for podcast profiles
+podcast_router = DefaultRouter()
+podcast_router.register(r'comments', PodcastCommentViewSet, basename='podcast-comment')
+podcast_router.register(r'reactions', PodcastReactionViewSet, basename='podcast-reaction')
+
 urlpatterns = [
     path('', include(router.urls)),
+    path('podcasts/<int:podcast_pk>/', include(podcast_router.urls)),
     path('my-podcasts/', MyPodcastsView.as_view(), name='my-podcasts'),
     path(
         'profile/create/',

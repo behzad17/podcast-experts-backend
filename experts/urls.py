@@ -10,10 +10,19 @@ from .views import (
     ExpertProfileViewSet,
     PendingExpertProfilesView,
     ExpertProfileUpdateView,
+    ExpertCategoryViewSet,
+    ExpertCommentViewSet,
+    ExpertReactionViewSet,
 )
 
 router = DefaultRouter()
-router.register(r'experts', ExpertProfileViewSet, basename='expert')
+router.register(r'profiles', ExpertProfileViewSet)
+router.register(r'categories', ExpertCategoryViewSet)
+
+# Nested routers for expert profiles
+expert_router = DefaultRouter()
+expert_router.register(r'comments', ExpertCommentViewSet, basename='expert-comment')
+expert_router.register(r'reactions', ExpertReactionViewSet, basename='expert-reaction')
 
 urlpatterns = [
     path('', ExpertListView.as_view(), name='expert-list'),
@@ -25,4 +34,5 @@ urlpatterns = [
     path('my-profile/', MyExpertProfileView.as_view(), name='expert-my-profile'),
     path('stats/', ExpertStatsView.as_view(), name='expert-stats'),
     path('', include(router.urls)),
+    path('profiles/<int:expert_pk>/', include(expert_router.urls)),
 ] 

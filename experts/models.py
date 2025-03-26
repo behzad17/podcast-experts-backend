@@ -80,4 +80,17 @@ class FavoriteExperts(models.Model):
     def __str__(self):
         return f"{self.user.username} favorite {self.expert.user.username}"
 
+class ExpertReaction(models.Model):
+    expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE, related_name='reactions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reaction_type = models.CharField(max_length=10, choices=[('like', 'Like'), ('dislike', 'Dislike')])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('expert', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} {self.reaction_type}d {self.expert.name}"
+
 

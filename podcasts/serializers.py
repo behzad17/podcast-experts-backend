@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment
+from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment, PodcastReaction
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -110,3 +110,13 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
         replies = PodcastComment.objects.filter(parent=obj)
         serializer = PodcastCommentSerializer(replies, many=True)
         return serializer.data
+
+
+class PodcastReactionSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+    podcast = serializers.ReadOnlyField(source='podcast.id')
+
+    class Meta:
+        model = PodcastReaction
+        fields = ['id', 'podcast', 'user', 'reaction_type', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']

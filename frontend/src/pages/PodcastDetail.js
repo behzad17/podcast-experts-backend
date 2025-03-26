@@ -22,6 +22,8 @@ import {
   FaMicrophone,
 } from "react-icons/fa";
 import CommentSection from "../components/comments/CommentSection";
+import ReactionButton from "../components/common/ReactionButton";
+import ReactPlayer from "react-player";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -30,6 +32,9 @@ const PodcastDetail = () => {
   const [error, setError] = useState("");
   const [isOwner, setIsOwner] = useState(false);
   const user = JSON.parse(localStorage.getItem("userData"));
+  const [reactions, setReactions] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
+  const [currentUserReaction, setCurrentUserReaction] = useState(null);
 
   useEffect(() => {
     const fetchPodcast = async () => {
@@ -45,6 +50,27 @@ const PodcastDetail = () => {
 
     fetchPodcast();
   }, [id, user]);
+
+  useEffect(() => {
+    const fetchReactions = async () => {
+      if (!podcast?.id) return;
+
+      try {
+        const response = await api.get(
+          `/podcasts/podcasts/${podcast.id}/reactions/`
+        );
+        const userReaction = response.data.find(
+          (r) => r.user === currentUser?.id
+        );
+        setReactions(response.data);
+        setCurrentUserReaction(userReaction?.reaction_type || null);
+      } catch (error) {
+        console.error("Error fetching reactions:", error);
+      }
+    };
+
+    fetchReactions();
+  }, [podcast?.id, currentUser?.id]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -142,6 +168,23 @@ const PodcastDetail = () => {
                   This podcast is pending approval.
                 </Alert>
               )}
+
+              <div className="mb-3">
+                <ReactionButton
+                  type="podcast"
+                  id={podcast.id}
+                  initialReaction={currentUserReaction}
+                />
+              </div>
+
+              <div className="mb-3">
+                <ReactPlayer
+                  url={podcast.audio_url}
+                  controls
+                  width="100%"
+                  height="50px"
+                />
+              </div>
             </Card.Body>
           </Card>
 
@@ -203,11 +246,11 @@ const PodcastDetail = () => {
               </Card.Body>
             </Card>
           )}
+
+          {/* Comments Section */}
+          <CommentSection type="podcast" id={id} />
         </Col>
       </Row>
-
-      {/* Add Comment Section */}
-      <CommentSection type="podcast" id={podcast.id} />
     </Container>
   );
 };

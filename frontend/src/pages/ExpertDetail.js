@@ -11,6 +11,7 @@ import {
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentSection from "../components/comments/CommentSection";
+import ReactionButton from "../components/common/ReactionButton";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -20,6 +21,8 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const [reactions, setReactions] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchExpert = async () => {
@@ -60,6 +63,26 @@ const ExpertDetail = () => {
 
     fetchExpert();
   }, [id, navigate]);
+
+  useEffect(() => {
+    if (expert) {
+      fetchReactions();
+    }
+  }, [expert]);
+
+  const fetchReactions = async () => {
+    try {
+      const response = await axios.get(`/experts/${expert.id}/reactions/`);
+      setReactions(response.data);
+    } catch (err) {
+      console.error("Error fetching reactions:", err);
+    }
+  };
+
+  const getCurrentUserReaction = () => {
+    if (!currentUser) return null;
+    return reactions.find((r) => r.user === currentUser.id);
+  };
 
   if (loading) {
     return (
@@ -159,6 +182,14 @@ const ExpertDetail = () => {
                   <p>{expert.social_media}</p>
                 </div>
               )}
+
+              <div className="mb-4">
+                <ReactionButton
+                  type="expert"
+                  id={expert.id}
+                  initialReaction={getCurrentUserReaction()}
+                />
+              </div>
             </div>
           </div>
         </Card.Body>
