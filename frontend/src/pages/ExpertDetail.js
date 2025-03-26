@@ -105,24 +105,51 @@ const ExpertDetail = () => {
       <Card className="shadow-sm">
         <Card.Body>
           <div className="row">
+            <div className="col-md-4">
+              {expert.profile_picture && (
+                <img
+                  src={expert.profile_picture}
+                  alt={expert.name}
+                  className="img-fluid rounded mb-4"
+                  style={{ maxHeight: "300px", objectFit: "cover" }}
+                />
+              )}
+            </div>
             <div className="col-md-8">
-              <h2 className="mb-3">{expert.user_name}</h2>
+              <h2 className="mb-3">{expert.name}</h2>
               <p className="lead mb-4">{expert.bio}</p>
 
               <div className="mb-4">
-                <h4>Specialization</h4>
-                <p>{expert.specialization}</p>
+                <h4>Expertise</h4>
+                <p>{expert.expertise}</p>
               </div>
 
               <div className="mb-4">
                 <h4>Experience</h4>
-                <p>{expert.experience} years</p>
+                <p>{expert.experience_years} years</p>
               </div>
 
-              <div className="mb-4">
-                <h4>Hourly Rate</h4>
-                <p>${expert.hourly_rate}/hour</p>
-              </div>
+              {expert.website && (
+                <div className="mb-4">
+                  <h4>Website</h4>
+                  <p>
+                    <a
+                      href={expert.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {expert.website}
+                    </a>
+                  </p>
+                </div>
+              )}
+
+              {expert.social_media && (
+                <div className="mb-4">
+                  <h4>Social Media</h4>
+                  <p>{expert.social_media}</p>
+                </div>
+              )}
             </div>
           </div>
         </Card.Body>

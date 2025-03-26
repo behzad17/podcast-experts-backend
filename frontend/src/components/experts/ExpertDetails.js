@@ -7,12 +7,12 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
     <Card className="mb-4">
       <Row>
         <Col md={4}>
-          {expert.profile_image && (
+          {expert.profile_picture && (
             <Card.Img
-              src={expert.profile_image}
+              src={expert.profile_picture}
               alt={expert.name}
               className="h-100"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", maxHeight: "300px" }}
             />
           )}
         </Col>
@@ -32,16 +32,19 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
                 <div className="mb-3">
                   <FaStar className="text-warning me-1" />
                   <span className="me-2">
-                    {expert.rating?.toFixed(1) || "No ratings"}
+                    {expert.average_rating?.toFixed(1) || "No ratings"}
                   </span>
                   <span className="text-muted">
-                    ({expert.review_count || 0} reviews)
+                    ({expert.ratings?.length || 0} reviews)
                   </span>
                 </div>
               </div>
               <div>
-                {currentUser && expert.user === currentUser.user_id && (
-                  <Button variant="outline-primary" onClick={() => onEdit(expert)}>
+                {currentUser && expert.user?.id === currentUser.user_id && (
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => onEdit(expert)}
+                  >
                     Edit Profile
                   </Button>
                 )}
@@ -74,4 +77,4 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
   );
 };
 
-export default ExpertDetails; 
+export default ExpertDetails;
