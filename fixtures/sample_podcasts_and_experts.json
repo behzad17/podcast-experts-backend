@@ -1,0 +1,137 @@
+[
+  {
+    "model": "podcasts.podcast",
+    "pk": 3,
+    "fields": {
+      "title": "Tech Talk Daily",
+      "description": "Daily insights into the latest technology trends, innovations, and industry news",
+      "owner": 1,
+      "category": 1,
+      "image": "",
+      "link": "https://techtalkdaily.com",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.290Z",
+      "updated_at": "2025-03-26T17:56:44.290Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 4,
+    "fields": {
+      "title": "Business Insights",
+      "description": "Expert analysis of business trends, entrepreneurship, and market strategies",
+      "owner": 1,
+      "category": 2,
+      "image": "",
+      "link": "https://businessinsights.com",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.291Z",
+      "updated_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 5,
+    "fields": {
+      "title": "Science Today",
+      "description": "Exploring the latest scientific discoveries and their impact on our world",
+      "owner": 2,
+      "category": 3,
+      "image": "",
+      "link": "https://sciencetoday.com",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.292Z",
+      "updated_at": "2025-03-26T17:56:44.292Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 6,
+    "fields": {
+      "title": "Health & Wellness Weekly",
+      "description": "Tips and advice for maintaining a healthy lifestyle and mental well-being",
+      "owner": 2,
+      "category": 4,
+      "image": "",
+      "link": "https://healthwellnessweekly.com",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.293Z",
+      "updated_at": "2025-03-26T17:56:44.293Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "name": "Dr. Sarah Chen",
+      "bio": "PhD in Computer Science with 15 years of experience in AI and machine learning",
+      "expertise": "Artificial Intelligence & Machine Learning",
+      "experience_years": 15,
+      "website": "https://sarahchen.com",
+      "social_media": "LinkedIn: sarahchen",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.294Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 4,
+      "name": "Michael Rodriguez",
+      "bio": "Business strategist and entrepreneur with expertise in scaling startups",
+      "expertise": "Business Strategy & Entrepreneurship",
+      "experience_years": 12,
+      "website": "https://michaelrodriguez.com",
+      "social_media": "Twitter: @michaelrodriguez",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.295Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 4,
+    "fields": {
+      "user": 5,
+      "name": "Dr. Emily Watson",
+      "bio": "Research scientist specializing in environmental science and climate change",
+      "expertise": "Environmental Science",
+      "experience_years": 10,
+      "website": "https://emilywatson.com",
+      "social_media": "ResearchGate: Emily Watson",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.296Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 5,
+    "fields": {
+      "user": 6,
+      "name": "Dr. James Wilson",
+      "bio": "Medical doctor and wellness expert focusing on preventive health",
+      "expertise": "Preventive Medicine & Wellness",
+      "experience_years": 18,
+      "website": "https://jameswilson.com",
+      "social_media": "LinkedIn: jameswilson",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.297Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 6,
+    "fields": {
+      "user": 7,
+      "name": "Lisa Thompson",
+      "bio": "Digital marketing expert with a focus on podcast promotion and audience growth",
+      "expertise": "Digital Marketing & Podcast Growth",
+      "experience_years": 8,
+      "website": "https://lisathompson.com",
+      "social_media": "Twitter: @lisathompson",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.298Z"
+    }
+  }
+]
