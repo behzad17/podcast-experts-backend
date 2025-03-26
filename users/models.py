@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
         ('podcaster', 'Podcaster'),
         ('expert', 'Expert'),
     )
-    
+
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_groups",

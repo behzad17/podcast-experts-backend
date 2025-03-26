@@ -57,7 +57,7 @@ class VerifyEmailView(APIView):
                 f"Current email_verified status: {user.email_verified}"
             )
             print(debug_msg)
-            
+
             if not user.email_verified:
                 print(
                     f"[DEBUG] Verifying email for user: "
@@ -108,20 +108,20 @@ class UserLoginView(TokenObtainPairView):
                 f"{user.email_verified}"
             )
             print(debug_msg)
-            
+
             if not user.email_verified:
                 print(f"[DEBUG] Email not verified for user: {email}")
                 return Response(
                     {"detail": "Please verify your email before logging in."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            
+
             # Modify request data to use username instead of email
             request_data = request.data.copy()
             request_data['username'] = user.username
             request_data.pop('email', None)
             request._full_data = request_data
-            
+
             print("[DEBUG] Email verified, proceeding with login")
             response = super().post(request, *args, **kwargs)
             response.data['user'] = {
@@ -149,7 +149,7 @@ class UserLoginView(TokenObtainPairView):
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get_object(self):
         user_id = self.kwargs.get('pk')
         if user_id == self.request.user.id:
@@ -160,7 +160,7 @@ class UserDetailView(generics.RetrieveAPIView):
 class UserMeView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def get_object(self):
         return self.request.user
 

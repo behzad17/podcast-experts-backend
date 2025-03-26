@@ -133,7 +133,7 @@ class MyExpertProfileView(generics.RetrieveUpdateAPIView):
             instance = self.get_object()
             if instance.profile_picture:
                 instance.profile_picture.delete()
-        
+
         serializer.save(user=self.request.user)
 
 
@@ -145,16 +145,16 @@ class ExpertStatsView(APIView):
 
     def get(self, request):
         expert_profile = get_object_or_404(ExpertProfile, user=request.user)
-        
+
         # Get total views
         total_views = expert_profile.get_total_views()
-        
+
         # Get total bookmarks
         total_bookmarks = expert_profile.get_total_bookmarks()
-        
+
         # Get average rating
         average_rating = expert_profile.get_average_rating()
-        
+
         return Response({
             'total_views': total_views,
             'total_bookmarks': total_bookmarks,
@@ -179,10 +179,10 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
         queryset = ExpertProfile.objects.all()
         category = self.request.query_params.get('category', None)
         search = self.request.query_params.get('search', None)
-        
+
         if category:
             queryset = queryset.filter(categories__id=category)
-            
+
         if search:
             queryset = queryset.filter(
                 Q(name__icontains=search) |
@@ -190,7 +190,7 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
                 Q(expertise__icontains=search) |
                 Q(user__username__icontains=search)
             )
-            
+
         if self.action == 'list':
             queryset = queryset.filter(is_approved=True)
         return queryset
@@ -289,17 +289,17 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     def edit_comment(self, request, pk=None):
         expert = self.get_object()
         comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
-        
+
         if comment.user != request.user:
             return Response(
                 {'detail': 'You can only edit your own comments'},
                 status=status.HTTP_403_FORBIDDEN
             )
-            
+
         serializer = ExpertCommentSerializer(comment, data={
             'content': request.data.get('content')
         }, partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -309,13 +309,13 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     def delete_comment(self, request, pk=None):
         expert = self.get_object()
         comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
-        
+
         if comment.user != request.user:
             return Response(
                 {'detail': 'You can only delete your own comments'},
                 status=status.HTTP_403_FORBIDDEN
             )
-            
+
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -323,20 +323,20 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     def react(self, request, pk=None):
         expert = self.get_object()
         reaction_type = request.data.get('reaction_type')
-        
+
         if reaction_type not in ['like', 'dislike']:
             return Response(
                 {'detail': 'Invalid reaction type'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
+
         # Get or create reaction
         reaction, created = ExpertReaction.objects.get_or_create(
             expert=expert,
             user=request.user,
             defaults={'reaction_type': reaction_type}
         )
-        
+
         if not created:
             if reaction.reaction_type == reaction_type:
                 # If same reaction type, remove the reaction
@@ -346,7 +346,7 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
                 # Update existing reaction
                 reaction.reaction_type = reaction_type
                 reaction.save()
-                
+
         serializer = ExpertReactionSerializer(reaction)
         return Response(serializer.data)
 

@@ -335,11 +335,13 @@ class PodcastReactionViewSet(viewsets.ModelViewSet):
 
 class PodcastCommentViewSet(viewsets.ModelViewSet):
     serializer_class = PodcastCommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        return PodcastComment.objects.filter(podcast_id=self.kwargs.get('podcast_pk'))
+        podcast_id = self.kwargs.get('podcast_pk')
+        return PodcastComment.objects.filter(podcast_id=podcast_id)
 
     def perform_create(self, serializer):
-        podcast = get_object_or_404(Podcast, pk=self.kwargs.get('podcast_pk'))
+        podcast_id = self.kwargs.get('podcast_pk')
+        podcast = get_object_or_404(Podcast, id=podcast_id)
         serializer.save(podcast=podcast, user=self.request.user)
