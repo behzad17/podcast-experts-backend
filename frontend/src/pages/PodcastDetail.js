@@ -10,8 +10,17 @@ import {
   Alert,
   Badge,
   Spinner,
+  ListGroup,
 } from "react-bootstrap";
-import { FaPlay, FaShare, FaEdit } from "react-icons/fa";
+import {
+  FaPlay,
+  FaShare,
+  FaEdit,
+  FaUser,
+  FaCalendar,
+  FaGlobe,
+  FaMicrophone,
+} from "react-icons/fa";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -19,7 +28,7 @@ const PodcastDetail = () => {
   const [podcast, setPodcast] = useState(null);
   const [error, setError] = useState("");
   const [isOwner, setIsOwner] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchPodcast = async () => {
@@ -68,7 +77,7 @@ const PodcastDetail = () => {
     <Container className="mt-4">
       <Row>
         <Col md={8} className="mx-auto">
-          <Card>
+          <Card className="mb-4">
             {podcast.image && (
               <Card.Img
                 variant="top"
@@ -96,9 +105,11 @@ const PodcastDetail = () => {
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                   <Badge bg="primary" className="me-2">
-                    By {podcast.owner?.channel_name || "Unknown"}
+                    <FaMicrophone className="me-1" />
+                    {podcast.owner?.channel_name || "Unknown"}
                   </Badge>
                   <Badge bg="secondary">
+                    <FaCalendar className="me-1" />
                     {new Date(podcast.created_at).toLocaleDateString()}
                   </Badge>
                 </div>
@@ -132,6 +143,65 @@ const PodcastDetail = () => {
               )}
             </Card.Body>
           </Card>
+
+          {/* Podcaster Information Card */}
+          {podcast.owner && (
+            <Card>
+              <Card.Body>
+                <Card.Title className="h4 mb-4">
+                  <FaUser className="me-2" />
+                  About the Podcaster
+                </Card.Title>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <strong>Channel Name:</strong> {podcast.owner.channel_name}
+                  </ListGroup.Item>
+                  {podcast.owner.bio && (
+                    <ListGroup.Item>
+                      <strong>Bio:</strong> {podcast.owner.bio}
+                    </ListGroup.Item>
+                  )}
+                  {podcast.owner.website && (
+                    <ListGroup.Item>
+                      <strong>Website:</strong>{" "}
+                      <a
+                        href={podcast.owner.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {podcast.owner.website}
+                      </a>
+                    </ListGroup.Item>
+                  )}
+                  {podcast.owner.social_links &&
+                    Object.keys(podcast.owner.social_links).length > 0 && (
+                      <ListGroup.Item>
+                        <strong>Social Links:</strong>
+                        <div className="mt-2">
+                          {Object.entries(podcast.owner.social_links).map(
+                            ([platform, url]) => (
+                              <Button
+                                key={platform}
+                                variant="outline-secondary"
+                                size="sm"
+                                className="me-2 mb-2"
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <FaGlobe className="me-1" />
+                                {platform.charAt(0).toUpperCase() +
+                                  platform.slice(1)}
+                              </Button>
+                            )
+                          )}
+                        </div>
+                      </ListGroup.Item>
+                    )}
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
     </Container>

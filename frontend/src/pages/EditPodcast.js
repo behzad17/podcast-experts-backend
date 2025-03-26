@@ -21,10 +21,11 @@ const EditPodcast = () => {
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
-        const response = await api.get(`/podcasts/${id}/`);
+        const response = await api.get(`/podcasts/podcasts/${id}/`);
         setFormData(response.data);
         setLoading(false);
       } catch (error) {
+        console.error("Error fetching podcast:", error);
         toast.error("Failed to load podcast");
         navigate("/podcasts");
       }
@@ -43,121 +44,109 @@ const EditPodcast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put("/podcasts/update/", formData);
+      await api.put(`/podcasts/podcasts/${id}/`, formData);
       toast.success("Podcast updated successfully");
       navigate(`/podcasts/${id}`);
     } catch (error) {
+      console.error("Error updating podcast:", error);
       toast.error(error.response?.data?.detail || "Failed to update podcast");
     }
   };
 
   if (loading) {
-    return <div className="container mx-auto p-4">Loading...</div>;
+    return (
+      <Container className="mt-4">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </Container>
+    );
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Podcast</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Title *
-          </label>
-          <input
+    <Container className="mt-4">
+      <h1 className="mb-4">Edit Podcast</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>Title *</Form.Label>
+          <Form.Control
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Description *
-          </label>
-          <textarea
+        <Form.Group className="mb-3">
+          <Form.Label>Description *</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={4}
             name="description"
             value={formData.description}
             onChange={handleChange}
             required
-            rows="4"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Category *
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label>Category *</Form.Label>
+          <Form.Control
             type="text"
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Language *
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label>Language *</Form.Label>
+          <Form.Control
             type="text"
             name="language"
             value={formData.language}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Website
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label>Website</Form.Label>
+          <Form.Control
             type="url"
             name="website"
             value={formData.website || ""}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Social Media
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label>Social Media</Form.Label>
+          <Form.Control
             type="text"
             name="social_media"
             value={formData.social_media || ""}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
-        </div>
+        </Form.Group>
 
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
+        <div className="d-flex justify-content-end gap-2">
+          <Button
+            variant="secondary"
             onClick={() => navigate(`/podcasts/${id}`)}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
+          </Button>
+          <Button variant="primary" type="submit">
             Save Changes
-          </button>
+          </Button>
         </div>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
 

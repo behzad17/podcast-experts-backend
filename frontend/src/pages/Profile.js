@@ -1,7 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Alert,
+  Badge,
+  ListGroup,
+  Image,
+} from "react-bootstrap";
 import api from "../api/axios";
 import ProfileEditModal from "../components/profile/ProfileEditModal";
+import {
+  FaUser,
+  FaGlobe,
+  FaShareAlt,
+  FaEdit,
+  FaMicrophone,
+  FaPodcast,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -9,6 +28,8 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [podcasts, setPodcasts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -31,6 +52,25 @@ const Profile = () => {
           // Since the ViewSet returns a list, we need to get the first item
           if (response.data && response.data.length > 0) {
             setProfile(response.data[0]);
+            // Fetch podcaster's podcasts using the my-podcasts endpoint
+            try {
+              const podcastsResponse = await api.get("/podcasts/my-podcasts/");
+              if (
+                podcastsResponse.data &&
+                Array.isArray(podcastsResponse.data)
+              ) {
+                setPodcasts(podcastsResponse.data);
+              } else {
+                console.error(
+                  "Unexpected podcasts response format:",
+                  podcastsResponse.data
+                );
+                setPodcasts([]);
+              }
+            } catch (podcastError) {
+              console.error("Error fetching podcasts:", podcastError);
+              setPodcasts([]);
+            }
           } else {
             setError(
               "No podcaster profile found. Please create a profile first."
@@ -54,6 +94,10 @@ const Profile = () => {
 
   const handleProfileUpdate = (updatedProfile) => {
     setProfile(updatedProfile);
+  };
+
+  const handleEditPodcast = (podcastId) => {
+    navigate(`/podcasts/${podcastId}/edit`);
   };
 
   if (isLoading) {
@@ -90,10 +134,14 @@ const Profile = () => {
     <Container className="mt-4">
       <Row>
         <Col md={8} className="mx-auto">
-          <Card>
+          <Card className="mb-4">
             <Card.Header className="d-flex justify-content-between align-items-center">
-              <h3 className="mb-0">My Profile</h3>
+              <h3 className="mb-0">
+                <FaUser className="me-2" />
+                My Profile
+              </h3>
               <Button variant="primary" onClick={handleEditClick}>
+                <FaEdit className="me-2" />
                 Edit Profile
               </Button>
             </Card.Header>
@@ -113,31 +161,31 @@ const Profile = () => {
                 </div>
               )}
 
-              <div className="mb-3">
-                <h5>Name</h5>
-                <p>{profile.name || "Not set"}</p>
-              </div>
-
-              <div className="mb-3">
-                <h5>Bio</h5>
-                <p>{profile.bio || "Not set"}</p>
-              </div>
-
-              {currentUser?.user_type === "expert" && (
-                <>
-                  <div className="mb-3">
-                    <h5>Expertise</h5>
-                    <p>{profile.expertise || "Not set"}</p>
-                  </div>
-
-                  <div className="mb-3">
-                    <h5>Years of Experience</h5>
-                    <p>{profile.experience_years || "Not set"}</p>
-                  </div>
-
-                  <div className="mb-3">
-                    <h5>Website</h5>
+              <ListGroup variant="flush">
+                <ListGroup.Item>
+                  <h5 className="mb-2">
+                    <FaMicrophone className="me-2" />
+                    Channel Information
+                  </h5>
+                  <div className="ms-4">
                     <p>
+                      <strong>Channel Name:</strong>{" "}
+                      {profile.channel_name || "Not set"}
+                    </p>
+                    <p>
+                      <strong>Bio:</strong> {profile.bio || "Not set"}
+                    </p>
+                  </div>
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  <h5 className="mb-2">
+                    <FaGlobe className="me-2" />
+                    Contact Information
+                  </h5>
+                  <div className="ms-4">
+                    <p>
+                      <strong>Website:</strong>{" "}
                       {profile.website ? (
                         <a
                           href={profile.website}
@@ -151,60 +199,136 @@ const Profile = () => {
                       )}
                     </p>
                   </div>
+                </ListGroup.Item>
 
-                  <div className="mb-3">
-                    <h5>Social Media</h5>
-                    <p>{profile.social_media || "Not set"}</p>
-                  </div>
-                </>
-              )}
+                {profile.social_links &&
+                  Object.keys(profile.social_links).length > 0 && (
+                    <ListGroup.Item>
+                      <h5 className="mb-2">
+                        <FaShareAlt className="me-2" />
+                        Social Links
+                      </h5>
+                      <div className="ms-4">
+                        {Object.entries(profile.social_links).map(
+                          ([platform, url]) => (
+                            <Badge
+                              key={platform}
+                              bg="secondary"
+                              className="me-2 mb-2"
+                              style={{
+                                fontSize: "0.9rem",
+                                padding: "0.5rem 1rem",
+                              }}
+                            >
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white text-decoration-none"
+                              >
+                                {platform.charAt(0).toUpperCase() +
+                                  platform.slice(1)}
+                              </a>
+                            </Badge>
+                          )
+                        )}
+                      </div>
+                    </ListGroup.Item>
+                  )}
 
-              {currentUser?.user_type === "podcaster" && (
-                <>
-                  <div className="mb-3">
-                    <h5>Bio</h5>
-                    <p>{profile.bio || "Not set"}</p>
-                  </div>
-
-                  <div className="mb-3">
-                    <h5>Website</h5>
+                <ListGroup.Item>
+                  <h5 className="mb-2">Account Details</h5>
+                  <div className="ms-4">
                     <p>
-                      {profile.website ? (
-                        <a
-                          href={profile.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {profile.website}
-                        </a>
-                      ) : (
-                        "Not set"
-                      )}
+                      <strong>Member Since:</strong>{" "}
+                      {new Date(profile.created_at).toLocaleDateString()}
+                    </p>
+                    <p>
+                      <strong>Last Updated:</strong>{" "}
+                      {new Date(profile.updated_at).toLocaleDateString()}
                     </p>
                   </div>
-
-                  <div className="mb-3">
-                    <h5>Social Links</h5>
-                    <pre className="bg-light p-3 rounded">
-                      {profile.social_links
-                        ? JSON.stringify(profile.social_links, null, 2)
-                        : "Not set"}
-                    </pre>
-                  </div>
-
-                  <div className="mb-3">
-                    <h5>Member Since</h5>
-                    <p>{new Date(profile.created_at).toLocaleDateString()}</p>
-                  </div>
-
-                  <div className="mb-3">
-                    <h5>Last Updated</h5>
-                    <p>{new Date(profile.updated_at).toLocaleDateString()}</p>
-                  </div>
-                </>
-              )}
+                </ListGroup.Item>
+              </ListGroup>
             </Card.Body>
           </Card>
+
+          {/* My Podcasts Section */}
+          {currentUser?.user_type === "podcaster" && (
+            <Card>
+              <Card.Header className="d-flex justify-content-between align-items-center">
+                <h3 className="mb-0">
+                  <FaPodcast className="me-2" />
+                  My Podcasts
+                </h3>
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/podcasts/create")}
+                >
+                  <FaEdit className="me-2" />
+                  Create New Podcast
+                </Button>
+              </Card.Header>
+              <Card.Body>
+                {podcasts.length === 0 ? (
+                  <Alert variant="info">
+                    You haven't created any podcasts yet. Click the button above
+                    to create your first podcast!
+                  </Alert>
+                ) : (
+                  <ListGroup variant="flush">
+                    {podcasts.map((podcast) => (
+                      <ListGroup.Item key={podcast.id}>
+                        <div className="d-flex align-items-center">
+                          {podcast.image && (
+                            <Image
+                              src={podcast.image}
+                              alt={podcast.title}
+                              rounded
+                              style={{
+                                width: "80px",
+                                height: "80px",
+                                objectFit: "cover",
+                                marginRight: "1rem",
+                              }}
+                            />
+                          )}
+                          <div className="flex-grow-1">
+                            <h5 className="mb-1">{podcast.title}</h5>
+                            <p className="mb-1 text-muted">
+                              {podcast.description}
+                            </p>
+                            <div className="d-flex align-items-center">
+                              <Badge
+                                bg={podcast.is_approved ? "success" : "warning"}
+                                className="me-2"
+                              >
+                                {podcast.is_approved ? "Approved" : "Pending"}
+                              </Badge>
+                              <small className="text-muted me-3">
+                                Created:{" "}
+                                {new Date(
+                                  podcast.created_at
+                                ).toLocaleDateString()}
+                              </small>
+                              <Button
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={() => handleEditPodcast(podcast.id)}
+                              >
+                                <FaEdit className="me-1" />
+                                Edit
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                )}
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
 

@@ -128,12 +128,17 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class PodcasterProfileViewSet(viewsets.ModelViewSet):
     queryset = PodcasterProfile.objects.all()
     serializer_class = PodcasterProfileSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return PodcasterProfile.objects.all()
         return PodcasterProfile.objects.filter(user=self.request.user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 
 class PodcastViewSet(viewsets.ModelViewSet):

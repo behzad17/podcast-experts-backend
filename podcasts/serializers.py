@@ -9,11 +9,21 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PodcasterProfileSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
+    podcasts = serializers.SerializerMethodField()
 
     class Meta:
         model = PodcasterProfile
-        fields = ['id', 'username', 'bio', 'website', 'social_links']
+        fields = [
+            'id', 'user', 'bio', 'website', 'social_links',
+            'created_at', 'updated_at', 'podcasts'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+
+    def get_podcasts(self, obj):
+        request = self.context.get('request')
+        if request and request.user == obj.user:
+            return PodcastSerializer(obj.podcasts.all(), many=True).data
+        return []
 
 
 class CommentSerializer(serializers.ModelSerializer):
