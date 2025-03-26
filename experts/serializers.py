@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from users.models import CustomUser
 from .models import ExpertProfile, ExpertRating, ExpertComment, ExpertCategory
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class ExpertCategorySerializer(serializers.ModelSerializer):
@@ -17,12 +20,27 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
 
 class ExpertCommentSerializer(serializers.ModelSerializer):
-    user = SimpleUserSerializer(read_only=True)
-
+    user = serializers.SerializerMethodField()
+    replies = serializers.SerializerMethodField()
+    
     class Meta:
         model = ExpertComment
-        fields = ['id', 'user', 'content', 'created_at']
-        read_only_fields = ['created_at']
+        fields = ['id', 'expert', 'user', 'content', 'parent', 'replies', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'replies']
+
+    def get_user(self, obj):
+        return {
+            'id': obj.user.id,
+            'username': obj.user.username,
+            'profile_picture': obj.user.profile_picture.url if obj.user.profile_picture else None
+        }
+
+    def get_replies(self, obj):
+        if obj.parent is not None:  # Don't get replies for replies
+            return []
+        replies = ExpertComment.objects.filter(parent=obj)
+        serializer = ExpertCommentSerializer(replies, many=True)
+        return serializer.data
 
 
 class ExpertRatingSerializer(serializers.ModelSerializer):

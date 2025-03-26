@@ -3,11 +3,12 @@ from rest_framework import generics, permissions, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from .models import Podcast, PodcasterProfile, Category
+from .models import Podcast, PodcasterProfile, Category, PodcastComment
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
-    CategorySerializer
+    CategorySerializer,
+    PodcastCommentSerializer
 )
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import action
@@ -196,6 +197,78 @@ class PodcastViewSet(viewsets.ModelViewSet):
         podcast.is_approved = True
         podcast.save()
         return Response({'status': 'podcast approved'})
+
+    @action(detail=True, methods=['get'])
+    def comments(self, request, pk=None):
+        podcast = self.get_object()
+        comments = PodcastComment.objects.filter(podcast=podcast, parent=None)
+        serializer = PodcastCommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def add_comment(self, request, pk=None):
+        podcast = self.get_object()
+        serializer = PodcastCommentSerializer(data={
+            'podcast': podcast.id,
+            'content': request.data.get('content'),
+            'parent': request.data.get('parent')
+        })
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def reply_comment(self, request, pk=None):
+        podcast = self.get_object()
+        parent_comment = get_object_or_404(
+            PodcastComment,
+            id=request.data.get('parent'),
+            podcast=podcast
+        )
+        serializer = PodcastCommentSerializer(data={
+            'podcast': podcast.id,
+            'content': request.data.get('content'),
+            'parent': parent_comment.id
+        })
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['put', 'patch'])
+    def edit_comment(self, request, pk=None):
+        podcast = self.get_object()
+        comment = get_object_or_404(PodcastComment, id=request.data.get('comment_id'), podcast=podcast)
+        
+        if comment.user != request.user:
+            return Response(
+                {'detail': 'You can only edit your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        serializer = PodcastCommentSerializer(comment, data={
+            'content': request.data.get('content')
+        }, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['delete'])
+    def delete_comment(self, request, pk=None):
+        podcast = self.get_object()
+        comment = get_object_or_404(PodcastComment, id=request.data.get('comment_id'), podcast=podcast)
+        
+        if comment.user != request.user:
+            return Response(
+                {'detail': 'You can only delete your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PodcastUpdateView(generics.UpdateAPIView):

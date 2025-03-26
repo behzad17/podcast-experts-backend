@@ -193,12 +193,41 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(is_approved=True)
         return queryset
 
+    @action(detail=True, methods=['get'])
+    def comments(self, request, pk=None):
+        expert = self.get_object()
+        comments = ExpertComment.objects.filter(expert=expert, parent=None)
+        serializer = ExpertCommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'])
     def add_comment(self, request, pk=None):
         expert = self.get_object()
-        serializer = ExpertCommentSerializer(data=request.data)
+        serializer = ExpertCommentSerializer(data={
+            'expert': expert.id,
+            'content': request.data.get('content'),
+            'parent': request.data.get('parent')
+        })
         if serializer.is_valid():
-            serializer.save(expert=expert, user=request.user)
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def reply_comment(self, request, pk=None):
+        expert = self.get_object()
+        parent_comment = get_object_or_404(
+            ExpertComment,
+            id=request.data.get('parent'),
+            expert=expert
+        )
+        serializer = ExpertCommentSerializer(data={
+            'expert': expert.id,
+            'content': request.data.get('content'),
+            'parent': parent_comment.id
+        })
+        if serializer.is_valid():
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -253,6 +282,40 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
                 {'error': 'Expert profile not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+    @action(detail=True, methods=['put', 'patch'])
+    def edit_comment(self, request, pk=None):
+        expert = self.get_object()
+        comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
+        
+        if comment.user != request.user:
+            return Response(
+                {'detail': 'You can only edit your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        serializer = ExpertCommentSerializer(comment, data={
+            'content': request.data.get('content')
+        }, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['delete'])
+    def delete_comment(self, request, pk=None):
+        expert = self.get_object()
+        comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
+        
+        if comment.user != request.user:
+            return Response(
+                {'detail': 'You can only delete your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PendingExpertProfilesView(generics.ListAPIView):

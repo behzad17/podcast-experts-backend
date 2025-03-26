@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Category, PodcasterProfile, Podcast, Comment
+from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -83,3 +86,27 @@ class PodcastStatsSerializer(serializers.ModelSerializer):
         model = Podcast
         fields = ['id', 'title', 'views', 'average_rating', 'total_bookmarks']
         read_only_fields = fields
+
+
+class PodcastCommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    replies = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = PodcastComment
+        fields = ['id', 'podcast', 'user', 'content', 'parent', 'replies', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'replies']
+
+    def get_user(self, obj):
+        return {
+            'id': obj.user.id,
+            'username': obj.user.username,
+            'profile_picture': obj.user.profile_picture.url if obj.user.profile_picture else None
+        }
+
+    def get_replies(self, obj):
+        if obj.parent is not None:  # Don't get replies for replies
+            return []
+        replies = PodcastComment.objects.filter(parent=obj)
+        serializer = PodcastCommentSerializer(replies, many=True)
+        return serializer.data

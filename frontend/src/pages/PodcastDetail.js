@@ -21,6 +21,7 @@ import {
   FaGlobe,
   FaMicrophone,
 } from "react-icons/fa";
+import CommentSection from "../components/comments/CommentSection";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -204,6 +205,9 @@ const PodcastDetail = () => {
           )}
         </Col>
       </Row>
+
+      {/* Add Comment Section */}
+      <CommentSection type="podcast" id={podcast.id} />
     </Container>
   );
 };

@@ -2,6 +2,10 @@ from django.db import models
 from users.models import CustomUser
 from django.conf import settings
 from django.utils.text import slugify
+from django.contrib.auth import get_user_model
+from experts.models import ExpertProfile
+
+User = get_user_model()
 
 # Create your models here.
 class Category(models.Model):
@@ -93,3 +97,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.podcast.title}'[:79]
+
+class PodcastComment(models.Model):
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast_comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.podcast.title}'

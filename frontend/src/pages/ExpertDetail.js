@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Button, Alert, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Button,
+  Alert,
+  Spinner,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import CommentSection from "../components/comments/CommentSection";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -154,6 +163,9 @@ const ExpertDetail = () => {
           </div>
         </Card.Body>
       </Card>
+
+      {/* Add Comment Section */}
+      <CommentSection type="expert" id={expert.id} />
     </Container>
   );
 };
