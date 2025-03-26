@@ -11,6 +11,7 @@ from .serializers import (
     ExpertRatingSerializer
 )
 from rest_framework.decorators import action
+from django.db.models import Q
 
 # Create your views here.
 
@@ -163,6 +164,9 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     queryset = ExpertProfile.objects.all()
     serializer_class = ExpertProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'bio', 'expertise', 'user__username']
+    ordering_fields = ['name', 'created_at', 'experience_years', 'average_rating']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -171,6 +175,20 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = ExpertProfile.objects.all()
+        category = self.request.query_params.get('category', None)
+        search = self.request.query_params.get('search', None)
+        
+        if category:
+            queryset = queryset.filter(categories__id=category)
+            
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(bio__icontains=search) |
+                Q(expertise__icontains=search) |
+                Q(user__username__icontains=search)
+            )
+            
         if self.action == 'list':
             queryset = queryset.filter(is_approved=True)
         return queryset

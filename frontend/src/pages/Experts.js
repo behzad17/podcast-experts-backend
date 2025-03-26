@@ -1,24 +1,64 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Alert, Pagination, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Alert,
+  Pagination,
+  Spinner,
+  Form,
+} from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(9); // Number of experts per page
+  const [pageSize] = useState(9);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/experts/categories/");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchExperts = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/experts/?page=${currentPage}&page_size=${pageSize}`);
+        const params = new URLSearchParams({
+          page: currentPage,
+          page_size: pageSize,
+        });
+
+        if (searchTerm) {
+          params.append("search", searchTerm);
+        }
+        if (selectedCategory) {
+          params.append("category", selectedCategory);
+        }
+
+        const response = await api.get(`/experts/?${params}`);
         setExperts(response.data.results || response.data);
-        setTotalPages(Math.ceil((response.data.count || response.data.length) / pageSize));
+        setTotalPages(
+          Math.ceil((response.data.count || response.data.length) / pageSize)
+        );
       } catch (error) {
         console.error("Error fetching experts:", error);
         setError("Failed to load experts. Please try again later.");
@@ -27,8 +67,12 @@ const Experts = () => {
       }
     };
 
-    fetchExperts();
-  }, [currentPage, pageSize]);
+    const debounceTimer = setTimeout(() => {
+      fetchExperts();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [currentPage, pageSize, searchTerm, selectedCategory]);
 
   const handleCreateExpert = () => {
     navigate("/experts/create");
@@ -38,10 +82,23 @@ const Experts = () => {
     setCurrentPage(page);
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1); // Reset to first page when changing category
+  };
+
   if (loading) {
     return (
       <Container className="mt-4">
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
@@ -67,6 +124,34 @@ const Experts = () => {
         </Button>
       </div>
 
+      <Row className="mb-4">
+        <Col md={6}>
+          <Form.Group>
+            <Form.Control
+              type="text"
+              placeholder="Search experts..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Select
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Col>
+      </Row>
+
       <Row>
         {experts.map((expert) => (
           <Col key={expert.id} md={4} className="mb-4">
@@ -82,6 +167,13 @@ const Experts = () => {
               <Card.Body>
                 <Card.Title>{expert.name}</Card.Title>
                 <Card.Text>{expert.bio?.substring(0, 100)}...</Card.Text>
+                <div className="mb-2">
+                  {expert.categories?.map((category) => (
+                    <span key={category.id} className="badge bg-secondary me-1">
+                      {category.name}
+                    </span>
+                  ))}
+                </div>
                 <Button
                   variant="outline-primary"
                   onClick={() => navigate(`/experts/${expert.id}`)}
@@ -93,6 +185,12 @@ const Experts = () => {
           </Col>
         ))}
       </Row>
+
+      {experts.length === 0 && !loading && (
+        <Alert variant="info">
+          No experts found. Try adjusting your search term or category.
+        </Alert>
+      )}
 
       {totalPages > 1 && (
         <div className="d-flex justify-content-center mt-4">

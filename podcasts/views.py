@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status, viewsets
+from rest_framework import generics, permissions, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
@@ -11,6 +11,7 @@ from .serializers import (
 )
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import action
+from django.db.models import Q
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -145,6 +146,9 @@ class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description', 'owner__channel_name']
+    ordering_fields = ['title', 'created_at', 'is_approved']
 
     def get_permissions(self):
         if self.action == 'list':
@@ -156,9 +160,17 @@ class PodcastViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Podcast.objects.all()
         category = self.request.query_params.get('category', None)
+        search = self.request.query_params.get('search', None)
         
         if category:
             queryset = queryset.filter(category_id=category)
+            
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(owner__channel_name__icontains=search)
+            )
             
         if self.request.user.is_staff:
             return queryset

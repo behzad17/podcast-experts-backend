@@ -16,12 +16,14 @@ import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(9);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
@@ -34,12 +36,35 @@ const Podcasts = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/podcasts/categories/");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     const fetchPodcasts = async () => {
       try {
         setLoading(true);
-        const response = await api.get(
-          `/podcasts/podcasts/?page=${currentPage}&page_size=${pageSize}&search=${searchTerm}`
-        );
+        const params = new URLSearchParams({
+          page: currentPage,
+          page_size: pageSize,
+        });
+
+        if (searchTerm) {
+          params.append("search", searchTerm);
+        }
+        if (selectedCategory) {
+          params.append("category", selectedCategory);
+        }
+
+        const response = await api.get(`/podcasts/podcasts/?${params}`);
         setPodcasts(response.data.results || response.data);
         setTotalPages(
           Math.ceil((response.data.count || response.data.length) / pageSize)
@@ -63,7 +88,7 @@ const Podcasts = () => {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [currentPage, pageSize, searchTerm]);
+  }, [currentPage, pageSize, searchTerm, selectedCategory]);
 
   useEffect(() => {
     // Get current user if token exists
@@ -84,6 +109,11 @@ const Podcasts = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1); // Reset to first page when changing category
   };
 
   const handleEditClick = (podcast) => {
@@ -173,14 +203,33 @@ const Podcasts = () => {
         )}
       </div>
 
-      <Form.Group className="mb-4">
-        <Form.Control
-          type="text"
-          placeholder="Search podcasts..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </Form.Group>
+      <Row className="mb-4">
+        <Col md={6}>
+          <Form.Group>
+            <Form.Control
+              type="text"
+              placeholder="Search podcasts..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Select
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Col>
+      </Row>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
@@ -225,7 +274,7 @@ const Podcasts = () => {
 
       {podcasts.length === 0 && !loading && (
         <Alert variant="info">
-          No podcasts found. Try adjusting your search term.
+          No podcasts found. Try adjusting your search term or category.
         </Alert>
       )}
 
