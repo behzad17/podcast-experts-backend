@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from users.models import CustomUser
-from .models import ExpertProfile, ExpertRating, ExpertComment
+from .models import ExpertProfile, ExpertRating, ExpertComment, ExpertCategory
+
+
+class ExpertCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpertCategory
+        fields = ['id', 'name', 'description']
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):
@@ -29,6 +35,7 @@ class ExpertRatingSerializer(serializers.ModelSerializer):
 
 class ExpertProfileSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
+    categories = ExpertCategorySerializer(many=True, read_only=True)
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()
@@ -39,10 +46,11 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpertProfile
         fields = [
-            'id', 'user', 'name', 'bio', 'expertise', 'experience_years',
-            'website', 'social_media', 'profile_picture', 'profile_picture_url',
-            'is_approved', 'created_at', 'total_views', 'total_bookmarks',
-            'average_rating', 'comments', 'ratings'
+            'id', 'user', 'name', 'bio', 'expertise', 'categories',
+            'experience_years', 'website', 'social_media', 'profile_picture',
+            'profile_picture_url', 'is_approved', 'created_at',
+            'total_views', 'total_bookmarks', 'average_rating',
+            'comments', 'ratings'
         ]
         read_only_fields = ['is_approved']
 

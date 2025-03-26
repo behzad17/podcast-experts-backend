@@ -4,6 +4,17 @@ from users.models import CustomUser
 from django.db.models import Avg
 
 # Create your models here.
+class ExpertCategory(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "Expert Categories"
+
 class ExpertProfile(models.Model):
     user = models.OneToOneField(
         CustomUser,
@@ -13,6 +24,7 @@ class ExpertProfile(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField()
     expertise = models.CharField(max_length=255)
+    categories = models.ManyToManyField(ExpertCategory, related_name='experts')
     experience_years = models.IntegerField()
     website = models.URLField(blank=True, null=True)
     social_media = models.TextField(blank=True, null=True)
