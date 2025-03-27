@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Button, Badge } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
+import { FaEnvelope, FaPlus } from "react-icons/fa";
+import api from "../api/axios";
 
 function Navigation() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (user) {
+      fetchUnreadCount();
+      // Set up polling every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await api.get("/messages/conversations/");
+      const totalUnread = response.data.reduce(
+        (sum, conv) => sum + conv.unread_count,
+        0
+      );
+      setUnreadCount(totalUnread);
+    } catch (error) {
+      console.error("Error fetching unread count:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -33,6 +58,22 @@ function Navigation() {
             </Nav.Link>
             {user && (
               <>
+                <Nav.Link
+                  as={Link}
+                  to="/messages"
+                  className="position-relative"
+                >
+                  <FaEnvelope className="me-1" />
+                  Messages
+                  {unreadCount > 0 && (
+                    <Badge
+                      bg="danger"
+                      className="position-absolute top-0 start-100 translate-middle rounded-pill"
+                    >
+                      {unreadCount}
+                    </Badge>
+                  )}
+                </Nav.Link>
                 <Nav.Link as={Link} to="/profile">
                   Profile
                 </Nav.Link>

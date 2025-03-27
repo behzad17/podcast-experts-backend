@@ -1,0 +1,83 @@
+[
+  {
+    "model": "user_messages.message",
+    "pk": 1,
+    "fields": {
+      "sender": 1,
+      "receiver": 3,
+      "content": "Hi Dr. Chen, I'm interested in having you as a guest on my tech podcast to discuss AI trends.",
+      "timestamp": "2025-03-26T16:30:00Z",
+      "is_read": false
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 2,
+    "fields": {
+      "sender": 3,
+      "receiver": 1,
+      "content": "Hello! I'd be happy to discuss AI trends on your podcast. What specific topics would you like to cover?",
+      "timestamp": "2025-03-26T16:35:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:36:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 3,
+    "fields": {
+      "sender": 1,
+      "receiver": 3,
+      "content": "I'd love to discuss recent developments in large language models and their impact on various industries.",
+      "timestamp": "2025-03-26T16:40:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:41:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 4,
+    "fields": {
+      "sender": 2,
+      "receiver": 4,
+      "content": "Hi, I'm interested in getting your expert advice on growing my business podcast.",
+      "timestamp": "2025-03-26T17:00:00Z",
+      "is_read": false
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 5,
+    "fields": {
+      "sender": 2,
+      "receiver": 5,
+      "content": "Hello! I'd love to have you as a guest on my environmental science podcast to discuss sustainability.",
+      "timestamp": "2025-03-26T17:30:00Z",
+      "is_read": false
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 6,
+    "fields": {
+      "sender": 1,
+      "receiver": 7,
+      "content": "Hi Lisa, I'm looking for advice on improving my podcast's social media presence.",
+      "timestamp": "2025-03-26T18:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T18:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 7,
+    "fields": {
+      "sender": 7,
+      "receiver": 1,
+      "content": "I'd be happy to help! What platforms are you currently using for your podcast?",
+      "timestamp": "2025-03-26T18:10:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T18:11:00Z"
+    }
+  }
+]

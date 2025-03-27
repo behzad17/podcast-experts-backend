@@ -9,6 +9,7 @@ from .serializers import UserRegisterSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from .models import UserProfile
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -172,3 +173,20 @@ class UserLogoutView(APIView):
         # Since we're using JWT, we don't need to do anything server-side
         # The client will handle token removal
         return Response({"message": "Successfully logged out."})
+
+
+class UserSearchView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        query = request.GET.get('query', '')
+        if len(query) < 2:
+            return Response([])
+            
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(email__icontains=query)
+        ).exclude(id=request.user.id)[:10]  # Exclude current user and limit to 10 results
+        
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)

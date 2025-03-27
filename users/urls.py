@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     UserRegisterView, UserLoginView, UserLogoutView,
-    UserDetailView, UserMeView, VerifyEmailView
+    UserDetailView, UserMeView, VerifyEmailView, UserSearchView
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -17,4 +17,5 @@ urlpatterns = [
         name='verify-email'
     ),
     path('<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('search/', UserSearchView.as_view(), name='user-search'),
 ]
