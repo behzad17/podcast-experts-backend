@@ -1,0 +1,98 @@
+[
+  {
+    "model": "user_messages.message",
+    "pk": 8,
+    "fields": {
+      "sender": 6,
+      "receiver": 4,
+      "content": "I have some experience with quantum computing and would love to discuss it on your podcast. What specific aspects would you like to cover?",
+      "timestamp": "2025-03-26T13:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T13:35:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 9,
+    "fields": {
+      "sender": 4,
+      "receiver": 6,
+      "content": "That's great! I'd love to focus on quantum computing applications in cryptography and data security. When would you be available?",
+      "timestamp": "2025-03-26T13:45:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 10,
+    "fields": {
+      "sender": 10,
+      "receiver": 11,
+      "content": "Hi! I'm interested in discussing mental health and cognitive development on your podcast. Would you be interested?",
+      "timestamp": "2025-03-26T14:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T14:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 11,
+    "fields": {
+      "sender": 11,
+      "receiver": 10,
+      "content": "Absolutely! I'd love to discuss the connection between environmental factors and mental health. What topics would you like to focus on?",
+      "timestamp": "2025-03-26T14:15:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 12,
+    "fields": {
+      "sender": 12,
+      "receiver": 8,
+      "content": "Hello! I noticed your expertise in AI and would love to discuss the intersection of technology and health optimization. Are you interested?",
+      "timestamp": "2025-03-26T14:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T14:35:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 13,
+    "fields": {
+      "sender": 8,
+      "receiver": 12,
+      "content": "That's an interesting topic! I'd be happy to discuss how AI can help optimize health and wellness. When would you like to record?",
+      "timestamp": "2025-03-26T14:45:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 14,
+    "fields": {
+      "sender": 9,
+      "receiver": 10,
+      "content": "Hi! I'd love to discuss how business strategy can impact environmental sustainability. Would you be interested in collaborating?",
+      "timestamp": "2025-03-26T15:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T15:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 15,
+    "fields": {
+      "sender": 10,
+      "receiver": 9,
+      "content": "That's a fascinating topic! I'd be happy to discuss the psychological aspects of sustainable business practices. What specific areas would you like to cover?",
+      "timestamp": "2025-03-26T15:15:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  }
+]

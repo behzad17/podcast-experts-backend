@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
@@ -15,30 +15,30 @@ const CommentSection = ({ type, id }) => {
   const [commentToDelete, setCommentToDelete] = useState(null);
   const currentUser = JSON.parse(localStorage.getItem("userData"));
 
-  useEffect(() => {
-    fetchComments();
-  }, [type, id]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/${type}s/${id}/comments/`);
+      const response = await api.get(`/podcasts/podcasts/${id}/comments/`);
       setComments(response.data);
       setError("");
-    } catch (err) {
+    } catch (error) {
+      console.error("Error fetching comments:", error);
       setError("Failed to load comments");
-      console.error("Error fetching comments:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const endpoint = replyTo
-        ? `/${type}s/${id}/reply_comment/`
-        : `/${type}s/${id}/add_comment/`;
+        ? `/podcasts/podcasts/${id}/reply_comment/`
+        : `/podcasts/podcasts/${id}/add_comment/`;
 
       const data = {
         content: newComment,
@@ -57,7 +57,7 @@ const CommentSection = ({ type, id }) => {
 
   const handleEdit = async (commentId, content) => {
     try {
-      await api.patch(`/${type}s/${id}/edit_comment/`, {
+      await api.patch(`/podcasts/podcasts/${id}/edit_comment/`, {
         comment_id: commentId,
         content: content,
       });
@@ -71,7 +71,7 @@ const CommentSection = ({ type, id }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      await api.delete(`/${type}s/${id}/delete_comment/`, {
+      await api.delete(`/podcasts/podcasts/${id}/delete_comment/`, {
         data: { comment_id: commentId },
       });
       setShowDeleteModal(false);
@@ -181,16 +181,6 @@ const CommentSection = ({ type, id }) => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="text-center py-4">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-4">
       <h4 className="mb-4">Comments</h4>
@@ -224,9 +214,21 @@ const CommentSection = ({ type, id }) => {
       </Form>
 
       <div>
-        {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
+        {loading ? (
+          <div className="text-center py-4">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : comments.length === 0 ? (
+          <div className="text-center py-4 text-muted">
+            No comments yet. Be the first to comment!
+          </div>
+        ) : (
+          comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+          ))
+        )}
       </div>
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>

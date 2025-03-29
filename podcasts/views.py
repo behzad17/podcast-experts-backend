@@ -3,17 +3,17 @@ from rest_framework import generics, permissions, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from .models import Podcast, PodcasterProfile, Category, PodcastComment, PodcastReaction
+from .models import Podcast, PodcasterProfile, Category, PodcastComment
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
     CategorySerializer,
     PodcastCommentSerializer,
-    PodcastReactionSerializer
 )
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import action
 from django.db.models import Q
+from ratings.models import Rating
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -147,66 +147,56 @@ class PodcasterProfileViewSet(viewsets.ModelViewSet):
 class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description', 'owner__channel_name']
-    ordering_fields = ['title', 'created_at', 'is_approved']
-
-    def get_permissions(self):
-        if self.action == 'list':
-            return [permissions.AllowAny()]
-        elif self.action == 'create':
-            return [permissions.IsAuthenticated()]
-        return [permissions.IsAuthenticated(), IsOwnerOrReadOnly()]
+    search_fields = ['title', 'description']
+    ordering_fields = ['created_at', 'title']
 
     def get_queryset(self):
-        queryset = Podcast.objects.all()
-        category = self.request.query_params.get('category', None)
-        search = self.request.query_params.get('search', None)
-        
-        if category:
-            queryset = queryset.filter(category_id=category)
-            
-        if search:
-            queryset = queryset.filter(
-                Q(title__icontains=search) |
-                Q(description__icontains=search) |
-                Q(owner__channel_name__icontains=search)
-            )
-            
         if self.request.user.is_staff:
-            return queryset
+            return Podcast.objects.all()
         elif self.request.user.is_authenticated:
             return (
-                queryset.filter(is_approved=True) |
-                queryset.filter(owner__user=self.request.user)
+                Podcast.objects.filter(is_approved=True) |
+                Podcast.objects.filter(owner__user=self.request.user)
             )
-        return queryset.filter(is_approved=True)
+        else:
+            return Podcast.objects.filter(is_approved=True)
 
     def perform_create(self, serializer):
         profile = PodcasterProfile.get_or_create_profile(self.request.user)
-        serializer.save(owner=profile)
+        serializer.save(owner=profile, is_approved=False)
+
+    @action(detail=True, methods=['get'])
+    def stats(self, request, pk=None):
+        podcast = self.get_object()
+        return Response({
+            'total_views': podcast.total_views,
+            'total_likes': podcast.total_likes,
+            'total_comments': podcast.total_comments,
+            'average_rating': podcast.get_average_rating(),
+        })
 
     @action(detail=True, methods=['post'])
     def approve(self, request, pk=None):
         if not request.user.is_staff:
             return Response(
-                {'detail': 'Permission denied'},
+                {"detail": "Only staff members can approve podcasts."},
                 status=status.HTTP_403_FORBIDDEN
             )
         podcast = self.get_object()
         podcast.is_approved = True
         podcast.save()
-        return Response({'status': 'podcast approved'})
+        return Response({"status": "podcast approved"})
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
         podcast = self.get_object()
-        comments = PodcastComment.objects.filter(podcast=podcast, parent=None)
+        comments = podcast.podcast_comments.filter(parent=None)
         serializer = PodcastCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def add_comment(self, request, pk=None):
         podcast = self.get_object()
         serializer = PodcastCommentSerializer(data={
@@ -219,7 +209,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def reply_comment(self, request, pk=None):
         podcast = self.get_object()
         parent_comment = get_object_or_404(
@@ -237,77 +227,15 @@ class PodcastViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['put', 'patch'])
-    def edit_comment(self, request, pk=None):
-        podcast = self.get_object()
-        comment = get_object_or_404(PodcastComment, id=request.data.get('comment_id'), podcast=podcast)
-        
-        if comment.user != request.user:
-            return Response(
-                {'detail': 'You can only edit your own comments'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-            
-        serializer = PodcastCommentSerializer(comment, data={
-            'content': request.data.get('content')
-        }, partial=True)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['delete'])
-    def delete_comment(self, request, pk=None):
-        podcast = self.get_object()
-        comment = get_object_or_404(PodcastComment, id=request.data.get('comment_id'), podcast=podcast)
-        
-        if comment.user != request.user:
-            return Response(
-                {'detail': 'You can only delete your own comments'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-            
-        comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @action(detail=True, methods=['post'])
-    def react(self, request, pk=None):
-        podcast = self.get_object()
-        reaction_type = request.data.get('reaction_type')
-        
-        if reaction_type not in ['like', 'dislike']:
-            return Response(
-                {'detail': 'Invalid reaction type'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-            
-        # Get or create reaction
-        reaction, created = PodcastReaction.objects.get_or_create(
-            podcast=podcast,
-            user=request.user,
-            defaults={'reaction_type': reaction_type}
-        )
-        
-        if not created:
-            if reaction.reaction_type == reaction_type:
-                # If same reaction type, remove the reaction
-                reaction.delete()
-                return Response({'status': 'reaction removed'})
-            else:
-                # Update existing reaction
-                reaction.reaction_type = reaction_type
-                reaction.save()
-                
-        serializer = PodcastReactionSerializer(reaction)
-        return Response(serializer.data)
-
     @action(detail=True, methods=['get'])
-    def reactions(self, request, pk=None):
+    def ratings(self, request, pk=None):
         podcast = self.get_object()
-        reactions = PodcastReaction.objects.filter(podcast=podcast)
-        serializer = PodcastReactionSerializer(reactions, many=True)
-        return Response(serializer.data)
+        ratings = Rating.objects.filter(podcast=podcast)
+        return Response({
+            'average_rating': podcast.get_average_rating(),
+            'total_ratings': podcast.get_total_ratings(),
+            'user_rating': ratings.filter(user=request.user).first().score if ratings.filter(user=request.user).exists() else None
+        })
 
 
 class PodcastUpdateView(generics.UpdateAPIView):
@@ -319,18 +247,6 @@ class PodcastUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(creator=self.request.user)
-
-
-class PodcastReactionViewSet(viewsets.ModelViewSet):
-    serializer_class = PodcastReactionSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return PodcastReaction.objects.filter(podcast_id=self.kwargs.get('podcast_pk'))
-
-    def perform_create(self, serializer):
-        podcast = get_object_or_404(Podcast, pk=self.kwargs.get('podcast_pk'))
-        serializer.save(podcast=podcast, user=self.request.user)
 
 
 class PodcastCommentViewSet(viewsets.ModelViewSet):

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
-import axios from "axios";
+import api from "../../api/axios";
 
 const ReactionButton = ({ type, id, initialReaction }) => {
   const [reaction, setReaction] = useState(initialReaction);
@@ -15,15 +15,16 @@ const ReactionButton = ({ type, id, initialReaction }) => {
 
       // If clicking the same reaction, remove it
       if (reaction === newReaction) {
-        await axios.delete(`/api/${type}/reactions/${id}/`);
+        await api.post(`/podcasts/podcasts/${id}/react/`, {
+          reaction_type: null,
+        });
         setReaction(null);
         return;
       }
 
       // If changing reaction, update it
-      const response = await axios.post(`/api/${type}/reactions/`, {
-        [`${type}`]: id,
-        reaction: newReaction,
+      await api.post(`/podcasts/podcasts/${id}/react/`, {
+        reaction_type: newReaction,
       });
 
       setReaction(newReaction);

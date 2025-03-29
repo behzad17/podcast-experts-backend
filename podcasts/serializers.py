@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment, PodcastReaction
+from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -8,7 +8,7 @@ User = get_user_model()
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'description']
+        fields = '__all__'
 
 
 class PodcasterProfileSerializer(serializers.ModelSerializer):
@@ -16,11 +16,7 @@ class PodcasterProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PodcasterProfile
-        fields = [
-            'id', 'user', 'bio', 'website', 'social_links',
-            'created_at', 'updated_at', 'podcasts'
-        ]
-        read_only_fields = ['created_at', 'updated_at']
+        fields = '__all__'
 
     def get_podcasts(self, obj):
         request = self.context.get('request')
@@ -34,8 +30,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'created_at', 'user', 'user_name']
-        read_only_fields = ['user']
+        fields = '__all__'
 
     def get_user_name(self, obj):
         if obj.user:
@@ -49,36 +44,18 @@ class PodcastSerializer(serializers.ModelSerializer):
     category_id = serializers.IntegerField(write_only=True, required=False)
     comments = CommentSerializer(many=True, read_only=True)
     views = serializers.IntegerField(read_only=True, default=0)
-    average_rating = serializers.FloatField(read_only=True)
-    total_bookmarks = serializers.IntegerField(read_only=True, default=0)
+    average_rating = serializers.SerializerMethodField()
+    total_ratings = serializers.SerializerMethodField()
 
     class Meta:
         model = Podcast
-        fields = [
-            'id',
-            'title',
-            'description',
-            'image',
-            'link',
-            'created_at',
-            'updated_at',
-            'is_approved',
-            'owner',
-            'category',
-            'category_id',
-            'views',
-            'average_rating',
-            'total_bookmarks',
-            'comments'
-        ]
-        read_only_fields = [
-            'created_at',
-            'updated_at',
-            'is_approved',
-            'views',
-            'average_rating',
-            'total_bookmarks'
-        ]
+        fields = '__all__'
+
+    def get_average_rating(self, obj):
+        return obj.get_average_rating()
+
+    def get_total_ratings(self, obj):
+        return obj.get_total_ratings()
 
 
 class PodcastStatsSerializer(serializers.ModelSerializer):
@@ -94,14 +71,13 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = PodcastComment
-        fields = ['id', 'podcast', 'user', 'content', 'parent', 'replies', 'created_at', 'updated_at']
-        read_only_fields = ['user', 'replies']
+        fields = '__all__'
 
     def get_user(self, obj):
         return {
             'id': obj.user.id,
             'username': obj.user.username,
-            'profile_picture': obj.user.profile_picture.url if obj.user.profile_picture else None
+            'profile_picture': getattr(obj.user, 'profile_picture', None)
         }
 
     def get_replies(self, obj):
@@ -110,13 +86,3 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
         replies = PodcastComment.objects.filter(parent=obj)
         serializer = PodcastCommentSerializer(replies, many=True)
         return serializer.data
-
-
-class PodcastReactionSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')
-    podcast = serializers.ReadOnlyField(source='podcast.id')
-
-    class Meta:
-        model = PodcastReaction
-        fields = ['id', 'podcast', 'user', 'reaction_type', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']

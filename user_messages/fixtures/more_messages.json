@@ -1,0 +1,134 @@
+[
+  {
+    "model": "user_messages.message",
+    "pk": 16,
+    "fields": {
+      "sender": 6,
+      "receiver": 8,
+      "content": "Hi! I noticed you're working on AI and health optimization. I'd love to collaborate on a podcast series about the future of healthcare technology.",
+      "timestamp": "2025-03-26T15:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T15:35:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 17,
+    "fields": {
+      "sender": 8,
+      "receiver": 6,
+      "content": "That's a great idea! We could cover topics like AI in diagnostics, personalized medicine, and healthcare automation. Would you like to start with a pilot episode?",
+      "timestamp": "2025-03-26T15:45:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 18,
+    "fields": {
+      "sender": 6,
+      "receiver": 8,
+      "content": "Absolutely! I have some interesting case studies we could discuss. When would you be available for a planning session?",
+      "timestamp": "2025-03-26T16:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 19,
+    "fields": {
+      "sender": 11,
+      "receiver": 12,
+      "content": "Hello! I saw your expertise in nutrition and wellness. Would you be interested in discussing sustainable food systems and their impact on health?",
+      "timestamp": "2025-03-26T16:15:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:20:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 20,
+    "fields": {
+      "sender": 12,
+      "receiver": 11,
+      "content": "That's a fascinating topic! I'd love to explore how environmental sustainability affects nutrition and public health. What specific aspects would you like to focus on?",
+      "timestamp": "2025-03-26T16:30:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 21,
+    "fields": {
+      "sender": 9,
+      "receiver": 4,
+      "content": "Hi! I'm interested in discussing how business strategy can drive technological innovation. Would you be interested in collaborating on a podcast series?",
+      "timestamp": "2025-03-26T16:45:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:50:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 22,
+    "fields": {
+      "sender": 4,
+      "receiver": 9,
+      "content": "That sounds interesting! We could explore how companies are leveraging technology for competitive advantage. What industries would you like to focus on?",
+      "timestamp": "2025-03-26T17:00:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 23,
+    "fields": {
+      "sender": 10,
+      "receiver": 8,
+      "content": "Hello! I'm interested in discussing the intersection of mental health and technology. Would you be interested in exploring this topic on your podcast?",
+      "timestamp": "2025-03-26T17:15:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T17:20:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 24,
+    "fields": {
+      "sender": 8,
+      "receiver": 10,
+      "content": "That's a great topic! We could discuss how AI and digital tools are transforming mental health care. When would you like to start planning?",
+      "timestamp": "2025-03-26T17:30:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 25,
+    "fields": {
+      "sender": 12,
+      "receiver": 9,
+      "content": "Hi! I'd love to discuss how sustainable business practices can improve employee wellness. Would you be interested in collaborating?",
+      "timestamp": "2025-03-26T17:45:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T17:50:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 26,
+    "fields": {
+      "sender": 9,
+      "receiver": 12,
+      "content": "Absolutely! We could explore how companies are integrating wellness programs with sustainability initiatives. What specific aspects would you like to cover?",
+      "timestamp": "2025-03-26T18:00:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  }
+]

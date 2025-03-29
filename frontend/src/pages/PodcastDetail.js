@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import {
@@ -20,9 +20,10 @@ import {
   FaCalendar,
   FaGlobe,
   FaMicrophone,
+  FaStar,
 } from "react-icons/fa";
 import CommentSection from "../components/comments/CommentSection";
-import ReactionButton from "../components/common/ReactionButton";
+import RatingButton from "../components/common/RatingButton";
 import ReactPlayer from "react-player";
 
 const PodcastDetail = () => {
@@ -31,46 +32,50 @@ const PodcastDetail = () => {
   const [podcast, setPodcast] = useState(null);
   const [error, setError] = useState("");
   const [isOwner, setIsOwner] = useState(false);
+  const [currentUserRating, setCurrentUserRating] = useState(null);
+  const [averageRating, setAverageRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("userData"));
-  const [reactions, setReactions] = useState([]);
-  const currentUser = JSON.parse(localStorage.getItem("userData"));
-  const [currentUserReaction, setCurrentUserReaction] = useState(null);
+
+  const fetchPodcastData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+
+      // Fetch podcast data
+      const response = await api.get(`/podcasts/podcasts/${id}/`);
+      setPodcast(response.data);
+      setIsOwner(response.data.creator === user?.id);
+      setAverageRating(response.data.average_rating || 0);
+
+      // Fetch user rating if user is logged in
+      if (user?.id) {
+        const ratingResponse = await api.get(`/ratings/podcast/${id}/`);
+        setCurrentUserRating(ratingResponse.data.score);
+      }
+    } catch (error) {
+      console.error("Error fetching podcast:", error);
+      setError("Failed to load podcast details. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id, user?.id]);
 
   useEffect(() => {
-    const fetchPodcast = async () => {
-      try {
-        const response = await api.get(`/podcasts/podcasts/${id}/`);
-        setPodcast(response.data);
-        setIsOwner(response.data.creator === user?.id);
-      } catch (error) {
-        console.error("Error fetching podcast:", error);
-        setError("Failed to load podcast details. Please try again later.");
+    let isMounted = true;
+
+    const loadData = async () => {
+      if (isMounted) {
+        await fetchPodcastData();
       }
     };
 
-    fetchPodcast();
-  }, [id, user]);
+    loadData();
 
-  useEffect(() => {
-    const fetchReactions = async () => {
-      if (!podcast?.id) return;
-
-      try {
-        const response = await api.get(
-          `/podcasts/podcasts/${podcast.id}/reactions/`
-        );
-        const userReaction = response.data.find(
-          (r) => r.user === currentUser?.id
-        );
-        setReactions(response.data);
-        setCurrentUserReaction(userReaction?.reaction_type || null);
-      } catch (error) {
-        console.error("Error fetching reactions:", error);
-      }
+    return () => {
+      isMounted = false;
     };
-
-    fetchReactions();
-  }, [podcast?.id, currentUser?.id]);
+  }, [fetchPodcastData]);
 
   const handleShare = () => {
     if (navigator.share) {
@@ -90,7 +95,7 @@ const PodcastDetail = () => {
     );
   }
 
-  if (!podcast) {
+  if (isLoading || !podcast) {
     return (
       <Container className="mt-4 text-center">
         <Spinner animation="border" role="status">
@@ -170,10 +175,15 @@ const PodcastDetail = () => {
               )}
 
               <div className="mb-3">
-                <ReactionButton
+                <div className="d-flex align-items-center mb-2">
+                  <FaStar className="text-warning me-2" />
+                  <span className="me-2">Average Rating:</span>
+                  <span className="fw-bold">{averageRating.toFixed(1)}</span>
+                </div>
+                <RatingButton
                   type="podcast"
                   id={podcast.id}
-                  initialReaction={currentUserReaction}
+                  initialRating={currentUserRating}
                 />
               </div>
 
