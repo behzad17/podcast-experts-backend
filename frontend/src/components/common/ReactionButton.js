@@ -1,61 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 
-const ReactionButton = ({ type, id, initialReaction }) => {
+const ReactionButton = ({ contentType, contentId, initialReaction }) => {
   const [reaction, setReaction] = useState(initialReaction);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [count, setCount] = useState(0);
+  const { getAuthHeaders } = useAuth();
 
-  const handleReaction = async (newReaction) => {
+  useEffect(() => {
+    fetchReactionCount();
+  }, [contentType, contentId]);
+
+  const fetchReactionCount = async () => {
     try {
-      setLoading(true);
-      setError(null);
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/ratings/count/?content_type=${contentType}&content_id=${contentId}`,
+        getAuthHeaders()
+      );
+      setCount(response.data.count);
+    } catch (error) {
+      console.error("Error fetching reaction count:", error);
+    }
+  };
 
-      // If clicking the same reaction, remove it
-      if (reaction === newReaction) {
-        await axios.delete(`/api/${type}/reactions/${id}/`);
+  const handleReaction = async (type) => {
+    try {
+      if (reaction === type) {
+        // Remove reaction
+        await axios.delete(
+          `http://127.0.0.1:8000/api/ratings/remove/?content_type=${contentType}&content_id=${contentId}`,
+          getAuthHeaders()
+        );
         setReaction(null);
-        return;
+        setCount((prev) => prev - 1);
+      } else {
+        // Add or change reaction
+        await axios.post(
+          "http://127.0.0.1:8000/api/ratings/",
+          {
+            content_type: contentType,
+            content_id: contentId,
+            reaction_type: type,
+          },
+          getAuthHeaders()
+        );
+        setReaction(type);
+        setCount((prev) => (reaction ? prev : prev + 1));
       }
-
-      // If changing reaction, update it
-      const response = await axios.post(`/api/${type}/reactions/`, {
-        [`${type}`]: id,
-        reaction: newReaction,
-      });
-
-      setReaction(newReaction);
-    } catch (err) {
-      setError("Failed to update reaction. Please try again.");
-      console.error("Reaction error:", err);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Error handling reaction:", error);
     }
   };
 
   return (
-    <div className="d-flex gap-2 align-items-center">
+    <div className="d-flex align-items-center gap-2">
       <Button
         variant={reaction === "like" ? "primary" : "outline-primary"}
+        size="sm"
         onClick={() => handleReaction("like")}
-        disabled={loading}
-        className="d-flex align-items-center gap-1"
       >
-        <FaThumbsUp />
+        <FaThumbsUp className="me-1" />
         Like
       </Button>
       <Button
         variant={reaction === "dislike" ? "danger" : "outline-danger"}
+        size="sm"
         onClick={() => handleReaction("dislike")}
-        disabled={loading}
-        className="d-flex align-items-center gap-1"
       >
-        <FaThumbsDown />
+        <FaThumbsDown className="me-1" />
         Dislike
       </Button>
-      {error && <div className="text-danger small">{error}</div>}
+      <span className="text-muted">{count}</span>
     </div>
   );
 };
