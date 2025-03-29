@@ -51,6 +51,9 @@ function Navigation() {
                     Admin Dashboard
                   </Nav.Link>
                 )}
+                <Nav.Link as={Link} to="/messages">
+                  Messages
+                </Nav.Link>
               </>
             )}
           </Nav>

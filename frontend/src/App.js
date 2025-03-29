@@ -21,6 +21,8 @@ import AdminExpertApproval from "./pages/AdminExpertApproval";
 import Profile from "./pages/Profile";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { AuthProvider } from "./contexts/AuthContext";
+import Messages from "./pages/Messages";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -65,6 +67,22 @@ function App() {
               />
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/profile" element={<Profile />} />
+              <Route
+                path="/messages"
+                element={
+                  <PrivateRoute>
+                    <Messages />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/messages/:userId"
+                element={
+                  <PrivateRoute>
+                    <Messages />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
             <ToastContainer position="top-right" autoClose={3000} />
           </div>

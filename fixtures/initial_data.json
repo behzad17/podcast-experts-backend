@@ -84,6 +84,48 @@
     }
   },
   {
+    "model": "users.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "jameswilson_expert",
+      "first_name": "",
+      "last_name": "",
+      "email": "jameswilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "lisathompson_expert",
+      "first_name": "",
+      "last_name": "",
+      "email": "lisathompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
     "model": "podcasts.category",
     "pk": 1,
     "fields": {
@@ -475,7 +517,7 @@
       "expertise": "Web delopment",
       "experience_years": 55,
       "website": "http://www.swedcast.net",
-      "social_media": "insta: @swedcast",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/swedcast\", \"twitter\": \"https://twitter.com/swedcast\"}",
       "profile_picture": "",
       "is_approved": true,
       "created_at": "2025-03-26T16:22:34.327Z",
@@ -492,12 +534,14 @@
       "name": "Dr. Sarah Chen",
       "bio": "AI and Machine Learning expert with 10+ years of experience in developing cutting-edge solutions.",
       "expertise": "Artificial Intelligence, Machine Learning, Deep Learning",
-      "years_of_experience": 10,
+      "experience_years": 10,
       "website": "https://sarahchen.com",
-      "social_media_links": "{\"linkedin\": \"https://linkedin.com/in/sarahchen\", \"twitter\": \"https://twitter.com/sarahchen\"}",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/sarahchen\", \"twitter\": \"https://twitter.com/sarahchen\"}",
       "is_approved": true,
       "created_at": "2025-03-26T17:56:44.299Z",
-      "updated_at": "2025-03-26T17:56:44.299Z"
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
@@ -508,12 +552,14 @@
       "name": "Michael Rodriguez",
       "bio": "Business strategy consultant specializing in digital transformation and innovation.",
       "expertise": "Business Strategy, Digital Transformation, Innovation",
-      "years_of_experience": 8,
+      "experience_years": 8,
       "website": "https://michaelrodriguez.com",
-      "social_media_links": "{\"linkedin\": \"https://linkedin.com/in/michaelrodriguez\", \"twitter\": \"https://twitter.com/michaelrodriguez\"}",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/michaelrodriguez\", \"twitter\": \"https://twitter.com/michaelrodriguez\"}",
       "is_approved": true,
       "created_at": "2025-03-26T17:56:44.300Z",
-      "updated_at": "2025-03-26T17:56:44.300Z"
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
@@ -524,44 +570,50 @@
       "name": "Dr. Emily Watson",
       "bio": "Neuroscientist and mental health expert focusing on cognitive development and well-being.",
       "expertise": "Neuroscience, Mental Health, Cognitive Development",
-      "years_of_experience": 12,
+      "experience_years": 12,
       "website": "https://emilywatson.com",
-      "social_media_links": "{\"linkedin\": \"https://linkedin.com/in/emilywatson\", \"twitter\": \"https://twitter.com/emilywatson\"}",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/emilywatson\", \"twitter\": \"https://twitter.com/emilywatson\"}",
       "is_approved": true,
       "created_at": "2025-03-26T17:56:44.301Z",
-      "updated_at": "2025-03-26T17:56:44.301Z"
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 5,
     "fields": {
-      "user": 6,
+      "user": 8,
       "name": "Dr. James Wilson",
       "bio": "Environmental scientist and sustainability expert with a focus on climate change solutions.",
       "expertise": "Environmental Science, Sustainability, Climate Change",
-      "years_of_experience": 15,
+      "experience_years": 15,
       "website": "https://jameswilson.com",
-      "social_media_links": "{\"linkedin\": \"https://linkedin.com/in/jameswilson\", \"twitter\": \"https://twitter.com/jameswilson\"}",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/jameswilson\", \"twitter\": \"https://twitter.com/jameswilson\"}",
       "is_approved": true,
       "created_at": "2025-03-26T17:56:44.302Z",
-      "updated_at": "2025-03-26T17:56:44.302Z"
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 6,
     "fields": {
-      "user": 7,
+      "user": 9,
       "name": "Lisa Thompson",
       "bio": "Nutrition and wellness expert specializing in personalized health optimization.",
       "expertise": "Nutrition, Wellness, Health Optimization",
-      "years_of_experience": 9,
+      "experience_years": 9,
       "website": "https://lisathompson.com",
-      "social_media_links": "{\"linkedin\": \"https://linkedin.com/in/lisathompson\", \"twitter\": \"https://twitter.com/lisathompson\"}",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/lisathompson\", \"twitter\": \"https://twitter.com/lisathompson\"}",
       "is_approved": true,
       "created_at": "2025-03-26T17:56:44.303Z",
-      "updated_at": "2025-03-26T17:56:44.303Z"
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   }
 ]

@@ -1,0 +1,86 @@
+[
+  {
+    "model": "user_messages.message",
+    "pk": 1,
+    "fields": {
+      "sender": 1,
+      "receiver": 2,
+      "content": "Hi, I'm interested in having you as a guest on my podcast. Would you be available for a discussion about technology trends?",
+      "timestamp": "2025-03-26T10:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T10:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 2,
+    "fields": {
+      "sender": 2,
+      "receiver": 1,
+      "content": "Thank you for reaching out! I'd be happy to discuss technology trends on your podcast. What specific topics would you like to cover?",
+      "timestamp": "2025-03-26T10:10:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T10:15:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 3,
+    "fields": {
+      "sender": 4,
+      "receiver": 6,
+      "content": "Hello! I saw your profile and would love to have you share your expertise on AI and machine learning on my podcast.",
+      "timestamp": "2025-03-26T11:00:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 4,
+    "fields": {
+      "sender": 6,
+      "receiver": 4,
+      "content": "Hi! Thanks for the invitation. I'd be interested in discussing AI applications in various industries. When were you thinking of recording?",
+      "timestamp": "2025-03-26T11:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T11:35:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 5,
+    "fields": {
+      "sender": 8,
+      "receiver": 9,
+      "content": "Hi there! I'm working on a series about environmental sustainability. Would you be interested in sharing your insights?",
+      "timestamp": "2025-03-26T12:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T12:05:00Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 6,
+    "fields": {
+      "sender": 9,
+      "receiver": 8,
+      "content": "That sounds interesting! I'd love to discuss environmental sustainability. What aspects would you like to focus on?",
+      "timestamp": "2025-03-26T12:10:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 7,
+    "fields": {
+      "sender": 1,
+      "receiver": 4,
+      "content": "Hello! I noticed you're an expert in quantum computing. Would you be interested in collaborating on a podcast series?",
+      "timestamp": "2025-03-26T13:00:00Z",
+      "is_read": false,
+      "read_at": null
+    }
+  }
+]

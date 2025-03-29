@@ -19,8 +19,10 @@ from django.urls import path, include
 from django.http import HttpResponse
 from backend.admin_dashboard.views import admin_stats
 
+
 def home_view(request):
     return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +34,5 @@ urlpatterns = [
     path('api/podcasts/', include('podcasts.urls')),
     path('api/comments/', include('comments.urls')),
     path('api/ratings/', include('ratings.urls')),
+    path('api/messages/', include('user_messages.urls')),
 ]

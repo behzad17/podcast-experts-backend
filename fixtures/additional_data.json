@@ -1,9 +1,135 @@
 [
   {
+    "model": "users.customuser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "davidwilson",
+      "first_name": "",
+      "last_name": "",
+      "email": "davidwilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "lisapark",
+      "first_name": "",
+      "last_name": "",
+      "email": "lisapark@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "robertsmith",
+      "first_name": "",
+      "last_name": "",
+      "email": "robertsmith@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "mariagomez",
+      "first_name": "",
+      "last_name": "",
+      "email": "mariagomez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "jameskim",
+      "first_name": "",
+      "last_name": "",
+      "email": "jameskim@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 15,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "annalee",
+      "first_name": "",
+      "last_name": "",
+      "email": "annalee@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
     "model": "experts.expertprofile",
     "pk": 4,
     "fields": {
-      "user": 4,
+      "user": 10,
       "name": "Dr. David Wilson",
       "bio": "Quantum physics researcher specializing in quantum computing and quantum entanglement.",
       "expertise": "Quantum Physics",
@@ -11,14 +137,17 @@
       "website": "https://davidwilson.science",
       "social_media": "twitter.com/drwilson",
       "is_approved": true,
-      "created_at": "2024-03-16T10:03:00Z"
+      "created_at": "2024-03-16T10:03:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 5,
     "fields": {
-      "user": 5,
+      "user": 11,
       "name": "Dr. Lisa Park",
       "bio": "Biotechnology expert focusing on genetic engineering and CRISPR technology.",
       "expertise": "Biotechnology",
@@ -26,14 +155,17 @@
       "website": "https://lisapark.bio",
       "social_media": "linkedin.com/lisapark",
       "is_approved": true,
-      "created_at": "2024-03-16T10:04:00Z"
+      "created_at": "2024-03-16T10:04:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 6,
     "fields": {
-      "user": 6,
+      "user": 12,
       "name": "Prof. Robert Smith",
       "bio": "Cybersecurity specialist with expertise in blockchain and cryptography.",
       "expertise": "Cybersecurity",
@@ -41,14 +173,17 @@
       "website": "https://robertsmith.security",
       "social_media": "twitter.com/robsmith",
       "is_approved": true,
-      "created_at": "2024-03-16T10:05:00Z"
+      "created_at": "2024-03-16T10:05:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 7,
     "fields": {
-      "user": 7,
+      "user": 13,
       "name": "Dr. Maria Gomez",
       "bio": "Marine biologist studying ocean ecosystems and climate change impact.",
       "expertise": "Marine Biology",
@@ -56,14 +191,17 @@
       "website": "https://mariagomez.org",
       "social_media": "instagram.com/drmariagomez",
       "is_approved": true,
-      "created_at": "2024-03-16T10:06:00Z"
+      "created_at": "2024-03-16T10:06:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 8,
     "fields": {
-      "user": 8,
+      "user": 14,
       "name": "Dr. James Kim",
       "bio": "Robotics engineer specializing in human-robot interaction and AI integration.",
       "expertise": "Robotics",
@@ -71,14 +209,17 @@
       "website": "https://jameskim.tech",
       "social_media": "linkedin.com/jameskim",
       "is_approved": true,
-      "created_at": "2024-03-16T10:07:00Z"
+      "created_at": "2024-03-16T10:07:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
     "model": "experts.expertprofile",
     "pk": 9,
     "fields": {
-      "user": 9,
+      "user": 15,
       "name": "Dr. Anna Lee",
       "bio": "Psychology researcher focusing on cognitive development and learning.",
       "expertise": "Psychology",
@@ -86,97 +227,10 @@
       "website": "https://annalee.edu",
       "social_media": "twitter.com/drannalee",
       "is_approved": true,
-      "created_at": "2024-03-16T10:08:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 10,
-    "fields": {
-      "user": 10,
-      "name": "Dr. Thomas Anderson",
-      "bio": "Space physicist studying solar winds and magnetospheric physics.",
-      "expertise": "Space Physics",
-      "experience_years": 15,
-      "website": "https://thomasanderson.space",
-      "social_media": "twitter.com/spaceanderson",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:09:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 11,
-    "fields": {
-      "user": 11,
-      "name": "Dr. Sarah Connor",
-      "bio": "Renewable energy expert specializing in solar and wind technologies.",
-      "expertise": "Renewable Energy",
-      "experience_years": 10,
-      "website": "https://sarahconnor.energy",
-      "social_media": "linkedin.com/sarahconnor",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:10:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 12,
-    "fields": {
-      "user": 12,
-      "name": "Dr. Alex Turner",
-      "bio": "Data science expert focusing on big data analytics and machine learning.",
-      "expertise": "Data Science",
-      "experience_years": 8,
-      "website": "https://alexturner.data",
-      "social_media": "twitter.com/dataalex",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:11:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 13,
-    "fields": {
-      "user": 13,
-      "name": "Dr. Emma Davis",
-      "bio": "Molecular biology researcher specializing in cancer research.",
-      "expertise": "Molecular Biology",
-      "experience_years": 11,
-      "website": "https://emmadavis.bio",
-      "social_media": "linkedin.com/emmadavis",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:12:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 14,
-    "fields": {
-      "user": 14,
-      "name": "Dr. Daniel Zhang",
-      "bio": "Materials scientist working on advanced materials and nanotechnology.",
-      "expertise": "Materials Science",
-      "experience_years": 13,
-      "website": "https://danielzhang.materials",
-      "social_media": "twitter.com/drdanzhang",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:13:00Z"
-    }
-  },
-  {
-    "model": "experts.expertprofile",
-    "pk": 15,
-    "fields": {
-      "user": 15,
-      "name": "Dr. Olivia Wang",
-      "bio": "Astrophysicist studying black holes and gravitational waves.",
-      "expertise": "Astrophysics",
-      "experience_years": 12,
-      "website": "https://oliviawang.space",
-      "social_media": "twitter.com/droliviawang",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:14:00Z"
+      "created_at": "2024-03-16T10:08:00Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
     }
   },
   {
@@ -184,41 +238,88 @@
     "pk": 3,
     "fields": {
       "user": 4,
-      "channel_name": "Quantum World",
-      "description": "Exploring the mysteries of quantum physics",
+      "bio": "Exploring the mysteries of quantum physics",
       "website": "https://quantumworld.science",
-      "social_media": "twitter.com/quantumworld",
-      "topics": "Physics, Quantum Mechanics, Technology",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:03:00Z"
+      "social_links": {
+        "twitter": "twitter.com/quantumworld"
+      },
+      "created_at": "2024-03-16T10:03:00Z",
+      "updated_at": "2024-03-16T10:03:00Z"
     }
   },
   {
     "model": "podcasts.podcasterprofile",
     "pk": 4,
     "fields": {
-      "user": 6,
-      "channel_name": "Cyber Security Today",
-      "description": "Latest in cybersecurity and digital privacy",
-      "website": "https://cybersecuritytoday.com",
-      "social_media": "twitter.com/cybersectoday",
-      "topics": "Cybersecurity, Privacy, Technology",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:05:00Z"
+      "user": 5,
+      "bio": "Discussing the latest developments in biotechnology",
+      "website": "https://biotechinsights.com",
+      "social_links": {
+        "linkedin": "linkedin.com/biotechinsights",
+        "twitter": "twitter.com/biotechinsights"
+      },
+      "created_at": "2024-03-16T10:04:00Z",
+      "updated_at": "2024-03-16T10:04:00Z"
     }
   },
   {
     "model": "podcasts.podcasterprofile",
     "pk": 5,
     "fields": {
+      "user": 6,
+      "bio": "Cybersecurity news and analysis",
+      "website": "https://cybersecnews.com",
+      "social_links": {
+        "twitter": "twitter.com/cybersecnews",
+        "linkedin": "linkedin.com/cybersecnews"
+      },
+      "created_at": "2024-03-16T10:05:00Z",
+      "updated_at": "2024-03-16T10:05:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 6,
+    "fields": {
+      "user": 7,
+      "bio": "Marine biology and ocean conservation",
+      "website": "https://oceanlife.org",
+      "social_links": {
+        "instagram": "instagram.com/oceanlife",
+        "twitter": "twitter.com/oceanlife"
+      },
+      "created_at": "2024-03-16T10:06:00Z",
+      "updated_at": "2024-03-16T10:06:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 7,
+    "fields": {
       "user": 8,
-      "channel_name": "Robot Revolution",
-      "description": "The future of robotics and automation",
-      "website": "https://robotrevolution.tech",
-      "social_media": "twitter.com/robotrev",
-      "topics": "Robotics, AI, Technology",
-      "is_approved": true,
-      "created_at": "2024-03-16T10:07:00Z"
+      "bio": "Robotics and AI developments",
+      "website": "https://roboticsai.com",
+      "social_links": {
+        "linkedin": "linkedin.com/roboticsai",
+        "twitter": "twitter.com/roboticsai"
+      },
+      "created_at": "2024-03-16T10:07:00Z",
+      "updated_at": "2024-03-16T10:07:00Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 8,
+    "fields": {
+      "user": 9,
+      "bio": "Psychology and mental health insights",
+      "website": "https://psychinsights.com",
+      "social_links": {
+        "twitter": "twitter.com/psychinsights",
+        "linkedin": "linkedin.com/psychinsights"
+      },
+      "created_at": "2024-03-16T10:08:00Z",
+      "updated_at": "2024-03-16T10:08:00Z"
     }
   },
   {
