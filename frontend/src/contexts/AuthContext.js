@@ -114,13 +114,22 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  };
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
-    checkAuth,
+    getAuthHeaders,
   };
 
   return (

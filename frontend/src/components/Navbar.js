@@ -25,12 +25,6 @@ function Navigation() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
-              Home
-            </Nav.Link>
-            <Nav.Link as={Link} to="/podcasters">
-              Podcasters
-            </Nav.Link>
             <Nav.Link as={Link} to="/podcasts">
               Podcasts
             </Nav.Link>
@@ -39,23 +33,35 @@ function Navigation() {
             </Nav.Link>
             {user && (
               <>
+                <Nav.Link as={Link} to="/profile">
+                  Profile
+                </Nav.Link>
+                {user.user_type === "podcaster" && (
+                  <Nav.Link as={Link} to="/podcasts/create">
+                    Create Podcast
+                  </Nav.Link>
+                )}
+                {user.user_type === "expert" && (
+                  <Nav.Link as={Link} to="/experts/create">
+                    Create Expert Profile
+                  </Nav.Link>
+                )}
+                {user.is_admin && (
+                  <Nav.Link as={Link} to="/admin">
+                    Admin Dashboard
+                  </Nav.Link>
+                )}
                 <Nav.Link as={Link} to="/messages">
                   Messages
-                </Nav.Link>
-                <Nav.Link as={Link} to="/podcasters/create">
-                  Create Profile
                 </Nav.Link>
               </>
             )}
           </Nav>
           <Nav>
             {user ? (
-              <>
-                <Nav.Link as={Link} to={`/podcasters/${user.id}`}>
-                  Profile
-                </Nav.Link>
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-              </>
+              <Button variant="outline-light" onClick={handleLogout}>
+                Logout
+              </Button>
             ) : (
               <>
                 <Nav.Link as={Link} to="/login">

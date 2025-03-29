@@ -11,9 +11,10 @@ const MessageList = () => {
 
   const fetchConversations = useCallback(async () => {
     try {
+      const headers = getAuthHeaders();
       const response = await axios.get(
         "http://127.0.0.1:8000/api/messages/conversations/",
-        getAuthHeaders()
+        headers
       );
       setConversations(Object.values(response.data));
     } catch (error) {

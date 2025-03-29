@@ -1,19 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  Form,
-  Button,
-  Card,
-  Alert,
-  Modal,
-  Dropdown,
-  ListGroup,
-} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
-import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import api from "../../api/axios";
 import moment from "moment";
 
-const CommentSection = ({ contentType, contentId }) => {
+const CommentSection = ({ type, id }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState(null);
@@ -22,58 +13,54 @@ const CommentSection = ({ contentType, contentId }) => {
   const [editingComment, setEditingComment] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const { getAuthHeaders } = useAuth();
-
-  const fetchComments = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/comments/?content_type=${contentType}&content_id=${contentId}`,
-        getAuthHeaders()
-      );
-      setComments(response.data);
-      setError("");
-    } catch (error) {
-      setError("Failed to load comments");
-      console.error("Error fetching comments:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [contentType, contentId, getAuthHeaders]);
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     fetchComments();
-  }, [fetchComments]);
+  }, [type, id]);
+
+  const fetchComments = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/${type}s/${id}/comments/`);
+      setComments(response.data);
+      setError("");
+    } catch (err) {
+      setError("Failed to load comments");
+      console.error("Error fetching comments:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
-
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/api/comments/",
-        {
-          content_type: contentType,
-          content_id: contentId,
-          content: newComment,
-        },
-        getAuthHeaders()
-      );
+      const endpoint = replyTo
+        ? `/${type}s/${id}/reply_comment/`
+        : `/${type}s/${id}/add_comment/`;
+
+      const data = {
+        content: newComment,
+        ...(replyTo && { parent: replyTo }),
+      };
+
+      await api.post(endpoint, data);
       setNewComment("");
+      setReplyTo(null);
       fetchComments();
-    } catch (error) {
+    } catch (err) {
       setError("Failed to post comment");
-      console.error("Error posting comment:", error);
+      console.error("Error posting comment:", err);
     }
   };
 
   const handleEdit = async (commentId, content) => {
     try {
-      await axios.patch(
-        `http://127.0.0.1:8000/api/comments/${commentId}/`,
-        { content: content },
-        getAuthHeaders()
-      );
+      await api.patch(`/${type}s/${id}/edit_comment/`, {
+        comment_id: commentId,
+        content: content,
+      });
       setEditingComment(null);
       fetchComments();
     } catch (err) {
@@ -84,10 +71,9 @@ const CommentSection = ({ contentType, contentId }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/api/comments/${commentId}/`,
-        getAuthHeaders()
-      );
+      await api.delete(`/${type}s/${id}/delete_comment/`, {
+        data: { comment_id: commentId },
+      });
       setShowDeleteModal(false);
       fetchComments();
     } catch (err) {
@@ -98,69 +84,81 @@ const CommentSection = ({ contentType, contentId }) => {
 
   const Comment = ({ comment }) => {
     const [editContent, setEditContent] = useState(comment.content);
-    const isOwner =
-      comment.user.id === JSON.parse(localStorage.getItem("userData")).id;
+    const isOwner = currentUser && comment.user.id === currentUser.id;
 
     return (
-      <ListGroup.Item>
-        <div className="d-flex justify-content-between">
-          <div>
-            <strong>{comment.user.username}</strong>
-            <p className="mb-0">{comment.content}</p>
-          </div>
-          <small className="text-muted">
-            {moment(comment.timestamp).fromNow()}
-          </small>
-          {isOwner && (
-            <Dropdown>
-              <Dropdown.Toggle variant="link" size="sm">
-                <FaEllipsisV />
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setEditingComment(comment.id)}>
-                  <FaEdit className="me-2" /> Edit
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setCommentToDelete(comment.id);
-                    setShowDeleteModal(true);
-                  }}
-                >
-                  <FaTrash className="me-2" /> Delete
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
-        </div>
-
-        {editingComment === comment.id ? (
-          <div className="mt-3">
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="mb-2"
-            />
-            <div className="d-flex justify-content-end gap-2">
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => setEditingComment(null)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => handleEdit(comment.id, editContent)}
-              >
-                Save
-              </Button>
+      <Card className="mb-3 shadow-sm">
+        <Card.Body>
+          <div className="d-flex justify-content-between align-items-start">
+            <div className="d-flex align-items-center">
+              {comment.user.profile_picture && (
+                <img
+                  src={comment.user.profile_picture}
+                  alt={comment.user.username}
+                  className="rounded-circle me-2"
+                  style={{ width: "32px", height: "32px", objectFit: "cover" }}
+                />
+              )}
+              <div>
+                <strong>{comment.user.username}</strong>
+                <small className="text-muted ms-2">
+                  {moment(comment.created_at).fromNow()}
+                </small>
+              </div>
             </div>
+            {isOwner && (
+              <Dropdown>
+                <Dropdown.Toggle variant="link" size="sm">
+                  <FaEllipsisV />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setEditingComment(comment.id)}>
+                    <FaEdit className="me-2" /> Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setCommentToDelete(comment.id);
+                      setShowDeleteModal(true);
+                    }}
+                  >
+                    <FaTrash className="me-2" /> Delete
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
           </div>
-        ) : (
-          <div className="mt-2">
+
+          {editingComment === comment.id ? (
+            <div className="mt-3">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="mb-2"
+              />
+              <div className="d-flex justify-content-end gap-2">
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={() => setEditingComment(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => handleEdit(comment.id, editContent)}
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Card.Text className="mt-2">{comment.content}</Card.Text>
+          )}
+
+          <div className="d-flex justify-content-between align-items-center mt-2">
             <Button
               variant="link"
               size="sm"
@@ -170,16 +168,16 @@ const CommentSection = ({ contentType, contentId }) => {
               Reply
             </Button>
           </div>
-        )}
 
-        {comment.replies && comment.replies.length > 0 && (
-          <div className="ms-4 mt-3 border-start ps-3">
-            {comment.replies.map((reply) => (
-              <Comment key={reply.id} comment={reply} />
-            ))}
-          </div>
-        )}
-      </ListGroup.Item>
+          {comment.replies && comment.replies.length > 0 && (
+            <div className="ms-4 mt-3 border-start ps-3">
+              {comment.replies.map((reply) => (
+                <Comment key={reply.id} comment={reply} />
+              ))}
+            </div>
+          )}
+        </Card.Body>
+      </Card>
     );
   };
 
@@ -194,34 +192,42 @@ const CommentSection = ({ contentType, contentId }) => {
   }
 
   return (
-    <Card className="mt-3">
-      <Card.Header>
-        <h5>Comments</h5>
-      </Card.Header>
-      <Card.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group>
-            <Form.Control
-              as="textarea"
-              rows={2}
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
-            />
-          </Form.Group>
-          <Button type="submit" variant="primary" className="mt-2">
-            Post Comment
-          </Button>
-        </Form>
-        <ListGroup className="mt-3">
-          {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-          {comments.length === 0 && (
-            <ListGroup.Item>No comments yet</ListGroup.Item>
+    <div className="mt-4">
+      <h4 className="mb-4">Comments</h4>
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      <Form onSubmit={handleSubmit} className="mb-4">
+        <Form.Group>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
+            className="shadow-sm"
+          />
+        </Form.Group>
+        <div className="d-flex justify-content-between align-items-center mt-2">
+          {replyTo && (
+            <Button
+              variant="link"
+              onClick={() => setReplyTo(null)}
+              className="text-decoration-none"
+            >
+              Cancel Reply
+            </Button>
           )}
-        </ListGroup>
-      </Card.Body>
+          <Button type="submit" variant="primary" disabled={!newComment.trim()}>
+            {replyTo ? "Post Reply" : "Post Comment"}
+          </Button>
+        </div>
+      </Form>
+
+      <div>
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
+      </div>
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
@@ -243,7 +249,7 @@ const CommentSection = ({ contentType, contentId }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Card>
+    </div>
   );
 };
 

@@ -23,7 +23,6 @@ import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { AuthProvider } from "./contexts/AuthContext";
 import Messages from "./pages/Messages";
 import PrivateRoute from "./components/PrivateRoute";
-import PodcasterProfile from "./components/podcasters/PodcasterProfile";
 
 function App() {
   return (
@@ -84,7 +83,6 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              <Route path="/podcasters/*" element={<PodcasterProfile />} />
             </Routes>
             <ToastContainer position="top-right" autoClose={3000} />
           </div>

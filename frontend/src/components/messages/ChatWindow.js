@@ -7,7 +7,7 @@ const ChatWindow = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [otherUser, setOtherUser] = useState(null);
-  const { currentUser, getAuthHeaders } = useAuth();
+  const { user: currentUser, getAuthHeaders } = useAuth();
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -20,18 +20,21 @@ const ChatWindow = ({ userId }) => {
         `http://127.0.0.1:8000/api/messages/chat_with_user/?user_id=${userId}`,
         getAuthHeaders()
       );
-      setMessages(response.data.messages);
+      setMessages(response.data.messages || []);
       setOtherUser(response.data.other_user);
     } catch (error) {
       console.error("Error fetching messages:", error);
+      setMessages([]);
     }
   }, [userId, getAuthHeaders]);
 
   useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval);
-  }, [fetchMessages]);
+    if (userId) {
+      fetchMessages();
+      const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [fetchMessages, userId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -39,7 +42,7 @@ const ChatWindow = ({ userId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !userId) return;
 
     try {
       await axios.post(
@@ -61,6 +64,18 @@ const ChatWindow = ({ userId }) => {
     return new Date(timestamp).toLocaleString();
   };
 
+  if (!userId) {
+    return (
+      <Card className="h-100">
+        <Card.Body className="d-flex align-items-center justify-content-center">
+          <p className="text-muted mb-0">
+            Select a conversation to start chatting
+          </p>
+        </Card.Body>
+      </Card>
+    );
+  }
+
   return (
     <Card className="h-100">
       <Card.Header>
@@ -73,12 +88,12 @@ const ChatWindow = ({ userId }) => {
               <ListGroup.Item
                 key={message.id}
                 className={`border-0 ${
-                  message.sender.id === currentUser.id ? "text-end" : ""
+                  message.sender?.id === currentUser?.id ? "text-end" : ""
                 }`}
               >
                 <div
                   className={`d-inline-block p-2 rounded ${
-                    message.sender.id === currentUser.id
+                    message.sender?.id === currentUser?.id
                       ? "bg-primary text-white"
                       : "bg-light"
                   }`}
@@ -101,9 +116,8 @@ const ChatWindow = ({ userId }) => {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="me-2"
             />
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" className="ms-2">
               Send
             </Button>
           </Form.Group>
