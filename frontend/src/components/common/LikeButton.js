@@ -18,15 +18,32 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
       const endpoint =
         type === "podcasts/podcasts"
           ? `/podcasts/podcasts/${itemId}/like/`
-          : `/experts/profiles/${itemId}/like/`;
+          : `/experts/profiles/${itemId}/react/`;
 
-      const response = await api.post(endpoint);
-      if (response.data.status === "liked") {
-        setCount((prev) => prev + 1);
-        setIsLiked(true);
+      const response = await api.post(
+        endpoint,
+        type === "experts/profiles"
+          ? { reaction_type: isLiked ? "dislike" : "like" }
+          : {}
+      );
+
+      if (type === "podcasts/podcasts") {
+        if (response.data.status === "liked") {
+          setCount((prev) => prev + 1);
+          setIsLiked(true);
+        } else {
+          setCount((prev) => prev - 1);
+          setIsLiked(false);
+        }
       } else {
-        setCount((prev) => prev - 1);
-        setIsLiked(false);
+        // For experts, the response indicates if the reaction was removed
+        if (response.data.status === "reaction removed") {
+          setCount((prev) => prev - 1);
+          setIsLiked(false);
+        } else {
+          setCount((prev) => prev + 1);
+          setIsLiked(true);
+        }
       }
     } catch (error) {
       console.error("Error updating like:", error);
