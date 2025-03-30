@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, Form, Button, ListGroup } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import api from "../../api/axios";
 
 const ChatWindow = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [otherUser, setOtherUser] = useState(null);
-  const { user: currentUser, getAuthHeaders } = useAuth();
+  const { user: currentUser } = useAuth();
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -16,9 +16,8 @@ const ChatWindow = ({ userId }) => {
 
   const fetchMessages = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/messages/chat_with_user/?user_id=${userId}`,
-        getAuthHeaders()
+      const response = await api.get(
+        `/messages/chat_with_user/?user_id=${userId}`
       );
       setMessages(response.data.messages || []);
       setOtherUser(response.data.other_user);
@@ -26,7 +25,7 @@ const ChatWindow = ({ userId }) => {
       console.error("Error fetching messages:", error);
       setMessages([]);
     }
-  }, [userId, getAuthHeaders]);
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
@@ -45,14 +44,10 @@ const ChatWindow = ({ userId }) => {
     if (!newMessage.trim() || !userId) return;
 
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/api/messages/",
-        {
-          receiver_id: userId,
-          content: newMessage,
-        },
-        getAuthHeaders()
-      );
+      await api.post("/messages/", {
+        receiver_id: userId,
+        content: newMessage,
+      });
       setNewMessage("");
       fetchMessages();
     } catch (error) {

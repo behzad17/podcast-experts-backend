@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         if (token && userData) {
           try {
             const response = await axios.get(
-              "http://localhost:8000/api/users/me/"
+              "http://localhost:8001/api/users/me/"
             );
             setUser(response.data);
             setIsAuthenticated(true);
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/users/login/",
+        "http://localhost:8001/api/users/login/",
         {
           email,
           password,
@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/users/register/",
+        "http://localhost:8001/api/users/register/",
         userData
       );
       return response.data;

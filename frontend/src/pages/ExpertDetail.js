@@ -32,7 +32,7 @@ const ExpertDetail = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8000/api/experts/${id}/`,
+          `http://localhost:8001/api/experts/${id}/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

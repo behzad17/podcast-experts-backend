@@ -33,7 +33,7 @@ const PodcastCreate = () => {
       try {
         // First check if user has a podcaster profile
         const profileResponse = await axios.get(
-          "http://localhost:8000/api/podcasts/profiles/",
+          "http://localhost:8001/api/podcasts/profiles/",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ const PodcastCreate = () => {
 
       console.log("Sending podcast creation request");
       const response = await axios.post(
-        "http://localhost:8000/api/podcasts/podcasts/",
+        "http://localhost:8001/api/podcasts/podcasts/",
         form,
         {
           headers: {

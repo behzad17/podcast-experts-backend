@@ -10,8 +10,13 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const response = await axios.get(`/${type}/${itemId}/likes_count/`);
-        setCount(response.data.count);
+        const response = await axios.get(`/${type}/${itemId}/reactions/`);
+        const reactions = response.data;
+        const userReaction = reactions.find(
+          (r) => r.user === JSON.parse(localStorage.getItem("userData"))?.id
+        );
+        setLiked(userReaction?.reaction_type === "like");
+        setCount(reactions.filter((r) => r.reaction_type === "like").length);
       } catch (error) {
         console.error("Error fetching like status:", error);
       }
@@ -22,13 +27,15 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
 
   const handleLike = async () => {
     try {
-      const response = await axios.post(`/${type}/${itemId}/like/`);
-      if (response.data.status === "liked") {
-        setLiked(true);
-        setCount((prev) => prev + 1);
-      } else {
+      const response = await axios.post(`/${type}/${itemId}/react/`, {
+        reaction_type: liked ? "dislike" : "like",
+      });
+      if (response.data.status === "reaction removed") {
         setLiked(false);
         setCount((prev) => prev - 1);
+      } else {
+        setLiked(true);
+        setCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Error toggling like:", error);

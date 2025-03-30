@@ -47,7 +47,7 @@ const ExpertCreate = () => {
       try {
         // Check if user already has an expert profile
         const response = await axios.get(
-          "http://localhost:8000/api/experts/my-profile/",
+          "http://localhost:8001/api/experts/my-profile/",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -113,7 +113,7 @@ const ExpertCreate = () => {
 
       console.log("Sending expert profile creation request");
       const response = await axios.post(
-        "http://localhost:8000/api/experts/create/",
+        "http://localhost:8001/api/experts/create/",
         form,
         {
           headers: {

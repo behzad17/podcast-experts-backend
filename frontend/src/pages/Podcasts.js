@@ -13,6 +13,7 @@ import {
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
+import LikeButton from "../components/common/LikeButton";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -253,6 +254,12 @@ const Podcasts = () => {
                     >
                       View Details
                     </Button>
+                    <LikeButton
+                      itemId={podcast.id}
+                      type="podcasts/podcasts"
+                      initialCount={podcast.likes_count}
+                      className="btn-sm"
+                    />
                     {currentUser && podcast.user === currentUser.id && (
                       <Button
                         variant="outline-secondary btn-sm"

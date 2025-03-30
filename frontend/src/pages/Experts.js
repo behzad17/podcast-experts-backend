@@ -3,7 +3,6 @@ import {
   Container,
   Row,
   Col,
-  Card,
   Button,
   Alert,
   Pagination,
@@ -12,6 +11,7 @@ import {
 } from "react-bootstrap";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import ExpertCard from "../components/experts/ExpertCard";
 
 const Experts = () => {
   const [experts, setExperts] = useState([]);
@@ -24,6 +24,7 @@ const Experts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -155,37 +156,11 @@ const Experts = () => {
       <Row className="g-4">
         {experts.map((expert) => (
           <Col key={expert.id} md={4}>
-            <Card className="h-100 shadow-sm rounded-3">
-              <div className="d-flex h-100">
-                <div
-                  className="p-3"
-                  style={{ width: "75%", borderRight: "2px solid #ced4da" }}
-                >
-                  <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
-                  <Card.Text className="small text-muted mb-2">
-                    {expert.bio?.substring(0, 15)}...
-                  </Card.Text>
-                  <div className="d-flex gap-2 align-items-center">
-                    <Button
-                      variant="outline-primary btn-sm"
-                      onClick={() => navigate(`/experts/${expert.id}`)}
-                    >
-                      View Profile
-                    </Button>
-                  </div>
-                </div>
-                {expert.profile_picture && (
-                  <div style={{ width: "25%", minWidth: "25%" }}>
-                    <Card.Img
-                      src={expert.profile_picture}
-                      alt={expert.name}
-                      style={{ height: "100%", objectFit: "cover" }}
-                      className="rounded-end-3"
-                    />
-                  </div>
-                )}
-              </div>
-            </Card>
+            <ExpertCard
+              expert={expert}
+              currentUser={userData}
+              onEdit={(expert) => navigate(`/experts/${expert.id}/edit`)}
+            />
           </Col>
         ))}
       </Row>

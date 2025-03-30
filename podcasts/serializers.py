@@ -60,7 +60,7 @@ class PodcastSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Podcast
-        fields = ['id', 'title', 'description', 'owner', 'category', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
+        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
         read_only_fields = ['created_at']
 
     def get_comments(self, obj):

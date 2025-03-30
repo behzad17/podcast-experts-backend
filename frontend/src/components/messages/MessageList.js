@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, ListGroup, Badge } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import api from "../../api/axios";
 
 const MessageList = () => {
   const [conversations, setConversations] = useState([]);
@@ -11,16 +11,12 @@ const MessageList = () => {
 
   const fetchConversations = useCallback(async () => {
     try {
-      const headers = getAuthHeaders();
-      const response = await axios.get(
-        "http://127.0.0.1:8000/api/messages/conversations/",
-        headers
-      );
+      const response = await api.get("/messages/conversations/");
       setConversations(Object.values(response.data));
     } catch (error) {
       console.error("Error fetching conversations:", error);
     }
-  }, [getAuthHeaders]);
+  }, []);
 
   useEffect(() => {
     fetchConversations();

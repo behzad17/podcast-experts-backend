@@ -29,7 +29,7 @@ const EditExpert = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:8000/api/experts/${id}/`,
+          `http://localhost:8001/api/experts/${id}/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -69,7 +69,7 @@ const EditExpert = () => {
         return;
       }
 
-      await axios.put(`http://localhost:8000/api/experts/${id}/`, formData, {
+      await axios.put(`http://localhost:8001/api/experts/${id}/`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
