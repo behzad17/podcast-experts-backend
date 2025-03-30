@@ -86,14 +86,17 @@ class PodcastViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
         podcast = self.get_object()
-        comments = podcast.comments.all()
+        comments = podcast.podcast_comments.all()
         serializer = PodcastCommentSerializer(comments, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def add_comment(self, request, pk=None):
         podcast = self.get_object()
-        serializer = PodcastCommentSerializer(data=request.data)
+        serializer = PodcastCommentSerializer(data={
+            'content': request.data.get('content'),
+            'parent': request.data.get('parent')
+        })
         if serializer.is_valid():
             serializer.save(podcast=podcast, user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

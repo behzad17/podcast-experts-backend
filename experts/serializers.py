@@ -23,10 +23,11 @@ class ExpertCommentSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     replies = serializers.SerializerMethodField()
     parent = serializers.PrimaryKeyRelatedField(queryset=ExpertComment.objects.all(), required=False, allow_null=True)
+    expert = serializers.PrimaryKeyRelatedField(queryset=ExpertProfile.objects.all(), required=False)
 
     class Meta:
         model = ExpertComment
-        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent']
+        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent', 'expert']
         read_only_fields = ['created_at']
 
     def get_replies(self, obj):

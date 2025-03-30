@@ -28,10 +28,12 @@ class PodcasterProfileSerializer(serializers.ModelSerializer):
 class PodcastCommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
+    parent = serializers.PrimaryKeyRelatedField(queryset=PodcastComment.objects.all(), required=False, allow_null=True)
     
     class Meta:
         model = PodcastComment
-        fields = '__all__'
+        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent']
+        read_only_fields = ['created_at']
 
     def get_user(self, obj):
         return {
@@ -52,12 +54,16 @@ class PodcastSerializer(serializers.ModelSerializer):
     owner = PodcasterProfileSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     category_id = serializers.IntegerField(write_only=True, required=False)
-    comments = PodcastCommentSerializer(many=True, read_only=True)
+    comments = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
 
     class Meta:
         model = Podcast
         fields = '__all__'
+
+    def get_comments(self, obj):
+        comments = obj.podcast_comments.filter(parent=None)
+        return PodcastCommentSerializer(comments, many=True).data
 
 
 class PodcastStatsSerializer(serializers.ModelSerializer):
