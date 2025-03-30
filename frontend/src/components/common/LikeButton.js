@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "../../api/axios";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const LikeButton = ({ itemId, type, initialCount = 0 }) => {
   const [liked, setLiked] = useState(false);
@@ -40,7 +41,7 @@ const LikeButton = ({ itemId, type, initialCount = 0 }) => {
       onClick={handleLike}
       className="d-flex align-items-center gap-2"
     >
-      <i className={`bi bi-heart${liked ? "-fill" : ""}`}></i>
+      {liked ? <FaHeart /> : <FaRegHeart />}
       <span>{count}</span>
     </Button>
   );

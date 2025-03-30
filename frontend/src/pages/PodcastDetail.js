@@ -21,6 +21,7 @@ import {
 } from "react-icons/fa";
 import CommentSection from "../components/comments/CommentSection";
 import ReactPlayer from "react-player";
+import LikeButton from "../components/common/LikeButton";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -97,7 +98,29 @@ const PodcastDetail = () => {
         <Card.Body>
           <Row>
             <Col md={8}>
-              <h2>{podcast.title}</h2>
+              <div className="d-flex justify-content-between align-items-center">
+                <h2>{podcast.title}</h2>
+                <div className="d-flex gap-2">
+                  <LikeButton
+                    itemId={podcast.id}
+                    type="podcasts/podcasts"
+                    initialCount={podcast.likes_count}
+                  />
+                  <Button variant="outline-primary" onClick={handleShare}>
+                    <FaShare className="me-2" />
+                    Share
+                  </Button>
+                  {isOwner && (
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => navigate(`/podcasts/${id}/edit`)}
+                    >
+                      <FaEdit className="me-2" />
+                      Edit
+                    </Button>
+                  )}
+                </div>
+              </div>
               <p className="text-muted">{podcast.description}</p>
               {podcast.audio_url && (
                 <div className="mb-4">
@@ -120,16 +143,6 @@ const PodcastDetail = () => {
                 <strong>Created on:</strong>{" "}
                 {new Date(podcast.created_at).toLocaleDateString()}
               </div>
-              {isOwner && (
-                <Link to={`/podcasts/${id}/edit`}>
-                  <Button variant="primary" className="me-2">
-                    <FaEdit /> Edit Podcast
-                  </Button>
-                </Link>
-              )}
-              <Button variant="outline-secondary" onClick={handleShare}>
-                <FaShare /> Share
-              </Button>
             </Col>
             <Col md={4}>
               {podcast.thumbnail && (

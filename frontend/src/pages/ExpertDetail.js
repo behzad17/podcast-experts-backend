@@ -11,6 +11,7 @@ import {
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentSection from "../components/comments/CommentSection";
+import LikeButton from "../components/common/LikeButton";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -95,8 +96,27 @@ const ExpertDetail = () => {
               )}
             </Col>
             <Col md={8}>
-              <h2>{expert.name}</h2>
-              <p className="text-muted">{expert.expertise}</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <h2>{expert.name}</h2>
+                  <p className="text-muted">{expert.expertise}</p>
+                </div>
+                <div className="d-flex gap-2">
+                  <LikeButton
+                    itemId={expert.id}
+                    type="experts/profiles"
+                    initialCount={expert.likes_count}
+                  />
+                  {isOwner && (
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => navigate(`/experts/${id}/edit`)}
+                    >
+                      Edit Profile
+                    </Button>
+                  )}
+                </div>
+              </div>
               <p>{expert.bio}</p>
               <div className="mb-3">
                 <strong>Experience:</strong> {expert.experience_years} years
@@ -124,11 +144,6 @@ const ExpertDetail = () => {
                     {expert.social_media}
                   </a>
                 </div>
-              )}
-              {isOwner && (
-                <Link to={`/experts/${id}/edit`}>
-                  <Button variant="primary">Edit Profile</Button>
-                </Link>
               )}
             </Col>
           </Row>
