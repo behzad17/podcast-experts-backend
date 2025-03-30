@@ -97,3 +97,14 @@ class PodcastComment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.podcast.title}'
+
+class PodcastLike(models.Model):
+    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('podcast', 'user')
+
+    def __str__(self):
+        return f'{self.user.username} liked {self.podcast.title}'

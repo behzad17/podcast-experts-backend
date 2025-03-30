@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from django.db.models import Sum
-from .models import Podcast, PodcasterProfile, Category, PodcastComment
+from .models import Podcast, PodcasterProfile, Category, PodcastComment, PodcastLike
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
@@ -202,6 +202,24 @@ class PodcastViewSet(viewsets.ModelViewSet):
         featured_podcasts = self.get_queryset().filter(is_featured=True)[:6]
         serializer = self.get_serializer(featured_podcasts, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        podcast = self.get_object()
+        like, created = PodcastLike.objects.get_or_create(
+            podcast=podcast,
+            user=request.user
+        )
+        if not created:
+            like.delete()
+            return Response({'status': 'unliked'})
+        return Response({'status': 'liked'})
+
+    @action(detail=True, methods=['get'])
+    def likes_count(self, request, pk=None):
+        podcast = self.get_object()
+        count = podcast.likes.count()
+        return Response({'count': count})
 
 
 class PodcasterProfileViewSet(viewsets.ModelViewSet):

@@ -55,15 +55,20 @@ class PodcastSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     category_id = serializers.IntegerField(write_only=True, required=False)
     comments = serializers.SerializerMethodField()
+    likes_count = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
 
     class Meta:
         model = Podcast
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'owner', 'category', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
+        read_only_fields = ['created_at']
 
     def get_comments(self, obj):
         comments = obj.podcast_comments.filter(parent=None)
         return PodcastCommentSerializer(comments, many=True).data
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
 
 
 class PodcastStatsSerializer(serializers.ModelSerializer):

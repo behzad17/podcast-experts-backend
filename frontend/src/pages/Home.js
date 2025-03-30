@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
+import LikeButton from "../components/common/LikeButton";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -69,12 +70,19 @@ const Home = () => {
                   <Card.Body>
                     <Card.Title>{podcast.title}</Card.Title>
                     <Card.Text>{podcast.description}</Card.Text>
-                    <Link
-                      to={`/podcasts/${podcast.id}`}
-                      className="btn btn-primary"
-                    >
-                      Listen Now
-                    </Link>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <Link
+                        to={`/podcasts/${podcast.id}`}
+                        className="btn btn-primary"
+                      >
+                        Listen Now
+                      </Link>
+                      <LikeButton
+                        itemId={podcast.id}
+                        type="podcasts/podcasts"
+                        initialCount={podcast.likes_count}
+                      />
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
@@ -106,12 +114,19 @@ const Home = () => {
                   <Card.Body>
                     <Card.Title>{expert.name}</Card.Title>
                     <Card.Text>{expert.expertise}</Card.Text>
-                    <Link
-                      to={`/experts/${expert.id}`}
-                      className="btn btn-primary"
-                    >
-                      View Profile
-                    </Link>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <Link
+                        to={`/experts/${expert.id}`}
+                        className="btn btn-primary"
+                      >
+                        View Profile
+                      </Link>
+                      <LikeButton
+                        itemId={expert.id}
+                        type="experts/profiles"
+                        initialCount={expert.likes_count}
+                      />
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
