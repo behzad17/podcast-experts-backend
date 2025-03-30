@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { Button } from "react-bootstrap";
 
 const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
