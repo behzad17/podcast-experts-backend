@@ -69,7 +69,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
     ordering_fields = ['title', 'created_at', 'views']
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'featured']:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
@@ -196,6 +196,12 @@ class PodcastViewSet(viewsets.ModelViewSet):
         
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        featured_podcasts = self.get_queryset().filter(is_featured=True)[:6]
+        serializer = self.get_serializer(featured_podcasts, many=True)
+        return Response(serializer.data)
 
 
 class PodcasterProfileViewSet(viewsets.ModelViewSet):

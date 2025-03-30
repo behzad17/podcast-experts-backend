@@ -74,6 +74,7 @@ class Podcast(models.Model):
     )
     link = models.URLField(null=True, blank=True, default='')
     is_approved = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

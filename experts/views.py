@@ -170,7 +170,7 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name', 'created_at', 'experience_years']
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'featured']:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
@@ -193,6 +193,12 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             queryset = queryset.filter(is_approved=True)
         return queryset
+
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        featured_experts = self.get_queryset().filter(is_featured=True)[:6]
+        serializer = self.get_serializer(featured_experts, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):

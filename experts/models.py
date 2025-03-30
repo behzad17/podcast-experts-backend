@@ -33,6 +33,7 @@ class ExpertProfile(models.Model):
     social_media = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='expert_profiles/', blank=True, null=True)
     is_approved = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
     bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
