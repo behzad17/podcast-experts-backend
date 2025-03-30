@@ -1,48 +1,36 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
-    PodcasterProfileCreateView,
-    PodcasterProfileUpdateView,
-    PodcasterProfileDetailView,
-    PodcasterProfileApprovalView,
-    MyPodcastsView,
-    CategoryViewSet,
-    PodcasterProfileViewSet,
+    PodcastListView,
+    PodcastCreateView,
+    PodcastDetailView,
     PodcastViewSet,
-    PodcastListCreateView,
-    PodcastUpdateView,
-    PodcastCommentViewSet,
+    PodcasterProfileViewSet,
+    CategoryViewSet,
 )
 
 router = DefaultRouter()
-router.register(r'podcasts', PodcastViewSet, basename='podcast')
-router.register(r'profiles', PodcasterProfileViewSet, basename='podcaster-profile')
-router.register(r'categories', CategoryViewSet, basename='category')
-router.register(r'comments', PodcastCommentViewSet, basename='podcast-comment')
+router.register(
+    r'podcasts', PodcastViewSet, basename='podcast'
+)
+router.register(
+    r'profiles', PodcasterProfileViewSet, basename='podcaster-profile'
+)
+router.register(
+    r'categories', CategoryViewSet, basename='category'
+)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('my-podcasts/', MyPodcastsView.as_view(), name='my-podcasts'),
+    path('podcasts/', PodcastListView.as_view(), name='podcast-list'),
     path(
-        'profile/create/',
-        PodcasterProfileCreateView.as_view(),
-        name='podcaster-profile-create'
+        'podcasts/create/',
+        PodcastCreateView.as_view(),
+        name='podcast-create'
     ),
     path(
-        'profile/update/<int:pk>/',
-        PodcasterProfileUpdateView.as_view(),
-        name='podcaster-profile-update'
+        'podcasts/<int:pk>/',
+        PodcastDetailView.as_view(),
+        name='podcast-detail'
     ),
-    path(
-        'profile/',
-        PodcasterProfileDetailView.as_view(),
-        name='podcaster-profile-detail'
-    ),
-    path(
-        'profile/approve/<int:pk>/',
-        PodcasterProfileApprovalView.as_view(),
-        name='podcaster-profile-approve'
-    ),
-    path('create/', PodcastListCreateView.as_view(), name='podcast-create'),
-    path('update/', PodcastUpdateView.as_view(), name='podcast-update'),
 ]

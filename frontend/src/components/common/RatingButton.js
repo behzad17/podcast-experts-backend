@@ -42,7 +42,7 @@ const RatingButton = ({ type, id, initialRating }) => {
         // Create new rating
         const data = {
           score: newRating,
-          [type]: id, // This will set either podcast or expert
+          [`${type}_id`]: id, // This will set either podcast_id or expert_id
         };
 
         console.log("Sending rating data:", data); // Debug log

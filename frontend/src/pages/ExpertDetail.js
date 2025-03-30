@@ -11,7 +11,6 @@ import {
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CommentSection from "../components/comments/CommentSection";
-import ReactionButton from "../components/common/ReactionButton";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -21,8 +20,6 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const [reactions, setReactions] = useState([]);
-  const currentUser = JSON.parse(localStorage.getItem("userData"));
 
   useEffect(() => {
     const fetchExpert = async () => {
@@ -43,65 +40,33 @@ const ExpertDetail = () => {
         setExpert(response.data);
 
         // Check if the current user is the owner
-        const userResponse = await axios.get(
-          "http://localhost:8000/api/users/me/",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setIsOwner(response.data.user === userResponse.data.id);
-
-        setLoading(false);
-      } catch (error) {
-        setError(
-          error.response?.data?.detail ||
-            "An error occurred while fetching the expert profile."
-        );
+        if (userData && userData.id === response.data.user) {
+          setIsOwner(true);
+        }
+      } catch (err) {
+        setError(err.response?.data?.detail || "Error fetching expert details");
+        console.error("Error:", err);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchExpert();
-  }, [id, navigate]);
-
-  useEffect(() => {
-    if (expert) {
-      fetchReactions();
-    }
-  }, [expert]);
-
-  const fetchReactions = async () => {
-    try {
-      const response = await axios.get(`/experts/${expert.id}/reactions/`);
-      setReactions(response.data);
-    } catch (err) {
-      console.error("Error fetching reactions:", err);
-    }
-  };
-
-  const getCurrentUserReaction = () => {
-    if (!currentUser) return null;
-    return reactions.find((r) => r.user === currentUser.id);
-  };
+  }, [id, navigate, userData]);
 
   if (loading) {
     return (
       <Container className="mt-5">
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ minHeight: "60vh" }}
-        >
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </Container>
     );
   }
 
   if (error) {
     return (
-      <Container className="mt-4">
+      <Container className="mt-5">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
@@ -109,94 +74,78 @@ const ExpertDetail = () => {
 
   if (!expert) {
     return (
-      <Container className="mt-4">
-        <Alert variant="warning">Expert profile not found.</Alert>
+      <Container className="mt-5">
+        <Alert variant="warning">Expert not found</Alert>
       </Container>
     );
   }
 
   return (
-    <Container className="mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Expert Profile</h1>
-        <div>
-          {isOwner && (
-            <Link to={`/experts/${id}/edit`} className="me-2">
-              <Button variant="primary">Edit Profile</Button>
-            </Link>
-          )}
-          <Button
-            variant="outline-secondary"
-            onClick={() => navigate("/experts")}
-          >
-            Back to Experts
-          </Button>
-        </div>
-      </div>
-
-      <Card className="shadow-sm">
+    <Container className="mt-5">
+      <Card>
         <Card.Body>
-          <div className="row">
-            <div className="col-md-4">
+          <Row>
+            <Col md={4}>
               {expert.profile_picture && (
                 <img
                   src={expert.profile_picture}
                   alt={expert.name}
-                  className="img-fluid rounded mb-4"
-                  style={{ maxHeight: "300px", objectFit: "cover" }}
+                  className="img-fluid rounded"
                 />
               )}
-            </div>
-            <div className="col-md-8">
-              <h2 className="mb-3">{expert.name}</h2>
-              <p className="lead mb-4">{expert.bio}</p>
-
-              <div className="mb-4">
-                <h4>Expertise</h4>
-                <p>{expert.expertise}</p>
+            </Col>
+            <Col md={8}>
+              <h2>{expert.name}</h2>
+              <p className="text-muted">{expert.expertise}</p>
+              <p>{expert.bio}</p>
+              <div className="mb-3">
+                <strong>Experience:</strong> {expert.experience_years} years
               </div>
-
-              <div className="mb-4">
-                <h4>Experience</h4>
-                <p>{expert.experience_years} years</p>
-              </div>
-
               {expert.website && (
-                <div className="mb-4">
-                  <h4>Website</h4>
-                  <p>
-                    <a
-                      href={expert.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {expert.website}
-                    </a>
-                  </p>
+                <div className="mb-3">
+                  <strong>Website:</strong>{" "}
+                  <a
+                    href={expert.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {expert.website}
+                  </a>
                 </div>
               )}
-
               {expert.social_media && (
-                <div className="mb-4">
-                  <h4>Social Media</h4>
-                  <p>{expert.social_media}</p>
+                <div className="mb-3">
+                  <strong>Social Media:</strong>{" "}
+                  <a
+                    href={expert.social_media}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {expert.social_media}
+                  </a>
                 </div>
               )}
-
-              <div className="mb-4">
-                <ReactionButton
-                  type="expert"
-                  id={expert.id}
-                  initialReaction={getCurrentUserReaction()}
-                />
-              </div>
-            </div>
-          </div>
+              {isOwner && (
+                <Link to={`/experts/${id}/edit`}>
+                  <Button variant="primary">Edit Profile</Button>
+                </Link>
+              )}
+            </Col>
+          </Row>
         </Card.Body>
       </Card>
 
-      {/* Add Comment Section */}
-      <CommentSection type="expert" id={expert.id} />
+      <Card className="mt-4">
+        <Card.Body>
+          <h3>Comments</h3>
+          <CommentSection
+            type="expert"
+            id={id}
+            comments={expert.comments || []}
+            currentUser={userData}
+          />
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

@@ -4,21 +4,29 @@ import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
 import moment from "moment";
 
-const CommentSection = ({ type, id }) => {
-  const [comments, setComments] = useState([]);
+const CommentSection = ({
+  type,
+  id,
+  comments: initialComments = [],
+  currentUser,
+}) => {
+  const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const currentUser = JSON.parse(localStorage.getItem("userData"));
 
   const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/podcasts/podcasts/${id}/comments/`);
+      const endpoint =
+        type === "expert"
+          ? `/experts/profiles/${id}/comments/`
+          : `/podcasts/podcasts/${id}/comments/`;
+      const response = await api.get(endpoint);
       setComments(response.data);
       setError("");
     } catch (error) {
@@ -27,225 +35,210 @@ const CommentSection = ({ type, id }) => {
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, type]);
 
   useEffect(() => {
-    fetchComments();
-  }, [fetchComments]);
+    if (!initialComments.length) {
+      fetchComments();
+    }
+  }, [fetchComments, initialComments]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!newComment.trim()) return;
+
     try {
-      const endpoint = replyTo
-        ? `/podcasts/podcasts/${id}/reply_comment/`
-        : `/podcasts/podcasts/${id}/add_comment/`;
+      const endpoint =
+        type === "expert"
+          ? `/experts/profiles/${id}/add_comment/`
+          : `/podcasts/podcasts/${id}/add_comment/`;
 
       const data = {
         content: newComment,
         ...(replyTo && { parent: replyTo }),
       };
 
-      await api.post(endpoint, data);
+      const response = await api.post(endpoint, data);
+      setComments((prev) => [...prev, response.data]);
       setNewComment("");
       setReplyTo(null);
-      fetchComments();
-    } catch (err) {
+      setError("");
+    } catch (error) {
+      console.error("Error posting comment:", error);
       setError("Failed to post comment");
-      console.error("Error posting comment:", err);
     }
   };
 
   const handleEdit = async (commentId, content) => {
     try {
-      await api.patch(`/podcasts/podcasts/${id}/edit_comment/`, {
+      const endpoint =
+        type === "expert"
+          ? `/experts/profiles/${id}/edit_comment/`
+          : `/podcasts/podcasts/${id}/edit_comment/${commentId}/`;
+
+      const data = {
         comment_id: commentId,
         content: content,
-      });
+      };
+
+      const response = await api.put(endpoint, data);
+      setComments((prev) =>
+        prev.map((comment) =>
+          comment.id === commentId ? response.data : comment
+        )
+      );
       setEditingComment(null);
-      fetchComments();
-    } catch (err) {
+      setError("");
+    } catch (error) {
+      console.error("Error editing comment:", error);
       setError("Failed to edit comment");
-      console.error("Error editing comment:", err);
     }
   };
 
   const handleDelete = async (commentId) => {
     try {
-      await api.delete(`/podcasts/podcasts/${id}/delete_comment/`, {
-        data: { comment_id: commentId },
-      });
+      const endpoint =
+        type === "expert"
+          ? `/experts/profiles/${id}/delete_comment/`
+          : `/podcasts/podcasts/${id}/delete_comment/${commentId}/`;
+
+      const data = {
+        comment_id: commentId,
+      };
+
+      await api.delete(endpoint, { data });
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
       setShowDeleteModal(false);
-      fetchComments();
-    } catch (err) {
+      setError("");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
       setError("Failed to delete comment");
-      console.error("Error deleting comment:", err);
     }
   };
 
   const Comment = ({ comment }) => {
-    const [editContent, setEditContent] = useState(comment.content);
-    const isOwner = currentUser && comment.user.id === currentUser.id;
+    const isOwner = currentUser?.id === comment.user.id;
+    const isEditing = editingComment === comment.id;
 
     return (
-      <Card className="mb-3 shadow-sm">
+      <Card className="mb-3">
         <Card.Body>
           <div className="d-flex justify-content-between align-items-start">
-            <div className="d-flex align-items-center">
-              {comment.user.profile_picture && (
-                <img
-                  src={comment.user.profile_picture}
-                  alt={comment.user.username}
-                  className="rounded-circle me-2"
-                  style={{ width: "32px", height: "32px", objectFit: "cover" }}
-                />
-              )}
-              <div>
-                <strong>{comment.user.username}</strong>
-                <small className="text-muted ms-2">
-                  {moment(comment.created_at).fromNow()}
-                </small>
-              </div>
+            <div>
+              <h6 className="mb-1">{comment.user.username}</h6>
+              <small className="text-muted">
+                {moment(comment.created_at).fromNow()}
+              </small>
             </div>
             {isOwner && (
               <Dropdown>
-                <Dropdown.Toggle variant="link" size="sm">
+                <Dropdown.Toggle variant="link" id={`dropdown-${comment.id}`}>
                   <FaEllipsisV />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={() => setEditingComment(comment.id)}>
-                    <FaEdit className="me-2" /> Edit
+                    <FaEdit /> Edit
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {
-                      setCommentToDelete(comment.id);
+                      setCommentToDelete(comment);
                       setShowDeleteModal(true);
                     }}
                   >
-                    <FaTrash className="me-2" /> Delete
+                    <FaTrash /> Delete
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             )}
           </div>
-
-          {editingComment === comment.id ? (
-            <div className="mt-3">
+          {isEditing ? (
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEdit(comment.id, newComment);
+              }}
+            >
               <Form.Control
-                as="textarea"
-                rows={3}
-                value={editContent}
-                onChange={(e) => setEditContent(e.target.value)}
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
                 className="mb-2"
               />
-              <div className="d-flex justify-content-end gap-2">
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  onClick={() => setEditingComment(null)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleEdit(comment.id, editContent)}
-                >
-                  Save
-                </Button>
-              </div>
-            </div>
+              <Button type="submit" size="sm" className="me-2">
+                Save
+              </Button>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => setEditingComment(null)}
+              >
+                Cancel
+              </Button>
+            </Form>
           ) : (
-            <Card.Text className="mt-2">{comment.content}</Card.Text>
+            <p className="mt-2 mb-0">{comment.content}</p>
           )}
-
-          <div className="d-flex justify-content-between align-items-center mt-2">
-            <Button
-              variant="link"
-              size="sm"
-              onClick={() => setReplyTo(comment.id)}
-              className="text-decoration-none"
-            >
-              Reply
-            </Button>
-          </div>
-
-          {comment.replies && comment.replies.length > 0 && (
-            <div className="ms-4 mt-3 border-start ps-3">
-              {comment.replies.map((reply) => (
-                <Comment key={reply.id} comment={reply} />
-              ))}
-            </div>
-          )}
+          <Button
+            variant="link"
+            size="sm"
+            className="p-0 mt-2"
+            onClick={() => setReplyTo(comment.id)}
+          >
+            Reply
+          </Button>
         </Card.Body>
       </Card>
     );
   };
 
   return (
-    <div className="mt-4">
-      <h4 className="mb-4">Comments</h4>
+    <div>
       {error && <Alert variant="danger">{error}</Alert>}
-
       <Form onSubmit={handleSubmit} className="mb-4">
         <Form.Group>
           <Form.Control
-            as="textarea"
-            rows={3}
+            type="text"
+            placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
-            className="shadow-sm"
           />
         </Form.Group>
-        <div className="d-flex justify-content-between align-items-center mt-2">
+        <div className="mt-2">
+          <Button type="submit" disabled={!newComment.trim()}>
+            {replyTo ? "Reply" : "Comment"}
+          </Button>
           {replyTo && (
             <Button
-              variant="link"
+              variant="secondary"
+              className="ms-2"
               onClick={() => setReplyTo(null)}
-              className="text-decoration-none"
             >
               Cancel Reply
             </Button>
           )}
-          <Button type="submit" variant="primary" disabled={!newComment.trim()}>
-            {replyTo ? "Post Reply" : "Post Comment"}
-          </Button>
         </div>
       </Form>
 
-      <div>
-        {loading ? (
-          <div className="text-center py-4">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        ) : comments.length === 0 ? (
-          <div className="text-center py-4 text-muted">
-            No comments yet. Be the first to comment!
-          </div>
-        ) : (
-          comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))
-        )}
-      </div>
+      {loading ? (
+        <div>Loading comments...</div>
+      ) : (
+        comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))
+      )}
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Comment</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this comment? This action cannot be
-          undone.
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to delete this comment?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
           <Button
             variant="danger"
-            onClick={() => handleDelete(commentToDelete)}
+            onClick={() => handleDelete(commentToDelete.id)}
           >
             Delete
           </Button>

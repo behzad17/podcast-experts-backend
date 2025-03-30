@@ -83,14 +83,6 @@ class Podcast(models.Model):
     def __str__(self):
         return self.title
 
-    def get_average_rating(self):
-        from ratings.models import Rating
-        return Rating.objects.filter(podcast=self).aggregate(Avg('score'))['score__avg'] or 0
-
-    def get_total_ratings(self):
-        from ratings.models import Rating
-        return Rating.objects.filter(podcast=self).count()
-
 class PodcastComment(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast_comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

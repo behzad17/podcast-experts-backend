@@ -36,7 +36,6 @@ class ExpertProfile(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
     bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
-    ratings = models.ManyToManyField('users.CustomUser', through='ExpertRating', related_name='rated_experts')
 
     def __str__(self):
         return f"{self.name} - {self.expertise}"
@@ -46,9 +45,6 @@ class ExpertProfile(models.Model):
 
     def get_total_bookmarks(self):
         return self.bookmarks.count()
-
-    def get_average_rating(self):
-        return ExpertRating.objects.filter(expert=self).aggregate(Avg('rating'))['rating__avg'] or 0
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

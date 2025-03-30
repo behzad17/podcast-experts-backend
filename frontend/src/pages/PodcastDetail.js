@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import {
   Container,
@@ -10,20 +10,16 @@ import {
   Alert,
   Badge,
   Spinner,
-  ListGroup,
 } from "react-bootstrap";
 import {
-  FaPlay,
   FaShare,
   FaEdit,
   FaUser,
   FaCalendar,
   FaGlobe,
   FaMicrophone,
-  FaStar,
 } from "react-icons/fa";
 import CommentSection from "../components/comments/CommentSection";
-import RatingButton from "../components/common/RatingButton";
 import ReactPlayer from "react-player";
 
 const PodcastDetail = () => {
@@ -32,8 +28,6 @@ const PodcastDetail = () => {
   const [podcast, setPodcast] = useState(null);
   const [error, setError] = useState("");
   const [isOwner, setIsOwner] = useState(false);
-  const [currentUserRating, setCurrentUserRating] = useState(null);
-  const [averageRating, setAverageRating] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("userData"));
 
@@ -45,36 +39,17 @@ const PodcastDetail = () => {
       // Fetch podcast data
       const response = await api.get(`/podcasts/podcasts/${id}/`);
       setPodcast(response.data);
-      setIsOwner(response.data.creator === user?.id);
-      setAverageRating(response.data.average_rating || 0);
-
-      // Fetch user rating if user is logged in
-      if (user?.id) {
-        const ratingResponse = await api.get(`/ratings/podcast/${id}/`);
-        setCurrentUserRating(ratingResponse.data.score);
-      }
-    } catch (error) {
-      console.error("Error fetching podcast:", error);
-      setError("Failed to load podcast details. Please try again later.");
+      setIsOwner(response.data.user === user?.id);
+    } catch (err) {
+      setError(err.response?.data?.detail || "Error fetching podcast details");
+      console.error("Error:", err);
     } finally {
       setIsLoading(false);
     }
   }, [id, user?.id]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const loadData = async () => {
-      if (isMounted) {
-        await fetchPodcastData();
-      }
-    };
-
-    loadData();
-
-    return () => {
-      isMounted = false;
-    };
+    fetchPodcastData();
   }, [fetchPodcastData]);
 
   const handleShare = () => {
@@ -84,20 +59,15 @@ const PodcastDetail = () => {
         text: podcast.description,
         url: window.location.href,
       });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard!");
     }
   };
 
-  if (error) {
+  if (isLoading) {
     return (
-      <Container className="mt-4">
-        <Alert variant="danger">{error}</Alert>
-      </Container>
-    );
-  }
-
-  if (isLoading || !podcast) {
-    return (
-      <Container className="mt-4 text-center">
+      <Container className="mt-5">
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
@@ -105,162 +75,86 @@ const PodcastDetail = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Container className="mt-5">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
+
+  if (!podcast) {
+    return (
+      <Container className="mt-5">
+        <Alert variant="warning">Podcast not found</Alert>
+      </Container>
+    );
+  }
+
   return (
-    <Container className="mt-4">
-      <Row>
-        <Col md={8} className="mx-auto">
-          <Card className="mb-4">
-            {podcast.image && (
-              <Card.Img
-                variant="top"
-                src={podcast.image}
-                alt={podcast.title}
-                style={{ height: "300px", objectFit: "cover" }}
-                loading="lazy"
-              />
-            )}
-            <Card.Body>
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <Card.Title className="h2 mb-0">{podcast.title}</Card.Title>
-                {isOwner && (
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => navigate(`/podcasts/${id}/edit`)}
-                  >
-                    <FaEdit className="me-2" />
-                    Edit Podcast
-                  </Button>
-                )}
-              </div>
-              <Card.Text className="lead mb-4">{podcast.description}</Card.Text>
-
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                  <Badge bg="primary" className="me-2">
-                    <FaMicrophone className="me-1" />
-                    {podcast.owner?.channel_name || "Unknown"}
-                  </Badge>
-                  <Badge bg="secondary">
-                    <FaCalendar className="me-1" />
-                    {new Date(podcast.created_at).toLocaleDateString()}
-                  </Badge>
+    <Container className="mt-5">
+      <Card>
+        <Card.Body>
+          <Row>
+            <Col md={8}>
+              <h2>{podcast.title}</h2>
+              <p className="text-muted">{podcast.description}</p>
+              {podcast.audio_url && (
+                <div className="mb-4">
+                  <ReactPlayer
+                    url={podcast.audio_url}
+                    controls
+                    width="100%"
+                    height="50px"
+                  />
                 </div>
-                <div>
-                  <Button
-                    variant="outline-secondary"
-                    className="me-2"
-                    onClick={handleShare}
-                  >
-                    <FaShare className="me-2" />
-                    Share
-                  </Button>
-                  {podcast.link && (
-                    <Button
-                      variant="primary"
-                      href={podcast.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaPlay className="me-2" />
-                      Listen Now
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {!podcast.is_approved && (
-                <Alert variant="warning">
-                  This podcast is pending approval.
-                </Alert>
               )}
-
               <div className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaStar className="text-warning me-2" />
-                  <span className="me-2">Average Rating:</span>
-                  <span className="fw-bold">{averageRating.toFixed(1)}</span>
-                </div>
-                <RatingButton
-                  type="podcast"
-                  id={podcast.id}
-                  initialRating={currentUserRating}
-                />
+                <strong>Category:</strong>{" "}
+                <Badge bg="primary">{podcast.category?.name}</Badge>
               </div>
-
               <div className="mb-3">
-                <ReactPlayer
-                  url={podcast.audio_url}
-                  controls
-                  width="100%"
-                  height="50px"
-                />
+                <strong>Created by:</strong> {podcast.creator_name || "Unknown"}
               </div>
-            </Card.Body>
-          </Card>
+              <div className="mb-3">
+                <strong>Created on:</strong>{" "}
+                {new Date(podcast.created_at).toLocaleDateString()}
+              </div>
+              {isOwner && (
+                <Link to={`/podcasts/${id}/edit`}>
+                  <Button variant="primary" className="me-2">
+                    <FaEdit /> Edit Podcast
+                  </Button>
+                </Link>
+              )}
+              <Button variant="outline-secondary" onClick={handleShare}>
+                <FaShare /> Share
+              </Button>
+            </Col>
+            <Col md={4}>
+              {podcast.thumbnail && (
+                <img
+                  src={podcast.thumbnail}
+                  alt={podcast.title}
+                  className="img-fluid rounded"
+                />
+              )}
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
 
-          {/* Podcaster Information Card */}
-          {podcast.owner && (
-            <Card>
-              <Card.Body>
-                <Card.Title className="h4 mb-4">
-                  <FaUser className="me-2" />
-                  About the Podcaster
-                </Card.Title>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>
-                    <strong>Channel Name:</strong> {podcast.owner.channel_name}
-                  </ListGroup.Item>
-                  {podcast.owner.bio && (
-                    <ListGroup.Item>
-                      <strong>Bio:</strong> {podcast.owner.bio}
-                    </ListGroup.Item>
-                  )}
-                  {podcast.owner.website && (
-                    <ListGroup.Item>
-                      <strong>Website:</strong>{" "}
-                      <a
-                        href={podcast.owner.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {podcast.owner.website}
-                      </a>
-                    </ListGroup.Item>
-                  )}
-                  {podcast.owner.social_links &&
-                    Object.keys(podcast.owner.social_links).length > 0 && (
-                      <ListGroup.Item>
-                        <strong>Social Links:</strong>
-                        <div className="mt-2">
-                          {Object.entries(podcast.owner.social_links).map(
-                            ([platform, url]) => (
-                              <Button
-                                key={platform}
-                                variant="outline-secondary"
-                                size="sm"
-                                className="me-2 mb-2"
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <FaGlobe className="me-1" />
-                                {platform.charAt(0).toUpperCase() +
-                                  platform.slice(1)}
-                              </Button>
-                            )
-                          )}
-                        </div>
-                      </ListGroup.Item>
-                    )}
-                </ListGroup>
-              </Card.Body>
-            </Card>
-          )}
-
-          {/* Comments Section */}
-          <CommentSection type="podcast" id={id} />
-        </Col>
-      </Row>
+      <Card className="mt-4">
+        <Card.Body>
+          <h3>Comments</h3>
+          <CommentSection
+            type="podcast"
+            id={id}
+            comments={podcast.comments || []}
+            currentUser={user}
+          />
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

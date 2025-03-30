@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from users.models import CustomUser
-from .models import ExpertProfile, ExpertRating, ExpertComment, ExpertCategory, ExpertReaction
 from django.contrib.auth import get_user_model
+from .models import (
+    ExpertProfile, ExpertComment, ExpertCategory, ExpertReaction
+)
 
 User = get_user_model()
 
@@ -14,40 +15,32 @@ class ExpertCategorySerializer(serializers.ModelSerializer):
 
 class SimpleUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['id', 'username', 'email']
-        read_only_fields = ['id', 'username', 'email']
 
 
 class ExpertCommentSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    user = SimpleUserSerializer(read_only=True)
     replies = serializers.SerializerMethodField()
-    
+    parent = serializers.PrimaryKeyRelatedField(queryset=ExpertComment.objects.all(), required=False, allow_null=True)
+
     class Meta:
         model = ExpertComment
-        fields = ['id', 'expert', 'user', 'content', 'parent', 'replies', 'created_at', 'updated_at']
-        read_only_fields = ['user', 'replies']
-
-    def get_user(self, obj):
-        return {
-            'id': obj.user.id,
-            'username': obj.user.username
-        }
+        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent']
+        read_only_fields = ['created_at']
 
     def get_replies(self, obj):
-        if obj.parent is not None:  # Don't get replies for replies
-            return []
         replies = ExpertComment.objects.filter(parent=obj)
-        serializer = ExpertCommentSerializer(replies, many=True)
-        return serializer.data
+        return ExpertCommentSerializer(replies, many=True).data
 
 
-class ExpertRatingSerializer(serializers.ModelSerializer):
+class ExpertReactionSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
 
     class Meta:
-        model = ExpertRating
-        fields = ['id', 'user', 'rating', 'created_at']
+        model = ExpertReaction
+        fields = ['id', 'user', 'reaction_type', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
 
 
 class ExpertProfileSerializer(serializers.ModelSerializer):
@@ -55,9 +48,7 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     categories = ExpertCategorySerializer(many=True, read_only=True)
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
-    average_rating = serializers.SerializerMethodField()
     comments = ExpertCommentSerializer(many=True, read_only=True)
-    ratings = ExpertRatingSerializer(many=True, read_only=True)
     profile_picture_url = serializers.SerializerMethodField()
     
     class Meta:
@@ -66,8 +57,7 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
             'id', 'user', 'name', 'bio', 'expertise', 'categories',
             'experience_years', 'website', 'social_media', 'profile_picture',
             'profile_picture_url', 'is_approved', 'created_at',
-            'total_views', 'total_bookmarks', 'average_rating',
-            'comments', 'ratings'
+            'total_views', 'total_bookmarks', 'comments'
         ]
         read_only_fields = ['is_approved']
 
@@ -77,22 +67,9 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     def get_total_bookmarks(self, obj):
         return obj.get_total_bookmarks()
 
-    def get_average_rating(self, obj):
-        return obj.get_average_rating()
-
     def get_profile_picture_url(self, obj):
         if obj.profile_picture:
             return self.context['request'].build_absolute_uri(
                 obj.profile_picture.url
             )
         return None 
-
-
-class ExpertReactionSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')
-    expert = serializers.ReadOnlyField(source='expert.id')
-
-    class Meta:
-        model = ExpertReaction
-        fields = ['id', 'expert', 'user', 'reaction_type', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at'] 

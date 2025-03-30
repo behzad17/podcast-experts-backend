@@ -4,11 +4,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
-from .models import ExpertProfile, ExpertComment, ExpertRating, ExpertReaction, ExpertCategory
+from .models import ExpertProfile, ExpertComment, ExpertReaction, ExpertCategory
 from .serializers import (
     ExpertProfileSerializer,
     ExpertCommentSerializer,
-    ExpertRatingSerializer,
     ExpertReactionSerializer,
     ExpertCategorySerializer
 )
@@ -168,7 +167,7 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'bio', 'expertise', 'user__username']
-    ordering_fields = ['name', 'created_at', 'experience_years', 'average_rating']
+    ordering_fields = ['name', 'created_at', 'experience_years']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -234,15 +233,6 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
-    def rate(self, request, pk=None):
-        expert = self.get_object()
-        serializer = ExpertRatingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(expert=expert, user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=['post'])
     def bookmark(self, request, pk=None):
         expert = self.get_object()
         if request.user in expert.bookmarks.all():
@@ -276,7 +266,6 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
             stats = {
                 'total_views': expert_profile.get_total_views(),
                 'total_bookmarks': expert_profile.get_total_bookmarks(),
-                'average_rating': expert_profile.get_average_rating(),
             }
             return Response(stats)
         except ExpertProfile.DoesNotExist:
@@ -409,3 +398,8 @@ class ExpertCommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         expert = get_object_or_404(ExpertProfile, pk=self.kwargs.get('expert_pk'))
         serializer.save(expert=expert, user=self.request.user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['expert_pk'] = self.kwargs.get('expert_pk')
+        return context
