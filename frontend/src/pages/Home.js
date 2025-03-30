@@ -50,7 +50,10 @@ const Home = () => {
   return (
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Welcome to Podcast Platform</h1>
+        <h3 style={{ fontSize: "1.5rem", fontWeight: "500", color: "#6495ED" }}>
+        This platform provides a convenient and reliable way for experts and
+        specialists to connect with podcasters and content creators
+        </h3>
         {isAuthenticated && (
           <div className="text-muted">
             You are logged in as{" "}
