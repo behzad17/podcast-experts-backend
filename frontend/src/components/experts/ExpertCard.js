@@ -26,6 +26,12 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
     return "";
   };
 
+  const getImageUrl = (expert) => {
+    if (expert.profile_image) return expert.profile_image;
+    // Use local placeholder image
+    return "/logo192.png";
+  };
+
   return (
     <Card className="h-100 shadow-sm rounded-3">
       <div className="d-flex h-100">
@@ -35,14 +41,22 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
             width: "75%",
             borderRight: "2px solid #ced4da",
             backgroundColor: "#F0F8FF",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
           }}
         >
-          <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
-          <Card.Text className="small text-muted mb-2">
-            {limitWords(expert.bio, 5)}
-          </Card.Text>
-          <div className="mb-2">
-            <Badge bg="primary">{getFirstExpertise(expert.expertise)}</Badge>
+          <div>
+            <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
+            <Card.Text
+              className="small text-muted mb-2"
+              style={{ height: "3em", overflow: "hidden" }}
+            >
+              {limitWords(expert.bio, 10)}
+            </Card.Text>
+            <div className="mb-2">
+              <Badge bg="primary">{getFirstExpertise(expert.expertise)}</Badge>
+            </div>
           </div>
           <div className="d-flex gap-2 align-items-center">
             <LikeButton
@@ -67,16 +81,14 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
             )}
           </div>
         </div>
-        {expert.profile_image && (
-          <div style={{ width: "25%", minWidth: "25%" }}>
-            <Card.Img
-              src={expert.profile_image}
-              alt={expert.name}
-              style={{ height: "100%", objectFit: "cover" }}
-              className="rounded-end-3"
-            />
-          </div>
-        )}
+        <div style={{ width: "25%", minWidth: "25%" }}>
+          <Card.Img
+            src={getImageUrl(expert)}
+            alt={expert.name}
+            style={{ height: "100%", objectFit: "cover" }}
+            className="rounded-end-3"
+          />
+        </div>
       </div>
     </Card>
   );

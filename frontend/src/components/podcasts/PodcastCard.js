@@ -5,16 +5,20 @@ import { useNavigate } from "react-router-dom";
 const PodcastCard = ({ podcast, currentUser, onEdit }) => {
   const navigate = useNavigate();
 
+  const getImageUrl = (podcast) => {
+    if (podcast.image) return podcast.image;
+    // Use local placeholder image
+    return "/logo192.png";
+  };
+
   return (
     <Card>
-      {podcast.image && (
-        <Card.Img
-          variant="top"
-          src={podcast.image}
-          alt={podcast.title}
-          loading="lazy"
-        />
-      )}
+      <Card.Img
+        variant="top"
+        src={getImageUrl(podcast)}
+        alt={podcast.title}
+        loading="lazy"
+      />
       <Card.Body style={{ backgroundColor: "#F0F8FF" }}>
         <Card.Title>{podcast.title}</Card.Title>
         <Card.Text>{podcast.description}</Card.Text>

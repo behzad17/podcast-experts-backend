@@ -37,6 +37,16 @@ const Home = () => {
     fetchFeaturedItems();
   }, []);
 
+  const getExpertImageUrl = (expert) => {
+    if (expert.profile_picture) return expert.profile_picture;
+    return "/logo192.png";
+  };
+
+  const getPodcastImageUrl = (podcast) => {
+    if (podcast.image) return podcast.image;
+    return "/logo192.png";
+  };
+
   return (
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -87,16 +97,14 @@ const Home = () => {
                         />
                       </div>
                     </div>
-                    {expert.profile_picture && (
-                      <div style={{ width: "25%", minWidth: "25%" }}>
-                        <Card.Img
-                          src={expert.profile_picture}
-                          alt={expert.name}
-                          style={{ height: "100%", objectFit: "cover" }}
-                          className="rounded-end-3"
-                        />
-                      </div>
-                    )}
+                    <div style={{ width: "25%", minWidth: "25%" }}>
+                      <Card.Img
+                        src={getExpertImageUrl(expert)}
+                        alt={expert.name}
+                        style={{ height: "100%", objectFit: "cover" }}
+                        className="rounded-end-3"
+                      />
+                    </div>
                   </div>
                 </Card>
               </Col>
@@ -147,16 +155,14 @@ const Home = () => {
                         />
                       </div>
                     </div>
-                    {podcast.image && (
-                      <div style={{ width: "25%", minWidth: "25%" }}>
-                        <Card.Img
-                          src={podcast.image}
-                          alt={podcast.title}
-                          style={{ height: "100%", objectFit: "cover" }}
-                          className="rounded-end-3"
-                        />
-                      </div>
-                    )}
+                    <div style={{ width: "25%", minWidth: "25%" }}>
+                      <Card.Img
+                        src={getPodcastImageUrl(podcast)}
+                        alt={podcast.title}
+                        style={{ height: "100%", objectFit: "cover" }}
+                        className="rounded-end-3"
+                      />
+                    </div>
                   </div>
                 </Card>
               </Col>
