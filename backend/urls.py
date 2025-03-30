@@ -32,7 +32,6 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
-    path('api/comments/', include('comments.urls')),
     path('api/ratings/', include('ratings.urls')),
     path('api/messages/', include('user_messages.urls')),
 ]

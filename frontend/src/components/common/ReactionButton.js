@@ -3,34 +3,36 @@ import { Button } from "react-bootstrap";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import api from "../../api/axios";
 
-const ReactionButton = ({ type, id, initialReaction }) => {
-  const [reaction, setReaction] = useState(initialReaction);
+const ReactionButton = ({ type, id, initialRating }) => {
+  const [rating, setRating] = useState(initialRating);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleReaction = async (newReaction) => {
+  const handleRating = async (newRating) => {
     try {
       setLoading(true);
       setError(null);
 
-      // If clicking the same reaction, remove it
-      if (reaction === newReaction) {
-        await api.post(`/podcasts/podcasts/${id}/react/`, {
-          reaction_type: null,
+      // If clicking the same rating, remove it
+      if (rating === newRating) {
+        await api.post("/ratings/", {
+          podcast_id: id,
+          score: null,
         });
-        setReaction(null);
+        setRating(null);
         return;
       }
 
-      // If changing reaction, update it
-      await api.post(`/podcasts/podcasts/${id}/react/`, {
-        reaction_type: newReaction,
+      // If changing rating, update it
+      await api.post("/ratings/", {
+        podcast_id: id,
+        score: newRating,
       });
 
-      setReaction(newReaction);
+      setRating(newRating);
     } catch (err) {
-      setError("Failed to update reaction. Please try again.");
-      console.error("Reaction error:", err);
+      setError("Failed to update rating. Please try again.");
+      console.error("Rating error:", err);
     } finally {
       setLoading(false);
     }
@@ -39,8 +41,8 @@ const ReactionButton = ({ type, id, initialReaction }) => {
   return (
     <div className="d-flex gap-2 align-items-center">
       <Button
-        variant={reaction === "like" ? "primary" : "outline-primary"}
-        onClick={() => handleReaction("like")}
+        variant={rating === 5 ? "primary" : "outline-primary"}
+        onClick={() => handleRating(5)}
         disabled={loading}
         className="d-flex align-items-center gap-1"
       >
@@ -48,15 +50,15 @@ const ReactionButton = ({ type, id, initialReaction }) => {
         Like
       </Button>
       <Button
-        variant={reaction === "dislike" ? "danger" : "outline-danger"}
-        onClick={() => handleReaction("dislike")}
+        variant={rating === 1 ? "danger" : "outline-danger"}
+        onClick={() => handleRating(1)}
         disabled={loading}
         className="d-flex align-items-center gap-1"
       >
         <FaThumbsDown />
         Dislike
       </Button>
-      {error && <div className="text-danger small">{error}</div>}
+      {error && <div className="text-danger">{error}</div>}
     </div>
   );
 };

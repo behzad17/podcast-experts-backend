@@ -31,8 +31,7 @@ class ExpertCommentSerializer(serializers.ModelSerializer):
     def get_user(self, obj):
         return {
             'id': obj.user.id,
-            'username': obj.user.username,
-            'profile_picture': obj.user.profile_picture.url if obj.user.profile_picture else None
+            'username': obj.user.username
         }
 
     def get_replies(self, obj):

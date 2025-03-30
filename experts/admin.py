@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ExpertProfile, ExpertCategory
+from .models import ExpertProfile, ExpertCategory, ExpertComment
 
 
 @admin.register(ExpertCategory)
@@ -7,6 +7,15 @@ class ExpertCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at')
     search_fields = ('name', 'description')
     ordering = ('name',)
+
+
+@admin.register(ExpertComment)
+class ExpertCommentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'expert', 'content', 'created_at', 'parent')
+    list_filter = ('created_at', 'expert')
+    search_fields = ('content', 'user__username', 'expert__name')
+    raw_id_fields = ('user', 'expert', 'parent')
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(ExpertProfile)

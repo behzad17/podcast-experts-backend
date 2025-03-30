@@ -91,22 +91,6 @@ class Podcast(models.Model):
         from ratings.models import Rating
         return Rating.objects.filter(podcast=self).count()
 
-class Comment(models.Model):
-    podcast = models.ForeignKey(
-        Podcast,
-        on_delete=models.CASCADE,
-        related_name='comments'
-    )
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f'Comment by {self.user.username} on {self.podcast.title}'[:79]
-
 class PodcastComment(models.Model):
     podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast_comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, PodcasterProfile, Podcast, Comment, PodcastComment
+from .models import Category, PodcasterProfile, Podcast, PodcastComment
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -25,46 +25,6 @@ class PodcasterProfileSerializer(serializers.ModelSerializer):
         return []
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-    def get_user_name(self, obj):
-        if obj.user:
-            return obj.user.username
-        return None
-
-
-class PodcastSerializer(serializers.ModelSerializer):
-    owner = PodcasterProfileSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
-    category_id = serializers.IntegerField(write_only=True, required=False)
-    comments = CommentSerializer(many=True, read_only=True)
-    views = serializers.IntegerField(read_only=True, default=0)
-    average_rating = serializers.SerializerMethodField()
-    total_ratings = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Podcast
-        fields = '__all__'
-
-    def get_average_rating(self, obj):
-        return obj.get_average_rating()
-
-    def get_total_ratings(self, obj):
-        return obj.get_total_ratings()
-
-
-class PodcastStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Podcast
-        fields = ['id', 'title', 'views', 'average_rating', 'total_bookmarks']
-        read_only_fields = fields
-
-
 class PodcastCommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
@@ -86,3 +46,30 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
         replies = PodcastComment.objects.filter(parent=obj)
         serializer = PodcastCommentSerializer(replies, many=True)
         return serializer.data
+
+
+class PodcastSerializer(serializers.ModelSerializer):
+    owner = PodcasterProfileSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+    category_id = serializers.IntegerField(write_only=True, required=False)
+    comments = PodcastCommentSerializer(many=True, read_only=True)
+    views = serializers.IntegerField(read_only=True, default=0)
+    average_rating = serializers.SerializerMethodField()
+    total_ratings = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Podcast
+        fields = '__all__'
+
+    def get_average_rating(self, obj):
+        return obj.get_average_rating()
+
+    def get_total_ratings(self, obj):
+        return obj.get_total_ratings()
+
+
+class PodcastStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Podcast
+        fields = ['id', 'title', 'views', 'average_rating', 'total_bookmarks']
+        read_only_fields = fields

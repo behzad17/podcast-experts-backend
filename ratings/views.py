@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from podcasts.models import Podcast
 from experts.models import ExpertProfile
 
+
 class RatingListCreateView(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
@@ -35,6 +36,7 @@ class RatingListCreateView(generics.ListCreateAPIView):
             # Create new rating
             return serializer.save(user=self.request.user)
 
+
 class RatingDetailView(generics.RetrieveDestroyAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
@@ -42,6 +44,7 @@ class RatingDetailView(generics.RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return Rating.objects.filter(user=self.request.user)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
