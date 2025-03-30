@@ -51,8 +51,8 @@ const Home = () => {
     <Container className="mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 style={{ fontSize: "1.5rem", fontWeight: "500", color: "#6495ED" }}>
-        This platform provides a convenient and reliable way for experts and
-        specialists to connect with podcasters and content creators
+          This platform provides a convenient and reliable way for experts and
+          specialists to connect with podcasters and content creators
         </h3>
         {isAuthenticated && (
           <div className="text-muted">
@@ -64,7 +64,7 @@ const Home = () => {
 
       {/* Featured Experts Section */}
       <section className="mb-5">
-        <h2 className="mb-4">Featured Experts</h2>
+        <h2 className="mb-4 text-center">Featured Experts</h2>
         <Row className="g-4">
           {loading ? (
             <Col>Loading...</Col>
@@ -120,7 +120,7 @@ const Home = () => {
 
       {/* Featured Podcasts Section */}
       <section className="mb-5">
-        <h2 className="mb-4">Featured Podcasts</h2>
+        <h2 className="mb-4 text-center">Featured Podcasts</h2>
         <Row className="g-4">
           {loading ? (
             <Col>Loading...</Col>
