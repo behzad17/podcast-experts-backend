@@ -48,7 +48,20 @@ const Home = () => {
   };
 
   return (
-    <Container className="mt-4">
+    <div
+      className="container py-4"
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(to right, #f8f9fa, #e3f2fd)",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <h3
+        className="mb-4 text-center"
+        style={{ color: "#6495ED", fontSize: "1.5rem", fontWeight: "500" }}
+      >
+        Welcome to Podcast Experts
+      </h3>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 style={{ fontSize: "1.5rem", fontWeight: "500", color: "#6495ED" }}>
           This platform provides a convenient and reliable way for experts and
@@ -198,7 +211,7 @@ const Home = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

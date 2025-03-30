@@ -1,9 +1,8 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(to right, #f8f9fa, #e3f2fd);
-  background-attachment: fixed;
 }
 
 body {
@@ -21,5 +20,4 @@ code {
 
 #root {
   min-height: 100vh;
-  background: transparent;
 }
