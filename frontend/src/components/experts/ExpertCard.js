@@ -31,7 +31,11 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
       <div className="d-flex h-100">
         <div
           className="p-3"
-          style={{ width: "75%", borderRight: "2px solid #ced4da" }}
+          style={{
+            width: "75%",
+            borderRight: "2px solid #ced4da",
+            backgroundColor: "#F0F8FF",
+          }}
         >
           <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
           <Card.Text className="small text-muted mb-2">

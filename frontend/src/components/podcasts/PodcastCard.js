@@ -15,7 +15,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
           loading="lazy"
         />
       )}
-      <Card.Body>
+      <Card.Body style={{ backgroundColor: "#F0F8FF" }}>
         <Card.Title>{podcast.title}</Card.Title>
         <Card.Text>{podcast.description}</Card.Text>
         <div className="d-flex justify-content-between align-items-center">
