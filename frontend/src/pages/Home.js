@@ -140,47 +140,39 @@ const Home = () => {
             <Col>Loading...</Col>
           ) : featuredPodcasts.length > 0 ? (
             featuredPodcasts.map((podcast) => (
-              <Col key={podcast.id} md={4}>
+              <Col key={podcast.id} xs={2}>
                 <Card className="h-100 shadow-sm rounded-3">
-                  <div className="d-flex h-100">
-                    <div
-                      className="p-3"
-                      style={{
-                        width: "75%",
-                        borderRight: "2px solid #ced4da",
-                        backgroundColor: "#F0F8FF",
-                      }}
-                    >
-                      <Card.Title className="h6 mb-2">
-                        {podcast.title}
-                      </Card.Title>
-                      <Card.Text className="small text-muted mb-3">
-                        {podcast.description?.substring(0, 10)}...
-                      </Card.Text>
-                      <div className="d-flex gap-2 align-items-center">
-                        <Link
-                          to={`/podcasts/${podcast.id}`}
-                          className="btn btn-sm btn-primary"
-                        >
-                          Listen Now
-                        </Link>
-                        <LikeButton
-                          itemId={podcast.id}
-                          type="podcasts/podcasts"
-                          initialCount={podcast.likes_count}
-                          className="btn-sm"
-                        />
-                      </div>
-                    </div>
-                    <div style={{ width: "25%", minWidth: "25%" }}>
-                      <Card.Img
-                        src={getPodcastImageUrl(podcast)}
-                        alt={podcast.title}
-                        style={{ height: "100%", objectFit: "cover" }}
-                        className="rounded-end-3"
+                  <Card.Img
+                    src={getPodcastImageUrl(podcast)}
+                    alt={podcast.title}
+                    style={{ height: "200px", objectFit: "cover" }}
+                    className="rounded-top-3"
+                  />
+                  <Card.Body
+                    className="p-3"
+                    style={{ backgroundColor: "#F0F8FF" }}
+                  >
+                    <Card.Title className="h6 mb-2 text-truncate">
+                      {podcast.title}
+                    </Card.Title>
+                    <Card.Text className="small text-muted mb-3">
+                      {podcast.description?.substring(0, 30)}...
+                    </Card.Text>
+                    <div className="d-flex flex-column gap-2">
+                      <Link
+                        to={`/podcasts/${podcast.id}`}
+                        className="btn btn-sm btn-primary w-100"
+                      >
+                        Listen Now
+                      </Link>
+                      <LikeButton
+                        itemId={podcast.id}
+                        type="podcasts/podcasts"
+                        initialCount={podcast.likes_count}
+                        className="btn-sm w-100"
                       />
                     </div>
-                  </div>
+                  </Card.Body>
                 </Card>
               </Col>
             ))
