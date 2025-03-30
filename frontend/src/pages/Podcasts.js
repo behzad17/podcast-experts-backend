@@ -233,40 +233,47 @@ const Podcasts = () => {
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      <Row>
+      <Row className="g-4">
         {podcasts.map((podcast) => (
-          <Col key={podcast.id} md={4} className="mb-4">
-            <Card>
-              {podcast.image && (
-                <Card.Img
-                  variant="top"
-                  src={podcast.image}
-                  alt={podcast.title}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-              )}
-              <Card.Body>
-                <Card.Title>{podcast.title}</Card.Title>
-                <Card.Text>
-                  {podcast.description?.substring(0, 100)}...
-                </Card.Text>
-                <div className="d-flex justify-content-between">
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => navigate(`/podcasts/${podcast.id}`)}
-                  >
-                    View Details
-                  </Button>
-                  {currentUser && podcast.user === currentUser.id && (
+          <Col key={podcast.id} md={4}>
+            <Card className="h-100 shadow-sm rounded-3">
+              <div className="d-flex h-100">
+                <div
+                  className="p-3"
+                  style={{ width: "75%", borderRight: "2px solid #ced4da" }}
+                >
+                  <Card.Title className="h6 mb-2">{podcast.title}</Card.Title>
+                  <Card.Text className="small text-muted mb-2">
+                    {podcast.description?.substring(0, 15)}...
+                  </Card.Text>
+                  <div className="d-flex gap-2 align-items-center">
                     <Button
-                      variant="outline-secondary"
-                      onClick={() => handleEditClick(podcast)}
+                      variant="outline-primary btn-sm"
+                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
                     >
-                      Edit
+                      View Details
                     </Button>
-                  )}
+                    {currentUser && podcast.user === currentUser.id && (
+                      <Button
+                        variant="outline-secondary btn-sm"
+                        onClick={() => handleEditClick(podcast)}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </Card.Body>
+                {podcast.image && (
+                  <div style={{ width: "25%", minWidth: "25%" }}>
+                    <Card.Img
+                      src={podcast.image}
+                      alt={podcast.title}
+                      style={{ height: "100%", objectFit: "cover" }}
+                      className="rounded-end-3"
+                    />
+                  </div>
+                )}
+              </div>
             </Card>
           </Col>
         ))}

@@ -1,16 +1,28 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
 
-  if (!user) {
-    // Redirect to login if not authenticated
-    return <Navigate to="/login" />;
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
-  // Render the protected component if authenticated
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
   return children;
 };
 

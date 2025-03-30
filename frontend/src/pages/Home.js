@@ -49,105 +49,135 @@ const Home = () => {
         )}
       </div>
 
-      {/* Featured Podcasts Section */}
-      <section className="mb-5">
-        <h2 className="mb-4">Featured Podcasts</h2>
-        <Row>
-          {loading ? (
-            <Col>Loading...</Col>
-          ) : featuredPodcasts.length > 0 ? (
-            featuredPodcasts.map((podcast) => (
-              <Col key={podcast.id} md={4} className="mb-4">
-                <Card className="h-100">
-                  {podcast.image && (
-                    <Card.Img
-                      variant="top"
-                      src={podcast.image}
-                      alt={podcast.title}
-                      style={{ height: "200px", objectFit: "cover" }}
-                    />
-                  )}
-                  <Card.Body>
-                    <Card.Title>{podcast.title}</Card.Title>
-                    <Card.Text>{podcast.description}</Card.Text>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <Link
-                        to={`/podcasts/${podcast.id}`}
-                        className="btn btn-primary"
-                      >
-                        Listen Now
-                      </Link>
-                      <LikeButton
-                        itemId={podcast.id}
-                        type="podcasts/podcasts"
-                        initialCount={podcast.likes_count}
-                      />
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <Col>No featured podcasts available.</Col>
-          )}
-        </Row>
-      </section>
-
       {/* Featured Experts Section */}
       <section className="mb-5">
         <h2 className="mb-4">Featured Experts</h2>
-        <Row>
+        <Row className="g-4">
           {loading ? (
             <Col>Loading...</Col>
           ) : featuredExperts.length > 0 ? (
             featuredExperts.map((expert) => (
-              <Col key={expert.id} md={4} className="mb-4">
-                <Card className="h-100">
-                  {expert.profile_picture && (
-                    <Card.Img
-                      variant="top"
-                      src={expert.profile_picture}
-                      alt={expert.name}
-                      style={{ height: "200px", objectFit: "cover" }}
-                    />
-                  )}
-                  <Card.Body>
-                    <Card.Title>{expert.name}</Card.Title>
-                    <Card.Text>{expert.expertise}</Card.Text>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <Link
-                        to={`/experts/${expert.id}`}
-                        className="btn btn-primary"
-                      >
-                        View Profile
-                      </Link>
-                      <LikeButton
-                        itemId={expert.id}
-                        type="experts/profiles"
-                        initialCount={expert.likes_count}
-                      />
+              <Col key={expert.id} md={4}>
+                <Card className="h-100 shadow-sm rounded-3">
+                  <div className="d-flex h-100">
+                    <div
+                      className="p-3"
+                      style={{ width: "75%", borderRight: "2px solid #ced4da" }}
+                    >
+                      <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
+                      <Card.Text className="small text-muted mb-2">
+                        {expert.bio?.substring(0, 10)}...
+                      </Card.Text>
+                      <div className="d-flex gap-2 align-items-center">
+                        <Link
+                          to={`/experts/${expert.id}`}
+                          className="btn btn-sm btn-primary"
+                        >
+                          View Profile
+                        </Link>
+                        <LikeButton
+                          itemId={expert.id}
+                          type="experts/profiles"
+                          initialCount={expert.likes_count}
+                          className="btn-sm"
+                        />
+                      </div>
                     </div>
-                  </Card.Body>
+                    {expert.profile_picture && (
+                      <div style={{ width: "25%", minWidth: "25%" }}>
+                        <Card.Img
+                          src={expert.profile_picture}
+                          alt={expert.name}
+                          style={{ height: "100%", objectFit: "cover" }}
+                          className="rounded-end-3"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </Card>
               </Col>
             ))
           ) : (
-            <Col>No featured experts available.</Col>
+            <Col>No featured experts available</Col>
           )}
         </Row>
       </section>
 
-      <Row>
+      {/* Featured Podcasts Section */}
+      <section className="mb-5">
+        <h2 className="mb-4">Featured Podcasts</h2>
+        <Row className="g-4">
+          {loading ? (
+            <Col>Loading...</Col>
+          ) : featuredPodcasts.length > 0 ? (
+            featuredPodcasts.map((podcast) => (
+              <Col key={podcast.id} md={4}>
+                <Card className="h-100 shadow-sm rounded-3">
+                  <div className="d-flex h-100">
+                    <div
+                      className="p-3"
+                      style={{ width: "75%", borderRight: "2px solid #ced4da" }}
+                    >
+                      <Card.Title className="h6 mb-2">
+                        {podcast.title}
+                      </Card.Title>
+                      <Card.Text className="small text-muted mb-3">
+                        {podcast.description?.substring(0, 10)}...
+                      </Card.Text>
+                      <div className="d-flex gap-2 align-items-center">
+                        <Link
+                          to={`/podcasts/${podcast.id}`}
+                          className="btn btn-sm btn-primary"
+                        >
+                          Listen Now
+                        </Link>
+                        <LikeButton
+                          itemId={podcast.id}
+                          type="podcasts/podcasts"
+                          initialCount={podcast.likes_count}
+                          className="btn-sm"
+                        />
+                      </div>
+                    </div>
+                    {podcast.image && (
+                      <div style={{ width: "25%", minWidth: "25%" }}>
+                        <Card.Img
+                          src={podcast.image}
+                          alt={podcast.title}
+                          style={{ height: "100%", objectFit: "cover" }}
+                          className="rounded-end-3"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </Col>
+            ))
+          ) : (
+            <Col>No featured podcasts available</Col>
+          )}
+        </Row>
+      </section>
+
+      <Row className="g-4">
         <Col md={6}>
-          <Card className="p-3">
-            <h3>Find Experts</h3>
-            <p>Search and connect with industry professionals.</p>
+          <Card className="shadow-sm rounded-3">
+            <Card.Body className="p-3">
+              <h3 className="h5">Find Experts</h3>
+              <p className="small text-muted mb-0">
+                Search and connect with industry professionals.
+              </p>
+            </Card.Body>
           </Card>
         </Col>
         <Col md={6}>
-          <Card className="p-3">
-            <h3>Discover Podcasts</h3>
-            <p>Explore and listen to amazing podcasts.</p>
+          <Card className="shadow-sm rounded-3">
+            <Card.Body className="p-3">
+              <h3 className="h5">Discover Podcasts</h3>
+              <p className="small text-muted mb-0">
+                Explore and listen to amazing podcasts.
+              </p>
+            </Card.Body>
           </Card>
         </Col>
       </Row>

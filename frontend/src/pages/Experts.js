@@ -152,35 +152,39 @@ const Experts = () => {
         </Col>
       </Row>
 
-      <Row>
+      <Row className="g-4">
         {experts.map((expert) => (
-          <Col key={expert.id} md={4} className="mb-4">
-            <Card>
-              {expert.profile_picture && (
-                <Card.Img
-                  variant="top"
-                  src={expert.profile_picture}
-                  alt={expert.name}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-              )}
-              <Card.Body>
-                <Card.Title>{expert.name}</Card.Title>
-                <Card.Text>{expert.bio?.substring(0, 100)}...</Card.Text>
-                <div className="mb-2">
-                  {expert.categories?.map((category) => (
-                    <span key={category.id} className="badge bg-secondary me-1">
-                      {category.name}
-                    </span>
-                  ))}
-                </div>
-                <Button
-                  variant="outline-primary"
-                  onClick={() => navigate(`/experts/${expert.id}`)}
+          <Col key={expert.id} md={4}>
+            <Card className="h-100 shadow-sm rounded-3">
+              <div className="d-flex h-100">
+                <div
+                  className="p-3"
+                  style={{ width: "75%", borderRight: "2px solid #ced4da" }}
                 >
-                  View Profile
-                </Button>
-              </Card.Body>
+                  <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
+                  <Card.Text className="small text-muted mb-2">
+                    {expert.bio?.substring(0, 15)}...
+                  </Card.Text>
+                  <div className="d-flex gap-2 align-items-center">
+                    <Button
+                      variant="outline-primary btn-sm"
+                      onClick={() => navigate(`/experts/${expert.id}`)}
+                    >
+                      View Profile
+                    </Button>
+                  </div>
+                </div>
+                {expert.profile_picture && (
+                  <div style={{ width: "25%", minWidth: "25%" }}>
+                    <Card.Img
+                      src={expert.profile_picture}
+                      alt={expert.name}
+                      style={{ height: "100%", objectFit: "cover" }}
+                      className="rounded-end-3"
+                    />
+                  </div>
+                )}
+              </div>
             </Card>
           </Col>
         ))}

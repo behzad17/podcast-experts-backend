@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import axios from "../../api/axios";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const LikeButton = ({ itemId, type, initialCount = 0 }) => {
+const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(initialCount);
 
@@ -39,7 +39,7 @@ const LikeButton = ({ itemId, type, initialCount = 0 }) => {
     <Button
       variant={liked ? "primary" : "outline-primary"}
       onClick={handleLike}
-      className="d-flex align-items-center gap-2"
+      className={`d-flex align-items-center gap-2 ${className}`}
     >
       {liked ? <FaHeart /> : <FaRegHeart />}
       <span>{count}</span>

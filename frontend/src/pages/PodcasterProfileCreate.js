@@ -8,6 +8,7 @@ const PodcasterProfileCreate = () => {
     bio: "",
     website: "",
     social_links: {},
+    profile_picture: null,
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -15,8 +16,12 @@ const PodcasterProfileCreate = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === "profile_picture" && files?.length > 0) {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
     setError("");
   };
 
@@ -26,8 +31,29 @@ const PodcasterProfileCreate = () => {
     setSuccess(false);
     setIsLoading(true);
 
+    if (!formData.profile_picture) {
+      setError("Please upload a profile picture");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await api.post("/podcasts/profile/create/", formData);
+      const form = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          if (key === "social_links") {
+            form.append(key, JSON.stringify(formData[key]));
+          } else {
+            form.append(key, formData[key]);
+          }
+        }
+      });
+
+      const response = await api.post("/podcasts/profile/create/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setSuccess(true);
       setTimeout(() => {
         navigate("/profile");
@@ -56,6 +82,20 @@ const PodcasterProfileCreate = () => {
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>Profile Picture *</Form.Label>
+          <Form.Control
+            type="file"
+            name="profile_picture"
+            onChange={handleChange}
+            accept="image/*"
+            required
+          />
+          <Form.Text className="text-muted">
+            Please upload a profile picture (required)
+          </Form.Text>
+        </Form.Group>
+
         <Form.Group className="mb-3">
           <Form.Label>Bio</Form.Label>
           <Form.Control

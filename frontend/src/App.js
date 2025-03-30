@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
@@ -20,9 +25,134 @@ import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import Profile from "./pages/Profile";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Messages from "./pages/Messages";
 import PrivateRoute from "./components/PrivateRoute";
+import { Spinner } from "react-bootstrap";
+
+function AppContent() {
+  const { loading, isAuthenticated } = useAuth();
+
+  return (
+    <>
+      <Navbar />
+      <div className="container mt-4">
+        {loading ? (
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "50vh" }}
+          >
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? <Navigate to="/" replace /> : <Login />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                isAuthenticated ? <Navigate to="/" replace /> : <Register />
+              }
+            />
+            <Route path="/podcasts" element={<Podcasts />} />
+            <Route
+              path="/podcasts/create"
+              element={
+                <PrivateRoute>
+                  <CreatePodcast />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/podcasts/:id" element={<PodcastDetail />} />
+            <Route
+              path="/podcasts/:id/edit"
+              element={
+                <PrivateRoute>
+                  <EditPodcast />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/podcasts/profile/create"
+              element={
+                <PrivateRoute>
+                  <PodcasterProfileCreate />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/experts" element={<Experts />} />
+            <Route
+              path="/experts/create"
+              element={
+                <PrivateRoute>
+                  <CreateExpert />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/experts/:id" element={<ExpertDetail />} />
+            <Route
+              path="/experts/:id/edit"
+              element={
+                <PrivateRoute>
+                  <EditExpert />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute>
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/expert-approval"
+              element={
+                <PrivateRoute>
+                  <AdminExpertApproval />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <PrivateRoute>
+                  <Messages />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/messages/:userId"
+              element={
+                <PrivateRoute>
+                  <Messages />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        )}
+      </div>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
+}
 
 function App() {
   return (
@@ -40,54 +170,11 @@ function App() {
         />
       </Helmet>
 
-      <AuthProvider>
-        <Router>
-          <div>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/podcasts" element={<Podcasts />} />
-              <Route path="/podcasts/create" element={<CreatePodcast />} />
-              <Route path="/podcasts/:id" element={<PodcastDetail />} />
-              <Route path="/podcasts/:id/edit" element={<EditPodcast />} />
-              <Route
-                path="/podcasts/profile/create"
-                element={<PodcasterProfileCreate />}
-              />
-              <Route path="/experts" element={<Experts />} />
-              <Route path="/experts/create" element={<CreateExpert />} />
-              <Route path="/experts/:id" element={<ExpertDetail />} />
-              <Route path="/experts/:id/edit" element={<EditExpert />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route
-                path="/admin/expert-approval"
-                element={<AdminExpertApproval />}
-              />
-              <Route path="/verify-email/:token" element={<VerifyEmail />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route
-                path="/messages"
-                element={
-                  <PrivateRoute>
-                    <Messages />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/messages/:userId"
-                element={
-                  <PrivateRoute>
-                    <Messages />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-            <ToastContainer position="top-right" autoClose={3000} />
-          </div>
-        </Router>
-      </AuthProvider>
+      <Router>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </Router>
     </HelmetProvider>
   );
 }

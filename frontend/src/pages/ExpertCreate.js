@@ -85,6 +85,12 @@ const ExpertCreate = () => {
     setSuccess(false);
     setIsLoading(true);
 
+    if (!formData.profile_picture) {
+      setError("Please upload a profile picture");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -187,6 +193,20 @@ const ExpertCreate = () => {
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
+          <Form.Label>Profile Picture *</Form.Label>
+          <Form.Control
+            type="file"
+            name="profile_picture"
+            onChange={handleChange}
+            accept="image/*"
+            required
+          />
+          <Form.Text className="text-muted">
+            Please upload a profile picture (required)
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
           <Form.Label>Name *</Form.Label>
           <Form.Control
             type="text"
@@ -255,16 +275,6 @@ const ExpertCreate = () => {
             value={formData.social_media}
             onChange={handleChange}
             placeholder="Enter your social media URL"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Profile Picture</Form.Label>
-          <Form.Control
-            type="file"
-            name="profile_picture"
-            onChange={handleChange}
-            accept="image/*"
           />
         </Form.Group>
 
