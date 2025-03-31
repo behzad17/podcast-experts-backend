@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
+from django.conf import settings
+from django.conf.urls.static import static
 from backend.admin_dashboard.views import admin_stats
 
 
@@ -33,4 +35,4 @@ urlpatterns = [
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/messages/', include('user_messages.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
