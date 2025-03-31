@@ -141,7 +141,10 @@ const Home = () => {
           ) : featuredPodcasts.length > 0 ? (
             featuredPodcasts.map((podcast) => (
               <Col key={podcast.id} xs={2}>
-                <Card className="h-100 shadow-sm rounded-3 podcast-card">
+                <Card
+                  className="h-100 shadow-sm rounded-3 podcast-card"
+                  style={{ overflow: "hidden" }}
+                >
                   <Card.Img
                     src={getPodcastImageUrl(podcast)}
                     alt={podcast.title}
