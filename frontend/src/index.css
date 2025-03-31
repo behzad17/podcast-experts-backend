@@ -30,10 +30,11 @@ code {
   background-color: white;
   border: none;
   will-change: transform;
+  box-shadow: 0 4px 12px rgba(100, 149, 237, 0.15);
 }
 
 .podcast-card:hover {
   transform: translateY(-15px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 30px rgba(100, 149, 237, 0.3);
   z-index: 2;
 }
