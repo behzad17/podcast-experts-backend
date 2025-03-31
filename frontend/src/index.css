@@ -29,10 +29,11 @@ code {
   z-index: 1;
   background-color: white;
   border: none;
+  will-change: transform;
 }
 
 .podcast-card:hover {
-  transform: translateY(-15px) scale(1.02);
+  transform: translateY(-15px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
   z-index: 2;
 }
