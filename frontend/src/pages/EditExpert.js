@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import { toast } from "react-toastify";
 
 const EditExpert = () => {
@@ -28,13 +28,7 @@ const EditExpert = () => {
           return;
         }
 
-        const response = await axios.get(
-          `http://localhost:8001/api/experts/${id}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
+        const response = await api.get(`/experts/${id}/`);
         setFormData(response.data);
         setFetching(false);
       } catch (error) {
@@ -69,10 +63,7 @@ const EditExpert = () => {
         return;
       }
 
-      await axios.put(`http://localhost:8001/api/experts/${id}/`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await api.put(`/experts/${id}/`, formData);
       toast.success("Profile updated successfully");
       navigate(`/experts/${id}`);
     } catch (error) {
@@ -170,18 +161,9 @@ const EditExpert = () => {
           />
         </Form.Group>
 
-        <div className="d-flex gap-2">
-          <Button type="submit" variant="primary" disabled={loading}>
-            {loading ? "Saving..." : "Save Changes"}
-          </Button>
-          <Button
-            type="button"
-            variant="outline-secondary"
-            onClick={() => navigate(`/experts/${id}`)}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button type="submit" variant="primary" disabled={loading}>
+          {loading ? "Updating..." : "Update Profile"}
+        </Button>
       </Form>
     </Container>
   );

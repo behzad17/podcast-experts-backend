@@ -27,7 +27,7 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
   };
 
   const getImageUrl = (expert) => {
-    if (expert.profile_image) return expert.profile_image;
+    if (expert.profile_picture) return expert.profile_picture;
     // Use local placeholder image
     return "/logo192.png";
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import axios from "axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const ExpertCreate = () => {
@@ -46,14 +46,7 @@ const ExpertCreate = () => {
       setIsAuthenticated(true);
       try {
         // Check if user already has an expert profile
-        const response = await axios.get(
-          "http://localhost:8001/api/experts/my-profile/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await api.get("/experts/my-profile/");
         setHasProfile(true);
         setError("You already have an expert profile");
       } catch (error) {
@@ -112,16 +105,11 @@ const ExpertCreate = () => {
       });
 
       console.log("Sending expert profile creation request");
-      const response = await axios.post(
-        "http://localhost:8001/api/experts/create/",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.post("/experts/create/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("Expert profile creation response:", response.data);
 
       setSuccess(true);

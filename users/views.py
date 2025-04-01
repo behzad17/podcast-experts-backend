@@ -1,14 +1,21 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import generics, status, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework import generics, status, permissions, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from django.conf import settings
-from .serializers import UserRegisterSerializer, UserSerializer
+from .serializers import (
+    UserRegisterSerializer,
+    UserSerializer,
+)
 from django.contrib.auth import get_user_model
 from .models import UserProfile
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Q
+from experts.models import ExpertProfile
+from podcasts.models import PodcasterProfile
 
 User = get_user_model()
 
@@ -166,3 +173,70 @@ class UserLogoutView(APIView):
         # Since we're using JWT, we don't need to do anything server-side
         # The client will handle token removal
         return Response({"message": "Successfully logged out."})
+
+
+class UserSearchView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        search_term = request.query_params.get('search', '')
+        user_type = request.query_params.get('user_type', '')
+        category_id = request.query_params.get('category', None)
+
+        queryset = User.objects.exclude(id=request.user.id)
+
+        if search_term:
+            queryset = queryset.filter(
+                Q(username__icontains=search_term) |
+                Q(email__icontains=search_term)
+            )
+
+        if user_type:
+            queryset = queryset.filter(user_type=user_type)
+
+        if user_type == 'expert' and category_id:
+            queryset = queryset.filter(expertprofile__categories__id=category_id)
+
+        users = []
+        for user in queryset:
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'user_type': user.user_type,
+                'profile_picture': None
+            }
+            
+            if user.user_type == 'expert':
+                try:
+                    expert = ExpertProfile.objects.get(user=user)
+                    user_data['expertise'] = expert.expertise
+                    user_data['profile_picture'] = expert.profile_picture.url if expert.profile_picture else None
+                except ExpertProfile.DoesNotExist:
+                    pass
+            elif user.user_type == 'podcaster':
+                try:
+                    podcaster = PodcasterProfile.objects.get(user=user)
+                    user_data['profile_picture'] = podcaster.profile_picture.url if podcaster.profile_picture else None
+                except PodcasterProfile.DoesNotExist:
+                    pass
+
+            users.append(user_data)
+
+        return Response(users)
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)

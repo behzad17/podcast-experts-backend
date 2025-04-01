@@ -186,7 +186,7 @@ CSP_CONNECT_SRC = (
 )
 CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_IMG_SRC = ("'self'", "data:", "blob:")
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "http://localhost:8000/media/", "http://127.0.0.1:8000/media/")
 CSP_FONT_SRC = ("'self'", "data:")
 CSP_FRAME_ANCESTORS = ("'self'",)
 CSP_INCLUDE_NONCE_IN = ["script-src"]

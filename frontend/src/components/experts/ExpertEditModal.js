@@ -83,10 +83,10 @@ const ExpertEditModal = ({
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Profile Image</Form.Label>
+            <Form.Label>Profile Picture</Form.Label>
             <Form.Control
               type="file"
-              name="profile_image"
+              name="profile_picture"
               onChange={onChange}
               accept="image/*"
             />

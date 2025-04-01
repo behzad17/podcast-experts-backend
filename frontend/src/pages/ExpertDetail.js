@@ -8,8 +8,8 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import CommentSection from "../components/comments/CommentSection";
 import LikeButton from "../components/common/LikeButton";
 
@@ -31,13 +31,7 @@ const ExpertDetail = () => {
           return;
         }
 
-        const response = await axios.get(
-          `http://localhost:8001/api/experts/${id}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
+        const response = await api.get(`/experts/${id}/`);
         setExpert(response.data);
 
         // Check if the current user is the owner
@@ -153,12 +147,7 @@ const ExpertDetail = () => {
       <Card className="mt-4">
         <Card.Body>
           <h3>Comments</h3>
-          <CommentSection
-            type="expert"
-            id={id}
-            comments={expert.comments || []}
-            currentUser={userData}
-          />
+          <CommentSection itemId={id} type="experts/profiles" />
         </Card.Body>
       </Card>
     </Container>
