@@ -190,7 +190,22 @@ const Home = () => {
             <Card.Body className="p-3">
               <h3 className="h5">Find Experts</h3>
               <p className="small text-muted mb-0">
-                Search and connect with industry professionals.
+                Get booked on podcasts to expand your reach and audience. Join
+                the free newsletter featuring 20 podcasts looking for guests
+                each week. And join our paid expert directory so podcasts can
+                find you. Get booked on podcasts to expand your reach and
+                audience. Join the free newsletter featuring 20 podcasts looking
+                for guests each week. And join our paid expert directory so
+                podcasts can find you. Get booked on podcasts to expand your
+                reach and audience. Join the free newsletter featuring 20
+                podcasts looking for guests each week. And join our paid expert
+                directory so podcasts can find you. Get booked on podcasts to
+                expand your reach and audience. Join the free newsletter
+                featuring 20 podcasts looking for guests each week. And join our
+                paid expert directory so podcasts can find you. Get booked on
+                podcasts to expand your reach and audience. Join the free
+                newsletter featuring 20 podcasts looking for guests each week.
+                And join our paid expert directory so podcasts can find you.
               </p>
             </Card.Body>
           </Card>
@@ -200,7 +215,23 @@ const Home = () => {
             <Card.Body className="p-3">
               <h3 className="h5">Discover Podcasts</h3>
               <p className="small text-muted mb-0">
-                Explore and listen to amazing podcasts.
+                Find experts to be guests on your podcast, from our Guest
+                Directory and/or a free podcast feature in our newsletter that
+                goes to many experts and podcasters, that goes to many experts
+                and podcasters. Find experts to be guests on your podcast, from
+                our Guest Directory and/or a free podcast feature in our
+                newsletter that goes to many experts and podcasters, that goes
+                to many experts and podcasters. Find experts to be guests on
+                your podcast, from our Guest Directory and/or a free podcast
+                feature in our newsletter that goes to many experts and
+                podcasters, that goes to many experts and podcasters. Find
+                experts to be guests on your podcast, from our Guest Directory
+                and/or a free podcast feature in our newsletter that goes to
+                many experts and podcasters, that goes to many experts and
+                podcasters. Find experts to be guests on your podcast, from our
+                Guest Directory and/or a free podcast feature in our newsletter
+                that goes to many experts and podcasters, that goes to many
+                experts and podcasters.
               </p>
             </Card.Body>
           </Card>

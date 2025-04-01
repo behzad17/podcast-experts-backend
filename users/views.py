@@ -99,10 +99,10 @@ class UserLoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        print(f"[DEBUG] Login attempt for email: {email}")
+        username = request.data.get('username')
+        print(f"[DEBUG] Login attempt for username: {username}")
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(username=username)
             debug_msg = (
                 f"[DEBUG] Found user, email_verified status: "
                 f"{user.email_verified}"
@@ -110,17 +110,11 @@ class UserLoginView(TokenObtainPairView):
             print(debug_msg)
 
             if not user.email_verified:
-                print(f"[DEBUG] Email not verified for user: {email}")
+                print(f"[DEBUG] Email not verified for user: {username}")
                 return Response(
                     {"detail": "Please verify your email before logging in."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-
-            # Modify request data to use username instead of email
-            request_data = request.data.copy()
-            request_data['username'] = user.username
-            request_data.pop('email', None)
-            request._full_data = request_data
 
             print("[DEBUG] Email verified, proceeding with login")
             response = super().post(request, *args, **kwargs)
@@ -130,12 +124,12 @@ class UserLoginView(TokenObtainPairView):
                 'email': user.email,
                 'user_type': user.user_type
             }
-            print(f"[DEBUG] Login successful for user: {email}")
+            print(f"[DEBUG] Login successful for user: {username}")
             return response
         except User.DoesNotExist:
-            print(f"[DEBUG] User not found: {email}")
+            print(f"[DEBUG] User not found: {username}")
             return Response(
-                {"detail": "Invalid email or password."},
+                {"detail": "Invalid username or password."},
                 status=status.HTTP_401_UNAUTHORIZED
             )
         except Exception as e:

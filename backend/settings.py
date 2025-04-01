@@ -173,17 +173,23 @@ CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 
 # Temporarily disable CSP for testing
-CSP_ENABLED = False
+CSP_ENABLED = True
 
-# Remove all CSP settings temporarily
-CSP_DEFAULT_SRC = None
-CSP_CONNECT_SRC = None
-CSP_SCRIPT_SRC = None
-CSP_STYLE_SRC = None
-CSP_IMG_SRC = None
-CSP_FONT_SRC = None
-CSP_FRAME_ANCESTORS = None
-CSP_INCLUDE_NONCE_IN = None
+# CSP Settings
+CSP_DEFAULT_SRC = ("'self'", "http://localhost:3000", "http://127.0.0.1:3000")
+CSP_CONNECT_SRC = (
+    "'self'",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "ws://localhost:8000",
+    "ws://127.0.0.1:8000",
+)
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "data:", "blob:")
+CSP_FONT_SRC = ("'self'", "data:")
+CSP_FRAME_ANCESTORS = ("'self'",)
+CSP_INCLUDE_NONCE_IN = ["script-src"]
 
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
@@ -231,3 +237,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+
+# Frontend URL for email verification
+FRONTEND_URL = 'http://localhost:3000'

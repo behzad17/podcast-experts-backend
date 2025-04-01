@@ -42,7 +42,7 @@ const Register = () => {
       localStorage.setItem("userType", formData.user_type);
       setTimeout(() => {
         navigate("/login");
-      }, 5000);
+      }, 10000);
     } catch (error) {
       console.error("Registration error:", error);
       if (error.response) {
@@ -79,8 +79,9 @@ const Register = () => {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && (
         <Alert variant="success">
-          Registration successful! Please check your email for verification.
-          Redirecting to login page...
+          Registration successful! Please check your email for verification. You
+          will be redirected to the login page in 10 seconds. If you don't see
+          the verification email, please check your spam folder.
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>

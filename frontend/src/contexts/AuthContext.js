@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         if (token && userData) {
           try {
             const response = await axios.get(
-              "http://localhost:8001/api/users/me/"
+              "http://localhost:8000/api/users/me/"
             );
             setUser(response.data);
             setIsAuthenticated(true);
@@ -65,12 +65,12 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
       const response = await axios.post(
-        "http://localhost:8001/api/users/login/",
+        "http://localhost:8000/api/users/login/",
         {
-          email,
+          username,
           password,
         }
       );
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       if (error.response?.status === 401) {
-        throw { message: "Invalid email or password" };
+        throw { message: "Invalid username or password" };
       } else if (error.response?.status === 403) {
         throw { message: "Please verify your email before logging in" };
       } else {
@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(
-        "http://localhost:8001/api/users/register/",
+        "http://localhost:8000/api/users/register/",
         userData
       );
       return response.data;
