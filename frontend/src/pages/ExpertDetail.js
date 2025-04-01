@@ -141,11 +141,7 @@ const ExpertDetail = () => {
       <Card className="mt-4">
         <Card.Body>
           <h3>Comments</h3>
-          <CommentSection
-            itemId={id}
-            type="experts/profiles"
-            currentUser={userData}
-          />
+          <CommentSection itemId={id} type="expert" currentUser={userData} />
         </Card.Body>
       </Card>
     </Container>
