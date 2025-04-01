@@ -50,3 +50,11 @@ code {
   transform: translateY(-35px);
   box-shadow: 0 25px 50px rgba(100, 149, 237, 0.5);
 }
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

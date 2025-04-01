@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Alert } from "react-bootstrap";
+import { Card, Button, Alert, Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const PodcastCard = ({ podcast, currentUser, onEdit }) => {
@@ -12,17 +12,35 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
   };
 
   return (
-    <Card>
+    <Card className="h-100">
       <Card.Img
         variant="top"
         src={getImageUrl(podcast)}
         alt={podcast.title}
         loading="lazy"
+        style={{ height: "200px", objectFit: "cover" }}
       />
-      <Card.Body style={{ backgroundColor: "#F0F8FF" }}>
-        <Card.Title>{podcast.title}</Card.Title>
-        <Card.Text>{podcast.description}</Card.Text>
-        <div className="d-flex justify-content-between align-items-center">
+      <Card.Body
+        style={{
+          backgroundColor: "#F0F8FF",
+          height: "250px",
+          overflow: "auto",
+        }}
+      >
+        <div className="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <Card.Title className="text-truncate">{podcast.title}</Card.Title>
+            {podcast.category && (
+              <Badge bg="info" pill className="mb-2">
+                {podcast.category.name}
+              </Badge>
+            )}
+          </div>
+        </div>
+        <Card.Text className="text-truncate-3" style={{ minHeight: "60px" }}>
+          {podcast.description}
+        </Card.Text>
+        <div className="d-flex justify-content-between align-items-center mt-auto">
           <small className="text-muted">
             By {podcast.owner?.channel_name || "Unknown"}
           </small>
@@ -32,20 +50,25 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
                 href={podcast.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary me-2"
+                className="btn btn-primary btn-sm me-2"
               >
                 Listen
               </a>
             )}
             <Button
               variant="outline-primary"
+              size="sm"
               className="me-2"
               onClick={() => navigate(`/podcasts/${podcast.id}`)}
             >
               View
             </Button>
             {currentUser && podcast.owner?.user === currentUser.id && (
-              <Button variant="outline-primary" onClick={() => onEdit(podcast)}>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={() => onEdit(podcast)}
+              >
                 Edit
               </Button>
             )}

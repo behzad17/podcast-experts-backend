@@ -14,6 +14,7 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 import LikeButton from "../components/common/LikeButton";
+import PodcastCard from "../components/podcasts/PodcastCard";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -237,55 +238,11 @@ const Podcasts = () => {
       <Row className="g-4">
         {podcasts.map((podcast) => (
           <Col key={podcast.id} md={4}>
-            <Card className="h-100 shadow-sm rounded-3">
-              <div className="d-flex h-100">
-                <div
-                  className="p-3"
-                  style={{
-                    width: "75%",
-                    borderRight: "2px solid #ced4da",
-                    backgroundColor: "#F0F8FF",
-                  }}
-                >
-                  <Card.Title className="h6 mb-2">{podcast.title}</Card.Title>
-                  <Card.Text className="small text-muted mb-2">
-                    {podcast.description?.substring(0, 15)}...
-                  </Card.Text>
-                  <div className="d-flex gap-2 align-items-center">
-                    <Button
-                      variant="outline-primary btn-sm"
-                      onClick={() => navigate(`/podcasts/${podcast.id}`)}
-                    >
-                      View Details
-                    </Button>
-                    <LikeButton
-                      itemId={podcast.id}
-                      type="podcasts/podcasts"
-                      initialCount={podcast.likes_count}
-                      className="btn-sm"
-                    />
-                    {currentUser && podcast.user === currentUser.id && (
-                      <Button
-                        variant="outline-secondary btn-sm"
-                        onClick={() => handleEditClick(podcast)}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                {podcast.image && (
-                  <div style={{ width: "25%", minWidth: "25%" }}>
-                    <Card.Img
-                      src={podcast.image}
-                      alt={podcast.title}
-                      style={{ height: "100%", objectFit: "cover" }}
-                      className="rounded-end-3"
-                    />
-                  </div>
-                )}
-              </div>
-            </Card>
+            <PodcastCard
+              podcast={podcast}
+              currentUser={currentUser}
+              onEdit={handleEditClick}
+            />
           </Col>
         ))}
       </Row>
