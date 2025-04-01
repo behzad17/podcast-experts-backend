@@ -25,17 +25,11 @@ const ExpertDetail = () => {
   useEffect(() => {
     const fetchExpert = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
-        const response = await api.get(`/experts/${id}/`);
+        const response = await api.get(`/experts/profiles/${id}/`);
         setExpert(response.data);
 
         // Check if the current user is the owner
-        if (userData && userData.id === response.data.user) {
+        if (userData && userData.id === response.data.user?.id) {
           setIsOwner(true);
         }
       } catch (err) {
@@ -47,7 +41,7 @@ const ExpertDetail = () => {
     };
 
     fetchExpert();
-  }, [id, navigate, userData]);
+  }, [id, userData]);
 
   if (loading) {
     return (
@@ -147,7 +141,11 @@ const ExpertDetail = () => {
       <Card className="mt-4">
         <Card.Body>
           <h3>Comments</h3>
-          <CommentSection itemId={id} type="experts/profiles" />
+          <CommentSection
+            itemId={id}
+            type="experts/profiles"
+            currentUser={userData}
+          />
         </Card.Body>
       </Card>
     </Container>
