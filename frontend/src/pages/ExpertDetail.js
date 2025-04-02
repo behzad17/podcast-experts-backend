@@ -71,76 +71,117 @@ const ExpertDetail = () => {
 
   return (
     <Container className="mt-5">
-      <Card>
-        <Card.Body>
+      <Card className="expert-profile-card shadow-sm">
+        <Card.Body className="p-4">
           <Row>
             <Col md={4}>
               {expert.profile_picture && (
-                <img
-                  src={expert.profile_picture}
-                  alt={expert.name}
-                  className="img-fluid rounded"
-                />
+                <div className="expert-profile-image position-relative">
+                  <img
+                    src={expert.profile_picture}
+                    alt={expert.name}
+                    className="img-fluid rounded-3"
+                    style={{
+                      width: "100%",
+                      height: "300px",
+                      objectFit: "cover",
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                    }}
+                  />
+                  <div className="position-absolute bottom-0 end-0 p-2">
+                    <LikeButton
+                      itemId={expert.id}
+                      type="experts/profiles"
+                      initialCount={expert.likes_count}
+                      className="btn-lg"
+                    />
+                  </div>
+                </div>
               )}
             </Col>
             <Col md={8}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-start mb-4">
                 <div>
-                  <h2>{expert.name}</h2>
-                  <p className="text-muted">{expert.expertise}</p>
+                  <h2 className="expert-name mb-2">{expert.name}</h2>
+                  <div className="expert-tags mb-3">
+                    <span className="expertise-tag">{expert.expertise}</span>
+                    <span className="experience-tag">
+                      {expert.experience_years} years experience
+                    </span>
+                  </div>
                 </div>
-                <div className="d-flex gap-2">
-                  <LikeButton
-                    itemId={expert.id}
-                    type="experts/profiles"
-                    initialCount={expert.likes_count}
-                  />
-                  {isOwner && (
-                    <Button
-                      variant="outline-primary"
-                      onClick={() => navigate(`/experts/${id}/edit`)}
-                    >
-                      Edit Profile
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <p>{expert.bio}</p>
-              <div className="mb-3">
-                <strong>Experience:</strong> {expert.experience_years} years
-              </div>
-              {expert.website && (
-                <div className="mb-3">
-                  <strong>Website:</strong>{" "}
-                  <a
-                    href={expert.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {isOwner && (
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => navigate(`/experts/${id}/edit`)}
+                    className="edit-profile-btn"
                   >
-                    {expert.website}
-                  </a>
+                    <i className="fas fa-edit me-2"></i>
+                    Edit Profile
+                  </Button>
+                )}
+              </div>
+              <div className="expert-bio mb-4">
+                <p>{expert.bio}</p>
+              </div>
+              <div className="expert-info-grid">
+                <div className="expert-info-box">
+                  <div className="info-icon">
+                    <i className="fas fa-briefcase"></i>
+                  </div>
+                  <div className="info-content">
+                    <strong>Experience</strong>
+                    <span>{expert.experience_years} years</span>
+                  </div>
                 </div>
-              )}
-              {expert.social_media && (
-                <div className="mb-3">
-                  <strong>Social Media:</strong>{" "}
-                  <a
-                    href={expert.social_media}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {expert.social_media}
-                  </a>
-                </div>
-              )}
+                {expert.website && (
+                  <div className="expert-info-box expert-social-links">
+                    <div className="info-icon">
+                      <i className="fas fa-globe"></i>
+                    </div>
+                    <div className="info-content">
+                      <strong>Website</strong>
+                      <a
+                        href={expert.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Visit Website
+                      </a>
+                    </div>
+                  </div>
+                )}
+                {expert.social_media && (
+                  <div className="expert-info-box expert-social-links">
+                    <div className="info-icon">
+                      <i className="fas fa-share-alt"></i>
+                    </div>
+                    <div className="info-content">
+                      <strong>Social Media</strong>
+                      <a
+                        href={expert.social_media}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Connect
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
             </Col>
           </Row>
         </Card.Body>
       </Card>
 
-      <Card className="mt-4">
+      <Card className="expert-comments-section mt-4 shadow-sm">
         <Card.Body>
-          <h3>Comments</h3>
+          <div className="section-header">
+            <h3>Comments</h3>
+            <p className="section-subtitle">
+              Share your thoughts about this expert
+            </p>
+          </div>
           <CommentSection
             type="expert"
             id={id}

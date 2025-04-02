@@ -94,17 +94,30 @@ const PodcastDetail = () => {
 
   return (
     <Container className="mt-5">
-      <Card>
-        <Card.Body>
+      <Card className="podcast-detail-card shadow-sm">
+        <Card.Body className="p-4">
           <Row>
             <Col md={8}>
-              <div className="d-flex justify-content-between align-items-center">
-                <h2>{podcast.title}</h2>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                  <h2 className="podcast-title">{podcast.title}</h2>
+                  <div className="podcast-meta">
+                    <span className="text-muted">
+                      <FaUser className="me-1" />
+                      {podcast.creator_name || "Unknown"}
+                    </span>
+                    <span className="text-muted ms-3">
+                      <FaCalendar className="me-1" />
+                      {new Date(podcast.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
                 <div className="d-flex gap-2">
                   <LikeButton
                     itemId={podcast.id}
                     type="podcasts/podcasts"
                     initialCount={podcast.likes_count}
+                    className="btn-lg"
                   />
                   {podcast.link && (
                     <Button
@@ -112,12 +125,17 @@ const PodcastDetail = () => {
                       href={podcast.link}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="listen-btn"
                     >
                       <FaMicrophone className="me-2" />
                       Listen
                     </Button>
                   )}
-                  <Button variant="outline-primary" onClick={handleShare}>
+                  <Button
+                    variant="outline-primary"
+                    onClick={handleShare}
+                    className="share-btn"
+                  >
                     <FaShare className="me-2" />
                     Share
                   </Button>
@@ -125,6 +143,7 @@ const PodcastDetail = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() => navigate(`/podcasts/${id}/edit`)}
+                      className="edit-btn"
                     >
                       <FaEdit className="me-2" />
                       Edit
@@ -132,9 +151,15 @@ const PodcastDetail = () => {
                   )}
                 </div>
               </div>
-              <p className="text-muted">{podcast.description}</p>
+              <div className="podcast-description mb-4">
+                <p>{podcast.description}</p>
+              </div>
               {podcast.audio_url && (
-                <div className="mb-4">
+                <div className="audio-player mb-4">
+                  <div className="audio-player-header">
+                    <FaMicrophone className="me-2" />
+                    <span>Listen to the Podcast</span>
+                  </div>
                   <ReactPlayer
                     url={podcast.audio_url}
                     controls
@@ -143,35 +168,59 @@ const PodcastDetail = () => {
                   />
                 </div>
               )}
-              <div className="mb-3">
+              <div className="podcast-category mb-4">
                 <strong>Category:</strong>{" "}
-                <Badge bg="primary">{podcast.category?.name}</Badge>
+                <Badge bg="primary" className="category-badge">
+                  {podcast.category?.name}
+                </Badge>
               </div>
-              <div className="mb-3">
-                <strong>Created by:</strong> {podcast.creator_name || "Unknown"}
-              </div>
-              <div className="mb-3">
-                <strong>Created on:</strong>{" "}
-                {new Date(podcast.created_at).toLocaleDateString()}
+              <div className="podcast-stats">
+                <div className="stat-item">
+                  <span className="stat-value">{podcast.likes_count || 0}</span>
+                  <span className="stat-label">Likes</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">
+                    {podcast.comments?.length || 0}
+                  </span>
+                  <span className="stat-label">Comments</span>
+                </div>
               </div>
             </Col>
             <Col md={4}>
               {podcast.image && (
-                <img
-                  src={podcast.image}
-                  alt={podcast.title}
-                  className="img-fluid rounded"
-                  style={{ maxHeight: "300px", objectFit: "cover" }}
-                />
+                <div className="podcast-image-container">
+                  <img
+                    src={podcast.image}
+                    alt={podcast.title}
+                    className="img-fluid rounded-3"
+                    style={{ maxHeight: "300px", objectFit: "cover" }}
+                  />
+                  <div className="image-overlay">
+                    <Button
+                      variant="light"
+                      className="view-image-btn"
+                      onClick={() => window.open(podcast.image, "_blank")}
+                    >
+                      <FaGlobe className="me-2" />
+                      View Full Image
+                    </Button>
+                  </div>
+                </div>
               )}
             </Col>
           </Row>
         </Card.Body>
       </Card>
 
-      <Card className="mt-4">
+      <Card className="podcast-comments-section mt-4 shadow-sm">
         <Card.Body>
-          <h3>Comments</h3>
+          <div className="section-header">
+            <h3>Comments</h3>
+            <p className="section-subtitle">
+              Share your thoughts about this podcast
+            </p>
+          </div>
           <CommentSection
             type="podcast"
             id={id}
