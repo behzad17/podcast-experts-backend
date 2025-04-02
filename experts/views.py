@@ -99,7 +99,7 @@ class ExpertProfileListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['specialty', 'user__username', 'bio']
+    search_fields = ['specialty', 'user__username', 'bio', 'expertise', 'user__email']
     ordering_fields = ['user__username', 'specialty', 'created_at']
 
     def get_queryset(self):
@@ -107,9 +107,19 @@ class ExpertProfileListView(generics.ListAPIView):
         if not self.request.user.is_staff:
             queryset = queryset.filter(is_approved=True)
 
-        specialty = self.request.query_params.get('specialty', None)
-        if specialty:
-            queryset = queryset.filter(specialty__icontains=specialty)
+        category_id = self.request.query_params.get('category', None)
+        if category_id:
+            queryset = queryset.filter(categories__id=category_id)
+
+        search_term = self.request.query_params.get('search', None)
+        if search_term:
+            queryset = queryset.filter(
+                Q(specialty__icontains=search_term) |
+                Q(user__username__icontains=search_term) |
+                Q(bio__icontains=search_term) |
+                Q(expertise__icontains=search_term) |
+                Q(user__email__icontains=search_term)
+            )
 
         return queryset
 

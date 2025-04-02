@@ -11,6 +11,7 @@ from .serializers import (
     PodcastCommentSerializer,
 )
 from rest_framework.decorators import action
+from django.db.models import Q
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -22,14 +23,24 @@ class PodcastListView(generics.ListAPIView):
     serializer_class = PodcastSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description', 'category__name']
+    search_fields = ['title', 'description', 'category__name', 'creator__username']
     ordering_fields = ['title', 'created_at', 'views']
 
     def get_queryset(self):
         queryset = Podcast.objects.all()
-        category = self.request.query_params.get('category', None)
-        if category:
-            queryset = queryset.filter(category__name=category)
+        category_id = self.request.query_params.get('category', None)
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+
+        search_term = self.request.query_params.get('search', None)
+        if search_term:
+            queryset = queryset.filter(
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term) |
+                Q(category__name__icontains=search_term) |
+                Q(creator__username__icontains=search_term)
+            )
+
         return queryset
 
 
