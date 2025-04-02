@@ -50,16 +50,16 @@ const Home = () => {
 
   return (
     <div
-      className="container-fluid py-4"
+      className="container-fluid"
       style={{
         minHeight: "100vh",
         background: "linear-gradient(to right, #f8f9fa, #e3f2fd)",
         backgroundAttachment: "fixed",
         margin: 0,
-        padding: "2rem",
+        padding: 0,
       }}
     >
-      <Container>
+      <Container className="py-4">
         <h3
           className="mb-4 text-center"
           style={{ color: "#6495ED", fontSize: "1.5rem", fontWeight: "500" }}
