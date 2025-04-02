@@ -106,6 +106,17 @@ const PodcastDetail = () => {
                     type="podcasts/podcasts"
                     initialCount={podcast.likes_count}
                   />
+                  {podcast.link && (
+                    <Button
+                      variant="primary"
+                      href={podcast.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaMicrophone className="me-2" />
+                      Listen
+                    </Button>
+                  )}
                   <Button variant="outline-primary" onClick={handleShare}>
                     <FaShare className="me-2" />
                     Share
@@ -145,11 +156,12 @@ const PodcastDetail = () => {
               </div>
             </Col>
             <Col md={4}>
-              {podcast.thumbnail && (
+              {podcast.image && (
                 <img
-                  src={podcast.thumbnail}
+                  src={podcast.image}
                   alt={podcast.title}
                   className="img-fluid rounded"
+                  style={{ maxHeight: "300px", objectFit: "cover" }}
                 />
               )}
             </Col>

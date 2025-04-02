@@ -197,22 +197,20 @@ const CommentSection = ({
       <Form onSubmit={handleSubmit} className="mb-4">
         <Form.Group>
           <Form.Control
-            type="text"
+            as="textarea"
+            rows={3}
             placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            className="mb-2"
           />
         </Form.Group>
-        <div className="mt-2">
+        <div className="d-flex gap-2">
           <Button type="submit" disabled={!newComment.trim()}>
             {replyTo ? "Reply" : "Comment"}
           </Button>
           {replyTo && (
-            <Button
-              variant="secondary"
-              className="ms-2"
-              onClick={() => setReplyTo(null)}
-            >
+            <Button variant="secondary" onClick={() => setReplyTo(null)}>
               Cancel Reply
             </Button>
           )}
