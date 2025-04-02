@@ -24,7 +24,6 @@ const Podcasts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(9);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPodcast, setEditingPodcast] = useState(null);
@@ -59,9 +58,6 @@ const Podcasts = () => {
           page_size: pageSize,
         });
 
-        if (searchTerm) {
-          params.append("search", searchTerm);
-        }
         if (selectedCategory) {
           params.append("category", selectedCategory);
         }
@@ -85,12 +81,8 @@ const Podcasts = () => {
       }
     };
 
-    const debounceTimer = setTimeout(() => {
-      fetchPodcasts();
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [currentPage, pageSize, searchTerm, selectedCategory]);
+    fetchPodcasts();
+  }, [currentPage, pageSize, selectedCategory]);
 
   useEffect(() => {
     // Get current user if token exists
@@ -106,11 +98,6 @@ const Podcasts = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleCategoryChange = (e) => {
@@ -206,17 +193,7 @@ const Podcasts = () => {
       </div>
 
       <Row className="mb-4">
-        <Col md={6}>
-          <Form.Group>
-            <Form.Control
-              type="text"
-              placeholder="Search podcasts..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={6}>
+        <Col md={12}>
           <Form.Group>
             <Form.Select
               value={selectedCategory}
@@ -248,9 +225,7 @@ const Podcasts = () => {
       </Row>
 
       {podcasts.length === 0 && !loading && (
-        <Alert variant="info">
-          No podcasts found. Try adjusting your search term or category.
-        </Alert>
+        <Alert variant="info">No podcasts found in this category.</Alert>
       )}
 
       {totalPages > 1 && (
@@ -285,14 +260,16 @@ const Podcasts = () => {
         </div>
       )}
 
-      <PodcastEditModal
-        show={showEditModal}
-        onHide={() => setShowEditModal(false)}
-        podcast={editingPodcast}
-        formData={editFormData}
-        onChange={handleEditChange}
-        onSubmit={handleEditSubmit}
-      />
+      {showEditModal && (
+        <PodcastEditModal
+          show={showEditModal}
+          onHide={() => setShowEditModal(false)}
+          podcast={editingPodcast}
+          formData={editFormData}
+          onChange={handleEditChange}
+          onSubmit={handleEditSubmit}
+        />
+      )}
     </Container>
   );
 };
