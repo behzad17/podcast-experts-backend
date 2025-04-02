@@ -85,7 +85,7 @@ const Home = () => {
           ) : featuredExperts.length > 0 ? (
             featuredExperts.map((expert) => (
               <Col key={expert.id} md={4}>
-                <Card className="h-100 shadow-sm rounded-3">
+                <Card className="h-100 shadow-lg rounded-3 expert-card">
                   <div className="d-flex h-100">
                     <div
                       className="p-3"
