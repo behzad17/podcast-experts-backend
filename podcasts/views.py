@@ -1,9 +1,13 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status, viewsets, filters
+from rest_framework import (
+    generics, permissions, status, viewsets, filters
+)
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from django.db.models import Sum
-from .models import Podcast, PodcasterProfile, Category, PodcastComment, PodcastLike
+from .models import (
+    Podcast, PodcasterProfile, Category, PodcastComment, PodcastLike
+)
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
@@ -11,7 +15,6 @@ from .serializers import (
     PodcastCommentSerializer,
 )
 from rest_framework.decorators import action
-from django.db.models import Q
 
 
 class IsPodcastOwner(permissions.BasePermission):
@@ -22,8 +25,7 @@ class IsPodcastOwner(permissions.BasePermission):
 class PodcastListView(generics.ListAPIView):
     serializer_class = PodcastSerializer
     permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description', 'category__name', 'creator__username']
+    filter_backends = [filters.OrderingFilter]
     ordering_fields = ['title', 'created_at', 'views']
 
     def get_queryset(self):
@@ -31,16 +33,6 @@ class PodcastListView(generics.ListAPIView):
         category_id = self.request.query_params.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id=category_id)
-
-        search_term = self.request.query_params.get('search', None)
-        if search_term:
-            queryset = queryset.filter(
-                Q(title__icontains=search_term) |
-                Q(description__icontains=search_term) |
-                Q(category__name__icontains=search_term) |
-                Q(creator__username__icontains=search_term)
-            )
-
         return queryset
 
 
@@ -75,8 +67,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description', 'category__name']
+    filter_backends = [filters.OrderingFilter]
     ordering_fields = ['title', 'created_at', 'views']
 
     def get_permissions(self):
