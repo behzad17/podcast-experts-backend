@@ -33,4 +33,9 @@ urlpatterns = [
         PodcastDetailView.as_view(),
         name='podcast-detail'
     ),
+    path(
+        'podcasts/featured/',
+        PodcastViewSet.as_view({'get': 'featured'}),
+        name='podcast-featured'
+    ),
 ]

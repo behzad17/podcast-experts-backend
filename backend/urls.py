@@ -16,14 +16,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.conf import settings
 from django.conf.urls.static import static
 from backend.admin_dashboard.views import admin_stats
+from podcasts.models import Podcast
+from experts.models import ExpertProfile
+from podcasts.serializers import PodcastSerializer
+from experts.serializers import ExpertProfileSerializer
 
 
 def home_view(request):
-    return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
+    featured_podcasts = Podcast.objects.filter(is_featured=True, is_approved=True)
+    featured_experts = ExpertProfile.objects.filter(is_featured=True, is_approved=True)
+    
+    podcast_serializer = PodcastSerializer(featured_podcasts, many=True)
+    expert_serializer = ExpertProfileSerializer(featured_experts, many=True)
+    
+    return JsonResponse({
+        'featured_podcasts': podcast_serializer.data,
+        'featured_experts': expert_serializer.data
+    })
 
 
 urlpatterns = [

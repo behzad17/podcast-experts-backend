@@ -35,4 +35,5 @@ urlpatterns = [
     path('stats/', ExpertStatsView.as_view(), name='expert-stats'),
     path('', include(router.urls)),
     path('profiles/<int:expert_pk>/', include(expert_router.urls)),
+    path('profiles/featured/', ExpertProfileViewSet.as_view({'get': 'featured'}), name='expert-featured'),
 ] 

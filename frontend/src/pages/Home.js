@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Image,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
 import LikeButton from "../components/common/LikeButton";
@@ -11,6 +19,7 @@ const Home = () => {
   const [featuredPodcasts, setFeaturedPodcasts] = useState([]);
   const [featuredExperts, setFeaturedExperts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,14 +31,13 @@ const Home = () => {
 
     const fetchFeaturedItems = async () => {
       try {
-        const [podcastsRes, expertsRes] = await Promise.all([
-          axios.get("/podcasts/podcasts/featured/"),
-          axios.get("/experts/profiles/featured/"),
-        ]);
-        setFeaturedPodcasts(podcastsRes.data);
-        setFeaturedExperts(expertsRes.data);
+        setError(null);
+        const response = await axios.get("http://localhost:8002/");
+        setFeaturedPodcasts(response.data.featured_podcasts);
+        setFeaturedExperts(response.data.featured_experts);
       } catch (error) {
         console.error("Error fetching featured items:", error);
+        setError("Failed to load featured items. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -47,6 +55,14 @@ const Home = () => {
     if (podcast.image) return podcast.image;
     return "/logo192.png";
   };
+
+  if (error) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <div
@@ -84,111 +100,127 @@ const Home = () => {
         {/* Featured Experts Section */}
         <section className="mb-5">
           <h2 className="mb-4 text-center">Featured Experts</h2>
-          <Row className="g-4">
-            {loading ? (
-              <Col>Loading...</Col>
-            ) : featuredExperts.length > 0 ? (
-              featuredExperts.map((expert) => (
-                <Col key={expert.id} md={4}>
-                  <Card className="h-100 shadow-lg rounded-3 expert-card">
-                    <div className="d-flex h-100">
-                      <div
-                        className="p-3"
-                        style={{
-                          width: "75%",
-                          borderRight: "2px solid #ced4da",
-                          backgroundColor: "#F0F8FF",
-                        }}
-                      >
-                        <Card.Title className="h6 mb-2">
-                          {expert.name}
-                        </Card.Title>
-                        <Card.Text className="small text-muted mb-2">
-                          {expert.bio?.substring(0, 10)}...
-                        </Card.Text>
-                        <div className="d-flex gap-2 align-items-center">
-                          <Link
-                            to={`/experts/${expert.id}`}
-                            className="btn btn-sm btn-primary"
-                          >
-                            View Profile
-                          </Link>
-                          <LikeButton
-                            itemId={expert.id}
-                            type="experts/profiles"
-                            initialCount={expert.likes_count}
-                            className="btn-sm"
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <Row className="g-4">
+              {featuredExperts.length > 0 ? (
+                featuredExperts.map((expert) => (
+                  <Col key={expert.id} md={4}>
+                    <Card className="h-100 shadow-lg rounded-3 expert-card">
+                      <div className="d-flex h-100">
+                        <div
+                          className="p-3"
+                          style={{
+                            width: "75%",
+                            borderRight: "2px solid #ced4da",
+                            backgroundColor: "#F0F8FF",
+                          }}
+                        >
+                          <Card.Title className="h6 mb-2">
+                            {expert.name}
+                          </Card.Title>
+                          <Card.Text className="small text-muted mb-2">
+                            {expert.bio?.substring(0, 10)}...
+                          </Card.Text>
+                          <div className="d-flex gap-2 align-items-center">
+                            <Link
+                              to={`/experts/${expert.id}`}
+                              className="btn btn-sm btn-primary"
+                            >
+                              View Profile
+                            </Link>
+                            <LikeButton
+                              itemId={expert.id}
+                              type="experts/profiles"
+                              initialCount={expert.likes_count}
+                              className="btn-sm"
+                            />
+                          </div>
+                        </div>
+                        <div style={{ width: "25%", minWidth: "25%" }}>
+                          <Card.Img
+                            src={getExpertImageUrl(expert)}
+                            alt={expert.name}
+                            style={{ height: "100%", objectFit: "cover" }}
+                            className="rounded-end-3"
                           />
                         </div>
                       </div>
-                      <div style={{ width: "25%", minWidth: "25%" }}>
-                        <Card.Img
-                          src={getExpertImageUrl(expert)}
-                          alt={expert.name}
-                          style={{ height: "100%", objectFit: "cover" }}
-                          className="rounded-end-3"
-                        />
-                      </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  </Col>
+                ))
+              ) : (
+                <Col>
+                  <Alert variant="info">No featured experts available</Alert>
                 </Col>
-              ))
-            ) : (
-              <Col>No featured experts available</Col>
-            )}
-          </Row>
+              )}
+            </Row>
+          )}
         </section>
 
         {/* Featured Podcasts Section */}
         <section className="mb-5">
           <h2 className="mb-4 text-center">Featured Podcasts</h2>
-          <Row className="g-4">
-            {loading ? (
-              <Col>Loading...</Col>
-            ) : featuredPodcasts.length > 0 ? (
-              featuredPodcasts.map((podcast) => (
-                <Col key={podcast.id} xs={12} sm={6} md={4} lg={2}>
-                  <div className="podcast-card">
-                    <Card className="h-100 shadow-sm">
-                      <Card.Img
-                        src={getPodcastImageUrl(podcast)}
-                        alt={podcast.title}
-                        style={{ height: "200px", objectFit: "cover" }}
-                        className="rounded-top-3"
-                      />
-                      <Card.Body
-                        className="p-3"
-                        style={{ backgroundColor: "#F0F8FF" }}
-                      >
-                        <Card.Title className="h6 mb-2 text-truncate">
-                          {podcast.title}
-                        </Card.Title>
-                        <Card.Text className="small text-muted mb-3">
-                          {podcast.description?.substring(0, 30)}...
-                        </Card.Text>
-                        <div className="d-flex flex-column gap-2">
-                          <Link
-                            to={`/podcasts/${podcast.id}`}
-                            className="btn btn-sm btn-primary w-100"
-                          >
-                            Listen Now
-                          </Link>
-                          <LikeButton
-                            itemId={podcast.id}
-                            type="podcasts/podcasts"
-                            initialCount={podcast.likes_count}
-                            className="btn-sm w-100"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </div>
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          ) : (
+            <Row className="g-4">
+              {featuredPodcasts.length > 0 ? (
+                featuredPodcasts.map((podcast) => (
+                  <Col key={podcast.id} xs={12} sm={6} md={4} lg={2}>
+                    <div className="podcast-card">
+                      <Card className="h-100 shadow-sm">
+                        <Card.Img
+                          src={getPodcastImageUrl(podcast)}
+                          alt={podcast.title}
+                          style={{ height: "200px", objectFit: "cover" }}
+                          className="rounded-top-3"
+                        />
+                        <Card.Body
+                          className="p-3"
+                          style={{ backgroundColor: "#F0F8FF" }}
+                        >
+                          <Card.Title className="h6 mb-2 text-truncate">
+                            {podcast.title}
+                          </Card.Title>
+                          <Card.Text className="small text-muted mb-3">
+                            {podcast.description?.substring(0, 30)}...
+                          </Card.Text>
+                          <div className="d-flex flex-column gap-2">
+                            <Link
+                              to={`/podcasts/${podcast.id}`}
+                              className="btn btn-sm btn-primary w-100"
+                            >
+                              Listen Now
+                            </Link>
+                            <LikeButton
+                              itemId={podcast.id}
+                              type="podcasts/podcasts"
+                              initialCount={podcast.likes_count}
+                              className="btn-sm w-100"
+                            />
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </Col>
+                ))
+              ) : (
+                <Col>
+                  <Alert variant="info">No featured podcasts available</Alert>
                 </Col>
-              ))
-            ) : (
-              <Col>No featured podcasts available</Col>
-            )}
-          </Row>
+              )}
+            </Row>
+          )}
         </section>
 
         <Row className="g-4">

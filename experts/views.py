@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
-from .models import ExpertProfile, ExpertComment, ExpertReaction, ExpertCategory
+from .models import (
+    ExpertProfile, ExpertComment, ExpertReaction, ExpertCategory
+)
 from .serializers import (
     ExpertProfileSerializer,
     ExpertCommentSerializer,
@@ -63,8 +65,8 @@ class ExpertProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         obj = super().get_object()
-        if (not obj.is_approved and not self.request.user.is_staff and 
-            obj.user != self.request.user):
+        if (not obj.is_approved and not self.request.user.is_staff and
+                obj.user != self.request.user):
             raise PermissionDenied("This profile is not approved yet.")
         return obj
 
@@ -99,7 +101,9 @@ class ExpertProfileListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['specialty', 'user__username', 'bio', 'expertise', 'user__email']
+    search_fields = [
+        'specialty', 'user__username', 'bio', 'expertise', 'user__email'
+    ]
     ordering_fields = ['user__username', 'specialty', 'created_at']
 
     def get_queryset(self):
@@ -176,8 +180,8 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ExpertProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name', 'bio', 'expertise', 'user__username']
-    ordering_fields = ['name', 'created_at', 'experience_years']
+    search_fields = ['user__username', 'bio', 'expertise']
+    ordering_fields = ['created_at', 'updated_at']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'featured']:
@@ -185,28 +189,26 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
-        queryset = ExpertProfile.objects.all()
-        category = self.request.query_params.get('category', None)
-        search = self.request.query_params.get('search', None)
+        if self.request.user.is_staff:
+            return ExpertProfile.objects.all()
+        return ExpertProfile.objects.filter(is_approved=True)
 
-        if category:
-            queryset = queryset.filter(categories__id=category)
-
-        if search:
-            queryset = queryset.filter(
-                Q(name__icontains=search) |
-                Q(bio__icontains=search) |
-                Q(expertise__icontains=search) |
-                Q(user__username__icontains=search)
+    def perform_create(self, serializer):
+        if self.request.user.user_type != 'expert':
+            raise PermissionDenied(
+                "Only users registered as experts can create expert profiles."
             )
-
-        if self.action == 'list':
-            queryset = queryset.filter(is_approved=True)
-        return queryset
+        if hasattr(self.request.user, 'expert_profile'):
+            raise PermissionDenied(
+                "You already have an expert profile."
+            )
+        serializer.save(user=self.request.user, is_approved=False)
 
     @action(detail=False, methods=['get'])
     def featured(self, request):
-        featured_experts = self.get_queryset().filter(is_featured=True)[:6]
+        featured_experts = ExpertProfile.objects.filter(
+            is_featured=True, is_approved=True
+        )
         serializer = self.get_serializer(featured_experts, many=True)
         return Response(serializer.data)
 
@@ -292,7 +294,11 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['put', 'patch'])
     def edit_comment(self, request, pk=None):
         expert = self.get_object()
-        comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
+        comment = get_object_or_404(
+            ExpertComment,
+            id=request.data.get('comment_id'),
+            expert=expert
+        )
 
         if comment.user != request.user:
             return Response(
@@ -312,7 +318,11 @@ class ExpertProfileViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['delete'])
     def delete_comment(self, request, pk=None):
         expert = self.get_object()
-        comment = get_object_or_404(ExpertComment, id=request.data.get('comment_id'), expert=expert)
+        comment = get_object_or_404(
+            ExpertComment,
+            id=request.data.get('comment_id'),
+            expert=expert
+        )
 
         if comment.user != request.user:
             return Response(
@@ -396,10 +406,15 @@ class ExpertReactionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return ExpertReaction.objects.filter(expert_id=self.kwargs.get('expert_pk'))
+        return ExpertReaction.objects.filter(
+            expert_id=self.kwargs.get('expert_pk')
+        )
 
     def perform_create(self, serializer):
-        expert = get_object_or_404(ExpertProfile, pk=self.kwargs.get('expert_pk'))
+        expert = get_object_or_404(
+            ExpertProfile,
+            pk=self.kwargs.get('expert_pk')
+        )
         serializer.save(expert=expert, user=self.request.user)
 
 
@@ -408,10 +423,15 @@ class ExpertCommentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return ExpertComment.objects.filter(expert_id=self.kwargs.get('expert_pk'))
+        return ExpertComment.objects.filter(
+            expert_id=self.kwargs.get('expert_pk')
+        )
 
     def perform_create(self, serializer):
-        expert = get_object_or_404(ExpertProfile, pk=self.kwargs.get('expert_pk'))
+        expert = get_object_or_404(
+            ExpertProfile,
+            pk=self.kwargs.get('expert_pk')
+        )
         serializer.save(expert=expert, user=self.request.user)
 
     def get_serializer_context(self):

@@ -85,6 +85,12 @@ class PodcastViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @action(detail=False, methods=['get'])
+    def featured(self, request):
+        featured_podcasts = Podcast.objects.filter(is_featured=True)
+        serializer = self.get_serializer(featured_podcasts, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
         podcast = self.get_object()
@@ -198,12 +204,6 @@ class PodcastViewSet(viewsets.ModelViewSet):
         
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @action(detail=False, methods=['get'])
-    def featured(self, request):
-        featured_podcasts = self.get_queryset().filter(is_featured=True)[:6]
-        serializer = self.get_serializer(featured_podcasts, many=True)
-        return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
