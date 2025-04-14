@@ -53,7 +53,7 @@ def create_sample_data():
 
     # Create categories
     podcast_categories = [
-        'Technology', 'Business', 'Science', 'Health', 
+        'Technology', 'Business', 'Science', 'Health',
         'Education', 'Entertainment'
     ]
     for category_name in podcast_categories:
@@ -64,7 +64,7 @@ def create_sample_data():
         print(f'Created podcast category: {category.name}')
 
     expert_categories = [
-        'Technology', 'Business', 'Science', 'Health', 
+        'Technology', 'Business', 'Science', 'Health',
         'Education', 'Marketing'
     ]
     for category_name in expert_categories:
@@ -101,7 +101,7 @@ def create_sample_data():
         'Education Revolution',
         'Entertainment Buzz'
     ]
-    
+
     for i, title in enumerate(podcast_titles):
         podcast = Podcast.objects.create(
             title=title,
@@ -123,7 +123,7 @@ def create_sample_data():
         'Prof. Robert Wilson',
         'Lisa Anderson'
     ]
-    
+
     expert_expertise = [
         'Artificial Intelligence',
         'Business Strategy',
@@ -132,7 +132,7 @@ def create_sample_data():
         'Digital Marketing',
         'Environmental Science'
     ]
-    
+
     for i, expert in enumerate(experts):
         expert_profile = ExpertProfile.objects.create(
             user=expert,

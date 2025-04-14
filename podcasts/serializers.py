@@ -57,10 +57,13 @@ class PodcastSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Podcast
-        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
+        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 
+                 'image', 'image_url', 'link', 'is_approved', 'created_at', 
+                 'comments', 'likes_count', 'views']
         read_only_fields = ['created_at']
 
     def get_comments(self, obj):
@@ -69,6 +72,14 @@ class PodcastSerializer(serializers.ModelSerializer):
 
     def get_likes_count(self, obj):
         return obj.likes.count()
+
+    def get_image_url(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None
 
 
 class PodcastStatsSerializer(serializers.ModelSerializer):

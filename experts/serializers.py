@@ -70,7 +70,8 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
 
     def get_profile_picture_url(self, obj):
         if obj.profile_picture:
-            return self.context['request'].build_absolute_uri(
-                obj.profile_picture.url
-            )
+            request = self.context.get('request')
+            if request is not None:
+                return request.build_absolute_uri(obj.profile_picture.url)
+            return obj.profile_picture.url
         return None 

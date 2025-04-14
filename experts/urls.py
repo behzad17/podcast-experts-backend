@@ -13,6 +13,7 @@ from .views import (
     ExpertCategoryViewSet,
     ExpertCommentViewSet,
     ExpertReactionViewSet,
+    TestImageUploadView
 )
 
 router = DefaultRouter()
@@ -36,4 +37,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('profiles/<int:expert_pk>/', include(expert_router.urls)),
     path('profiles/featured/', ExpertProfileViewSet.as_view({'get': 'featured'}), name='expert-featured'),
+    path('test-upload/', TestImageUploadView.as_view(), name='test-image-upload'),
 ] 

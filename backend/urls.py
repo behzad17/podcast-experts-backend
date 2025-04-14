@@ -30,8 +30,8 @@ def home_view(request):
     featured_podcasts = Podcast.objects.filter(is_featured=True, is_approved=True)
     featured_experts = ExpertProfile.objects.filter(is_featured=True, is_approved=True)
     
-    podcast_serializer = PodcastSerializer(featured_podcasts, many=True)
-    expert_serializer = ExpertProfileSerializer(featured_experts, many=True)
+    podcast_serializer = PodcastSerializer(featured_podcasts, many=True, context={'request': request})
+    expert_serializer = ExpertProfileSerializer(featured_experts, many=True, context={'request': request})
     
     return JsonResponse({
         'featured_podcasts': podcast_serializer.data,

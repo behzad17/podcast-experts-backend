@@ -438,3 +438,19 @@ class ExpertCommentViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['expert_pk'] = self.kwargs.get('expert_pk')
         return context
+
+
+class TestImageUploadView(APIView):
+    def post(self, request):
+        expert = ExpertProfile.objects.first()  # Get the first expert
+        if not expert:
+            return Response({"error": "No experts found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        if 'image' not in request.FILES:
+            return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        expert.profile_picture = request.FILES['image']
+        expert.save()
+        
+        serializer = ExpertProfileSerializer(expert, context={'request': request})
+        return Response(serializer.data)
