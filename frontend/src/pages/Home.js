@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Image,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Alert, Spinner } from "react-bootstrap";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
 import LikeButton from "../components/common/LikeButton";
@@ -32,7 +24,7 @@ const Home = () => {
     const fetchFeaturedItems = async () => {
       try {
         setError(null);
-        const response = await axios.get("http://localhost:8002/");
+        const response = await axios.get("/");
         setFeaturedPodcasts(response.data.featured_podcasts);
         setFeaturedExperts(response.data.featured_experts);
       } catch (error) {
@@ -47,12 +39,12 @@ const Home = () => {
   }, []);
 
   const getExpertImageUrl = (expert) => {
-    if (expert.profile_picture) return expert.profile_picture;
+    if (expert.profile_picture_url) return expert.profile_picture_url;
     return "/logo192.png";
   };
 
   const getPodcastImageUrl = (podcast) => {
-    if (podcast.image) return podcast.image;
+    if (podcast.image_url) return podcast.image_url;
     return "/logo192.png";
   };
 
@@ -125,7 +117,7 @@ const Home = () => {
                             {expert.name}
                           </Card.Title>
                           <Card.Text className="small text-muted mb-2">
-                            {expert.bio?.substring(0, 10)}...
+                            {expert.bio?.substring(0, 100)}...
                           </Card.Text>
                           <div className="d-flex gap-2 align-items-center">
                             <Link
@@ -134,12 +126,6 @@ const Home = () => {
                             >
                               View Profile
                             </Link>
-                            <LikeButton
-                              itemId={expert.id}
-                              type="experts/profiles"
-                              initialCount={expert.likes_count}
-                              className="btn-sm"
-                            />
                           </div>
                         </div>
                         <div style={{ width: "25%", minWidth: "25%" }}>
@@ -176,42 +162,34 @@ const Home = () => {
             <Row className="g-4">
               {featuredPodcasts.length > 0 ? (
                 featuredPodcasts.map((podcast) => (
-                  <Col key={podcast.id} xs={12} sm={6} md={4} lg={2}>
-                    <div className="podcast-card">
-                      <Card className="h-100 shadow-sm">
-                        <Card.Img
-                          src={getPodcastImageUrl(podcast)}
-                          alt={podcast.title}
-                          style={{ height: "200px", objectFit: "cover" }}
-                          className="rounded-top-3"
-                        />
-                        <Card.Body
-                          className="p-3"
-                          style={{ backgroundColor: "#F0F8FF" }}
-                        >
-                          <Card.Title className="h6 mb-2 text-truncate">
-                            {podcast.title}
-                          </Card.Title>
-                          <Card.Text className="small text-muted mb-3">
-                            {podcast.description?.substring(0, 30)}...
-                          </Card.Text>
-                          <div className="d-flex flex-column gap-2">
-                            <Link
-                              to={`/podcasts/${podcast.id}`}
-                              className="btn btn-sm btn-primary w-100"
-                            >
-                              Listen Now
-                            </Link>
-                            <LikeButton
-                              itemId={podcast.id}
-                              type="podcasts/podcasts"
-                              initialCount={podcast.likes_count}
-                              className="btn-sm w-100"
-                            />
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </div>
+                  <Col key={podcast.id} xs={12} sm={6} md={4} lg={3}>
+                    <Card className="h-100 shadow-sm">
+                      <Card.Img
+                        src={getPodcastImageUrl(podcast)}
+                        alt={podcast.title}
+                        style={{ height: "200px", objectFit: "cover" }}
+                        className="rounded-top-3"
+                      />
+                      <Card.Body
+                        className="p-3"
+                        style={{ backgroundColor: "#F0F8FF" }}
+                      >
+                        <Card.Title className="h6 mb-2 text-truncate">
+                          {podcast.title}
+                        </Card.Title>
+                        <Card.Text className="small text-muted mb-3">
+                          {podcast.description?.substring(0, 100)}...
+                        </Card.Text>
+                        <div className="d-flex flex-column gap-2">
+                          <Link
+                            to={`/podcasts/${podcast.id}`}
+                            className="btn btn-sm btn-primary"
+                          >
+                            View Details
+                          </Link>
+                        </div>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 ))
               ) : (
@@ -222,63 +200,8 @@ const Home = () => {
             </Row>
           )}
         </section>
-
-        <Row className="g-4">
-          <Col md={6}>
-            <Card className="shadow-sm rounded-3">
-              <Card.Body className="p-3">
-                <h3 className="h5">Find Experts</h3>
-                <p className="small text-muted mb-0">
-                  Get booked on podcasts to expand your reach and audience. Join
-                  the free newsletter featuring 20 podcasts looking for guests
-                  each week. And join our paid expert directory so podcasts can
-                  find you. Get booked on podcasts to expand your reach and
-                  audience. Join the free newsletter featuring 20 podcasts
-                  looking for guests each week. And join our paid expert
-                  directory so podcasts can find you. Get booked on podcasts to
-                  expand your reach and audience. Join the free newsletter
-                  featuring 20 podcasts looking for guests each week. And join
-                  our paid expert directory so podcasts can find you. Get booked
-                  on podcasts to expand your reach and audience. Join the free
-                  newsletter featuring 20 podcasts looking for guests each week.
-                  And join our paid expert directory so podcasts can find you.
-                  Get booked on podcasts to expand your reach and audience. Join
-                  the free newsletter featuring 20 podcasts looking for guests
-                  each week. And join our paid expert directory so podcasts can
-                  find you.
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className="shadow-sm rounded-3">
-              <Card.Body className="p-3">
-                <h3 className="h5">Discover Podcasts</h3>
-                <p className="small text-muted mb-0">
-                  Find experts to be guests on your podcast, from our Guest
-                  Directory and/or a free podcast feature in our newsletter that
-                  goes to many experts and podcasters, that goes to many experts
-                  and podcasters. Find experts to be guests on your podcast,
-                  from our Guest Directory and/or a free podcast feature in our
-                  newsletter that goes to many experts and podcasters, that goes
-                  to many experts and podcasters. Find experts to be guests on
-                  your podcast, from our Guest Directory and/or a free podcast
-                  feature in our newsletter that goes to many experts and
-                  podcasters, that goes to many experts and podcasters. Find
-                  experts to be guests on your podcast, from our Guest Directory
-                  and/or a free podcast feature in our newsletter that goes to
-                  many experts and podcasters, that goes to many experts and
-                  podcasters. Find experts to be guests on your podcast, from
-                  our Guest Directory and/or a free podcast feature in our
-                  newsletter that goes to many experts and podcasters, that goes
-                  to many experts and podcasters.
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Footer />
       </Container>
+      <Footer />
     </div>
   );
 };

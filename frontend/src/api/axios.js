@@ -1,16 +1,14 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8002/api",
+const instance = axios.create({
+  baseURL: "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
   },
-  withCredentials: true,
 });
 
-// Add request interceptor
-api.interceptors.request.use(
+// Add a request interceptor to include the token in requests
+instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -24,7 +22,7 @@ api.interceptors.request.use(
 );
 
 // Add response interceptor
-api.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
@@ -35,4 +33,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default instance;
