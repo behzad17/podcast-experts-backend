@@ -19,7 +19,7 @@ fi
 
 # Step 2: Load fixture data
 echo -e "${YELLOW}Loading fixture data...${NC}"
-python3 manage.py loaddata initial_data.json
+python3 manage.py loaddata fixtures/initial_data.json
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}Error: Loading fixture data failed${NC}"

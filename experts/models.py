@@ -3,6 +3,8 @@ from django.utils import timezone
 from users.models import CustomUser
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from cloudinary.models import CloudinaryField
 
 User = get_user_model()
 
@@ -20,7 +22,7 @@ class ExpertCategory(models.Model):
 
 class ExpertProfile(models.Model):
     user = models.OneToOneField(
-        CustomUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='expert_profile'
     )
@@ -31,21 +33,26 @@ class ExpertProfile(models.Model):
     experience_years = models.IntegerField()
     website = models.URLField(blank=True, null=True)
     social_media = models.TextField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='expert_profiles/', blank=True, null=True)
+    profile_picture = CloudinaryField('image', folder='expert_profiles/', blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_views = models.IntegerField(default=0)
+    total_bookmarks = models.IntegerField(default=0)
     views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
     bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
 
     def __str__(self):
-        return f"{self.name} - {self.expertise}"
+        return self.name
 
     def get_total_views(self):
         return self.views.count()
 
     def get_total_bookmarks(self):
         return self.bookmarks.count()
+
+    class Meta:
+        ordering = ['-created_at']
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

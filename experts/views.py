@@ -15,6 +15,7 @@ from .serializers import (
 )
 from rest_framework.decorators import action
 from django.db.models import Q
+import cloudinary.uploader
 
 # Create your views here.
 
@@ -145,8 +146,16 @@ class MyExpertProfileView(generics.RetrieveUpdateAPIView):
             # Delete old profile picture if it exists
             instance = self.get_object()
             if instance.profile_picture:
-                instance.profile_picture.delete()
-
+                cloudinary.uploader.destroy(instance.profile_picture.public_id)
+            
+            # Upload new image to Cloudinary
+            upload_result = cloudinary.uploader.upload(
+                profile_picture,
+                folder="expert_profiles",
+                resource_type="image"
+            )
+            serializer.validated_data['profile_picture'] = upload_result['secure_url']
+        
         serializer.save(user=self.request.user)
 
 
@@ -449,7 +458,14 @@ class TestImageUploadView(APIView):
         if 'image' not in request.FILES:
             return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
         
-        expert.profile_picture = request.FILES['image']
+        # Upload image to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            request.FILES['image'],
+            folder="expert_profiles",
+            resource_type="image"
+        )
+        
+        expert.profile_picture = upload_result['secure_url']
         expert.save()
         
         serializer = ExpertProfileSerializer(expert, context={'request': request})
