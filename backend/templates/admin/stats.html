@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %} {% block content %}
+<div class="module">
+  <h2>📊 آمار کلی سایت</h2>
+  <table>
+    <tr>
+      <th>کاربران</th>
+      <td>{{ data.users }}</td>
+    </tr>
+    <tr>
+      <th>پادکست‌ها</th>
+      <td>{{ data.podcasts }}</td>
+    </tr>
+    <tr>
+      <th>درخواست‌های همکاری</th>
+      <td>{{ data.collaborations }}</td>
+    </tr>
+    <tr>
+      <td>Experts</td>
+      <td>{{ data.experts }}</td>
+    </tr>
+    <tr>
+      <td>Comments</td>
+      <td>{{ data.comments }}</td>
+    </tr>
+    <tr>
+      <td>Ratings</td>
+      <td>{{ data.ratings }}</td>
+    </tr>
+    <tr>
+      <td>Bookmarks</td>
+      <td>{{ data.bookmarks }}</td>
+    </tr>
+    <tr>
+      <td>Messages</td>
+      <td>{{ data.messages }}</td>
+    </tr>
+  </table>
+</div>
+{% endblock %}

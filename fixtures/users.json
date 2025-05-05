@@ -1,0 +1,149 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": "2025-03-26T16:47:13.841Z",
+      "is_superuser": true,
+      "username": "Benny",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzadjavadian49@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:19:22.251Z",
+      "email_verified": false,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$1JSqUVVi2KAdR1swt1MHVh$T6+wC5lkiH3VaALjk4b7JQJC6biqtKK6FZsc9kmDces=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "testexpert",
+      "first_name": "",
+      "last_name": "",
+      "email": "expert@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:24:30.957Z",
+      "email_verified": false,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sarahchen",
+      "first_name": "Sarah",
+      "last_name": "Chen",
+      "email": "sarah.chen@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.290Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "michaelrodriguez",
+      "first_name": "Michael",
+      "last_name": "Rodriguez",
+      "email": "michael.rodriguez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.291Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emilywatson",
+      "first_name": "Emily",
+      "last_name": "Watson",
+      "email": "emily.watson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.292Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jameswilson",
+      "first_name": "James",
+      "last_name": "Wilson",
+      "email": "james.wilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.293Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lisathompson",
+      "first_name": "Lisa",
+      "last_name": "Thompson",
+      "email": "lisa.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.294Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

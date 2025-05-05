@@ -1,0 +1,686 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": "2025-03-26T16:47:13.841Z",
+      "is_superuser": true,
+      "username": "Benny",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzadjavadian49@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:19:22.251Z",
+      "email_verified": false,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$1JSqUVVi2KAdR1swt1MHVh$T6+wC5lkiH3VaALjk4b7JQJC6biqtKK6FZsc9kmDces=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "testexpert",
+      "first_name": "",
+      "last_name": "",
+      "email": "expert@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:24:30.957Z",
+      "email_verified": false,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$mGESHFkxdkwVl44Ms4C6Vx$4Nea7pompSYkri/Lt7eG7AuzGx6cE6fAb8NiFk5JYm4=",
+      "last_login": "2025-03-26T18:54:56.783Z",
+      "is_superuser": false,
+      "username": "Behzad",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzad_1349@hotmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:07:08.071Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "Shirin",
+      "first_name": "",
+      "last_name": "",
+      "email": "swedpodcast@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 1,
+    "fields": {
+      "name": "Technology",
+      "slug": "technology",
+      "description": "Tech news, reviews, and discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 2,
+    "fields": {
+      "name": "Business",
+      "slug": "business",
+      "description": "Business news, entrepreneurship, and finance"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 3,
+    "fields": {
+      "name": "Science",
+      "slug": "science",
+      "description": "Scientific discoveries and discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 4,
+    "fields": {
+      "name": "Health & Wellness",
+      "slug": "health-wellness",
+      "description": "Health, fitness, and mental wellness"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 5,
+    "fields": {
+      "name": "Education",
+      "slug": "education",
+      "description": "Educational content and learning"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 6,
+    "fields": {
+      "name": "Entertainment",
+      "slug": "entertainment",
+      "description": "Movies, TV shows, and pop culture"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 7,
+    "fields": {
+      "name": "News & Politics",
+      "slug": "news-politics",
+      "description": "Current events and political discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 8,
+    "fields": {
+      "name": "Sports",
+      "slug": "sports",
+      "description": "Sports news, analysis, and commentary"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 9,
+    "fields": {
+      "name": "Music",
+      "slug": "music",
+      "description": "Music reviews, interviews, and industry news"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 10,
+    "fields": {
+      "name": "Arts & Culture",
+      "slug": "arts-culture",
+      "description": "Art, literature, and cultural topics"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 11,
+    "fields": {
+      "name": "History",
+      "slug": "history",
+      "description": "Historical events and stories"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 12,
+    "fields": {
+      "name": "True Crime",
+      "slug": "true-crime",
+      "description": "True crime stories and investigations"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 13,
+    "fields": {
+      "name": "Comedy",
+      "slug": "comedy",
+      "description": "Comedy shows and humor"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 14,
+    "fields": {
+      "name": "Society",
+      "slug": "society",
+      "description": "Social issues and cultural commentary"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 15,
+    "fields": {
+      "name": "Religion & Spirituality",
+      "slug": "religion-spirituality",
+      "description": "Religious and spiritual content"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 16,
+    "fields": {
+      "name": "Family & Kids",
+      "slug": "family-kids",
+      "description": "Family-friendly and children's content"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 17,
+    "fields": {
+      "name": "Food & Cooking",
+      "slug": "food-cooking",
+      "description": "Cooking tips, recipes, and food culture"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 18,
+    "fields": {
+      "name": "Travel",
+      "slug": "travel",
+      "description": "Travel stories, tips, and destinations"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 19,
+    "fields": {
+      "name": "Personal Development",
+      "slug": "personal-development",
+      "description": "Self-improvement and motivation"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 20,
+    "fields": {
+      "name": "Career",
+      "slug": "career",
+      "description": "Career advice and professional development"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 21,
+    "fields": { "name": "Health", "slug": "health", "description": "" }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 22,
+    "fields": { "name": "News", "slug": "news", "description": "" }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 23,
+    "fields": { "name": "Arts", "slug": "arts", "description": "" }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 24,
+    "fields": { "name": "Lifestyle", "slug": "lifestyle", "description": "" }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "bio": "Test podcaster profile",
+      "website": "",
+      "social_links": {},
+      "created_at": "2025-03-25T17:26:28.726Z",
+      "updated_at": "2025-03-25T17:26:28.726Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "bio": "",
+      "website": "",
+      "social_links": {},
+      "created_at": "2025-03-26T16:53:13.690Z",
+      "updated_at": "2025-03-26T16:53:13.690Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 1,
+    "fields": {
+      "title": "Test Podcast",
+      "description": "A test podcast for development",
+      "owner": 1,
+      "category": 1,
+      "image": "",
+      "link": "",
+      "is_approved": true,
+      "created_at": "2025-03-25T17:26:28.728Z",
+      "updated_at": "2025-03-25T17:26:28.728Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 2,
+    "fields": {
+      "title": "SWEDCAST",
+      "description": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+      "owner": 2,
+      "category": null,
+      "image": "",
+      "link": "http://www.swedcast.net",
+      "is_approved": true,
+      "created_at": "2025-03-26T16:53:13.693Z",
+      "updated_at": "2025-03-26T22:01:52.070Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 3,
+    "fields": {
+      "title": "Tech Talk Daily",
+      "description": "Daily insights into the latest technology trends, innovations, and industry developments.",
+      "owner": 1,
+      "category": 1,
+      "link": "https://example.com/techtalkdaily",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.295Z",
+      "updated_at": "2025-03-26T17:56:44.295Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 4,
+    "fields": {
+      "title": "Business Insights",
+      "description": "Expert analysis of business trends, market movements, and entrepreneurial strategies.",
+      "owner": 1,
+      "category": 2,
+      "link": "https://example.com/businessinsights",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.296Z",
+      "updated_at": "2025-03-26T17:56:44.296Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 5,
+    "fields": {
+      "title": "Science Today",
+      "description": "Exploring the latest scientific discoveries and their impact on our world.",
+      "owner": 1,
+      "category": 3,
+      "link": "https://example.com/sciencetoday",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.297Z",
+      "updated_at": "2025-03-26T17:56:44.297Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 6,
+    "fields": {
+      "title": "Health & Wellness Weekly",
+      "description": "Weekly discussions on health, fitness, and mental wellness topics.",
+      "owner": 1,
+      "category": 4,
+      "link": "https://example.com/healthwellness",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.298Z",
+      "updated_at": "2025-03-26T17:56:44.298Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Audio Production",
+      "description": "Experts in sound engineering, mixing, and audio production techniques",
+      "created_at": "2025-03-26T17:56:44.290Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Content Strategy",
+      "description": "Specialists in podcast content planning, storytelling, and audience engagement",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Marketing & Growth",
+      "description": "Experts in podcast promotion, audience building, and monetization strategies",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Technical Equipment",
+      "description": "Specialists in podcast recording equipment, software, and technical setup",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 5,
+    "fields": {
+      "name": "Voice & Presentation",
+      "description": "Experts in voice training, public speaking, and on-air presentation skills",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 6,
+    "fields": {
+      "name": "Business & Monetization",
+      "description": "Specialists in podcast business models, sponsorship, and revenue generation",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 7,
+    "fields": {
+      "name": "Legal & Compliance",
+      "description": "Experts in podcast-related legal matters, copyright, and content compliance",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 8,
+    "fields": {
+      "name": "Distribution & Platforms",
+      "description": "Specialists in podcast distribution, platform optimization, and analytics",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 1,
+    "fields": {
+      "user": 6,
+      "name": "Shirin",
+      "bio": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+      "expertise": "Web delopment",
+      "experience_years": 55,
+      "website": "http://www.swedcast.net",
+      "social_media": "insta: @swedcast",
+      "profile_picture": "",
+      "is_approved": true,
+      "created_at": "2025-03-26T16:22:34.327Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 8,
+      "name": "Dr. Sarah Chen",
+      "bio": "AI and Machine Learning expert with 10+ years of experience in developing cutting-edge solutions.",
+      "expertise": "Artificial Intelligence, Machine Learning, Deep Learning",
+      "experience_years": 10,
+      "website": "https://sarahchen.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/sarahchen\", \"twitter\": \"https://twitter.com/sarahchen\"}",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.299Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 9,
+      "name": "Michael Rodriguez",
+      "bio": "Business strategy consultant specializing in digital transformation and innovation.",
+      "expertise": "Business Strategy, Digital Transformation, Innovation",
+      "experience_years": 8,
+      "website": "https://michaelrodriguez.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/michaelrodriguez\", \"twitter\": \"https://twitter.com/michaelrodriguez\"}",
+      "profile_picture": "",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.300Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 4,
+    "fields": {
+      "user": 10,
+      "name": "Dr. Emily Watson",
+      "bio": "Neuroscientist and mental health expert focusing on cognitive development and well-being.",
+      "expertise": "Neuroscience, Mental Health, Cognitive Development",
+      "experience_years": 12,
+      "website": "https://emilywatson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/emilywatson\", \"twitter\": \"https://twitter.com/emilywatson\"}",
+      "profile_picture": "",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.301Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 5,
+    "fields": {
+      "user": 11,
+      "name": "Dr. James Wilson",
+      "bio": "Environmental scientist and sustainability expert with a focus on climate change solutions.",
+      "expertise": "Environmental Science, Sustainability, Climate Change",
+      "experience_years": 15,
+      "website": "https://jameswilson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/jameswilson\", \"twitter\": \"https://twitter.com/jameswilson\"}",
+      "profile_picture": "",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.302Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 6,
+    "fields": {
+      "user": 12,
+      "name": "Lisa Thompson",
+      "bio": "Nutrition and wellness expert specializing in personalized health optimization.",
+      "expertise": "Nutrition, Wellness, Health Optimization",
+      "experience_years": 9,
+      "website": "https://lisathompson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/lisathompson\", \"twitter\": \"https://twitter.com/lisathompson\"}",
+      "profile_picture": "",
+      "is_approved": true,
+      "created_at": "2025-03-26T17:56:44.303Z",
+      "categories": [],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sarahchen",
+      "first_name": "Sarah",
+      "last_name": "Chen",
+      "email": "sarah.chen@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.299Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "michaelrodriguez",
+      "first_name": "Michael",
+      "last_name": "Rodriguez",
+      "email": "michael.rodriguez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.300Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emilywatson",
+      "first_name": "Emily",
+      "last_name": "Watson",
+      "email": "emily.watson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.301Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jameswilson",
+      "first_name": "James",
+      "last_name": "Wilson",
+      "email": "james.wilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.302Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lisathompson",
+      "first_name": "Lisa",
+      "last_name": "Thompson",
+      "email": "lisa.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.303Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

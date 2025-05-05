@@ -1,0 +1,87 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sarahchen",
+      "first_name": "Sarah",
+      "last_name": "Chen",
+      "email": "sarah.chen@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.290Z",
+      "user_type": "expert"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "michaelrodriguez",
+      "first_name": "Michael",
+      "last_name": "Rodriguez",
+      "email": "michael.rodriguez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.291Z",
+      "user_type": "expert"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emilywatson",
+      "first_name": "Emily",
+      "last_name": "Watson",
+      "email": "emily.watson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.292Z",
+      "user_type": "expert"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jameswilson",
+      "first_name": "James",
+      "last_name": "Wilson",
+      "email": "james.wilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.293Z",
+      "user_type": "expert"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$dummy_hash",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lisathompson",
+      "first_name": "Lisa",
+      "last_name": "Thompson",
+      "email": "lisa.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.294Z",
+      "user_type": "expert"
+    }
+  }
+]
