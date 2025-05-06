@@ -11,6 +11,7 @@ import {
   Image,
 } from "react-bootstrap";
 import api from "../api/axios";
+import { getMyPodcasts } from "../services/api";
 import ProfileEditModal from "../components/profile/ProfileEditModal";
 import {
   FaUser,
@@ -52,25 +53,8 @@ const Profile = () => {
           // Since the ViewSet returns a list, we need to get the first item
           if (response.data && response.data.length > 0) {
             setProfile(response.data[0]);
-            // Fetch podcaster's podcasts using the my-podcasts endpoint
-            try {
-              const podcastsResponse = await api.get("/podcasts/my-podcasts/");
-              if (
-                podcastsResponse.data &&
-                Array.isArray(podcastsResponse.data)
-              ) {
-                setPodcasts(podcastsResponse.data);
-              } else {
-                console.error(
-                  "Unexpected podcasts response format:",
-                  podcastsResponse.data
-                );
-                setPodcasts([]);
-              }
-            } catch (podcastError) {
-              console.error("Error fetching podcasts:", podcastError);
-              setPodcasts([]);
-            }
+            // Fetch podcaster's podcasts
+            await fetchPodcasts();
           } else {
             setError(
               "No podcaster profile found. Please create a profile first."
@@ -98,6 +82,31 @@ const Profile = () => {
 
   const handleEditPodcast = (podcastId) => {
     navigate(`/podcasts/${podcastId}/edit`);
+  };
+
+  const fetchPodcasts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getMyPodcasts();
+      console.log("Podcasts response:", response);
+      if (response.data) {
+        setPodcasts(response.data);
+      } else {
+        console.error("No data in podcasts response");
+        setError("Failed to load podcasts. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error fetching podcasts:", error);
+      if (error.response?.status === 401) {
+        setError("Please log in to view your podcasts.");
+      } else if (error.response?.status === 403) {
+        setError("You don't have permission to view podcasts.");
+      } else {
+        setError("Failed to load podcasts. Please try again later.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isLoading) {

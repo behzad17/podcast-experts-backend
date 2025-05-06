@@ -19,23 +19,19 @@ const CommentSection = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
 
-  const fetchComments = useCallback(async () => {
+  const fetchComments = async () => {
     try {
-      setLoading(true);
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/comments/`
-          : `/podcasts/podcasts/${id}/comments/`;
-      const response = await api.get(endpoint);
+      const response = await api.get(
+        type === "podcast"
+          ? `/podcasts/${id}/comments/`
+          : `/experts/${id}/comments/`
+      );
       setComments(response.data);
-      setError("");
     } catch (error) {
       console.error("Error fetching comments:", error);
       setError("Failed to load comments");
-    } finally {
-      setLoading(false);
     }
-  }, [id, type]);
+  };
 
   useEffect(() => {
     if (!initialComments.length) {
@@ -43,73 +39,48 @@ const CommentSection = ({
     }
   }, [fetchComments, initialComments]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
-
+  const handleAddComment = async (content, parentId = null) => {
     try {
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/add_comment/`
-          : `/podcasts/podcasts/${id}/add_comment/`;
-
-      const data = {
-        content: newComment,
-        ...(replyTo && { parent: replyTo }),
-      };
-
-      const response = await api.post(endpoint, data);
-      setComments((prev) => [...prev, response.data]);
-      setNewComment("");
-      setReplyTo(null);
-      setError("");
+      const response = await api.post(
+        type === "podcast"
+          ? `/podcasts/${id}/comments/`
+          : `/experts/${id}/comments/`,
+        { content, parent: parentId }
+      );
+      setComments([...comments, response.data]);
     } catch (error) {
-      console.error("Error posting comment:", error);
-      setError("Failed to post comment");
+      console.error("Error adding comment:", error);
+      setError("Failed to add comment");
     }
   };
 
-  const handleEdit = async (commentId, content) => {
+  const handleEditComment = async (commentId, content) => {
     try {
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/edit_comment/`
-          : `/podcasts/podcasts/${id}/edit_comment/${commentId}/`;
-
-      const data = {
-        comment_id: commentId,
-        content: content,
-      };
-
-      const response = await api.put(endpoint, data);
-      setComments((prev) =>
-        prev.map((comment) =>
+      const response = await api.put(
+        type === "podcast"
+          ? `/podcasts/${id}/comments/${commentId}/`
+          : `/experts/${id}/comments/${commentId}/`,
+        { content }
+      );
+      setComments(
+        comments.map((comment) =>
           comment.id === commentId ? response.data : comment
         )
       );
-      setEditingComment(null);
-      setError("");
     } catch (error) {
       console.error("Error editing comment:", error);
       setError("Failed to edit comment");
     }
   };
 
-  const handleDelete = async (commentId) => {
+  const handleDeleteComment = async (commentId) => {
     try {
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/delete_comment/`
-          : `/podcasts/podcasts/${id}/delete_comment/${commentId}/`;
-
-      const data = {
-        comment_id: commentId,
-      };
-
-      await api.delete(endpoint, { data });
-      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
-      setShowDeleteModal(false);
-      setError("");
+      await api.delete(
+        type === "podcast"
+          ? `/podcasts/${id}/comments/${commentId}/`
+          : `/experts/${id}/comments/${commentId}/`
+      );
+      setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Error deleting comment:", error);
       setError("Failed to delete comment");
@@ -155,7 +126,7 @@ const CommentSection = ({
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleEdit(comment.id, newComment);
+                handleEditComment(comment.id, newComment);
               }}
             >
               <Form.Control
@@ -194,7 +165,7 @@ const CommentSection = ({
   return (
     <div>
       {error && <Alert variant="danger">{error}</Alert>}
-      <Form onSubmit={handleSubmit} className="mb-4">
+      <Form onSubmit={handleAddComment} className="mb-4">
         <Form.Group>
           <Form.Control
             as="textarea"
@@ -236,7 +207,7 @@ const CommentSection = ({
           </Button>
           <Button
             variant="danger"
-            onClick={() => handleDelete(commentToDelete.id)}
+            onClick={() => handleDeleteComment(commentToDelete.id)}
           >
             Delete
           </Button>

@@ -105,7 +105,7 @@ const ExpertCreate = () => {
       });
 
       console.log("Sending expert profile creation request");
-      const response = await api.post("/experts/create/", form, {
+      const response = await api.post("/experts/", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

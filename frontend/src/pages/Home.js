@@ -13,28 +13,19 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFeaturedItems = async () => {
+    const fetchData = async () => {
       try {
-        const [podcastsRes, expertsRes] = await Promise.allSettled([
-          axios.get("/podcasts/podcasts/featured/"),
-          axios.get("/experts/profiles/featured/"),
+        const [featuredExpertsResponse] = await Promise.all([
+          axios.get("/experts/featured/"),
         ]);
 
-        if (podcastsRes.status === "fulfilled") {
-          setFeaturedPodcasts(podcastsRes.value.data);
-        }
-
-        if (expertsRes.status === "fulfilled") {
-          setFeaturedExperts(expertsRes.value.data);
-        }
+        setFeaturedExperts(featuredExpertsResponse.data);
       } catch (error) {
-        console.error("Error fetching featured items:", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchFeaturedItems();
+    fetchData();
   }, []);
 
   const getExpertImageUrl = (expert) => {

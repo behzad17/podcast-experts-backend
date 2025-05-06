@@ -79,9 +79,9 @@ export const getExperts = () => api.get("/experts/");
 export const getFeaturedExperts = () => api.get("/experts/featured/");
 export const getExpert = (id) => api.get(`/experts/${id}/`);
 export const likeExpert = (id) =>
-  api.post(`/experts/profiles/${id}/react/`, { reaction_type: "like" });
+  api.post(`/experts/${id}/react/`, { reaction_type: "like" });
 export const unlikeExpert = (id) =>
-  api.post(`/experts/profiles/${id}/react/`, { reaction_type: "like" });
+  api.post(`/experts/${id}/react/`, { reaction_type: "like" });
 
 // User endpoints
 export const getUsers = () => api.get("/users/");

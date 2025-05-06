@@ -61,7 +61,7 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
           <div className="d-flex gap-2 align-items-center">
             <LikeButton
               itemId={expert.id}
-              type="experts/profiles"
+              type="experts"
               initialCount={expert.likes_count}
               className="btn-sm"
             />
