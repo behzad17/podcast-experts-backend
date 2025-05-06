@@ -8,7 +8,7 @@ export const expertApi = {
   getExpert: (id) => api.get(`/experts/${id}/`),
 
   // Create a new expert profile
-  createExpertProfile: (data) => api.post("/experts/", data),
+  createExpertProfile: (data) => api.post("/experts/create/", data),
 
   // Update an expert profile
   updateExpertProfile: (id, data) => api.put(`/experts/${id}/`, data),
@@ -17,22 +17,23 @@ export const expertApi = {
   deleteExpertProfile: (id) => api.delete(`/experts/${id}/`),
 
   // Get expert comments
-  getComments: (expertId) => api.get(`/experts/${expertId}/comments/`),
+  getComments: (expertId) => api.get(`/experts/profiles/${expertId}/comments/`),
 
   // Add a comment
   addComment: (expertId, data) =>
-    api.post(`/experts/${expertId}/comments/`, data),
+    api.post(`/experts/profiles/${expertId}/comments/`, data),
 
   // Get expert reactions
-  getReactions: (expertId) => api.get(`/experts/${expertId}/reactions/`),
+  getReactions: (expertId) =>
+    api.get(`/experts/profiles/${expertId}/reactions/`),
 
   // Add/update a reaction
   addReaction: (expertId, data) =>
-    api.post(`/experts/${expertId}/reactions/`, data),
+    api.post(`/experts/profiles/${expertId}/reactions/`, data),
 
   // Delete a reaction
   deleteReaction: (expertId, reactionId) =>
-    api.delete(`/experts/${expertId}/reactions/${reactionId}/`),
+    api.delete(`/experts/profiles/${expertId}/reactions/${reactionId}/`),
 
   // Get expert categories
   getCategories: () => api.get("/experts/categories/"),

@@ -31,7 +31,7 @@ const AdminExpertApproval = () => {
 
   const handleApproval = async (expertId, isApproved) => {
     try {
-      await api.post(`/experts/${expertId}/approve/`, {
+      await api.post(`/experts/profile/approve/${expertId}/`, {
         is_approved: isApproved,
       });
       setSuccess(

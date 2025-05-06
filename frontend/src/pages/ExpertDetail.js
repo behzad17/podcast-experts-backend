@@ -25,7 +25,7 @@ const ExpertDetail = () => {
   useEffect(() => {
     const fetchExpert = async () => {
       try {
-        const response = await api.get(`/experts/${id}/`);
+        const response = await api.get(`/experts/profiles/${id}/`);
         setExpert(response.data);
 
         // Check if the current user is the owner
@@ -85,7 +85,7 @@ const ExpertDetail = () => {
                       width: "100%",
                       height: "300px",
                       objectFit: "cover",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
                     }}
                   />
                   <div className="position-absolute bottom-0 end-0 p-2">

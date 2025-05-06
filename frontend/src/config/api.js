@@ -55,8 +55,8 @@ export const endpoints = {
   experts: {
     list: "/experts/",
     detail: (id) => `/experts/${id}/`,
-    create: "/experts/",
-    update: (id) => `/experts/${id}/`,
+    create: "/experts/create/",
+    update: (id) => `/experts/${id}/update/`,
     categories: "/experts/categories/",
     reactions: (id) => `/experts/${id}/reactions/`,
     comments: (id) => `/experts/${id}/comments/`,

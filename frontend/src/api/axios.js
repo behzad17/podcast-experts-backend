@@ -11,13 +11,14 @@ const api = axios.create({
 
 // List of public routes that don't require authentication
 const publicRoutes = [
+  "/podcasts/podcasts/featured/",
+  "/experts/profiles/featured/",
+  "/experts/",
+  "/podcasts/",
+  "/experts/categories/",
   "/users/login/",
   "/users/register/",
-  "/users/verify-token/",
-  "/experts/",
-  "/experts/featured/",
-  "/podcasts/",
-  "/podcasts/featured/",
+  "/users/verify-email/",
 ];
 
 // Add request interceptor
