@@ -42,7 +42,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
         </Card.Text>
         <div className="d-flex justify-content-between align-items-center mt-auto">
           <small className="text-muted">
-            By {podcast.owner?.channel_name || "Unknown"}
+            By {podcast.owner?.username || "Unknown"}
           </small>
           <div>
             {podcast.link && (

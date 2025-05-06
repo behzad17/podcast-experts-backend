@@ -51,7 +51,7 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
 
 
 class PodcastSerializer(serializers.ModelSerializer):
-    owner = PodcasterProfileSerializer(read_only=True)
+    owner = serializers.SerializerMethodField()
     category = CategorySerializer(read_only=True)
     category_id = serializers.IntegerField(write_only=True, required=False)
     comments = serializers.SerializerMethodField()
@@ -62,6 +62,13 @@ class PodcastSerializer(serializers.ModelSerializer):
         model = Podcast
         fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
         read_only_fields = ['created_at']
+
+    def get_owner(self, obj):
+        return {
+            'id': obj.owner.id,
+            'username': obj.owner.user.username,
+            'user': obj.owner.user.id
+        }
 
     def get_comments(self, obj):
         comments = obj.podcast_comments.filter(parent=None)
