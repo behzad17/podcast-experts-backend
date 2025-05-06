@@ -95,7 +95,7 @@ const PodcastCreate = () => {
 
       console.log("Sending podcast creation request");
       const response = await axios.post(
-        "http://localhost:8001/api/podcasts/podcasts/",
+        "http://localhost:8000/api/podcasts/podcasts/",
         form,
         {
           headers: {
