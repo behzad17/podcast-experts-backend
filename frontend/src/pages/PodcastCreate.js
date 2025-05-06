@@ -1,60 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import { toast } from "react-toastify";
 
 const PodcastCreate = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    image: null,
     link: "",
+    image: null,
+    category_id: "",
   });
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [needsProfile, setNeedsProfile] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Please log in to create a podcast");
-        setIsAuthenticated(false);
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-        return;
-      }
-
-      setIsAuthenticated(true);
+    const checkProfile = async () => {
       try {
-        // First check if user has a podcaster profile
-        const profileResponse = await axios.get(
-          "http://localhost:8001/api/podcasts/profiles/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        // If we get here, user has a profile
+        const response = await api.get("/podcasts/profiles/");
         setNeedsProfile(false);
       } catch (error) {
-        console.error("Error checking profile:", error);
         if (error.response?.status === 404) {
           setNeedsProfile(true);
-        } else {
-          setError("Failed to check profile status");
         }
       }
     };
 
-    checkAuth();
-  }, [navigate]);
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/podcasts/categories/");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to load categories");
+      }
+    };
+
+    checkProfile();
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -69,17 +57,9 @@ const PodcastCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess(false);
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Please log in to create a podcast");
-        navigate("/login");
-        return;
-      }
-
       if (needsProfile) {
         setError("Please create a podcaster profile first");
         navigate("/podcasts/profile/create");
@@ -93,27 +73,17 @@ const PodcastCreate = () => {
         }
       });
 
-      console.log("Sending podcast creation request");
-      const response = await axios.post(
-        "http://localhost:8000/api/podcasts/podcasts/",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Podcast creation response:", response.data);
+      const response = await api.post("/podcasts/podcasts/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/podcasts");
-      }, 2000);
+      toast.success("Podcast created successfully!");
+      navigate("/podcasts");
     } catch (error) {
       console.error("Podcast creation error:", error);
       if (error.response) {
-        console.error("Error response:", error.response.data);
         if (error.response.status === 401) {
           setError("Please log in to create a podcast");
           navigate("/login");
@@ -121,15 +91,9 @@ const PodcastCreate = () => {
           setError("Please check your input and try again");
         } else if (error.response.status === 403) {
           setError("You don't have permission to create podcasts");
-        } else if (error.response.status === 405) {
-          setError("Invalid request method. Please try again.");
         } else {
           setError(error.response.data.detail || "Error creating podcast");
         }
-      } else if (error.code === "ERR_NETWORK") {
-        setError(
-          "Cannot connect to server. Please check if the server is running."
-        );
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
@@ -137,16 +101,6 @@ const PodcastCreate = () => {
       setIsLoading(false);
     }
   };
-
-  if (!isAuthenticated) {
-    return (
-      <Container className="mt-4">
-        <Alert variant="warning">
-          Please log in to create a podcast. Redirecting to login page...
-        </Alert>
-      </Container>
-    );
-  }
 
   if (needsProfile) {
     return (
@@ -168,11 +122,6 @@ const PodcastCreate = () => {
     <Container className="mt-4">
       <h2>Create Podcast</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {success && (
-        <Alert variant="success">
-          Podcast created successfully! Redirecting to podcasts page...
-        </Alert>
-      )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title *</Form.Label>
@@ -197,6 +146,23 @@ const PodcastCreate = () => {
             required
             placeholder="Describe your podcast"
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Category *</Form.Label>
+          <Form.Select
+            name="category_id"
+            value={formData.category_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3">

@@ -83,7 +83,9 @@ class PodcastViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # Get or create podcaster profile for the user
+        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
+        serializer.save(owner=podcaster_profile)
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
@@ -205,23 +207,31 @@ class PodcastViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(featured_podcasts, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def likes(self, request, pk=None):
+        podcast = get_object_or_404(Podcast, pk=pk)
+        is_liked = podcast.likes.filter(user=request.user).exists()
+        return Response({
+            'is_liked': is_liked,
+            'count': podcast.likes.count()
+        })
+
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
-        podcast = self.get_object()
-        like, created = PodcastLike.objects.get_or_create(
-            podcast=podcast,
-            user=request.user
-        )
-        if not created:
-            like.delete()
+        podcast = get_object_or_404(Podcast, pk=pk)
+        user = request.user
+        
+        # Check if user already liked
+        existing_like = podcast.likes.filter(user=user).first()
+        
+        if existing_like:
+            # Unlike
+            existing_like.delete()
             return Response({'status': 'unliked'})
-        return Response({'status': 'liked'})
-
-    @action(detail=True, methods=['get'])
-    def likes_count(self, request, pk=None):
-        podcast = self.get_object()
-        count = podcast.likes.count()
-        return Response({'count': count})
+        else:
+            # Like
+            podcast.likes.create(user=user)
+            return Response({'status': 'liked'})
 
 
 class PodcasterProfileViewSet(viewsets.ModelViewSet):

@@ -12,12 +12,8 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
     // Check if the user has already liked this item
     const checkLikeStatus = async () => {
       try {
-        const response = await api.get(`/${type}/${itemId}/reactions/`);
-        const userReaction = response.data.find(
-          (reaction) =>
-            reaction.user === JSON.parse(localStorage.getItem("userData"))?.id
-        );
-        setIsLiked(userReaction?.reaction_type === "like");
+        const response = await api.get(`/${type}/${itemId}/likes/`);
+        setIsLiked(response.data.is_liked);
       } catch (error) {
         console.error("Error checking like status:", error);
       }
@@ -29,38 +25,15 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const endpoint =
-        type === "podcasts/podcasts"
-          ? `/podcasts/podcasts/${itemId}/like/`
-          : `/experts/profiles/${itemId}/react/`;
+      const endpoint = `/${type}/${itemId}/like/`;
+      const response = await api.post(endpoint);
 
-      const response = await api.post(
-        endpoint,
-        type === "experts/profiles"
-          ? { reaction_type: isLiked ? "dislike" : "like" }
-          : {}
-      );
-
-      if (type === "podcasts/podcasts") {
-        if (response.data.status === "liked") {
-          setCount((prev) => prev + 1);
-          setIsLiked(true);
-        } else {
-          setCount((prev) => prev - 1);
-          setIsLiked(false);
-        }
+      if (response.data.status === "liked") {
+        setCount((prev) => prev + 1);
+        setIsLiked(true);
       } else {
-        // For experts, handle the response based on the reaction status
-        if (response.data.status === "reaction removed") {
-          setCount((prev) => prev - 1);
-          setIsLiked(false);
-        } else if (response.data.reaction_type === "like") {
-          setCount((prev) => prev + 1);
-          setIsLiked(true);
-        } else {
-          setCount((prev) => prev - 1);
-          setIsLiked(false);
-        }
+        setCount((prev) => prev - 1);
+        setIsLiked(false);
       }
     } catch (error) {
       console.error("Error updating like:", error);
