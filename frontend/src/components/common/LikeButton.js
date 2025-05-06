@@ -9,7 +9,21 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
 
   useEffect(() => {
     setCount(initialCount);
-  }, [initialCount]);
+    // Check if the user has already liked this item
+    const checkLikeStatus = async () => {
+      try {
+        const response = await api.get(`/${type}/${itemId}/reactions/`);
+        const userReaction = response.data.find(
+          (reaction) =>
+            reaction.user === JSON.parse(localStorage.getItem("userData"))?.id
+        );
+        setIsLiked(userReaction?.reaction_type === "like");
+      } catch (error) {
+        console.error("Error checking like status:", error);
+      }
+    };
+    checkLikeStatus();
+  }, [itemId, type, initialCount]);
 
   const handleLike = async () => {
     if (isLoading) return;
@@ -36,17 +50,23 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
           setIsLiked(false);
         }
       } else {
-        // For experts, the response indicates if the reaction was removed
+        // For experts, handle the response based on the reaction status
         if (response.data.status === "reaction removed") {
           setCount((prev) => prev - 1);
           setIsLiked(false);
-        } else {
+        } else if (response.data.reaction_type === "like") {
           setCount((prev) => prev + 1);
           setIsLiked(true);
+        } else {
+          setCount((prev) => prev - 1);
+          setIsLiked(false);
         }
       }
     } catch (error) {
       console.error("Error updating like:", error);
+      // If there's an error, revert the UI state
+      setIsLiked(!isLiked);
+      setCount((prev) => (isLiked ? prev + 1 : prev - 1));
     } finally {
       setIsLoading(false);
     }
