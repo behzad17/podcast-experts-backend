@@ -1,2550 +1,2538 @@
 [
-{
-  "model": "admin.logentry",
-  "pk": 1,
-  "fields": {
-    "action_time": "2025-03-30T19:01:00.565Z",
-    "user": 13,
-    "content_type": 6,
-    "object_id": "1",
-    "object_repr": "Benny",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Email verified\"]}}]"
+  {
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+      "action_time": "2025-03-30T19:01:00.565Z",
+      "user": 13,
+      "content_type": 6,
+      "object_id": "1",
+      "object_repr": "Benny",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Email verified\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2025-03-30T19:01:10.816Z",
+      "user": 13,
+      "content_type": 6,
+      "object_id": "13",
+      "object_repr": "admin",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Email verified\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+      "action_time": "2025-03-30T19:20:54.395Z",
+      "user": 1,
+      "content_type": 6,
+      "object_id": "4",
+      "object_repr": "Behzad",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+      "action_time": "2025-03-30T19:26:04.706Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "6",
+      "object_repr": "Lisa Thompson - Nutrition, Wellness, Health Optimization",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+      "action_time": "2025-03-30T19:26:14.184Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "5",
+      "object_repr": "Dr. James Wilson - Environmental Science, Sustainability, Climate Change",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+      "action_time": "2025-03-30T19:26:24.979Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "4",
+      "object_repr": "Dr. Emily Watson - Neuroscience, Mental Health, Cognitive Development",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+      "action_time": "2025-03-30T19:26:37.729Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "3",
+      "object_repr": "Michael Rodriguez - Business Strategy, Digital Transformation, Innovation",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+      "action_time": "2025-03-30T19:26:52.495Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "2",
+      "object_repr": "Dr. Sarah Chen - Artificial Intelligence, Machine Learning, Deep Learning",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+      "action_time": "2025-03-30T19:27:06.755Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "1",
+      "object_repr": "Shirin - Web delopment",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+      "action_time": "2025-03-30T19:27:14.455Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "6",
+      "object_repr": "Health & Wellness Weekly",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+      "action_time": "2025-03-30T19:27:19.071Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "5",
+      "object_repr": "Science Today",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+      "action_time": "2025-03-30T19:27:23.166Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "4",
+      "object_repr": "Business Insights",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+      "action_time": "2025-03-30T19:27:25.646Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "3",
+      "object_repr": "Tech Talk Daily",
+      "action_flag": 2,
+      "change_message": "[]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+      "action_time": "2025-03-30T19:27:30.121Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "3",
+      "object_repr": "Tech Talk Daily",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+      "action_time": "2025-03-30T19:27:33.535Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "2",
+      "object_repr": "SWEDCAST",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+      "action_time": "2025-03-30T19:27:38.787Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "1",
+      "object_repr": "Test Podcast",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+      "action_time": "2025-03-30T19:30:41.221Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "3",
+      "object_repr": "Tech Talk Daily",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+      "action_time": "2025-03-30T19:30:45.356Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "4",
+      "object_repr": "Business Insights",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+      "action_time": "2025-03-30T19:30:49.634Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "5",
+      "object_repr": "Science Today",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+      "action_time": "2025-03-30T19:30:53.588Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "6",
+      "object_repr": "Health & Wellness Weekly",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+      "action_time": "2025-03-31T00:28:45.922Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "1",
+      "object_repr": "Shirin - Web delopment",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+      "action_time": "2025-03-31T12:31:03.662Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "6",
+      "object_repr": "Lisa Thompson - Nutrition, Wellness, Health Optimization",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+      "action_time": "2025-03-31T12:31:18.081Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "5",
+      "object_repr": "Dr. James Wilson - Environmental Science, Sustainability, Climate Change",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+      "action_time": "2025-03-31T12:32:36.791Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "4",
+      "object_repr": "Dr. Emily Watson - Neuroscience, Mental Health, Cognitive Development",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+      "action_time": "2025-03-31T12:34:46.194Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "3",
+      "object_repr": "Michael Rodriguez - Business Strategy, Digital Transformation, Innovation",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+      "action_time": "2025-03-31T12:35:15.372Z",
+      "user": 1,
+      "content_type": 9,
+      "object_id": "2",
+      "object_repr": "Dr. Sarah Chen - Artificial Intelligence, Machine Learning, Deep Learning",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+      "action_time": "2025-03-31T12:53:56.403Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "6",
+      "object_repr": "Health & Wellness Weekly",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+      "action_time": "2025-03-31T12:54:15.424Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "5",
+      "object_repr": "Science Today",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+      "action_time": "2025-03-31T12:54:32.183Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "4",
+      "object_repr": "Business Insights",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+      "action_time": "2025-03-31T12:54:39.406Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "3",
+      "object_repr": "Tech Talk Daily",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+      "action_time": "2025-03-31T12:54:48.101Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "2",
+      "object_repr": "SWEDCAST",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+      "action_time": "2025-03-31T12:54:57.232Z",
+      "user": 1,
+      "content_type": 15,
+      "object_id": "1",
+      "object_repr": "Test Podcast",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 4,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 4,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 4,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 4,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 5,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 5,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 5,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 5,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 6,
+      "codename": "add_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 6,
+      "codename": "change_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 6,
+      "codename": "delete_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 6,
+      "codename": "view_customuser"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add user profile",
+      "content_type": 7,
+      "codename": "add_userprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change user profile",
+      "content_type": 7,
+      "codename": "change_userprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete user profile",
+      "content_type": 7,
+      "codename": "delete_userprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view user profile",
+      "content_type": 7,
+      "codename": "view_userprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add expert category",
+      "content_type": 8,
+      "codename": "add_expertcategory"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change expert category",
+      "content_type": 8,
+      "codename": "change_expertcategory"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete expert category",
+      "content_type": 8,
+      "codename": "delete_expertcategory"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view expert category",
+      "content_type": 8,
+      "codename": "view_expertcategory"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add expert profile",
+      "content_type": 9,
+      "codename": "add_expertprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change expert profile",
+      "content_type": 9,
+      "codename": "change_expertprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete expert profile",
+      "content_type": 9,
+      "codename": "delete_expertprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view expert profile",
+      "content_type": 9,
+      "codename": "view_expertprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add expert rating",
+      "content_type": 10,
+      "codename": "add_expertrating"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change expert rating",
+      "content_type": 10,
+      "codename": "change_expertrating"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete expert rating",
+      "content_type": 10,
+      "codename": "delete_expertrating"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view expert rating",
+      "content_type": 10,
+      "codename": "view_expertrating"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add expert reaction",
+      "content_type": 11,
+      "codename": "add_expertreaction"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change expert reaction",
+      "content_type": 11,
+      "codename": "change_expertreaction"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete expert reaction",
+      "content_type": 11,
+      "codename": "delete_expertreaction"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view expert reaction",
+      "content_type": 11,
+      "codename": "view_expertreaction"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+      "name": "Can add favorite experts",
+      "content_type": 12,
+      "codename": "add_favoriteexperts"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+      "name": "Can change favorite experts",
+      "content_type": 12,
+      "codename": "change_favoriteexperts"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+      "name": "Can delete favorite experts",
+      "content_type": 12,
+      "codename": "delete_favoriteexperts"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+      "name": "Can view favorite experts",
+      "content_type": 12,
+      "codename": "view_favoriteexperts"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+      "name": "Can add expert comment",
+      "content_type": 13,
+      "codename": "add_expertcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+      "name": "Can change expert comment",
+      "content_type": 13,
+      "codename": "change_expertcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+      "name": "Can delete expert comment",
+      "content_type": 13,
+      "codename": "delete_expertcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+      "name": "Can view expert comment",
+      "content_type": 13,
+      "codename": "view_expertcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+      "name": "Can add category",
+      "content_type": 14,
+      "codename": "add_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+      "name": "Can change category",
+      "content_type": 14,
+      "codename": "change_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+      "name": "Can delete category",
+      "content_type": 14,
+      "codename": "delete_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+      "name": "Can view category",
+      "content_type": 14,
+      "codename": "view_category"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 57,
+    "fields": {
+      "name": "Can add podcast",
+      "content_type": 15,
+      "codename": "add_podcast"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 58,
+    "fields": {
+      "name": "Can change podcast",
+      "content_type": 15,
+      "codename": "change_podcast"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 59,
+    "fields": {
+      "name": "Can delete podcast",
+      "content_type": 15,
+      "codename": "delete_podcast"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 60,
+    "fields": {
+      "name": "Can view podcast",
+      "content_type": 15,
+      "codename": "view_podcast"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 61,
+    "fields": {
+      "name": "Can add podcast comment",
+      "content_type": 16,
+      "codename": "add_podcastcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 62,
+    "fields": {
+      "name": "Can change podcast comment",
+      "content_type": 16,
+      "codename": "change_podcastcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 63,
+    "fields": {
+      "name": "Can delete podcast comment",
+      "content_type": 16,
+      "codename": "delete_podcastcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 64,
+    "fields": {
+      "name": "Can view podcast comment",
+      "content_type": 16,
+      "codename": "view_podcastcomment"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 65,
+    "fields": {
+      "name": "Can add podcaster profile",
+      "content_type": 17,
+      "codename": "add_podcasterprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 66,
+    "fields": {
+      "name": "Can change podcaster profile",
+      "content_type": 17,
+      "codename": "change_podcasterprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 67,
+    "fields": {
+      "name": "Can delete podcaster profile",
+      "content_type": 17,
+      "codename": "delete_podcasterprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 68,
+    "fields": {
+      "name": "Can view podcaster profile",
+      "content_type": 17,
+      "codename": "view_podcasterprofile"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 69,
+    "fields": {
+      "name": "Can add podcast like",
+      "content_type": 18,
+      "codename": "add_podcastlike"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 70,
+    "fields": {
+      "name": "Can change podcast like",
+      "content_type": 18,
+      "codename": "change_podcastlike"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 71,
+    "fields": {
+      "name": "Can delete podcast like",
+      "content_type": 18,
+      "codename": "delete_podcastlike"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 72,
+    "fields": {
+      "name": "Can view podcast like",
+      "content_type": 18,
+      "codename": "view_podcastlike"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 73,
+    "fields": {
+      "name": "Can add bookmark",
+      "content_type": 19,
+      "codename": "add_bookmark"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 74,
+    "fields": {
+      "name": "Can change bookmark",
+      "content_type": 19,
+      "codename": "change_bookmark"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 75,
+    "fields": {
+      "name": "Can delete bookmark",
+      "content_type": 19,
+      "codename": "delete_bookmark"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 76,
+    "fields": {
+      "name": "Can view bookmark",
+      "content_type": 19,
+      "codename": "view_bookmark"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 77,
+    "fields": {
+      "name": "Can add message",
+      "content_type": 20,
+      "codename": "add_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 78,
+    "fields": {
+      "name": "Can change message",
+      "content_type": 20,
+      "codename": "change_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 79,
+    "fields": {
+      "name": "Can delete message",
+      "content_type": 20,
+      "codename": "delete_message"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 80,
+    "fields": {
+      "name": "Can view message",
+      "content_type": 20,
+      "codename": "view_message"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "users",
+      "model": "customuser"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "users",
+      "model": "userprofile"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "experts",
+      "model": "expertcategory"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "experts",
+      "model": "expertprofile"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "experts",
+      "model": "expertrating"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "experts",
+      "model": "expertreaction"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+      "app_label": "experts",
+      "model": "favoriteexperts"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+      "app_label": "experts",
+      "model": "expertcomment"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+      "app_label": "podcasts",
+      "model": "category"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 15,
+    "fields": {
+      "app_label": "podcasts",
+      "model": "podcast"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 16,
+    "fields": {
+      "app_label": "podcasts",
+      "model": "podcastcomment"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 17,
+    "fields": {
+      "app_label": "podcasts",
+      "model": "podcasterprofile"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 18,
+    "fields": {
+      "app_label": "podcasts",
+      "model": "podcastlike"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 19,
+    "fields": {
+      "app_label": "bookmarks",
+      "model": "bookmark"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 20,
+    "fields": {
+      "app_label": "user_messages",
+      "model": "message"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "4pp146bf53utc0jq5omer0pnls2acpft",
+    "fields": {
+      "session_data": ".eJxVjEEOwiAQRe_C2hAQpoBL9z0DGRhGqoYmpV0Z765NutDtf-_9l4i4rTVuvSxxInERWpx-t4T5UdoO6I7tNss8t3WZktwVedAux5nK83q4fwcVe_3WPhVmVP7s2QGBCxxgIFaKlDWQDXjSAwVSJaMmawxoYnbEFp2zSYv3B_IROEI:1tyyCd:vQKMFrX3GojDqo4iLToiYihMVPk1-Kh4oXBI7qLwXhY",
+      "expire_date": "2025-04-13T19:20:15.637Z"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "s94mutdfbcqxjwzlepo9jaa1i1bjq0g7",
+    "fields": {
+      "session_data": ".eJxVjDsOwjAQBe_iGllrL_5R0ucM0dre4ACypTipEHeHSCmgfTPzXmKkbS3j1nkZ5ywuQqE4_Y6R0oPrTvKd6q3J1Oq6zFHuijxol0PL_Lwe7t9BoV6-tUaeQCmfcgjBU_CYYDImTxxtBGWNJusBTTYWEWMgdhocEJ8toHdevD_09Dcd:1tyxqK:e-XzaYFdgheeF1GXHyLCNsiLPRthfMNIGchw4fAgyzo",
+      "expire_date": "2025-04-13T18:57:12.016Z"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": "2025-03-30T19:20:15.636Z",
+      "is_superuser": true,
+      "username": "Benny",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzadjavadian49@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:19:22Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$1JSqUVVi2KAdR1swt1MHVh$T6+wC5lkiH3VaALjk4b7JQJC6biqtKK6FZsc9kmDces=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "testexpert",
+      "first_name": "",
+      "last_name": "",
+      "email": "expert@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-25T17:24:30.957Z",
+      "email_verified": false,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$mGESHFkxdkwVl44Ms4C6Vx$4Nea7pompSYkri/Lt7eG7AuzGx6cE6fAb8NiFk5JYm4=",
+      "last_login": "2025-03-30T19:24:44.775Z",
+      "is_superuser": false,
+      "username": "Behzad",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzad_1349@hotmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:07:08Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
+      "last_login": "2025-03-26T18:15:11.681Z",
+      "is_superuser": false,
+      "username": "Shirin",
+      "first_name": "",
+      "last_name": "",
+      "email": "swedpodcast@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T15:27:20.261Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sarahchen",
+      "first_name": "Sarah",
+      "last_name": "Chen",
+      "email": "sarah.chen@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.299Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "michaelrodriguez",
+      "first_name": "Michael",
+      "last_name": "Rodriguez",
+      "email": "michael.rodriguez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.300Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emilywatson",
+      "first_name": "Emily",
+      "last_name": "Watson",
+      "email": "emily.watson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.301Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jameswilson",
+      "first_name": "James",
+      "last_name": "Wilson",
+      "email": "james.wilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.302Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lisathompson",
+      "first_name": "Lisa",
+      "last_name": "Thompson",
+      "email": "lisa.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-03-26T17:56:44.303Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "expert",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$DY74QACzv4gisA9j6kNZfN$KwuK9pP74fyOe+/2betGvxU/jIwkp5/nmJT2Ij+fbc4=",
+      "last_login": "2025-03-30T18:57:12Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "behzadjavadian49@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-03-30T18:56:39Z",
+      "email_verified": true,
+      "verification_token": "",
+      "user_type": "podcaster",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Audio Production",
+      "description": "Experts in sound engineering, mixing, and audio production techniques",
+      "created_at": "2025-03-26T17:56:44.290Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Content Strategy",
+      "description": "Specialists in podcast content planning, storytelling, and audience engagement",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Marketing & Growth",
+      "description": "Experts in podcast promotion, audience building, and monetization strategies",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Technical Equipment",
+      "description": "Specialists in podcast recording equipment, software, and technical setup",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 5,
+    "fields": {
+      "name": "Voice & Presentation",
+      "description": "Experts in voice training, public speaking, and on-air presentation skills",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 6,
+    "fields": {
+      "name": "Business & Monetization",
+      "description": "Specialists in podcast business models, sponsorship, and revenue generation",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 7,
+    "fields": {
+      "name": "Legal & Compliance",
+      "description": "Experts in podcast-related legal matters, copyright, and content compliance",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertcategory",
+    "pk": 8,
+    "fields": {
+      "name": "Distribution & Platforms",
+      "description": "Specialists in podcast distribution, platform optimization, and analytics",
+      "created_at": "2025-03-26T17:56:44.291Z"
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 1,
+    "fields": {
+      "user": 6,
+      "name": "Shirin",
+      "bio": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+      "expertise": "Web delopment",
+      "experience_years": 55,
+      "website": "http://www.swedcast.net",
+      "social_media": "insta: @swedcast",
+      "profile_picture": "expert_profiles/photo_2023-08-13_22-16-27.jpg",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T16:22:34.327Z",
+      "categories": [4],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 8,
+      "name": "Dr. Sarah Chen",
+      "bio": "AI and Machine Learning expert with 10+ years of experience in developing cutting-edge solutions.",
+      "expertise": "Artificial Intelligence, Machine Learning, Deep Learning",
+      "experience_years": 10,
+      "website": "https://sarahchen.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/sarahchen\", \"twitter\": \"https://twitter.com/sarahchen\"}",
+      "profile_picture": "expert_profiles/th_6eppVzn.jpeg",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.299Z",
+      "categories": [3],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 9,
+      "name": "Michael Rodriguez",
+      "bio": "Business strategy consultant specializing in digital transformation and innovation.",
+      "expertise": "Business Strategy, Digital Transformation, Innovation",
+      "experience_years": 8,
+      "website": "https://michaelrodriguez.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/michaelrodriguez\", \"twitter\": \"https://twitter.com/michaelrodriguez\"}",
+      "profile_picture": "expert_profiles/5.jpeg",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.300Z",
+      "categories": [8],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 4,
+    "fields": {
+      "user": 10,
+      "name": "Dr. Emily Watson",
+      "bio": "Neuroscientist and mental health expert focusing on cognitive development and well-being.",
+      "expertise": "Neuroscience, Mental Health, Cognitive Development",
+      "experience_years": 12,
+      "website": "https://emilywatson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/emilywatson\", \"twitter\": \"https://twitter.com/emilywatson\"}",
+      "profile_picture": "expert_profiles/th.jpeg",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.301Z",
+      "categories": [2],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 5,
+    "fields": {
+      "user": 11,
+      "name": "Dr. James Wilson",
+      "bio": "Environmental scientist and sustainability expert with a focus on climate change solutions.",
+      "expertise": "Environmental Science, Sustainability, Climate Change",
+      "experience_years": 15,
+      "website": "https://jameswilson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/jameswilson\", \"twitter\": \"https://twitter.com/jameswilson\"}",
+      "profile_picture": "expert_profiles/7d5c0eae-d83c-4a3c-b789-373729bf32f6.png",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.302Z",
+      "categories": [2],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertprofile",
+    "pk": 6,
+    "fields": {
+      "user": 12,
+      "name": "Lisa Thompson",
+      "bio": "Nutrition and wellness expert specializing in personalized health optimization.",
+      "expertise": "Nutrition, Wellness, Health Optimization",
+      "experience_years": 9,
+      "website": "https://lisathompson.com",
+      "social_media": "{\"linkedin\": \"https://linkedin.com/in/lisathompson\", \"twitter\": \"https://twitter.com/lisathompson\"}",
+      "profile_picture": "expert_profiles/f0a6882b-ac11-4999-a9c5-63ebc731fe57.png",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.303Z",
+      "categories": [1],
+      "views": [],
+      "bookmarks": []
+    }
+  },
+  {
+    "model": "experts.expertcomment",
+    "pk": 1,
+    "fields": {
+      "expert": 1,
+      "user": 4,
+      "content": "j.hvj.hv",
+      "parent": null,
+      "created_at": "2025-03-30T19:31:21.604Z",
+      "updated_at": "2025-03-30T19:31:21.604Z"
+    }
+  },
+  {
+    "model": "experts.expertreaction",
+    "pk": 3,
+    "fields": {
+      "expert": 3,
+      "user": 4,
+      "reaction_type": "like",
+      "created_at": "2025-03-30T23:25:00.372Z",
+      "updated_at": "2025-03-30T23:25:00.372Z"
+    }
+  },
+  {
+    "model": "experts.expertreaction",
+    "pk": 7,
+    "fields": {
+      "expert": 2,
+      "user": 4,
+      "reaction_type": "like",
+      "created_at": "2025-03-30T23:41:16.936Z",
+      "updated_at": "2025-03-31T00:39:49.980Z"
+    }
+  },
+  {
+    "model": "experts.expertreaction",
+    "pk": 9,
+    "fields": {
+      "expert": 5,
+      "user": 4,
+      "reaction_type": "dislike",
+      "created_at": "2025-03-30T23:41:25.519Z",
+      "updated_at": "2025-03-30T23:41:26.087Z"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 1,
+    "fields": {
+      "name": "Technology",
+      "slug": "technology",
+      "description": "Tech news, reviews, and discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 2,
+    "fields": {
+      "name": "Business",
+      "slug": "business",
+      "description": "Business news, entrepreneurship, and finance"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 3,
+    "fields": {
+      "name": "Science",
+      "slug": "science",
+      "description": "Scientific discoveries and discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 4,
+    "fields": {
+      "name": "Health & Wellness",
+      "slug": "health-wellness",
+      "description": "Health, fitness, and mental wellness"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 5,
+    "fields": {
+      "name": "Education",
+      "slug": "education",
+      "description": "Educational content and learning"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 6,
+    "fields": {
+      "name": "Entertainment",
+      "slug": "entertainment",
+      "description": "Movies, TV shows, and pop culture"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 7,
+    "fields": {
+      "name": "News & Politics",
+      "slug": "news-politics",
+      "description": "Current events and political discussions"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 8,
+    "fields": {
+      "name": "Sports",
+      "slug": "sports",
+      "description": "Sports news, analysis, and commentary"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 9,
+    "fields": {
+      "name": "Music",
+      "slug": "music",
+      "description": "Music reviews, interviews, and industry news"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 10,
+    "fields": {
+      "name": "Arts & Culture",
+      "slug": "arts-culture",
+      "description": "Art, literature, and cultural topics"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 11,
+    "fields": {
+      "name": "History",
+      "slug": "history",
+      "description": "Historical events and stories"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 12,
+    "fields": {
+      "name": "True Crime",
+      "slug": "true-crime",
+      "description": "True crime stories and investigations"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 13,
+    "fields": {
+      "name": "Comedy",
+      "slug": "comedy",
+      "description": "Comedy shows and humor"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 14,
+    "fields": {
+      "name": "Society",
+      "slug": "society",
+      "description": "Social issues and cultural commentary"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 15,
+    "fields": {
+      "name": "Religion & Spirituality",
+      "slug": "religion-spirituality",
+      "description": "Religious and spiritual content"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 16,
+    "fields": {
+      "name": "Family & Kids",
+      "slug": "family-kids",
+      "description": "Family-friendly and children's content"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 17,
+    "fields": {
+      "name": "Food & Cooking",
+      "slug": "food-cooking",
+      "description": "Cooking tips, recipes, and food culture"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 18,
+    "fields": {
+      "name": "Travel",
+      "slug": "travel",
+      "description": "Travel stories, tips, and destinations"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 19,
+    "fields": {
+      "name": "Personal Development",
+      "slug": "personal-development",
+      "description": "Self-improvement and motivation"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 20,
+    "fields": {
+      "name": "Career",
+      "slug": "career",
+      "description": "Career advice and professional development"
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 21,
+    "fields": {
+      "name": "Health",
+      "slug": "health",
+      "description": ""
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 22,
+    "fields": {
+      "name": "News",
+      "slug": "news",
+      "description": ""
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 23,
+    "fields": {
+      "name": "Arts",
+      "slug": "arts",
+      "description": ""
+    }
+  },
+  {
+    "model": "podcasts.category",
+    "pk": 24,
+    "fields": {
+      "name": "Lifestyle",
+      "slug": "lifestyle",
+      "description": ""
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "bio": "Test podcaster profile",
+      "website": "",
+      "social_links": {},
+      "created_at": "2025-03-25T17:26:28.726Z",
+      "updated_at": "2025-03-25T17:26:28.726Z"
+    }
+  },
+  {
+    "model": "podcasts.podcasterprofile",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "bio": "",
+      "website": "",
+      "social_links": {},
+      "created_at": "2025-03-26T16:53:13.690Z",
+      "updated_at": "2025-03-26T16:53:13.690Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 1,
+    "fields": {
+      "title": "Test Podcast",
+      "description": "A test podcast for development",
+      "owner": 1,
+      "category": 1,
+      "image": "podcast_images/44.jpeg",
+      "link": null,
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-25T17:26:28.728Z",
+      "updated_at": "2025-03-31T12:54:57.230Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 2,
+    "fields": {
+      "title": "SWEDCAST",
+      "description": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
+      "owner": 2,
+      "category": null,
+      "image": "podcast_images/33.jpeg",
+      "link": "http://www.swedcast.net",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T16:53:13.693Z",
+      "updated_at": "2025-03-31T12:54:48.099Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 3,
+    "fields": {
+      "title": "Tech Talk Daily",
+      "description": "Daily insights into the latest technology trends, innovations, and industry news",
+      "owner": 1,
+      "category": 1,
+      "image": "podcast_images/22.jpeg",
+      "link": "https://techtalkdaily.com",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.290Z",
+      "updated_at": "2025-03-31T12:54:39.404Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 4,
+    "fields": {
+      "title": "Business Insights",
+      "description": "Expert analysis of business trends, entrepreneurship, and market strategies",
+      "owner": 1,
+      "category": 2,
+      "image": "podcast_images/11.jpeg",
+      "link": "https://businessinsights.com",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.291Z",
+      "updated_at": "2025-03-31T12:54:32.181Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 5,
+    "fields": {
+      "title": "Science Today",
+      "description": "Exploring the latest scientific discoveries and their impact on our world",
+      "owner": 2,
+      "category": 3,
+      "image": "podcast_images/1334379d-950e-4c83-9bd4-2a9519cab04d.png",
+      "link": "https://sciencetoday.com",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.292Z",
+      "updated_at": "2025-03-31T12:54:15.421Z"
+    }
+  },
+  {
+    "model": "podcasts.podcast",
+    "pk": 6,
+    "fields": {
+      "title": "Health & Wellness Weekly",
+      "description": "Tips and advice for maintaining a healthy lifestyle and mental well-being",
+      "owner": 2,
+      "category": 4,
+      "image": "podcast_images/411a45c9-a244-420e-bb7c-7fcab7dcc158.png",
+      "link": "https://healthwellnessweekly.com",
+      "is_approved": true,
+      "is_featured": true,
+      "created_at": "2025-03-26T17:56:44.293Z",
+      "updated_at": "2025-03-31T12:53:56.399Z"
+    }
+  },
+  {
+    "model": "podcasts.podcastlike",
+    "pk": 1,
+    "fields": {
+      "podcast": 3,
+      "user": 4,
+      "created_at": "2025-03-30T23:39:20.154Z"
+    }
+  },
+  {
+    "model": "podcasts.podcastlike",
+    "pk": 2,
+    "fields": {
+      "podcast": 2,
+      "user": 4,
+      "created_at": "2025-03-30T23:39:42.561Z"
+    }
+  },
+  {
+    "model": "podcasts.podcastlike",
+    "pk": 7,
+    "fields": {
+      "podcast": 4,
+      "user": 4,
+      "created_at": "2025-03-30T23:47:08.416Z"
+    }
+  },
+  {
+    "model": "podcasts.podcastlike",
+    "pk": 8,
+    "fields": {
+      "podcast": 5,
+      "user": 4,
+      "created_at": "2025-03-30T23:47:53.335Z"
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 1,
+    "fields": {
+      "sender": 1,
+      "receiver": 2,
+      "content": "Hi, I'm interested in having you as a guest on my podcast. Would you be available for a discussion about technology trends?",
+      "timestamp": "2025-03-26T10:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T10:05:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 2,
+    "fields": {
+      "sender": 2,
+      "receiver": 1,
+      "content": "Thank you for reaching out! I'd be happy to discuss technology trends on your podcast. What specific topics would you like to cover?",
+      "timestamp": "2025-03-26T10:10:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T10:15:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 3,
+    "fields": {
+      "sender": 4,
+      "receiver": 6,
+      "content": "Hello! I saw your profile and would love to have you share your expertise on AI and machine learning on my podcast.",
+      "timestamp": "2025-03-26T11:00:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 4,
+    "fields": {
+      "sender": 6,
+      "receiver": 4,
+      "content": "Hi! Thanks for the invitation. I'd be interested in discussing AI applications in various industries. When were you thinking of recording?",
+      "timestamp": "2025-03-26T11:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T11:35:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 5,
+    "fields": {
+      "sender": 8,
+      "receiver": 9,
+      "content": "Hi there! I'm working on a series about environmental sustainability. Would you be interested in sharing your insights?",
+      "timestamp": "2025-03-26T12:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T12:05:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 6,
+    "fields": {
+      "sender": 9,
+      "receiver": 8,
+      "content": "That sounds interesting! I'd love to discuss environmental sustainability. What aspects would you like to focus on?",
+      "timestamp": "2025-03-26T12:10:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 7,
+    "fields": {
+      "sender": 1,
+      "receiver": 4,
+      "content": "Hello! I noticed you're an expert in quantum computing. Would you be interested in collaborating on a podcast series?",
+      "timestamp": "2025-03-26T13:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-30T19:55:46.891Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 8,
+    "fields": {
+      "sender": 6,
+      "receiver": 4,
+      "content": "I have some experience with quantum computing and would love to discuss it on your podcast. What specific aspects would you like to cover?",
+      "timestamp": "2025-03-26T13:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T13:35:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 9,
+    "fields": {
+      "sender": 4,
+      "receiver": 6,
+      "content": "That's great! I'd love to focus on quantum computing applications in cryptography and data security. When would you be available?",
+      "timestamp": "2025-03-26T13:45:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 10,
+    "fields": {
+      "sender": 10,
+      "receiver": 11,
+      "content": "Hi! I'm interested in discussing mental health and cognitive development on your podcast. Would you be interested?",
+      "timestamp": "2025-03-26T14:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T14:05:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 11,
+    "fields": {
+      "sender": 11,
+      "receiver": 10,
+      "content": "Absolutely! I'd love to discuss the connection between environmental factors and mental health. What topics would you like to focus on?",
+      "timestamp": "2025-03-26T14:15:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 12,
+    "fields": {
+      "sender": 12,
+      "receiver": 8,
+      "content": "Hello! I noticed your expertise in AI and would love to discuss the intersection of technology and health optimization. Are you interested?",
+      "timestamp": "2025-03-26T14:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T14:35:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 13,
+    "fields": {
+      "sender": 8,
+      "receiver": 12,
+      "content": "That's an interesting topic! I'd be happy to discuss how AI can help optimize health and wellness. When would you like to record?",
+      "timestamp": "2025-03-26T14:45:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 14,
+    "fields": {
+      "sender": 9,
+      "receiver": 10,
+      "content": "Hi! I'd love to discuss how business strategy can impact environmental sustainability. Would you be interested in collaborating?",
+      "timestamp": "2025-03-26T15:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T15:05:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 15,
+    "fields": {
+      "sender": 10,
+      "receiver": 9,
+      "content": "That's a fascinating topic! I'd be happy to discuss the psychological aspects of sustainable business practices. What specific areas would you like to cover?",
+      "timestamp": "2025-03-26T15:15:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 16,
+    "fields": {
+      "sender": 6,
+      "receiver": 8,
+      "content": "Hi! I noticed you're working on AI and health optimization. I'd love to collaborate on a podcast series about the future of healthcare technology.",
+      "timestamp": "2025-03-26T15:30:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T15:35:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 17,
+    "fields": {
+      "sender": 8,
+      "receiver": 6,
+      "content": "That's a great idea! We could cover topics like AI in diagnostics, personalized medicine, and healthcare automation. Would you like to start with a pilot episode?",
+      "timestamp": "2025-03-26T15:45:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 18,
+    "fields": {
+      "sender": 6,
+      "receiver": 8,
+      "content": "Absolutely! I have some interesting case studies we could discuss. When would you be available for a planning session?",
+      "timestamp": "2025-03-26T16:00:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:05:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 19,
+    "fields": {
+      "sender": 11,
+      "receiver": 12,
+      "content": "Hello! I saw your expertise in nutrition and wellness. Would you be interested in discussing sustainable food systems and their impact on health?",
+      "timestamp": "2025-03-26T16:15:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:20:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 20,
+    "fields": {
+      "sender": 12,
+      "receiver": 11,
+      "content": "That's a fascinating topic! I'd love to explore how environmental sustainability affects nutrition and public health. What specific aspects would you like to focus on?",
+      "timestamp": "2025-03-26T16:30:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 21,
+    "fields": {
+      "sender": 9,
+      "receiver": 4,
+      "content": "Hi! I'm interested in discussing how business strategy can drive technological innovation. Would you be interested in collaborating on a podcast series?",
+      "timestamp": "2025-03-26T16:45:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T16:50:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 22,
+    "fields": {
+      "sender": 4,
+      "receiver": 9,
+      "content": "That sounds interesting! We could explore how companies are leveraging technology for competitive advantage. What industries would you like to focus on?",
+      "timestamp": "2025-03-26T17:00:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 23,
+    "fields": {
+      "sender": 10,
+      "receiver": 8,
+      "content": "Hello! I'm interested in discussing the intersection of mental health and technology. Would you be interested in exploring this topic on your podcast?",
+      "timestamp": "2025-03-26T17:15:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T17:20:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 24,
+    "fields": {
+      "sender": 8,
+      "receiver": 10,
+      "content": "That's a great topic! We could discuss how AI and digital tools are transforming mental health care. When would you like to start planning?",
+      "timestamp": "2025-03-26T17:30:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 25,
+    "fields": {
+      "sender": 12,
+      "receiver": 9,
+      "content": "Hi! I'd love to discuss how sustainable business practices can improve employee wellness. Would you be interested in collaborating?",
+      "timestamp": "2025-03-26T17:45:00Z",
+      "is_read": true,
+      "read_at": "2025-03-26T17:50:00Z",
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 26,
+    "fields": {
+      "sender": 9,
+      "receiver": 12,
+      "content": "Absolutely! We could explore how companies are integrating wellness programs with sustainability initiatives. What specific aspects would you like to cover?",
+      "timestamp": "2025-03-26T18:00:00Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
+  },
+  {
+    "model": "user_messages.message",
+    "pk": 27,
+    "fields": {
+      "sender": 4,
+      "receiver": 1,
+      "content": "hi",
+      "timestamp": "2025-03-30T19:56:01.396Z",
+      "is_read": false,
+      "read_at": null,
+      "attachment": "",
+      "attachment_name": null,
+      "attachment_type": null
+    }
   }
-},
-{
-  "model": "admin.logentry",
-  "pk": 2,
-  "fields": {
-    "action_time": "2025-03-30T19:01:10.816Z",
-    "user": 13,
-    "content_type": 6,
-    "object_id": "13",
-    "object_repr": "admin",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Email verified\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 3,
-  "fields": {
-    "action_time": "2025-03-30T19:20:54.395Z",
-    "user": 1,
-    "content_type": 6,
-    "object_id": "4",
-    "object_repr": "Behzad",
-    "action_flag": 2,
-    "change_message": "[]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 4,
-  "fields": {
-    "action_time": "2025-03-30T19:26:04.706Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "6",
-    "object_repr": "Lisa Thompson - Nutrition, Wellness, Health Optimization",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 5,
-  "fields": {
-    "action_time": "2025-03-30T19:26:14.184Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "5",
-    "object_repr": "Dr. James Wilson - Environmental Science, Sustainability, Climate Change",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 6,
-  "fields": {
-    "action_time": "2025-03-30T19:26:24.979Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "4",
-    "object_repr": "Dr. Emily Watson - Neuroscience, Mental Health, Cognitive Development",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 7,
-  "fields": {
-    "action_time": "2025-03-30T19:26:37.729Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "3",
-    "object_repr": "Michael Rodriguez - Business Strategy, Digital Transformation, Innovation",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 8,
-  "fields": {
-    "action_time": "2025-03-30T19:26:52.495Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "2",
-    "object_repr": "Dr. Sarah Chen - Artificial Intelligence, Machine Learning, Deep Learning",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 9,
-  "fields": {
-    "action_time": "2025-03-30T19:27:06.755Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "1",
-    "object_repr": "Shirin - Web delopment",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Categories\", \"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 10,
-  "fields": {
-    "action_time": "2025-03-30T19:27:14.455Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "6",
-    "object_repr": "Health & Wellness Weekly",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 11,
-  "fields": {
-    "action_time": "2025-03-30T19:27:19.071Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "5",
-    "object_repr": "Science Today",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 12,
-  "fields": {
-    "action_time": "2025-03-30T19:27:23.166Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "4",
-    "object_repr": "Business Insights",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 13,
-  "fields": {
-    "action_time": "2025-03-30T19:27:25.646Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "3",
-    "object_repr": "Tech Talk Daily",
-    "action_flag": 2,
-    "change_message": "[]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 14,
-  "fields": {
-    "action_time": "2025-03-30T19:27:30.121Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "3",
-    "object_repr": "Tech Talk Daily",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 15,
-  "fields": {
-    "action_time": "2025-03-30T19:27:33.535Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "2",
-    "object_repr": "SWEDCAST",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 16,
-  "fields": {
-    "action_time": "2025-03-30T19:27:38.787Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "1",
-    "object_repr": "Test Podcast",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 17,
-  "fields": {
-    "action_time": "2025-03-30T19:30:41.221Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "3",
-    "object_repr": "Tech Talk Daily",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 18,
-  "fields": {
-    "action_time": "2025-03-30T19:30:45.356Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "4",
-    "object_repr": "Business Insights",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 19,
-  "fields": {
-    "action_time": "2025-03-30T19:30:49.634Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "5",
-    "object_repr": "Science Today",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 20,
-  "fields": {
-    "action_time": "2025-03-30T19:30:53.588Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "6",
-    "object_repr": "Health & Wellness Weekly",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Is featured\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 21,
-  "fields": {
-    "action_time": "2025-03-31T00:28:45.922Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "1",
-    "object_repr": "Shirin - Web delopment",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 22,
-  "fields": {
-    "action_time": "2025-03-31T12:31:03.662Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "6",
-    "object_repr": "Lisa Thompson - Nutrition, Wellness, Health Optimization",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 23,
-  "fields": {
-    "action_time": "2025-03-31T12:31:18.081Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "5",
-    "object_repr": "Dr. James Wilson - Environmental Science, Sustainability, Climate Change",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 24,
-  "fields": {
-    "action_time": "2025-03-31T12:32:36.791Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "4",
-    "object_repr": "Dr. Emily Watson - Neuroscience, Mental Health, Cognitive Development",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 25,
-  "fields": {
-    "action_time": "2025-03-31T12:34:46.194Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "3",
-    "object_repr": "Michael Rodriguez - Business Strategy, Digital Transformation, Innovation",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 26,
-  "fields": {
-    "action_time": "2025-03-31T12:35:15.372Z",
-    "user": 1,
-    "content_type": 9,
-    "object_id": "2",
-    "object_repr": "Dr. Sarah Chen - Artificial Intelligence, Machine Learning, Deep Learning",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Profile picture\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 27,
-  "fields": {
-    "action_time": "2025-03-31T12:53:56.403Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "6",
-    "object_repr": "Health & Wellness Weekly",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 28,
-  "fields": {
-    "action_time": "2025-03-31T12:54:15.424Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "5",
-    "object_repr": "Science Today",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 29,
-  "fields": {
-    "action_time": "2025-03-31T12:54:32.183Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "4",
-    "object_repr": "Business Insights",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 30,
-  "fields": {
-    "action_time": "2025-03-31T12:54:39.406Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "3",
-    "object_repr": "Tech Talk Daily",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 31,
-  "fields": {
-    "action_time": "2025-03-31T12:54:48.101Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "2",
-    "object_repr": "SWEDCAST",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "admin.logentry",
-  "pk": 32,
-  "fields": {
-    "action_time": "2025-03-31T12:54:57.232Z",
-    "user": 1,
-    "content_type": 15,
-    "object_id": "1",
-    "object_repr": "Test Podcast",
-    "action_flag": 2,
-    "change_message": "[{\"changed\": {\"fields\": [\"Image\"]}}]"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 1,
-  "fields": {
-    "name": "Can add log entry",
-    "content_type": 1,
-    "codename": "add_logentry"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 2,
-  "fields": {
-    "name": "Can change log entry",
-    "content_type": 1,
-    "codename": "change_logentry"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 3,
-  "fields": {
-    "name": "Can delete log entry",
-    "content_type": 1,
-    "codename": "delete_logentry"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 4,
-  "fields": {
-    "name": "Can view log entry",
-    "content_type": 1,
-    "codename": "view_logentry"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 5,
-  "fields": {
-    "name": "Can add permission",
-    "content_type": 2,
-    "codename": "add_permission"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 6,
-  "fields": {
-    "name": "Can change permission",
-    "content_type": 2,
-    "codename": "change_permission"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 7,
-  "fields": {
-    "name": "Can delete permission",
-    "content_type": 2,
-    "codename": "delete_permission"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 8,
-  "fields": {
-    "name": "Can view permission",
-    "content_type": 2,
-    "codename": "view_permission"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 9,
-  "fields": {
-    "name": "Can add group",
-    "content_type": 3,
-    "codename": "add_group"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 10,
-  "fields": {
-    "name": "Can change group",
-    "content_type": 3,
-    "codename": "change_group"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 11,
-  "fields": {
-    "name": "Can delete group",
-    "content_type": 3,
-    "codename": "delete_group"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 12,
-  "fields": {
-    "name": "Can view group",
-    "content_type": 3,
-    "codename": "view_group"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 13,
-  "fields": {
-    "name": "Can add content type",
-    "content_type": 4,
-    "codename": "add_contenttype"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 14,
-  "fields": {
-    "name": "Can change content type",
-    "content_type": 4,
-    "codename": "change_contenttype"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 15,
-  "fields": {
-    "name": "Can delete content type",
-    "content_type": 4,
-    "codename": "delete_contenttype"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 16,
-  "fields": {
-    "name": "Can view content type",
-    "content_type": 4,
-    "codename": "view_contenttype"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 17,
-  "fields": {
-    "name": "Can add session",
-    "content_type": 5,
-    "codename": "add_session"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 18,
-  "fields": {
-    "name": "Can change session",
-    "content_type": 5,
-    "codename": "change_session"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 19,
-  "fields": {
-    "name": "Can delete session",
-    "content_type": 5,
-    "codename": "delete_session"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 20,
-  "fields": {
-    "name": "Can view session",
-    "content_type": 5,
-    "codename": "view_session"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 21,
-  "fields": {
-    "name": "Can add user",
-    "content_type": 6,
-    "codename": "add_customuser"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 22,
-  "fields": {
-    "name": "Can change user",
-    "content_type": 6,
-    "codename": "change_customuser"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 23,
-  "fields": {
-    "name": "Can delete user",
-    "content_type": 6,
-    "codename": "delete_customuser"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 24,
-  "fields": {
-    "name": "Can view user",
-    "content_type": 6,
-    "codename": "view_customuser"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 25,
-  "fields": {
-    "name": "Can add user profile",
-    "content_type": 7,
-    "codename": "add_userprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 26,
-  "fields": {
-    "name": "Can change user profile",
-    "content_type": 7,
-    "codename": "change_userprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 27,
-  "fields": {
-    "name": "Can delete user profile",
-    "content_type": 7,
-    "codename": "delete_userprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 28,
-  "fields": {
-    "name": "Can view user profile",
-    "content_type": 7,
-    "codename": "view_userprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 29,
-  "fields": {
-    "name": "Can add expert category",
-    "content_type": 8,
-    "codename": "add_expertcategory"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 30,
-  "fields": {
-    "name": "Can change expert category",
-    "content_type": 8,
-    "codename": "change_expertcategory"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 31,
-  "fields": {
-    "name": "Can delete expert category",
-    "content_type": 8,
-    "codename": "delete_expertcategory"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 32,
-  "fields": {
-    "name": "Can view expert category",
-    "content_type": 8,
-    "codename": "view_expertcategory"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 33,
-  "fields": {
-    "name": "Can add expert profile",
-    "content_type": 9,
-    "codename": "add_expertprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 34,
-  "fields": {
-    "name": "Can change expert profile",
-    "content_type": 9,
-    "codename": "change_expertprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 35,
-  "fields": {
-    "name": "Can delete expert profile",
-    "content_type": 9,
-    "codename": "delete_expertprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 36,
-  "fields": {
-    "name": "Can view expert profile",
-    "content_type": 9,
-    "codename": "view_expertprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 37,
-  "fields": {
-    "name": "Can add expert rating",
-    "content_type": 10,
-    "codename": "add_expertrating"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 38,
-  "fields": {
-    "name": "Can change expert rating",
-    "content_type": 10,
-    "codename": "change_expertrating"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 39,
-  "fields": {
-    "name": "Can delete expert rating",
-    "content_type": 10,
-    "codename": "delete_expertrating"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 40,
-  "fields": {
-    "name": "Can view expert rating",
-    "content_type": 10,
-    "codename": "view_expertrating"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 41,
-  "fields": {
-    "name": "Can add expert reaction",
-    "content_type": 11,
-    "codename": "add_expertreaction"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 42,
-  "fields": {
-    "name": "Can change expert reaction",
-    "content_type": 11,
-    "codename": "change_expertreaction"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 43,
-  "fields": {
-    "name": "Can delete expert reaction",
-    "content_type": 11,
-    "codename": "delete_expertreaction"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 44,
-  "fields": {
-    "name": "Can view expert reaction",
-    "content_type": 11,
-    "codename": "view_expertreaction"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 45,
-  "fields": {
-    "name": "Can add favorite experts",
-    "content_type": 12,
-    "codename": "add_favoriteexperts"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 46,
-  "fields": {
-    "name": "Can change favorite experts",
-    "content_type": 12,
-    "codename": "change_favoriteexperts"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 47,
-  "fields": {
-    "name": "Can delete favorite experts",
-    "content_type": 12,
-    "codename": "delete_favoriteexperts"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 48,
-  "fields": {
-    "name": "Can view favorite experts",
-    "content_type": 12,
-    "codename": "view_favoriteexperts"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 49,
-  "fields": {
-    "name": "Can add expert comment",
-    "content_type": 13,
-    "codename": "add_expertcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 50,
-  "fields": {
-    "name": "Can change expert comment",
-    "content_type": 13,
-    "codename": "change_expertcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 51,
-  "fields": {
-    "name": "Can delete expert comment",
-    "content_type": 13,
-    "codename": "delete_expertcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 52,
-  "fields": {
-    "name": "Can view expert comment",
-    "content_type": 13,
-    "codename": "view_expertcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 53,
-  "fields": {
-    "name": "Can add category",
-    "content_type": 14,
-    "codename": "add_category"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 54,
-  "fields": {
-    "name": "Can change category",
-    "content_type": 14,
-    "codename": "change_category"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 55,
-  "fields": {
-    "name": "Can delete category",
-    "content_type": 14,
-    "codename": "delete_category"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 56,
-  "fields": {
-    "name": "Can view category",
-    "content_type": 14,
-    "codename": "view_category"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 57,
-  "fields": {
-    "name": "Can add podcast",
-    "content_type": 15,
-    "codename": "add_podcast"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 58,
-  "fields": {
-    "name": "Can change podcast",
-    "content_type": 15,
-    "codename": "change_podcast"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 59,
-  "fields": {
-    "name": "Can delete podcast",
-    "content_type": 15,
-    "codename": "delete_podcast"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 60,
-  "fields": {
-    "name": "Can view podcast",
-    "content_type": 15,
-    "codename": "view_podcast"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 61,
-  "fields": {
-    "name": "Can add podcast comment",
-    "content_type": 16,
-    "codename": "add_podcastcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 62,
-  "fields": {
-    "name": "Can change podcast comment",
-    "content_type": 16,
-    "codename": "change_podcastcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 63,
-  "fields": {
-    "name": "Can delete podcast comment",
-    "content_type": 16,
-    "codename": "delete_podcastcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 64,
-  "fields": {
-    "name": "Can view podcast comment",
-    "content_type": 16,
-    "codename": "view_podcastcomment"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 65,
-  "fields": {
-    "name": "Can add podcaster profile",
-    "content_type": 17,
-    "codename": "add_podcasterprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 66,
-  "fields": {
-    "name": "Can change podcaster profile",
-    "content_type": 17,
-    "codename": "change_podcasterprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 67,
-  "fields": {
-    "name": "Can delete podcaster profile",
-    "content_type": 17,
-    "codename": "delete_podcasterprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 68,
-  "fields": {
-    "name": "Can view podcaster profile",
-    "content_type": 17,
-    "codename": "view_podcasterprofile"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 69,
-  "fields": {
-    "name": "Can add podcast like",
-    "content_type": 18,
-    "codename": "add_podcastlike"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 70,
-  "fields": {
-    "name": "Can change podcast like",
-    "content_type": 18,
-    "codename": "change_podcastlike"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 71,
-  "fields": {
-    "name": "Can delete podcast like",
-    "content_type": 18,
-    "codename": "delete_podcastlike"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 72,
-  "fields": {
-    "name": "Can view podcast like",
-    "content_type": 18,
-    "codename": "view_podcastlike"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 73,
-  "fields": {
-    "name": "Can add bookmark",
-    "content_type": 19,
-    "codename": "add_bookmark"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 74,
-  "fields": {
-    "name": "Can change bookmark",
-    "content_type": 19,
-    "codename": "change_bookmark"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 75,
-  "fields": {
-    "name": "Can delete bookmark",
-    "content_type": 19,
-    "codename": "delete_bookmark"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 76,
-  "fields": {
-    "name": "Can view bookmark",
-    "content_type": 19,
-    "codename": "view_bookmark"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 77,
-  "fields": {
-    "name": "Can add message",
-    "content_type": 20,
-    "codename": "add_message"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 78,
-  "fields": {
-    "name": "Can change message",
-    "content_type": 20,
-    "codename": "change_message"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 79,
-  "fields": {
-    "name": "Can delete message",
-    "content_type": 20,
-    "codename": "delete_message"
-  }
-},
-{
-  "model": "auth.permission",
-  "pk": 80,
-  "fields": {
-    "name": "Can view message",
-    "content_type": 20,
-    "codename": "view_message"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 1,
-  "fields": {
-    "app_label": "admin",
-    "model": "logentry"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 2,
-  "fields": {
-    "app_label": "auth",
-    "model": "permission"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 3,
-  "fields": {
-    "app_label": "auth",
-    "model": "group"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 4,
-  "fields": {
-    "app_label": "contenttypes",
-    "model": "contenttype"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 5,
-  "fields": {
-    "app_label": "sessions",
-    "model": "session"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 6,
-  "fields": {
-    "app_label": "users",
-    "model": "customuser"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 7,
-  "fields": {
-    "app_label": "users",
-    "model": "userprofile"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 8,
-  "fields": {
-    "app_label": "experts",
-    "model": "expertcategory"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 9,
-  "fields": {
-    "app_label": "experts",
-    "model": "expertprofile"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 10,
-  "fields": {
-    "app_label": "experts",
-    "model": "expertrating"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 11,
-  "fields": {
-    "app_label": "experts",
-    "model": "expertreaction"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 12,
-  "fields": {
-    "app_label": "experts",
-    "model": "favoriteexperts"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 13,
-  "fields": {
-    "app_label": "experts",
-    "model": "expertcomment"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 14,
-  "fields": {
-    "app_label": "podcasts",
-    "model": "category"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 15,
-  "fields": {
-    "app_label": "podcasts",
-    "model": "podcast"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 16,
-  "fields": {
-    "app_label": "podcasts",
-    "model": "podcastcomment"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 17,
-  "fields": {
-    "app_label": "podcasts",
-    "model": "podcasterprofile"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 18,
-  "fields": {
-    "app_label": "podcasts",
-    "model": "podcastlike"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 19,
-  "fields": {
-    "app_label": "bookmarks",
-    "model": "bookmark"
-  }
-},
-{
-  "model": "contenttypes.contenttype",
-  "pk": 20,
-  "fields": {
-    "app_label": "user_messages",
-    "model": "message"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "4pp146bf53utc0jq5omer0pnls2acpft",
-  "fields": {
-    "session_data": ".eJxVjEEOwiAQRe_C2hAQpoBL9z0DGRhGqoYmpV0Z765NutDtf-_9l4i4rTVuvSxxInERWpx-t4T5UdoO6I7tNss8t3WZktwVedAux5nK83q4fwcVe_3WPhVmVP7s2QGBCxxgIFaKlDWQDXjSAwVSJaMmawxoYnbEFp2zSYv3B_IROEI:1tyyCd:vQKMFrX3GojDqo4iLToiYihMVPk1-Kh4oXBI7qLwXhY",
-    "expire_date": "2025-04-13T19:20:15.637Z"
-  }
-},
-{
-  "model": "sessions.session",
-  "pk": "s94mutdfbcqxjwzlepo9jaa1i1bjq0g7",
-  "fields": {
-    "session_data": ".eJxVjDsOwjAQBe_iGllrL_5R0ucM0dre4ACypTipEHeHSCmgfTPzXmKkbS3j1nkZ5ywuQqE4_Y6R0oPrTvKd6q3J1Oq6zFHuijxol0PL_Lwe7t9BoV6-tUaeQCmfcgjBU_CYYDImTxxtBGWNJusBTTYWEWMgdhocEJ8toHdevD_09Dcd:1tyxqK:e-XzaYFdgheeF1GXHyLCNsiLPRthfMNIGchw4fAgyzo",
-    "expire_date": "2025-04-13T18:57:12.016Z"
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": "2025-03-30T19:20:15.636Z",
-    "is_superuser": true,
-    "username": "Benny",
-    "first_name": "",
-    "last_name": "",
-    "email": "behzadjavadian49@gmail.com",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2025-03-25T17:19:22Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "podcaster",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 2,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$1JSqUVVi2KAdR1swt1MHVh$T6+wC5lkiH3VaALjk4b7JQJC6biqtKK6FZsc9kmDces=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "testexpert",
-    "first_name": "",
-    "last_name": "",
-    "email": "expert@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-25T17:24:30.957Z",
-    "email_verified": false,
-    "verification_token": "",
-    "user_type": "podcaster",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 4,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$mGESHFkxdkwVl44Ms4C6Vx$4Nea7pompSYkri/Lt7eG7AuzGx6cE6fAb8NiFk5JYm4=",
-    "last_login": "2025-03-30T19:24:44.775Z",
-    "is_superuser": false,
-    "username": "Behzad",
-    "first_name": "",
-    "last_name": "",
-    "email": "behzad_1349@hotmail.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T15:07:08Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "podcaster",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 6,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$I68VSGCxaHFbJ8C8334f8J$ZarKqhFM1D74oxv5ywj345YAar1shnvHLvCLlX69dXc=",
-    "last_login": "2025-03-26T18:15:11.681Z",
-    "is_superuser": false,
-    "username": "Shirin",
-    "first_name": "",
-    "last_name": "",
-    "email": "swedpodcast@gmail.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T15:27:20.261Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 8,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "sarahchen",
-    "first_name": "Sarah",
-    "last_name": "Chen",
-    "email": "sarah.chen@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T17:56:44.299Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 9,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "michaelrodriguez",
-    "first_name": "Michael",
-    "last_name": "Rodriguez",
-    "email": "michael.rodriguez@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T17:56:44.300Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 10,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "emilywatson",
-    "first_name": "Emily",
-    "last_name": "Watson",
-    "email": "emily.watson@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T17:56:44.301Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 11,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "jameswilson",
-    "first_name": "James",
-    "last_name": "Wilson",
-    "email": "james.wilson@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T17:56:44.302Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 12,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$tfHtRtvJ2iSsN2zyfsvOOi$WREjefDnSEHJHPIzD73B3oCx4Zr3w7wiUsojIp3Eok0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "lisathompson",
-    "first_name": "Lisa",
-    "last_name": "Thompson",
-    "email": "lisa.thompson@example.com",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2025-03-26T17:56:44.303Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "expert",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "users.customuser",
-  "pk": 13,
-  "fields": {
-    "password": "pbkdf2_sha256$870000$DY74QACzv4gisA9j6kNZfN$KwuK9pP74fyOe+/2betGvxU/jIwkp5/nmJT2Ij+fbc4=",
-    "last_login": "2025-03-30T18:57:12Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "behzadjavadian49@gmail.com",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2025-03-30T18:56:39Z",
-    "email_verified": true,
-    "verification_token": "",
-    "user_type": "podcaster",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 1,
-  "fields": {
-    "name": "Audio Production",
-    "description": "Experts in sound engineering, mixing, and audio production techniques",
-    "created_at": "2025-03-26T17:56:44.290Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 2,
-  "fields": {
-    "name": "Content Strategy",
-    "description": "Specialists in podcast content planning, storytelling, and audience engagement",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 3,
-  "fields": {
-    "name": "Marketing & Growth",
-    "description": "Experts in podcast promotion, audience building, and monetization strategies",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 4,
-  "fields": {
-    "name": "Technical Equipment",
-    "description": "Specialists in podcast recording equipment, software, and technical setup",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 5,
-  "fields": {
-    "name": "Voice & Presentation",
-    "description": "Experts in voice training, public speaking, and on-air presentation skills",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 6,
-  "fields": {
-    "name": "Business & Monetization",
-    "description": "Specialists in podcast business models, sponsorship, and revenue generation",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 7,
-  "fields": {
-    "name": "Legal & Compliance",
-    "description": "Experts in podcast-related legal matters, copyright, and content compliance",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertcategory",
-  "pk": 8,
-  "fields": {
-    "name": "Distribution & Platforms",
-    "description": "Specialists in podcast distribution, platform optimization, and analytics",
-    "created_at": "2025-03-26T17:56:44.291Z"
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 1,
-  "fields": {
-    "user": 6,
-    "name": "Shirin",
-    "bio": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
-    "expertise": "Web delopment",
-    "experience_years": 55,
-    "website": "http://www.swedcast.net",
-    "social_media": "insta: @swedcast",
-    "profile_picture": "expert_profiles/photo_2023-08-13_22-16-27.jpg",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T16:22:34.327Z",
-    "categories": [
-      4
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 2,
-  "fields": {
-    "user": 8,
-    "name": "Dr. Sarah Chen",
-    "bio": "AI and Machine Learning expert with 10+ years of experience in developing cutting-edge solutions.",
-    "expertise": "Artificial Intelligence, Machine Learning, Deep Learning",
-    "experience_years": 10,
-    "website": "https://sarahchen.com",
-    "social_media": "{\"linkedin\": \"https://linkedin.com/in/sarahchen\", \"twitter\": \"https://twitter.com/sarahchen\"}",
-    "profile_picture": "expert_profiles/th_6eppVzn.jpeg",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.299Z",
-    "categories": [
-      3
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 3,
-  "fields": {
-    "user": 9,
-    "name": "Michael Rodriguez",
-    "bio": "Business strategy consultant specializing in digital transformation and innovation.",
-    "expertise": "Business Strategy, Digital Transformation, Innovation",
-    "experience_years": 8,
-    "website": "https://michaelrodriguez.com",
-    "social_media": "{\"linkedin\": \"https://linkedin.com/in/michaelrodriguez\", \"twitter\": \"https://twitter.com/michaelrodriguez\"}",
-    "profile_picture": "expert_profiles/5.jpeg",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.300Z",
-    "categories": [
-      8
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 4,
-  "fields": {
-    "user": 10,
-    "name": "Dr. Emily Watson",
-    "bio": "Neuroscientist and mental health expert focusing on cognitive development and well-being.",
-    "expertise": "Neuroscience, Mental Health, Cognitive Development",
-    "experience_years": 12,
-    "website": "https://emilywatson.com",
-    "social_media": "{\"linkedin\": \"https://linkedin.com/in/emilywatson\", \"twitter\": \"https://twitter.com/emilywatson\"}",
-    "profile_picture": "expert_profiles/th.jpeg",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.301Z",
-    "categories": [
-      2
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 5,
-  "fields": {
-    "user": 11,
-    "name": "Dr. James Wilson",
-    "bio": "Environmental scientist and sustainability expert with a focus on climate change solutions.",
-    "expertise": "Environmental Science, Sustainability, Climate Change",
-    "experience_years": 15,
-    "website": "https://jameswilson.com",
-    "social_media": "{\"linkedin\": \"https://linkedin.com/in/jameswilson\", \"twitter\": \"https://twitter.com/jameswilson\"}",
-    "profile_picture": "expert_profiles/7d5c0eae-d83c-4a3c-b789-373729bf32f6.png",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.302Z",
-    "categories": [
-      2
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertprofile",
-  "pk": 6,
-  "fields": {
-    "user": 12,
-    "name": "Lisa Thompson",
-    "bio": "Nutrition and wellness expert specializing in personalized health optimization.",
-    "expertise": "Nutrition, Wellness, Health Optimization",
-    "experience_years": 9,
-    "website": "https://lisathompson.com",
-    "social_media": "{\"linkedin\": \"https://linkedin.com/in/lisathompson\", \"twitter\": \"https://twitter.com/lisathompson\"}",
-    "profile_picture": "expert_profiles/f0a6882b-ac11-4999-a9c5-63ebc731fe57.png",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.303Z",
-    "categories": [
-      1
-    ],
-    "views": [],
-    "bookmarks": []
-  }
-},
-{
-  "model": "experts.expertcomment",
-  "pk": 1,
-  "fields": {
-    "expert": 1,
-    "user": 4,
-    "content": "j.hvj.hv",
-    "parent": null,
-    "created_at": "2025-03-30T19:31:21.604Z",
-    "updated_at": "2025-03-30T19:31:21.604Z"
-  }
-},
-{
-  "model": "experts.expertreaction",
-  "pk": 3,
-  "fields": {
-    "expert": 3,
-    "user": 4,
-    "reaction_type": "like",
-    "created_at": "2025-03-30T23:25:00.372Z",
-    "updated_at": "2025-03-30T23:25:00.372Z"
-  }
-},
-{
-  "model": "experts.expertreaction",
-  "pk": 7,
-  "fields": {
-    "expert": 2,
-    "user": 4,
-    "reaction_type": "like",
-    "created_at": "2025-03-30T23:41:16.936Z",
-    "updated_at": "2025-03-31T00:39:49.980Z"
-  }
-},
-{
-  "model": "experts.expertreaction",
-  "pk": 9,
-  "fields": {
-    "expert": 5,
-    "user": 4,
-    "reaction_type": "dislike",
-    "created_at": "2025-03-30T23:41:25.519Z",
-    "updated_at": "2025-03-30T23:41:26.087Z"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 1,
-  "fields": {
-    "name": "Technology",
-    "slug": "technology",
-    "description": "Tech news, reviews, and discussions"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 2,
-  "fields": {
-    "name": "Business",
-    "slug": "business",
-    "description": "Business news, entrepreneurship, and finance"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 3,
-  "fields": {
-    "name": "Science",
-    "slug": "science",
-    "description": "Scientific discoveries and discussions"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 4,
-  "fields": {
-    "name": "Health & Wellness",
-    "slug": "health-wellness",
-    "description": "Health, fitness, and mental wellness"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 5,
-  "fields": {
-    "name": "Education",
-    "slug": "education",
-    "description": "Educational content and learning"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 6,
-  "fields": {
-    "name": "Entertainment",
-    "slug": "entertainment",
-    "description": "Movies, TV shows, and pop culture"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 7,
-  "fields": {
-    "name": "News & Politics",
-    "slug": "news-politics",
-    "description": "Current events and political discussions"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 8,
-  "fields": {
-    "name": "Sports",
-    "slug": "sports",
-    "description": "Sports news, analysis, and commentary"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 9,
-  "fields": {
-    "name": "Music",
-    "slug": "music",
-    "description": "Music reviews, interviews, and industry news"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 10,
-  "fields": {
-    "name": "Arts & Culture",
-    "slug": "arts-culture",
-    "description": "Art, literature, and cultural topics"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 11,
-  "fields": {
-    "name": "History",
-    "slug": "history",
-    "description": "Historical events and stories"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 12,
-  "fields": {
-    "name": "True Crime",
-    "slug": "true-crime",
-    "description": "True crime stories and investigations"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 13,
-  "fields": {
-    "name": "Comedy",
-    "slug": "comedy",
-    "description": "Comedy shows and humor"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 14,
-  "fields": {
-    "name": "Society",
-    "slug": "society",
-    "description": "Social issues and cultural commentary"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 15,
-  "fields": {
-    "name": "Religion & Spirituality",
-    "slug": "religion-spirituality",
-    "description": "Religious and spiritual content"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 16,
-  "fields": {
-    "name": "Family & Kids",
-    "slug": "family-kids",
-    "description": "Family-friendly and children's content"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 17,
-  "fields": {
-    "name": "Food & Cooking",
-    "slug": "food-cooking",
-    "description": "Cooking tips, recipes, and food culture"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 18,
-  "fields": {
-    "name": "Travel",
-    "slug": "travel",
-    "description": "Travel stories, tips, and destinations"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 19,
-  "fields": {
-    "name": "Personal Development",
-    "slug": "personal-development",
-    "description": "Self-improvement and motivation"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 20,
-  "fields": {
-    "name": "Career",
-    "slug": "career",
-    "description": "Career advice and professional development"
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 21,
-  "fields": {
-    "name": "Health",
-    "slug": "health",
-    "description": ""
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 22,
-  "fields": {
-    "name": "News",
-    "slug": "news",
-    "description": ""
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 23,
-  "fields": {
-    "name": "Arts",
-    "slug": "arts",
-    "description": ""
-  }
-},
-{
-  "model": "podcasts.category",
-  "pk": 24,
-  "fields": {
-    "name": "Lifestyle",
-    "slug": "lifestyle",
-    "description": ""
-  }
-},
-{
-  "model": "podcasts.podcasterprofile",
-  "pk": 1,
-  "fields": {
-    "user": 2,
-    "bio": "Test podcaster profile",
-    "website": "",
-    "social_links": {},
-    "created_at": "2025-03-25T17:26:28.726Z",
-    "updated_at": "2025-03-25T17:26:28.726Z"
-  }
-},
-{
-  "model": "podcasts.podcasterprofile",
-  "pk": 2,
-  "fields": {
-    "user": 4,
-    "bio": "",
-    "website": "",
-    "social_links": {},
-    "created_at": "2025-03-26T16:53:13.690Z",
-    "updated_at": "2025-03-26T16:53:13.690Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 1,
-  "fields": {
-    "title": "Test Podcast",
-    "description": "A test podcast for development",
-    "owner": 1,
-    "category": 1,
-    "image": "podcast_images/44.jpeg",
-    "link": null,
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-25T17:26:28.728Z",
-    "updated_at": "2025-03-31T12:54:57.230Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 2,
-  "fields": {
-    "title": "SWEDCAST",
-    "description": "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters",
-    "owner": 2,
-    "category": null,
-    "image": "podcast_images/33.jpeg",
-    "link": "http://www.swedcast.net",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T16:53:13.693Z",
-    "updated_at": "2025-03-31T12:54:48.099Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 3,
-  "fields": {
-    "title": "Tech Talk Daily",
-    "description": "Daily insights into the latest technology trends, innovations, and industry news",
-    "owner": 1,
-    "category": 1,
-    "image": "podcast_images/22.jpeg",
-    "link": "https://techtalkdaily.com",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.290Z",
-    "updated_at": "2025-03-31T12:54:39.404Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 4,
-  "fields": {
-    "title": "Business Insights",
-    "description": "Expert analysis of business trends, entrepreneurship, and market strategies",
-    "owner": 1,
-    "category": 2,
-    "image": "podcast_images/11.jpeg",
-    "link": "https://businessinsights.com",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.291Z",
-    "updated_at": "2025-03-31T12:54:32.181Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 5,
-  "fields": {
-    "title": "Science Today",
-    "description": "Exploring the latest scientific discoveries and their impact on our world",
-    "owner": 2,
-    "category": 3,
-    "image": "podcast_images/1334379d-950e-4c83-9bd4-2a9519cab04d.png",
-    "link": "https://sciencetoday.com",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.292Z",
-    "updated_at": "2025-03-31T12:54:15.421Z"
-  }
-},
-{
-  "model": "podcasts.podcast",
-  "pk": 6,
-  "fields": {
-    "title": "Health & Wellness Weekly",
-    "description": "Tips and advice for maintaining a healthy lifestyle and mental well-being",
-    "owner": 2,
-    "category": 4,
-    "image": "podcast_images/411a45c9-a244-420e-bb7c-7fcab7dcc158.png",
-    "link": "https://healthwellnessweekly.com",
-    "is_approved": true,
-    "is_featured": true,
-    "created_at": "2025-03-26T17:56:44.293Z",
-    "updated_at": "2025-03-31T12:53:56.399Z"
-  }
-},
-{
-  "model": "podcasts.podcastlike",
-  "pk": 1,
-  "fields": {
-    "podcast": 3,
-    "user": 4,
-    "created_at": "2025-03-30T23:39:20.154Z"
-  }
-},
-{
-  "model": "podcasts.podcastlike",
-  "pk": 2,
-  "fields": {
-    "podcast": 2,
-    "user": 4,
-    "created_at": "2025-03-30T23:39:42.561Z"
-  }
-},
-{
-  "model": "podcasts.podcastlike",
-  "pk": 7,
-  "fields": {
-    "podcast": 4,
-    "user": 4,
-    "created_at": "2025-03-30T23:47:08.416Z"
-  }
-},
-{
-  "model": "podcasts.podcastlike",
-  "pk": 8,
-  "fields": {
-    "podcast": 5,
-    "user": 4,
-    "created_at": "2025-03-30T23:47:53.335Z"
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 1,
-  "fields": {
-    "sender": 1,
-    "receiver": 2,
-    "content": "Hi, I'm interested in having you as a guest on my podcast. Would you be available for a discussion about technology trends?",
-    "timestamp": "2025-03-26T10:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T10:05:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 2,
-  "fields": {
-    "sender": 2,
-    "receiver": 1,
-    "content": "Thank you for reaching out! I'd be happy to discuss technology trends on your podcast. What specific topics would you like to cover?",
-    "timestamp": "2025-03-26T10:10:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T10:15:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 3,
-  "fields": {
-    "sender": 4,
-    "receiver": 6,
-    "content": "Hello! I saw your profile and would love to have you share your expertise on AI and machine learning on my podcast.",
-    "timestamp": "2025-03-26T11:00:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 4,
-  "fields": {
-    "sender": 6,
-    "receiver": 4,
-    "content": "Hi! Thanks for the invitation. I'd be interested in discussing AI applications in various industries. When were you thinking of recording?",
-    "timestamp": "2025-03-26T11:30:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T11:35:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 5,
-  "fields": {
-    "sender": 8,
-    "receiver": 9,
-    "content": "Hi there! I'm working on a series about environmental sustainability. Would you be interested in sharing your insights?",
-    "timestamp": "2025-03-26T12:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T12:05:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 6,
-  "fields": {
-    "sender": 9,
-    "receiver": 8,
-    "content": "That sounds interesting! I'd love to discuss environmental sustainability. What aspects would you like to focus on?",
-    "timestamp": "2025-03-26T12:10:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 7,
-  "fields": {
-    "sender": 1,
-    "receiver": 4,
-    "content": "Hello! I noticed you're an expert in quantum computing. Would you be interested in collaborating on a podcast series?",
-    "timestamp": "2025-03-26T13:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-30T19:55:46.891Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 8,
-  "fields": {
-    "sender": 6,
-    "receiver": 4,
-    "content": "I have some experience with quantum computing and would love to discuss it on your podcast. What specific aspects would you like to cover?",
-    "timestamp": "2025-03-26T13:30:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T13:35:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 9,
-  "fields": {
-    "sender": 4,
-    "receiver": 6,
-    "content": "That's great! I'd love to focus on quantum computing applications in cryptography and data security. When would you be available?",
-    "timestamp": "2025-03-26T13:45:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 10,
-  "fields": {
-    "sender": 10,
-    "receiver": 11,
-    "content": "Hi! I'm interested in discussing mental health and cognitive development on your podcast. Would you be interested?",
-    "timestamp": "2025-03-26T14:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T14:05:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 11,
-  "fields": {
-    "sender": 11,
-    "receiver": 10,
-    "content": "Absolutely! I'd love to discuss the connection between environmental factors and mental health. What topics would you like to focus on?",
-    "timestamp": "2025-03-26T14:15:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 12,
-  "fields": {
-    "sender": 12,
-    "receiver": 8,
-    "content": "Hello! I noticed your expertise in AI and would love to discuss the intersection of technology and health optimization. Are you interested?",
-    "timestamp": "2025-03-26T14:30:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T14:35:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 13,
-  "fields": {
-    "sender": 8,
-    "receiver": 12,
-    "content": "That's an interesting topic! I'd be happy to discuss how AI can help optimize health and wellness. When would you like to record?",
-    "timestamp": "2025-03-26T14:45:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 14,
-  "fields": {
-    "sender": 9,
-    "receiver": 10,
-    "content": "Hi! I'd love to discuss how business strategy can impact environmental sustainability. Would you be interested in collaborating?",
-    "timestamp": "2025-03-26T15:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T15:05:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 15,
-  "fields": {
-    "sender": 10,
-    "receiver": 9,
-    "content": "That's a fascinating topic! I'd be happy to discuss the psychological aspects of sustainable business practices. What specific areas would you like to cover?",
-    "timestamp": "2025-03-26T15:15:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 16,
-  "fields": {
-    "sender": 6,
-    "receiver": 8,
-    "content": "Hi! I noticed you're working on AI and health optimization. I'd love to collaborate on a podcast series about the future of healthcare technology.",
-    "timestamp": "2025-03-26T15:30:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T15:35:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 17,
-  "fields": {
-    "sender": 8,
-    "receiver": 6,
-    "content": "That's a great idea! We could cover topics like AI in diagnostics, personalized medicine, and healthcare automation. Would you like to start with a pilot episode?",
-    "timestamp": "2025-03-26T15:45:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 18,
-  "fields": {
-    "sender": 6,
-    "receiver": 8,
-    "content": "Absolutely! I have some interesting case studies we could discuss. When would you be available for a planning session?",
-    "timestamp": "2025-03-26T16:00:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T16:05:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 19,
-  "fields": {
-    "sender": 11,
-    "receiver": 12,
-    "content": "Hello! I saw your expertise in nutrition and wellness. Would you be interested in discussing sustainable food systems and their impact on health?",
-    "timestamp": "2025-03-26T16:15:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T16:20:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 20,
-  "fields": {
-    "sender": 12,
-    "receiver": 11,
-    "content": "That's a fascinating topic! I'd love to explore how environmental sustainability affects nutrition and public health. What specific aspects would you like to focus on?",
-    "timestamp": "2025-03-26T16:30:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 21,
-  "fields": {
-    "sender": 9,
-    "receiver": 4,
-    "content": "Hi! I'm interested in discussing how business strategy can drive technological innovation. Would you be interested in collaborating on a podcast series?",
-    "timestamp": "2025-03-26T16:45:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T16:50:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 22,
-  "fields": {
-    "sender": 4,
-    "receiver": 9,
-    "content": "That sounds interesting! We could explore how companies are leveraging technology for competitive advantage. What industries would you like to focus on?",
-    "timestamp": "2025-03-26T17:00:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 23,
-  "fields": {
-    "sender": 10,
-    "receiver": 8,
-    "content": "Hello! I'm interested in discussing the intersection of mental health and technology. Would you be interested in exploring this topic on your podcast?",
-    "timestamp": "2025-03-26T17:15:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T17:20:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 24,
-  "fields": {
-    "sender": 8,
-    "receiver": 10,
-    "content": "That's a great topic! We could discuss how AI and digital tools are transforming mental health care. When would you like to start planning?",
-    "timestamp": "2025-03-26T17:30:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 25,
-  "fields": {
-    "sender": 12,
-    "receiver": 9,
-    "content": "Hi! I'd love to discuss how sustainable business practices can improve employee wellness. Would you be interested in collaborating?",
-    "timestamp": "2025-03-26T17:45:00Z",
-    "is_read": true,
-    "read_at": "2025-03-26T17:50:00Z",
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 26,
-  "fields": {
-    "sender": 9,
-    "receiver": 12,
-    "content": "Absolutely! We could explore how companies are integrating wellness programs with sustainability initiatives. What specific aspects would you like to cover?",
-    "timestamp": "2025-03-26T18:00:00Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-},
-{
-  "model": "user_messages.message",
-  "pk": 27,
-  "fields": {
-    "sender": 4,
-    "receiver": 1,
-    "content": "hi",
-    "timestamp": "2025-03-30T19:56:01.396Z",
-    "is_read": false,
-    "read_at": null,
-    "attachment": "",
-    "attachment_name": null,
-    "attachment_type": null
-  }
-}
 ]
