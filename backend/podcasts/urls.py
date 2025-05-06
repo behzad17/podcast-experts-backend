@@ -1,12 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PodcastViewSet, CategoryViewSet, PodcasterProfileViewSet, ReactionView
+from .views import PodcastViewSet, ReactionView
 
 router = DefaultRouter()
-router.register(r'podcasts', PodcastViewSet)
-router.register(r'categories', CategoryViewSet)
-router.register(r'profiles', PodcasterProfileViewSet)
-router.register(r'podcasts/(?P<pk>\d+)/reactions', ReactionView, basename='podcast-reactions')
+router.register(r'podcasts', PodcastViewSet, basename='podcast')
+router.register(r'reactions', ReactionView, basename='reaction')
 
 urlpatterns = [
     path('', include(router.urls)),
