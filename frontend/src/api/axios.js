@@ -75,6 +75,7 @@ api.interceptors.response.use(
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userData");
+        localStorage.removeItem("userType");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
