@@ -37,16 +37,17 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
       const response = await axios.post("/users/login/", {
-        email,
+        username,
         password,
       });
 
-      const { token, user } = response.data;
+      const { access, refresh, user } = response.data;
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", access);
+      localStorage.setItem("refreshToken", refresh);
       localStorage.setItem("userData", JSON.stringify(user));
       setUser(user);
 
@@ -57,12 +58,12 @@ export const AuthProvider = ({ children }) => {
         if (error.response.status === 401) {
           return {
             success: false,
-            error: "Invalid email or password",
+            error: "Invalid username or password",
           };
         }
         return {
           success: false,
-          error: error.response.data.message || "Login failed",
+          error: error.response.data.detail || "Login failed",
         };
       }
       return {
