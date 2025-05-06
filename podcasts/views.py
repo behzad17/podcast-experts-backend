@@ -143,7 +143,8 @@ class PodcastViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def my_podcasts(self, request):
-        podcasts = self.get_queryset().filter(user=request.user)
+        podcaster_profile = PodcasterProfile.get_or_create_profile(request.user)
+        podcasts = self.get_queryset().filter(owner=podcaster_profile)
         serializer = self.get_serializer(podcasts, many=True)
         return Response(serializer.data)
 
