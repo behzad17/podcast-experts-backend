@@ -31,7 +31,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { Spinner } from "react-bootstrap";
 
 function AppContent() {
-  const { loading, isAuthenticated } = useAuth();
+  const { loading, user } = useAuth();
 
   return (
     <>
@@ -51,17 +51,16 @@ function AppContent() {
             <Route path="/" element={<Home />} />
             <Route
               path="/login"
-              element={
-                isAuthenticated ? <Navigate to="/" replace /> : <Login />
-              }
+              element={user ? <Navigate to="/" replace /> : <Login />}
             />
             <Route
               path="/register"
-              element={
-                isAuthenticated ? <Navigate to="/" replace /> : <Register />
-              }
+              element={user ? <Navigate to="/" replace /> : <Register />}
             />
             <Route path="/podcasts" element={<Podcasts />} />
+            <Route path="/podcasts/:id" element={<PodcastDetail />} />
+            <Route path="/experts" element={<Experts />} />
+            <Route path="/experts/:id" element={<ExpertDetail />} />
             <Route
               path="/podcasts/create"
               element={
@@ -70,7 +69,6 @@ function AppContent() {
                 </PrivateRoute>
               }
             />
-            <Route path="/podcasts/:id" element={<PodcastDetail />} />
             <Route
               path="/podcasts/:id/edit"
               element={
@@ -87,7 +85,6 @@ function AppContent() {
                 </PrivateRoute>
               }
             />
-            <Route path="/experts" element={<Experts />} />
             <Route
               path="/experts/create"
               element={
@@ -96,7 +93,6 @@ function AppContent() {
                 </PrivateRoute>
               }
             />
-            <Route path="/experts/:id" element={<ExpertDetail />} />
             <Route
               path="/experts/:id/edit"
               element={

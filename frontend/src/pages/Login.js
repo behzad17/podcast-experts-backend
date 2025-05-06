@@ -4,7 +4,7 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,8 +21,12 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      await login(formData.username, formData.password);
-      navigate("/profile");
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        navigate("/profile");
+      } else {
+        setError(result.error);
+      }
     } catch (error) {
       console.error("Login error:", error);
       setError(error.message || "Login failed. Please try again.");
@@ -39,14 +43,14 @@ const Login = () => {
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
-                type="text"
-                name="username"
-                value={formData.username}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Enter your username"
+                placeholder="Enter your email"
               />
             </Form.Group>
             <Form.Group className="mb-3">

@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
 import LikeButton from "../components/common/LikeButton";
 import Footer from "../components/common/Footer";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userType, setUserType] = useState("");
+  const { user, loading: authLoading } = useAuth();
   const [featuredPodcasts, setFeaturedPodcasts] = useState([]);
   const [featuredExperts, setFeaturedExperts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-    const userType = localStorage.getItem("userType");
-    if (userType) {
-      setUserType(userType);
-    }
-
     const fetchFeaturedItems = async () => {
       try {
-        const [podcastsRes, expertsRes] = await Promise.all([
+        const [podcastsRes, expertsRes] = await Promise.allSettled([
           axios.get("/podcasts/podcasts/featured/"),
           axios.get("/experts/profiles/featured/"),
         ]);
-        setFeaturedPodcasts(podcastsRes.data);
-        setFeaturedExperts(expertsRes.data);
+
+        if (podcastsRes.status === "fulfilled") {
+          setFeaturedPodcasts(podcastsRes.value.data);
+        }
+
+        if (expertsRes.status === "fulfilled") {
+          setFeaturedExperts(expertsRes.value.data);
+        }
       } catch (error) {
         console.error("Error fetching featured items:", error);
       } finally {
@@ -47,6 +46,19 @@ const Home = () => {
     if (podcast.image) return podcast.image;
     return "/logo192.png";
   };
+
+  if (authLoading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -73,10 +85,10 @@ const Home = () => {
             This platform provides a convenient and reliable way for experts and
             specialists to connect with podcasters and content creators
           </h3>
-          {isAuthenticated && (
+          {user && (
             <div className="text-muted">
               You are logged in as{" "}
-              {userType === "expert" ? "an Expert" : "a Podcaster"}
+              {user.user_type === "expert" ? "an Expert" : "a Podcaster"}
             </div>
           )}
         </div>

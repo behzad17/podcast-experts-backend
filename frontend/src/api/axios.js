@@ -9,6 +9,15 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// List of public routes that don't require authentication
+const publicRoutes = [
+  "/podcasts/podcasts/featured/",
+  "/experts/profiles/featured/",
+  "/experts/",
+  "/podcasts/",
+  "/experts/categories/",
+];
+
 // Add request interceptor
 api.interceptors.request.use(
   (config) => {
@@ -27,9 +36,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only redirect to login for protected routes that return 401
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
+      const isPublicRoute = publicRoutes.some((route) =>
+        error.config.url.includes(route)
+      );
+
+      if (!isPublicRoute) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userData");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
