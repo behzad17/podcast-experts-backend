@@ -32,9 +32,11 @@ function Navigation() {
             </Nav.Link>
             {user && (
               <>
-                <Nav.Link as={Link} to="/profile">
-                  Profile
-                </Nav.Link>
+                {user.user_type === "expert" && (
+                  <Nav.Link as={Link} to="/profile">
+                    Profile
+                  </Nav.Link>
+                )}
                 {user.user_type === "podcaster" && (
                   <Nav.Link as={Link} to="/podcasts/create">
                     Create Podcast
