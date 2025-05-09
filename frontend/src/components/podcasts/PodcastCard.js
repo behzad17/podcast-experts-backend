@@ -22,7 +22,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
       />
       <Card.Body
         style={{
-          backgroundColor: "#F0F8FF",
+          backgroundColor: "#A8C9E3",
           height: "250px",
           overflow: "auto",
         }}
