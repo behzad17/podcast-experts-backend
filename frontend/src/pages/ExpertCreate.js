@@ -74,75 +74,11 @@ const ExpertCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess(false);
-    setIsLoading(true);
-
-    if (!formData.profile_picture) {
-      setError("Please upload a profile picture");
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Please log in to create an expert profile");
-        navigate("/login");
-        return;
-      }
-
-      if (hasProfile) {
-        setError("You already have an expert profile");
-        return;
-      }
-
-      const form = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== null) {
-          form.append(key, formData[key]);
-        }
-      });
-
-      console.log("Sending expert profile creation request");
-      const response = await api.post("/experts/create/", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Expert profile creation response:", response.data);
-
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/experts");
-      }, 2000);
+      await api.post("/experts/create/", formData);
+      navigate("/experts");
     } catch (error) {
-      console.error("Expert profile creation error:", error);
-      if (error.response) {
-        console.error("Error response:", error.response.data);
-        if (error.response.status === 401) {
-          setError("Please log in to create an expert profile");
-          navigate("/login");
-        } else if (error.response.status === 400) {
-          setError("Please check your input and try again");
-        } else if (error.response.status === 403) {
-          setError("You don't have permission to create an expert profile");
-        } else if (error.response.status === 405) {
-          setError("Invalid request method. Please try again.");
-        } else {
-          setError(
-            error.response.data.detail || "Error creating expert profile"
-          );
-        }
-      } else if (error.code === "ERR_NETWORK") {
-        setError(
-          "Cannot connect to server. Please check if the server is running."
-        );
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
+      setError(error.response?.data?.message || "An error occurred");
     }
   };
 

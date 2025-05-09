@@ -56,49 +56,23 @@ const PodcastCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
     try {
-      if (needsProfile) {
-        setError("Please create a podcaster profile first");
-        navigate("/podcasts/profile/create");
-        return;
-      }
-
-      const form = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== null) {
-          form.append(key, formData[key]);
-        }
-      });
-
-      const response = await api.post("/podcasts/podcasts/", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      toast.success("Podcast created successfully!");
+      await api.post("/podcasts/create/", formData);
       navigate("/podcasts");
     } catch (error) {
-      console.error("Podcast creation error:", error);
-      if (error.response) {
-        if (error.response.status === 401) {
-          setError("Please log in to create a podcast");
-          navigate("/login");
-        } else if (error.response.status === 400) {
-          setError("Please check your input and try again");
-        } else if (error.response.status === 403) {
-          setError("You don't have permission to create podcasts");
-        } else {
-          setError(error.response.data.detail || "Error creating podcast");
-        }
-      } else {
-        setError("An unexpected error occurred. Please try again.");
+      setError(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        await api.post("/podcasts/upload-image/", { image: file });
+        setFormData({ ...formData, image: file });
+      } catch (error) {
+        setError(error.response?.data?.message || "Error uploading image");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -170,7 +144,7 @@ const PodcastCreate = () => {
           <Form.Control
             type="file"
             name="image"
-            onChange={handleChange}
+            onChange={handleImageUpload}
             accept="image/*"
           />
         </Form.Group>

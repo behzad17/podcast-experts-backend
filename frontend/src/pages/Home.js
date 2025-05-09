@@ -78,15 +78,32 @@ const Home = () => {
         >
           Welcome to Swedish Podcast Experts
         </h3>
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex flex-column align-items-center mb-4">
           <h3
-            style={{ fontSize: "1.5rem", fontWeight: "500", color: "#6495ED" }}
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: "400",
+              color: "#6495ED",
+              border: "2px solid #6495ED",
+              borderRadius: "10px",
+              padding: "15px",
+              textAlign: "center",
+              width: "100%",
+              margin: "0 auto",
+            }}
           >
             This platform provides a convenient and reliable way for experts and
             specialists to connect with podcasters and content creators
           </h3>
           {user && (
-            <div className="text-muted">
+            <div
+              className="text-muted mt-3"
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: "500",
+                color: "#6495ED",
+              }}
+            >
               You are logged in as{" "}
               {user.user_type === "expert" ? "an Expert" : "a Podcaster"}
             </div>

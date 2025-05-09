@@ -1,11 +1,16 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Navbar as BootstrapNavbar,
+  Nav,
+  Container,
+  Button,
+} from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
+import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
 function Navigation() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -16,13 +21,13 @@ function Navigation() {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <BootstrapNavbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/">
+        <BootstrapNavbar.Brand as={Link} to="/">
           Podcast Experts
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        </BootstrapNavbar.Brand>
+        <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
+        <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/podcasts">
               Podcasts
@@ -74,9 +79,9 @@ function Navigation() {
               </>
             )}
           </Nav>
-        </Navbar.Collapse>
+        </BootstrapNavbar.Collapse>
       </Container>
-    </Navbar>
+    </BootstrapNavbar>
   );
 }
 
