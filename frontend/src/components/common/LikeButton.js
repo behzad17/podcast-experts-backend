@@ -12,8 +12,11 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
     // Check if the user has already liked this item
     const checkLikeStatus = async () => {
       try {
-        const response = await api.get(`/${type}/${itemId}/likes/`);
-        setIsLiked(response.data.is_liked);
+        const response = await api.get(`/${type}/${itemId}/reactions/`);
+        const userReaction = response.data.find(
+          (reaction) => reaction.reaction_type === "like"
+        );
+        setIsLiked(!!userReaction);
       } catch (error) {
         console.error("Error checking like status:", error);
       }
@@ -25,21 +28,21 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const endpoint = `/${type}/${itemId}/like/`;
-      const response = await api.post(endpoint);
+      const endpoint = `/${type}/${itemId}/react/`;
+      const response = await api.post(endpoint, { reaction_type: "like" });
 
-      if (response.data.status === "liked") {
-        setCount((prev) => prev + 1);
-        setIsLiked(true);
-      } else {
+      if (response.data.status === "reaction removed") {
         setCount((prev) => prev - 1);
         setIsLiked(false);
+      } else {
+        setCount((prev) => prev + 1);
+        setIsLiked(true);
       }
     } catch (error) {
       console.error("Error updating like:", error);
       // If there's an error, revert the UI state
       setIsLiked(!isLiked);
-      setCount((prev) => (isLiked ? prev + 1 : prev - 1));
+      setCount((prev) => (isLiked ? prev - 1 : prev + 1));
     } finally {
       setIsLoading(false);
     }
