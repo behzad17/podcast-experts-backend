@@ -174,7 +174,7 @@ const Podcasts = () => {
   }
 
   return (
-    <Container className="mt-4">
+    <Container className="podcasts-page-container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2>Podcasts</h2>
@@ -212,17 +212,17 @@ const Podcasts = () => {
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      <Row className="g-4">
+      <div className="podcasts-grid">
         {podcasts.map((podcast) => (
-          <Col key={podcast.id} md={4}>
+          <div key={podcast.id} className="podcast-card">
             <PodcastCard
               podcast={podcast}
               currentUser={currentUser}
               onEdit={handleEditClick}
             />
-          </Col>
+          </div>
         ))}
-      </Row>
+      </div>
 
       {podcasts.length === 0 && !loading && (
         <Alert variant="info">No podcasts found in this category.</Alert>
