@@ -170,7 +170,7 @@ const Home = () => {
 
         {/* Featured Podcasts Section */}
         <section className="mb-5">
-          <h2 className="mb-4 text-center">Featured Podcasts</h2>
+          <h2 className="section-title mb-4">Great and Engaging Podcasts</h2>
           <Row className="g-4">
             {loading ? (
               <Col>Loading...</Col>
