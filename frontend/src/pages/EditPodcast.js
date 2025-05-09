@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
@@ -16,7 +16,6 @@ const EditPodcast = () => {
     website: "",
     social_media: "",
   });
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPodcast = async () => {
@@ -44,7 +43,18 @@ const EditPodcast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/podcasts/podcasts/${id}/`, formData);
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] !== null) {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+
+      await api.put(`/podcasts/podcasts/${id}/`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success("Podcast updated successfully");
       navigate(`/podcasts/${id}`);
     } catch (error) {

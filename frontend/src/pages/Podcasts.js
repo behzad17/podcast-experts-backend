@@ -3,7 +3,6 @@ import {
   Container,
   Row,
   Col,
-  Card,
   Button,
   Alert,
   Pagination,
@@ -13,8 +12,8 @@ import {
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
-import LikeButton from "../components/common/LikeButton";
 import PodcastCard from "../components/podcasts/PodcastCard";
+import { toast } from "react-hot-toast";
 
 const Podcasts = () => {
   const [podcasts, setPodcasts] = useState([]);
@@ -135,8 +134,8 @@ const Podcasts = () => {
         }
       });
 
-      const response = await api.patch(
-        `/podcasts/${editingPodcast.id}/`,
+      const response = await api.put(
+        `/podcasts/podcasts/${editingPodcast.id}/`,
         formData,
         {
           headers: {
@@ -152,9 +151,10 @@ const Podcasts = () => {
           p.id === editingPodcast.id ? { ...p, ...response.data } : p
         )
       );
+      toast.success("Podcast updated successfully");
     } catch (error) {
       console.error("Error updating podcast:", error);
-      setError("Failed to update podcast. Please try again.");
+      toast.error(error.response?.data?.detail || "Failed to update podcast");
     }
   };
 
