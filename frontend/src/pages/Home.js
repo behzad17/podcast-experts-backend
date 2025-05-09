@@ -76,7 +76,7 @@ const Home = () => {
           className="mb-4 text-center"
           style={{ color: "#6495ED", fontSize: "1.5rem", fontWeight: "500" }}
         >
-          Welcome to Podcast Experts
+          Welcome to Swedish Podcast Experts
         </h3>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h3
