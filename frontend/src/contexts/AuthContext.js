@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "../api/axios";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
@@ -14,21 +14,46 @@ export const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("token");
         const userData = localStorage.getItem("userData");
+        const refreshToken = localStorage.getItem("refreshToken");
 
-        if (token && userData) {
+        if (token && userData && refreshToken) {
           try {
             // Verify token with backend
-            await axios.get("/users/verify-token/");
+            await api.get("/users/verify-token/");
             setUser(JSON.parse(userData));
           } catch (error) {
-            // If token verification fails, clear everything
-            localStorage.removeItem("token");
-            localStorage.removeItem("userData");
-            setUser(null);
+            if (error.response?.status === 401) {
+              try {
+                // Try to refresh the token
+                const response = await api.post("/users/token/refresh/", {
+                  refresh: refreshToken,
+                });
+                const { access } = response.data;
+                localStorage.setItem("token", access);
+                setUser(JSON.parse(userData));
+              } catch (refreshError) {
+                // If refresh fails, clear everything
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("userData");
+                localStorage.removeItem("userType");
+                setUser(null);
+              }
+            } else {
+              // For other errors, clear everything
+              localStorage.removeItem("token");
+              localStorage.removeItem("refreshToken");
+              localStorage.removeItem("userData");
+              localStorage.removeItem("userType");
+              setUser(null);
+            }
           }
+        } else {
+          setUser(null);
         }
       } catch (error) {
         console.error("Error initializing auth:", error);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -39,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post("/users/login/", {
+      const response = await api.post("/users/login/", {
         username,
         password,
       });
@@ -76,7 +101,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post("/users/register/", userData);
+      const response = await api.post("/users/register/", userData);
       return { success: true, data: response.data };
     } catch (error) {
       console.error("Registration error:", error);
@@ -95,6 +120,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userType");
     setUser(null);

@@ -19,6 +19,8 @@ const publicRoutes = [
   "/users/login/",
   "/users/register/",
   "/users/verify-email/",
+  "/users/verify-token/",
+  "/users/token/refresh/",
 ];
 
 // Add request interceptor
@@ -59,10 +61,10 @@ api.interceptors.response.use(
           throw new Error("No refresh token available");
         }
 
-        const response = await axios.post(
-          "http://localhost:8000/api/users/token/refresh/",
-          { refresh: refreshToken }
-        );
+        // Use the same axios instance for the refresh request
+        const response = await api.post("/users/token/refresh/", {
+          refresh: refreshToken,
+        });
 
         const { access } = response.data;
         localStorage.setItem("token", access);
@@ -71,12 +73,14 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // If refresh token fails, clear everything and redirect to login
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userData");
-        localStorage.removeItem("userType");
-        window.location.href = "/login";
+        // Only clear auth data and redirect if it's not a refresh token request
+        if (!originalRequest.url.includes("/users/token/refresh/")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("userData");
+          localStorage.removeItem("userType");
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }
