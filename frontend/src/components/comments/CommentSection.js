@@ -31,11 +31,7 @@ const CommentSection = ({
       setError("");
     } catch (error) {
       console.error("Error fetching comments:", error);
-      if (error.response && error.response.status === 401) {
-        setError("You must be logged in to view or post comments.");
-      } else {
-        setError("Failed to load comments");
-      }
+      setError("Failed to load comments");
     } finally {
       setLoading(false);
     }
@@ -222,42 +218,25 @@ const CommentSection = ({
       </Form>
 
       {loading ? (
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading comments...</span>
-          </div>
-        </div>
-      ) : comments.length === 0 ? (
-        <Alert variant="info" className="text-center">
-          No comments yet. Be the first to share your thoughts!
-        </Alert>
+        <div>Loading comments...</div>
       ) : (
-        <div>
-          {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
-          ))}
-        </div>
+        comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))
       )}
 
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Comment</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete this comment? This action cannot be
-          undone.
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to delete this comment?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
           <Button
             variant="danger"
-            onClick={() => {
-              if (commentToDelete) {
-                handleDelete(commentToDelete.id);
-              }
-            }}
+            onClick={() => handleDelete(commentToDelete.id)}
           >
             Delete
           </Button>
