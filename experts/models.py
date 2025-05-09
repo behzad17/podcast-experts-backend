@@ -38,6 +38,12 @@ class ExpertProfile(models.Model):
     views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
     bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
 
+    def get_likes_count(self):
+        return self.reactions.filter(reaction_type='like').count()
+
+    def get_dislikes_count(self):
+        return self.reactions.filter(reaction_type='dislike').count()
+
     def __str__(self):
         return f"{self.name} - {self.expertise}"
 
