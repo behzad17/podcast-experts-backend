@@ -229,19 +229,6 @@ const Home = () => {
                   Get booked on podcasts to expand your reach and audience. Join
                   the free newsletter featuring 20 podcasts looking for guests
                   each week. And join our paid expert directory so podcasts can
-                  find you. Get booked on podcasts to expand your reach and
-                  audience. Join the free newsletter featuring 20 podcasts
-                  looking for guests each week. And join our paid expert
-                  directory so podcasts can find you. Get booked on podcasts to
-                  expand your reach and audience. Join the free newsletter
-                  featuring 20 podcasts looking for guests each week. And join
-                  our paid expert directory so podcasts can find you. Get booked
-                  on podcasts to expand your reach and audience. Join the free
-                  newsletter featuring 20 podcasts looking for guests each week.
-                  And join our paid expert directory so podcasts can find you.
-                  Get booked on podcasts to expand your reach and audience. Join
-                  the free newsletter featuring 20 podcasts looking for guests
-                  each week. And join our paid expert directory so podcasts can
                   find you.
                 </p>
               </Card.Body>
