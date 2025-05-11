@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Navbar as BootstrapNavbar,
   Nav,
@@ -7,7 +7,6 @@ import {
   Button,
 } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
 function Navigation() {
   const { user, logout } = useAuth();
