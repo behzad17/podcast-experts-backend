@@ -187,7 +187,7 @@ const Home = () => {
                       />
                       <Card.Body
                         className="p-3"
-                        style={{ backgroundColor: "#F0F8FF" }}
+                        style={{ backgroundColor: "#DCE2E8" }}
                       >
                         <Card.Title className="h6 mb-2 text-truncate">
                           {podcast.title}
