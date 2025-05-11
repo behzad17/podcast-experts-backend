@@ -21,7 +21,7 @@ const PodcastCreate = () => {
   useEffect(() => {
     const checkProfile = async () => {
       try {
-        const response = await api.get("/podcasts/profiles/");
+        await api.get("/podcasts/profiles/");
         setNeedsProfile(false);
       } catch (error) {
         if (error.response?.status === 404) {
@@ -32,8 +32,8 @@ const PodcastCreate = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await api.get("/podcasts/categories/");
-        setCategories(response.data);
+        const res = await api.get("/podcasts/categories/");
+        setCategories(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
         toast.error("Failed to load categories");
@@ -56,11 +56,14 @@ const PodcastCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // شروع بارگذاری
     try {
       await api.post("/podcasts/create/", formData);
       navigate("/podcasts");
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false); // پایان بارگذاری
     }
   };
 
