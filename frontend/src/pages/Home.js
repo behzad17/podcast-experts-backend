@@ -224,7 +224,7 @@ const Home = () => {
           <Col md={6}>
             <Card className="shadow-sm rounded-3">
               <Card.Body className="p-3">
-                <h3 className="h5">Find Experts</h3>
+                <h3 className="h5">Experts:</h3>
                 <p className="small text-muted mb-0">
                   Get booked on podcasts to expand your reach and audience. Join
                   the free newsletter featuring 20 podcasts looking for guests
@@ -237,25 +237,12 @@ const Home = () => {
           <Col md={6}>
             <Card className="shadow-sm rounded-3">
               <Card.Body className="p-3">
-                <h3 className="h5">Discover Podcasts</h3>
+                <h3 className="h5">Podcasts:</h3>
                 <p className="small text-muted mb-0">
                   Find experts to be guests on your podcast, from our Guest
                   Directory and/or a free podcast feature in our newsletter that
                   goes to many experts and podcasters, that goes to many experts
-                  and podcasters. Find experts to be guests on your podcast,
-                  from our Guest Directory and/or a free podcast feature in our
-                  newsletter that goes to many experts and podcasters, that goes
-                  to many experts and podcasters. Find experts to be guests on
-                  your podcast, from our Guest Directory and/or a free podcast
-                  feature in our newsletter that goes to many experts and
-                  podcasters, that goes to many experts and podcasters. Find
-                  experts to be guests on your podcast, from our Guest Directory
-                  and/or a free podcast feature in our newsletter that goes to
-                  many experts and podcasters, that goes to many experts and
-                  podcasters. Find experts to be guests on your podcast, from
-                  our Guest Directory and/or a free podcast feature in our
-                  newsletter that goes to many experts and podcasters, that goes
-                  to many experts and podcasters.
+                  and podcasters.
                 </p>
               </Card.Body>
             </Card>
