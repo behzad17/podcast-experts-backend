@@ -1,14 +1,25 @@
 import React from "react";
 import { Card, Button, Alert, Badge } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useReactions } from "../../contexts/ReactionsContext";
+import { useViews } from "../../contexts/ViewsContext";
 
 const PodcastCard = ({ podcast, currentUser, onEdit }) => {
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { handleReaction, userReaction } = useReactions();
+  const { handleView } = useViews();
 
   const getImageUrl = (podcast) => {
     if (podcast.image) return podcast.image;
     // Use local placeholder image
     return "/logo192.png";
+  };
+
+  const handlePodcastClick = () => {
+    if (user) {
+      handleView("podcast", podcast.id);
+    }
   };
 
   return (
@@ -56,12 +67,37 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
               </a>
             )}
             <Button
+              variant={
+                userReaction(podcast.id) === "like"
+                  ? "primary"
+                  : "outline-primary"
+              }
+              size="sm"
+              className="me-2"
+              onClick={() => handleReaction("podcast", podcast.id, "like")}
+              disabled={!user}
+            >
+              👍 {podcast.likes_count}
+            </Button>
+            <Button
+              variant={
+                userReaction(podcast.id) === "dislike"
+                  ? "danger"
+                  : "outline-danger"
+              }
+              size="sm"
+              onClick={() => handleReaction("podcast", podcast.id, "dislike")}
+              disabled={!user}
+            >
+              👎 {podcast.dislikes_count}
+            </Button>
+            <Button
               variant="outline-primary"
               size="sm"
               className="me-2"
-              onClick={() => navigate(`/podcasts/${podcast.id}`)}
+              onClick={() => handlePodcastClick()}
             >
-              View
+              Listen Now
             </Button>
             {currentUser && podcast.owner?.user === currentUser.id && (
               <Button

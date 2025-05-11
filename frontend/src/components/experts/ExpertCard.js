@@ -1,10 +1,20 @@
 import React from "react";
-import { Card, Button, Badge } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import LikeButton from "../common/LikeButton";
+import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useReactions } from "../../contexts/ReactionsContext";
+import { useViews } from "../../contexts/ViewsContext";
 
-const ExpertCard = ({ expert, currentUser, onEdit }) => {
-  const navigate = useNavigate();
+const ExpertCard = ({ expert }) => {
+  const { user } = useAuth();
+  const { handleReaction, userReaction } = useReactions();
+  const { handleView } = useViews();
+
+  const handleExpertClick = () => {
+    if (user) {
+      handleView("expert", expert.id);
+    }
+  };
 
   const limitWords = (text, wordCount) => {
     if (!text) return "";
@@ -33,63 +43,56 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
   };
 
   return (
-    <Card className="h-100 shadow-sm rounded-3">
-      <div className="d-flex h-100">
-        <div
-          className="p-3"
-          style={{
-            width: "75%",
-            borderRight: "2px solid #ced4da",
-            backgroundColor: "#F0F8FF",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
+    <Card className="h-100 shadow-sm">
+      <Card.Img
+        variant="top"
+        src={getImageUrl(expert)}
+        alt={expert.name}
+        style={{ height: "200px", objectFit: "cover" }}
+      />
+      <Card.Body>
+        <Card.Title>{expert.name}</Card.Title>
+        <Card.Subtitle className="mb-2 text-muted">
+          {getFirstExpertise(expert.expertise)}
+        </Card.Subtitle>
+        <Card.Text>{limitWords(expert.bio, 100)}</Card.Text>
+        <div className="d-flex justify-content-between align-items-center">
           <div>
-            <Card.Title className="h6 mb-2">{expert.name}</Card.Title>
-            <Card.Text
-              className="small text-muted mb-2"
-              style={{ height: "3em", overflow: "hidden" }}
-            >
-              {limitWords(expert.bio, 10)}
-            </Card.Text>
-            <div className="mb-2">
-              <Badge bg="primary">{getFirstExpertise(expert.expertise)}</Badge>
-            </div>
-          </div>
-          <div className="d-flex gap-2 align-items-center">
-            <LikeButton
-              itemId={expert.id}
-              type="experts/profiles"
-              initialCount={expert.likes_count}
-              className="btn-sm"
-            />
             <Button
-              variant="outline-primary btn-sm"
-              onClick={() => navigate(`/experts/${expert.id}`)}
+              variant={
+                userReaction(expert.id) === "like"
+                  ? "primary"
+                  : "outline-primary"
+              }
+              size="sm"
+              className="me-2"
+              onClick={() => handleReaction("expert", expert.id, "like")}
+              disabled={!user}
             >
-              View Profile
+              👍 {expert.likes_count}
             </Button>
-            {currentUser && expert.user === currentUser.user_id && (
-              <Button
-                variant="outline-primary btn-sm"
-                onClick={() => onEdit(expert)}
-              >
-                Edit
-              </Button>
-            )}
+            <Button
+              variant={
+                userReaction(expert.id) === "dislike"
+                  ? "danger"
+                  : "outline-danger"
+              }
+              size="sm"
+              onClick={() => handleReaction("expert", expert.id, "dislike")}
+              disabled={!user}
+            >
+              👎 {expert.dislikes_count}
+            </Button>
           </div>
+          <Link
+            to={`/experts/${expert.id}`}
+            className="btn btn-primary"
+            onClick={handleExpertClick}
+          >
+            View Profile
+          </Link>
         </div>
-        <div style={{ width: "25%", minWidth: "25%" }}>
-          <Card.Img
-            src={getImageUrl(expert)}
-            alt={expert.name}
-            style={{ height: "100%", objectFit: "cover" }}
-            className="rounded-end-3"
-          />
-        </div>
-      </div>
+      </Card.Body>
     </Card>
   );
 };
