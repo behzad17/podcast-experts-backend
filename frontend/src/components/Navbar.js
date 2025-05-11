@@ -22,8 +22,12 @@ function Navigation() {
   return (
     <BootstrapNavbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <BootstrapNavbar.Brand as={Link} to="/">
-          Podcast Experts
+        <BootstrapNavbar.Brand
+          as={Link}
+          to="/"
+          style={{ fontSize: "1.5rem", fontWeight: "600" }}
+        >
+          CONNECT
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
