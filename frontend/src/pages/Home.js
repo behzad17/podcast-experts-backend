@@ -74,9 +74,9 @@ const Home = () => {
       <Container className="py-4">
         <h3
           className="mb-4 text-center"
-          style={{ color: "#6495ED", fontSize: "1.5rem", fontWeight: "500" }}
+          style={{ color: "#000000", fontSize: "1.5rem", fontWeight: "500" }}
         >
-          Welcome to Swedish Podcast Experts
+          Welcome to Sweden's podcast and expert connection platform
         </h3>
         <div className="d-flex flex-column align-items-center mb-4">
           <h3
