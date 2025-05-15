@@ -144,12 +144,12 @@ SIMPLE_JWT = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True  # Temporarily allow all origins for testing
 CORS_ALLOWED_ORIGINS = [
-    "https://your-frontend-domain.herokuapp.com",
+    "https://podcast-backend.herokuapp.com",
     "http://localhost:3000",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://your-frontend-domain.herokuapp.com",
+    "https://podcast-backend.herokuapp.com",
     "http://localhost:3000",
 ]
 
@@ -165,9 +165,10 @@ SESSION_COOKIE_HTTPONLY = True
 CSP_ENABLED = True
 
 # CSP Settings
-CSP_DEFAULT_SRC = ("'self'", "http://localhost:3000", "http://127.0.0.1:3000")
+CSP_DEFAULT_SRC = ("'self'", "https://podcast-backend.herokuapp.com", "http://localhost:3000")
 CSP_CONNECT_SRC = (
     "'self'",
+    "https://podcast-backend.herokuapp.com",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "ws://localhost:8000",
