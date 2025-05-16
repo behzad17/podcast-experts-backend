@@ -1,0 +1,4 @@
+[
+  // ... existing code ...
+  // Only include objects where model is NOT 'contenttypes.contenttype', 'auth.permission', or 'sessions.session'.
+]
