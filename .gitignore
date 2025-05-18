@@ -34,7 +34,6 @@ media
 
 # React
 node_modules/
-/frontend/build
 .DS_Store
 .env.local
 .env.development.local
