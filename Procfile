@@ -1,2 +1,2 @@
 web: gunicorn backend.wsgi --log-file -
-frontend: cd frontend && npm start
+release: cd frontend && npm install && npm run build

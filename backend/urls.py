@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 from backend.admin_dashboard.views import admin_stats
 
 
@@ -30,9 +31,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_dashboard/', include('backend.admin_dashboard.urls')),
     path('admin/stats/', admin_stats, name='admin_stats'),
-    path('', home_view),
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/messages/', include('user_messages.urls')),
+    # Serve React App
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
