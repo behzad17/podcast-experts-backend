@@ -1,0 +1,6 @@
+{
+  "root": "staticfiles/",
+  "routes": {
+    "/**": "index.html"
+  }
+}
