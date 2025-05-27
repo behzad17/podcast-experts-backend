@@ -25,7 +25,7 @@ function Navigation() {
         <BootstrapNavbar.Brand
           as={Link}
           to="/"
-          style={{ fontSize: "1.5rem", fontWeight: "600" }}
+          style={{ fontSize: "2rem", fontWeight: "600" }}
         >
           CONNECT
         </BootstrapNavbar.Brand>
