@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary',
+    'cloudinary_storage',
     # Third party apps
     'rest_framework',
     'rest_framework_simplejwt',
@@ -251,3 +253,11 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # Frontend URL for email verification
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
