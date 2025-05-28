@@ -1,2 +1,1 @@
-web: gunicorn backend.wsgi --log-file -
-release: cd frontend && npm install && npm run build && cd .. && python manage.py collectstatic --noinput --clear
+web: sh build_and_serve.sh
