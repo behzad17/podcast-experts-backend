@@ -1,63 +1,49 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card, ListGroup, Badge } from "react-bootstrap";
-import { useAuth } from "../../contexts/AuthContext";
+import React, { useState, useEffect } from "react";
+import { ListGroup } from "react-bootstrap";
 import api from "../../api/axios";
 
 const MessageList = () => {
   const [conversations, setConversations] = useState([]);
-  const { getAuthHeaders } = useAuth();
-  const navigate = useNavigate();
-
-  const fetchConversations = useCallback(async () => {
-    try {
-      const response = await api.get("/messages/conversations/");
-      setConversations(Object.values(response.data));
-    } catch (error) {
-      console.error("Error fetching conversations:", error);
-    }
-  }, []);
 
   useEffect(() => {
-    fetchConversations();
-  }, [fetchConversations]);
+    const fetchConversations = async () => {
+      try {
+        const response = await api.get("/messages/conversations/");
+        setConversations(response.data);
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
 
-  const handleConversationClick = (userId) => {
-    navigate(`/messages/${userId}`);
-  };
+    fetchConversations();
+  }, []);
 
   return (
-    <Card>
-      <Card.Header>
-        <h4>Messages</h4>
-      </Card.Header>
-      <ListGroup variant="flush">
-        {conversations.map((conversation) => (
-          <ListGroup.Item
-            key={conversation.user.id}
-            action
-            onClick={() => handleConversationClick(conversation.user.id)}
-            className="d-flex justify-content-between align-items-center"
-          >
-            <div>
-              <h6>{conversation.user.username}</h6>
-              <small className="text-muted">
-                {conversation.last_message?.content.substring(0, 50)}
-                {conversation.last_message?.content.length > 50 ? "..." : ""}
-              </small>
-            </div>
-            {conversation.unread_count > 0 && (
-              <Badge bg="primary" pill>
-                {conversation.unread_count}
-              </Badge>
-            )}
-          </ListGroup.Item>
-        ))}
-        {conversations.length === 0 && (
-          <ListGroup.Item>No conversations yet</ListGroup.Item>
-        )}
-      </ListGroup>
-    </Card>
+    <ListGroup variant="flush">
+      {conversations.map((conversation) => (
+        <ListGroup.Item
+          key={conversation.id}
+          action
+          href={`/messages/${conversation.user.id}`}
+          className="d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h6>{conversation.user.username}</h6>
+            <small className="text-muted">
+              {conversation.last_message?.content || "No messages yet"}
+            </small>
+          </div>
+          {conversation.unread_count > 0 && (
+            <span className="badge bg-primary rounded-pill">
+              {conversation.unread_count}
+            </span>
+          )}
+        </ListGroup.Item>
+      ))}
+      {conversations.length === 0 && (
+        <ListGroup.Item>No conversations yet</ListGroup.Item>
+      )}
+    </ListGroup>
   );
 };
 
