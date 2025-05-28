@@ -222,6 +222,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend/build'),
     os.path.join(BASE_DIR, 'frontend/build/static'),
 ]
 
@@ -231,6 +232,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Enable WhiteNoise compression and caching
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Add this line to ensure WhiteNoise serves the index.html file
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/build')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
