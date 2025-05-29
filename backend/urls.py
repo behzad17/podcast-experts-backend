@@ -32,15 +32,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_dashboard/', include('backend.admin_dashboard.urls')),
     path('admin/stats/', admin_stats, name='admin_stats'),
-    # API endpoints
-    path('api/auth/', include('users.urls')),
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/messages/', include('user_messages.urls')),
-    path('api/bookmarks/', include('bookmarks.urls')),
     # Serve static files
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    # Serve React App for all other routes
-    re_path(r'^(?!api/).*', TemplateView.as_view(template_name='index.html')),
+    # Serve React App
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
