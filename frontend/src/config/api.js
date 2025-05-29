@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://podcast-backend-4e5439705bd3.herokuapp.com";
+const API_URL = "https://podcast-backend-4e5439705bd3.herokuapp.com/api";
 
 // Create axios instance with default config
 const api = axios.create({
