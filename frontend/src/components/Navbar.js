@@ -53,6 +53,9 @@ function Navigation() {
             <Nav.Link as={Link} to="/about" onClick={closeNavbar}>
               About
             </Nav.Link>
+            <Nav.Link as={Link} to="/contact" onClick={closeNavbar}>
+              Contact
+            </Nav.Link>
             {user && (
               <>
                 {user.user_type === "expert" && (

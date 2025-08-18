@@ -20,6 +20,7 @@ import ExpertDetail from "./pages/ExpertDetail";
 import CreateExpert from "./pages/ExpertCreate";
 import EditExpert from "./pages/EditExpert";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -63,6 +64,7 @@ function AppContent() {
             <Route path="/experts" element={<Experts />} />
             <Route path="/experts/:id" element={<ExpertDetail />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route
               path="/podcasts/create"
               element={
