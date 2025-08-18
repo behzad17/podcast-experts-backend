@@ -26,10 +26,10 @@ function Navigation() {
   };
 
   return (
-    <BootstrapNavbar 
-      bg="dark" 
-      variant="dark" 
-      expand="lg" 
+    <BootstrapNavbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
       expanded={expanded}
       onToggle={(expanded) => setExpanded(expanded)}
     >
@@ -49,6 +49,9 @@ function Navigation() {
             </Nav.Link>
             <Nav.Link as={Link} to="/experts" onClick={closeNavbar}>
               Experts
+            </Nav.Link>
+            <Nav.Link as={Link} to="/about" onClick={closeNavbar}>
+              About
             </Nav.Link>
             {user && (
               <>
