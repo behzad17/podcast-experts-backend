@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Navbar as BootstrapNavbar,
@@ -10,6 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function Navigation() {
   const { user, logout } = useAuth();
+  const navbarRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -19,8 +20,18 @@ function Navigation() {
     }
   };
 
+  // Function to close the navbar on mobile
+  const closeNavbar = () => {
+    if (navbarRef.current) {
+      const bsCollapse = new window.bootstrap.Collapse(navbarRef.current, {
+        toggle: false,
+      });
+      bsCollapse.hide();
+    }
+  };
+
   return (
-    <BootstrapNavbar bg="dark" variant="dark" expand="lg">
+    <BootstrapNavbar bg="dark" variant="dark" expand="lg" ref={navbarRef}>
       <Container>
         <BootstrapNavbar.Brand
           as={Link}
@@ -32,35 +43,43 @@ function Navigation() {
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/podcasts">
+            <Nav.Link as={Link} to="/podcasts" onClick={closeNavbar}>
               Podcasts
             </Nav.Link>
-            <Nav.Link as={Link} to="/experts">
+            <Nav.Link as={Link} to="/experts" onClick={closeNavbar}>
               Experts
             </Nav.Link>
             {user && (
               <>
                 {user.user_type === "expert" && (
-                  <Nav.Link as={Link} to="/profile">
+                  <Nav.Link as={Link} to="/profile" onClick={closeNavbar}>
                     Profile
                   </Nav.Link>
                 )}
                 {user.user_type === "podcaster" && (
-                  <Nav.Link as={Link} to="/podcasts/create">
+                  <Nav.Link
+                    as={Link}
+                    to="/podcasts/create"
+                    onClick={closeNavbar}
+                  >
                     Create Podcast
                   </Nav.Link>
                 )}
                 {user.user_type === "expert" && (
-                  <Nav.Link as={Link} to="/experts/create">
+                  <Nav.Link
+                    as={Link}
+                    to="/experts/create"
+                    onClick={closeNavbar}
+                  >
                     Create Expert Profile
                   </Nav.Link>
                 )}
                 {user.is_admin && (
-                  <Nav.Link as={Link} to="/admin">
+                  <Nav.Link as={Link} to="/admin" onClick={closeNavbar}>
                     Admin Dashboard
                   </Nav.Link>
                 )}
-                <Nav.Link as={Link} to="/messages">
+                <Nav.Link as={Link} to="/messages" onClick={closeNavbar}>
                   Messages
                 </Nav.Link>
               </>
@@ -73,10 +92,10 @@ function Navigation() {
               </Button>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login">
+                <Nav.Link as={Link} to="/login" onClick={closeNavbar}>
                   Login
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register">
+                <Nav.Link as={Link} to="/register" onClick={closeNavbar}>
                   Register
                 </Nav.Link>
               </>
