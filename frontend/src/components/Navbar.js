@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Navbar as BootstrapNavbar,
@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function Navigation() {
   const { user, logout } = useAuth();
-  const navbarRef = useRef(null);
+  const [expanded, setExpanded] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -22,16 +22,17 @@ function Navigation() {
 
   // Function to close the navbar on mobile
   const closeNavbar = () => {
-    if (navbarRef.current) {
-      const bsCollapse = new window.bootstrap.Collapse(navbarRef.current, {
-        toggle: false,
-      });
-      bsCollapse.hide();
-    }
+    setExpanded(false);
   };
 
   return (
-    <BootstrapNavbar bg="dark" variant="dark" expand="lg" ref={navbarRef}>
+    <BootstrapNavbar 
+      bg="dark" 
+      variant="dark" 
+      expand="lg" 
+      expanded={expanded}
+      onToggle={(expanded) => setExpanded(expanded)}
+    >
       <Container>
         <BootstrapNavbar.Brand
           as={Link}
