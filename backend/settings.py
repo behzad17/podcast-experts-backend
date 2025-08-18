@@ -183,7 +183,14 @@ CSP_CONNECT_SRC = (
 )
 CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_IMG_SRC = ("'self'", "data:", "blob:", "http://localhost:8000/media/", "http://127.0.0.1:8000/media/")
+CSP_IMG_SRC = (
+    "'self'", 
+    "data:", 
+    "blob:", 
+    "https://res.cloudinary.com",
+    "http://localhost:8000/media/", 
+    "http://127.0.0.1:8000/media/"
+)
 CSP_FONT_SRC = ("'self'", "data:")
 CSP_FRAME_ANCESTORS = ("'self'",)
 CSP_INCLUDE_NONCE_IN = ["script-src"]
@@ -229,8 +236,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static'),
 ]
 
-# Media files
-MEDIA_URL = '/media/'
+# Media files - Cloudinary Configuration
+MEDIA_URL = 'https://res.cloudinary.com/dvveoxz3e/image/upload/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Enable WhiteNoise compression and caching
@@ -260,4 +267,7 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+    'SECURE': True,
+    'MEDIA_TAG': 'media',
+    'INVALID_VIDEO_ERROR': True,
 }

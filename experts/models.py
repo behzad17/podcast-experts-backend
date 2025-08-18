@@ -52,6 +52,14 @@ class ExpertProfile(models.Model):
 
     def get_total_bookmarks(self):
         return self.bookmarks.count()
+    
+    @property
+    def profile_picture_url(self):
+        """Return Cloudinary URL or default image if no profile picture exists"""
+        if self.profile_picture and hasattr(self.profile_picture, 'url'):
+            return self.profile_picture.url
+        # Return a default placeholder image from Cloudinary or a local default
+        return "https://res.cloudinary.com/dvveoxz3e/image/upload/v1/expert_profiles/default_profile"
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)
