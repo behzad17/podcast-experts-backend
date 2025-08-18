@@ -57,44 +57,53 @@ The backend is built with Django and Django REST Framework. The frontend is buil
 ## Models Explained
 
 ### 1. **User (CustomUser)**
+
 - Custom user model for authentication
 - Users can be regular listeners, podcasters, or experts
 - Supports email verification and password management
 
 ### 2. **PodcasterProfile**
+
 - Linked to a user
 - Stores bio, website, and social links for podcasters
 - Manages podcaster-specific information
 
 ### 3. **ExpertProfile**
+
 - Linked to a user
 - Stores information about podcast experts
 - Includes expertise areas, bio, website, social media, and featured status
 - Profile pictures with Cloudinary integration
 
 ### 4. **Category**
+
 - Each podcast belongs to a category (e.g., Health, Technology, Business)
 - Supports filtering and organization
 
 ### 5. **Podcast**
+
 - Main model for podcasts
 - Fields: title, description, owner (podcaster), category, image, link, approval status, featured status, created/updated times
 - Full CRUD operations with owner-only editing/deletion
 
 ### 6. **PodcastComment**
+
 - Users can comment on podcasts
 - Supports threaded comments and replies
 - Owner-only editing and deletion
 
 ### 7. **PodcastLike**
+
 - Users can like podcasts
 - Tracks user interactions and engagement
 
 ### 8. **UserMessage**
+
 - Users can send messages to each other (including experts)
 - Supports conversation threading
 
 ### 9. **Bookmark**
+
 - Users can bookmark favorite experts and podcasts
 - Quick access to saved content
 
@@ -132,6 +141,7 @@ The backend is built with Django and Django REST Framework. The frontend is buil
 ## API Endpoints
 
 ### **Podcasts**
+
 - **List:** `GET /api/podcasts/`
 - **Detail:** `GET /api/podcasts/<id>/`
 - **Create:** `POST /api/podcasts/create/`
@@ -140,15 +150,18 @@ The backend is built with Django and Django REST Framework. The frontend is buil
 - **Categories:** `GET /api/podcasts/categories/`
 
 ### **Comments**
+
 - **List:** `GET /api/podcasts/<id>/comments/`
 - **Create:** `POST /api/podcasts/<id>/comments/`
 
 ### **Reactions**
+
 - **List:** `GET /api/podcasts/<id>/reactions/`
 - **Add/Update:** `POST /api/podcasts/<id>/reactions/`
 - **Delete:** `DELETE /api/podcasts/<id>/reactions/<reaction_id>/`
 
 ### **Experts**
+
 - **List:** `GET /api/experts/`
 - **Detail:** `GET /api/experts/<id>/`
 - **Create:** `POST /api/experts/`
@@ -156,11 +169,13 @@ The backend is built with Django and Django REST Framework. The frontend is buil
 - **Delete:** `DELETE /api/experts/<id>/`
 
 ### **Authentication**
+
 - **Register:** `POST /api/auth/register/`
 - **Login:** `POST /api/auth/login/`
 - **Logout:** `POST /api/auth/logout/`
 
 ### **User Messages**
+
 - **List:** `GET /api/messages/`
 - **Create:** `POST /api/messages/`
 
@@ -220,24 +235,26 @@ CLOUDINARY_API_SECRET=your-api-secret
 
 ### **Complete CRUD Functionality Status: ✅ FULLY FUNCTIONAL**
 
-| Operation | API Endpoint | Description | Status |
-|-----------|--------------|-------------|---------|
-| **Create** | `POST /api/podcasts/create/` | Authenticated users can create new podcasts | ✅ |
-| **Read** | `GET /api/podcasts/` | Public endpoint to view all podcasts | ✅ |
-| **Read (Detail)** | `GET /api/podcasts/:id/` | View details of a specific podcast | ✅ |
-| **Update** | `PUT /api/podcasts/:id/` | Only the podcast owner can update | ✅ |
-| **Delete** | `DELETE /api/podcasts/:id/` | Only the podcast owner can delete | ✅ |
+| Operation         | API Endpoint                 | Description                                 | Status |
+| ----------------- | ---------------------------- | ------------------------------------------- | ------ |
+| **Create**        | `POST /api/podcasts/create/` | Authenticated users can create new podcasts | ✅     |
+| **Read**          | `GET /api/podcasts/`         | Public endpoint to view all podcasts        | ✅     |
+| **Read (Detail)** | `GET /api/podcasts/:id/`     | View details of a specific podcast          | ✅     |
+| **Update**        | `PUT /api/podcasts/:id/`     | Only the podcast owner can update           | ✅     |
+| **Delete**        | `DELETE /api/podcasts/:id/`  | Only the podcast owner can delete           | ✅     |
 
 ### **Expert Profiles CRUD**
-| Operation | API Endpoint | Description | Status |
-|-----------|--------------|-------------|---------|
-| **Create** | `POST /api/experts/` | Users can create expert profiles | ✅ |
-| **Read** | `GET /api/experts/` | Public endpoint to view all experts | ✅ |
-| **Read (Detail)** | `GET /api/experts/:id/` | View expert profile details | ✅ |
-| **Update** | `PUT /api/experts/:id/` | Only the expert owner can update | ✅ |
-| **Delete** | `DELETE /api/experts/:id/` | Only the expert owner can delete | ✅ |
+
+| Operation         | API Endpoint               | Description                         | Status |
+| ----------------- | -------------------------- | ----------------------------------- | ------ |
+| **Create**        | `POST /api/experts/`       | Users can create expert profiles    | ✅     |
+| **Read**          | `GET /api/experts/`        | Public endpoint to view all experts | ✅     |
+| **Read (Detail)** | `GET /api/experts/:id/`    | View expert profile details         | ✅     |
+| **Update**        | `PUT /api/experts/:id/`    | Only the expert owner can update    | ✅     |
+| **Delete**        | `DELETE /api/experts/:id/` | Only the expert owner can delete    | ✅     |
 
 ### **Frontend Implementation**
+
 - ✅ All CRUD operations implemented with forms and buttons
 - ✅ Delete confirmation modals with proper error handling
 - ✅ Toast notifications for success/failure feedback
@@ -250,18 +267,20 @@ CLOUDINARY_API_SECRET=your-api-secret
 ## Manual Testing
 
 ### **Backend API Testing**
-| Scenario | Test Steps | Expected Result | Status |
-|----------|------------|-----------------|---------|
-| User Registration (valid) | `POST /api/auth/register/` with valid data | 201 Created | ✅ |
-| User Registration (invalid) | `POST /api/auth/register/` with duplicate email | 400 Bad Request | ✅ |
-| Login | `POST /api/auth/login/` | JWT Token returned | ✅ |
-| Create Podcast | `POST /api/podcasts/create/` with valid token | 201 Created | ✅ |
-| Create Podcast (unauthenticated) | `POST /api/podcasts/create/` without token | 401 Unauthorized | ✅ |
-| Update Podcast | `PUT /api/podcasts/:id/` | 200 OK | ✅ |
-| Delete Podcast | `DELETE /api/podcasts/:id/` | 204 No Content | ✅ |
-| List Podcasts | `GET /api/podcasts/` | 200 OK + JSON List | ✅ |
+
+| Scenario                         | Test Steps                                      | Expected Result    | Status |
+| -------------------------------- | ----------------------------------------------- | ------------------ | ------ |
+| User Registration (valid)        | `POST /api/auth/register/` with valid data      | 201 Created        | ✅     |
+| User Registration (invalid)      | `POST /api/auth/register/` with duplicate email | 400 Bad Request    | ✅     |
+| Login                            | `POST /api/auth/login/`                         | JWT Token returned | ✅     |
+| Create Podcast                   | `POST /api/podcasts/create/` with valid token   | 201 Created        | ✅     |
+| Create Podcast (unauthenticated) | `POST /api/podcasts/create/` without token      | 401 Unauthorized   | ✅     |
+| Update Podcast                   | `PUT /api/podcasts/:id/`                        | 200 OK             | ✅     |
+| Delete Podcast                   | `DELETE /api/podcasts/:id/`                     | 204 No Content     | ✅     |
+| List Podcasts                    | `GET /api/podcasts/`                            | 200 OK + JSON List | ✅     |
 
 ### **Frontend Manual Testing**
+
 - ✅ User can register → success message + redirect to login
 - ✅ User can log in → navbar updates with personalized menu
 - ✅ Create podcast → Toast notification + new item appears in list
@@ -277,6 +296,7 @@ CLOUDINARY_API_SECRET=your-api-secret
 ## Installation (Local Setup)
 
 ### **Backend (Django + DRF)**
+
 ```bash
 git clone <repository-url>
 cd podcast-experts-backend
@@ -292,6 +312,7 @@ python manage.py runserver
 ```
 
 ### **Frontend (React)**
+
 ```bash
 cd frontend
 npm install
@@ -303,35 +324,39 @@ npm start
 ## Deployment Guide (Backend)
 
 1. **Install dependencies**
+
    ```bash
    pip install gunicorn whitenoise dj-database-url psycopg[binary] django-cors-headers
    ```
 
 2. **Settings (settings.py)**
+
    ```python
    import dj_database_url, os
-   
+
    DEBUG = False
    SECRET_KEY = os.getenv("SECRET_KEY")
    ALLOWED_HOSTS = ["your-domain.com"]
-   
+
    DATABASES = {
        "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
    }
-   
+
    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-   
+
    CORS_ALLOWED_ORIGINS = [
        "https://your-frontend-domain.com",
    ]
    ```
 
 3. **Procfile**
+
    ```
    web: gunicorn backend.wsgi
    ```
 
 4. **Deploy to Heroku**
+
    ```bash
    heroku create your-app-name
    heroku config:set SECRET_KEY="..."
@@ -349,6 +374,7 @@ npm start
 ## Project Management
 
 ### **Current Status**
+
 - ✅ Core functionality implemented
 - ✅ CRUD operations fully functional
 - ✅ Mobile responsive design
@@ -358,6 +384,7 @@ npm start
 - ✅ Admin panel accessible
 
 ### **Recent Improvements**
+
 - Fixed hamburger menu auto-close on mobile
 - Standardized API endpoints for consistency
 - Added delete functionality with confirmation modals
@@ -383,15 +410,19 @@ npm start
 ## Screenshots
 
 ### **Home Page**
+
 ![Home Page](screenshots/homepage.png)
 
 ### **Podcast Detail**
+
 ![Podcast Detail](screenshots/podcast_detail.png)
 
 ### **Admin Panel**
+
 ![Admin Panel](screenshots/admin_panel.png)
 
 ### **Mobile Navigation**
+
 ![Mobile Navigation](screenshots/mobile_nav.png)
 
 > To add your own screenshots, place images in a `screenshots/` folder and update the links above.
