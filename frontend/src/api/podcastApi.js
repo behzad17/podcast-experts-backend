@@ -8,7 +8,7 @@ export const podcastApi = {
   getPodcast: (id) => api.get(`/podcasts/${id}/`),
 
   // Create a new podcast
-  createPodcast: (data) => api.post("/podcasts/", data),
+  createPodcast: (data) => api.post("/podcasts/create/", data),
 
   // Update a podcast
   updatePodcast: (id, data) => api.put(`/podcasts/${id}/`, data),
@@ -24,7 +24,8 @@ export const podcastApi = {
     api.post(`/podcasts/${podcastId}/comments/`, data),
 
   // Get podcast reactions
-  getReactions: (podcastId) => api.get(`/podcasts/${podcastId}/reactions/`),
+  getReactions: (podcastId) =>
+    api.get(`/podcasts/${podcastId}/reactions/`),
 
   // Add/update a reaction
   addReaction: (podcastId, data) =>

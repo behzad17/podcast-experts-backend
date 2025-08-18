@@ -93,6 +93,10 @@ const Experts = () => {
     setCurrentPage(1); // Reset to first page when changing category
   };
 
+  const handleDeleteExpert = (expertId) => {
+    setExperts(prevExperts => prevExperts.filter(expert => expert.id !== expertId));
+  };
+
   if (loading) {
     return (
       <Container className="mt-4">
@@ -160,6 +164,7 @@ const Experts = () => {
               expert={expert}
               currentUser={userData}
               onEdit={(expert) => navigate(`/experts/${expert.id}/edit`)}
+              onDelete={handleDeleteExpert}
             />
           </Col>
         ))}

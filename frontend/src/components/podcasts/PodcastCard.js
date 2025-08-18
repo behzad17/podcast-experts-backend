@@ -1,14 +1,35 @@
-import React from "react";
-import { Card, Button, Alert, Badge } from "react-bootstrap";
+import React, { useState } from "react";
+import { Card, Button, Alert, Badge, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { podcastApi } from "../../api/podcastApi";
+import { toast } from "react-toastify";
 
-const PodcastCard = ({ podcast, currentUser, onEdit }) => {
+const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const getImageUrl = (podcast) => {
     if (podcast.image) return podcast.image;
     // Use local placeholder image
     return "/logo192.png";
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await podcastApi.deletePodcast(podcast.id);
+      toast.success("Podcast deleted successfully");
+      if (onDelete) {
+        onDelete(podcast.id);
+      }
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error("Error deleting podcast:", error);
+      toast.error("Failed to delete podcast");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -64,13 +85,23 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
               View
             </Button>
             {currentUser && podcast.owner?.user === currentUser.id && (
-              <Button
-                variant="outline-primary"
-                size="sm"
-                onClick={() => onEdit(podcast)}
-              >
-                Edit
-              </Button>
+              <>
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="me-2"
+                  onClick={() => onEdit(podcast)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -80,6 +111,29 @@ const PodcastCard = ({ podcast, currentUser, onEdit }) => {
           </Alert>
         )}
       </Card.Body>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Podcast</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the podcast <strong>"{podcast.title}"</strong>? 
+          This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete Podcast"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 };

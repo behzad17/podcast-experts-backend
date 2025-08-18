@@ -99,6 +99,10 @@ const Podcasts = () => {
     setCurrentPage(page);
   };
 
+  const handleDeletePodcast = (podcastId) => {
+    setPodcasts(prevPodcasts => prevPodcasts.filter(podcast => podcast.id !== podcastId));
+  };
+
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
     setCurrentPage(1); // Reset to first page when changing category
@@ -219,6 +223,7 @@ const Podcasts = () => {
               podcast={podcast}
               currentUser={currentUser}
               onEdit={handleEditClick}
+              onDelete={handleDeletePodcast}
             />
           </Col>
         ))}

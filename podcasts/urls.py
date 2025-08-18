@@ -22,15 +22,7 @@ router.register(
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('podcasts/', PodcastListView.as_view(), name='podcast-list'),
-    path(
-        'podcasts/create/',
-        PodcastCreateView.as_view(),
-        name='podcast-create'
-    ),
-    path(
-        'podcasts/<int:pk>/',
-        PodcastDetailView.as_view(),
-        name='podcast-detail'
-    ),
+    path('list/', PodcastListView.as_view(), name='podcast-list'),
+    path('create/', PodcastCreateView.as_view(), name='podcast-create'),
+    path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
 ]

@@ -1,10 +1,14 @@
-import React from "react";
-import { Card, Button, Badge } from "react-bootstrap";
+import React, { useState } from "react";
+import { Card, Button, Badge, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import LikeButton from "../common/LikeButton";
+import { expertApi } from "../../api/expertApi";
+import { toast } from "react-toastify";
 
-const ExpertCard = ({ expert, currentUser, onEdit }) => {
+const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const limitWords = (text, wordCount) => {
     if (!text) return "";
@@ -30,6 +34,23 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
     if (expert.profile_picture) return expert.profile_picture;
     // Use local placeholder image
     return "/logo192.png";
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await expertApi.deleteExpertProfile(expert.id);
+      toast.success("Expert profile deleted successfully");
+      if (onDelete) {
+        onDelete(expert.id);
+      }
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error("Error deleting expert profile:", error);
+      toast.error("Failed to delete expert profile");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -72,12 +93,20 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
               View Profile
             </Button>
             {currentUser && expert.user === currentUser.user_id && (
-              <Button
-                variant="outline-primary btn-sm"
-                onClick={() => onEdit(expert)}
-              >
-                Edit
-              </Button>
+              <>
+                <Button
+                  variant="outline-primary btn-sm"
+                  onClick={() => onEdit(expert)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outline-danger btn-sm"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -90,6 +119,29 @@ const ExpertCard = ({ expert, currentUser, onEdit }) => {
           />
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Expert Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the expert profile for <strong>{expert.name}</strong>? 
+          This action cannot be undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete Profile"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Card>
   );
 };
