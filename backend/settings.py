@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -210,15 +211,11 @@ MEDIA_URL = 'https://res.cloudinary.com/dvveoxz3e/image/upload/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Enable WhiteNoise compression and caching
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-
-# Add this line to ensure WhiteNoise serves the index.html file
-# WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/build')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # WhiteNoise configuration for SPA routing
-# WHITENOISE_INDEX_FILE = True
-# WHITENOISE_AUTOREFRESH = True
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/build')
+WHITENOISE_INDEX_FILE = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
