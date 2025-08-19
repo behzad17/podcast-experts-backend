@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api/axios";
 import { Button } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
   const [count, setCount] = useState(initialCount);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
 
   // Map content types to correct API endpoints
   const getApiEndpoints = (contentType) => {
@@ -31,6 +33,13 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
 
   useEffect(() => {
     setCount(initialCount);
+    
+    // Only check like status if user is authenticated
+    if (!user) {
+      setIsLiked(false);
+      return;
+    }
+
     // Check if the user has already liked this item
     const checkLikeStatus = async () => {
       try {
@@ -56,10 +65,10 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
       }
     };
     checkLikeStatus();
-  }, [itemId, type, initialCount]);
+  }, [itemId, type, initialCount, user]);
 
   const handleLike = async () => {
-    if (isLoading) return;
+    if (isLoading || !user) return;
     setIsLoading(true);
     try {
       const endpoints = getApiEndpoints(type);
@@ -93,6 +102,20 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
       setIsLoading(false);
     }
   };
+
+  // Don't show like button if user is not authenticated
+  if (!user) {
+    return (
+      <Button
+        variant="outline-secondary"
+        disabled
+        className={className}
+        title="Please login to like content"
+      >
+        🤍 {count}
+      </Button>
+    );
+  }
 
   return (
     <Button

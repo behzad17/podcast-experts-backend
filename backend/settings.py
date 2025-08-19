@@ -167,34 +167,31 @@ SESSION_COOKIE_HTTPONLY = True
 # Temporarily disable CSP for testing
 CSP_ENABLED = True
 
-# CSP Settings
-CSP_DEFAULT_SRC = (
-    "'self'",
-    "https://podcast-backend-4e5439705bd3.herokuapp.com",
-    "http://localhost:3000"
-)
-CSP_CONNECT_SRC = (
-    "'self'",
-    "https://podcast-backend-4e5439705bd3.herokuapp.com",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "ws://localhost:8000",
-    "ws://127.0.0.1:8000",
-)
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
-CSP_IMG_SRC = (
-    "'self'", 
-    "data:", 
-    "blob:", 
-    "https://res.cloudinary.com",
-    "https://*.cloudinary.com",
-    "http://localhost:8000/media/", 
-    "http://127.0.0.1:8000/media/"
-)
-CSP_FONT_SRC = ("'self'", "data:")
-CSP_FRAME_ANCESTORS = ("'self'",)
-CSP_INCLUDE_NONCE_IN = ["script-src"]
+# Content Security Policy - Temporarily disabled for development
+# CSP_DEFAULT_SRC = ("'self'",)
+# CSP_CONNECT_SRC = (
+#     "'self'",
+#     "https://podcast-backend-4e5439705bd3.herokuapp.com",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "ws://localhost:8000",
+#     "ws://127.0.0.1:8000",
+# )
+# CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "'unsafe-eval'")
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+# CSP_IMG_SRC = (
+#     "'self'", 
+#     "data:", 
+#     "blob:", 
+#     "https://res.cloudinary.com",
+#     "https://*.cloudinary.com",
+#     "https://res.cloudinary.com/*",
+#     "http://localhost:8000/media/", 
+#     "http://127.0.0.1:8000/media/"
+# )
+# CSP_FONT_SRC = ("'self'", "data:")
+# CSP_FRAME_ANCESTORS = ("'self'",)
+# CSP_INCLUDE_NONCE_IN = ["script-src"]
 
 # Security Headers
 SECURE_BROWSER_XSS_FILTER = True
