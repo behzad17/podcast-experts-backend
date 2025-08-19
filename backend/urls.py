@@ -28,8 +28,20 @@ def home_view(request):
     return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
 
 
+def debug_static(request):
+    return HttpResponse(f"Static route hit! Path: {request.path}")
+
+
+def test_static(request, path):
+    return HttpResponse(f"Test static route hit! Path: {path}")
+
+
 def serve_react_app(request, path):
     """Serve React app for all routes that don't match API routes"""
+    # Don't serve React app for static files
+    if path.startswith('static/'):
+        return None
+    
     build_path = os.path.join(settings.BASE_DIR, 'frontend', 'build')
     return serve(request, 'index.html', document_root=build_path)
 
@@ -42,9 +54,31 @@ urlpatterns = [
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/messages/', include('user_messages.urls')),
-    # Serve static files
-    re_path(r'^static/(?P<path>.*)$', serve, 
-            {'document_root': settings.STATIC_ROOT}),
-    # Serve React App for all other routes (SPA routing)
-    re_path(r'^.*', serve_react_app, kwargs={'path': 'index.html'}),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Debug route
+    path('debug-static/', debug_static, name='debug_static'),
+    # Test static route
+    re_path(r'^test-static/(?P<path>.*)$', test_static, name='test_static'),
+]
+
+# Serve static and media files in development
+if settings.DEBUG:
+    # Add static file serving for development
+    urlpatterns += [
+        re_path(r'^static/(?P<path>.*)$', serve, 
+                {'document_root': settings.STATIC_ROOT}),
+    ]
+    urlpatterns += static(
+        settings.MEDIA_URL, 
+        document_root=settings.MEDIA_ROOT
+    )
+else:
+    # In production, WhiteNoise will handle static files
+    urlpatterns += static(
+        settings.MEDIA_URL, 
+        document_root=settings.MEDIA_ROOT
+    )
+
+# Serve React App for all other routes (SPA routing) - must come last
+urlpatterns.append(
+    re_path(r'^.*', serve_react_app, kwargs={'path': 'index.html'})
+)
