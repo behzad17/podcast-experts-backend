@@ -31,6 +31,7 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
   };
 
   const getImageUrl = (expert) => {
+    if (expert.profile_picture_url) return expert.profile_picture_url;
     if (expert.profile_picture) return expert.profile_picture;
     // Use local placeholder image
     return "/logo192.png";
@@ -126,18 +127,14 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
           <Modal.Title>Delete Expert Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete the expert profile for <strong>{expert.name}</strong>? 
-          This action cannot be undone.
+          Are you sure you want to delete the expert profile for{" "}
+          <strong>{expert.name}</strong>? This action cannot be undone.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
-          <Button 
-            variant="danger" 
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
+          <Button variant="danger" onClick={handleDelete} disabled={isDeleting}>
             {isDeleting ? "Deleting..." : "Delete Profile"}
           </Button>
         </Modal.Footer>

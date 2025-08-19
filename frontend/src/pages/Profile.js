@@ -146,10 +146,10 @@ const Profile = () => {
               </Button>
             </Card.Header>
             <Card.Body>
-              {profile.profile_picture && (
+              {profile.profile_picture_url && (
                 <div className="text-center mb-4">
                   <img
-                    src={profile.profile_picture}
+                    src={profile.profile_picture_url}
                     alt="Profile"
                     className="rounded-circle"
                     style={{

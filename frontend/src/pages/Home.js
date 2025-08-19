@@ -37,7 +37,8 @@ const Home = () => {
     fetchFeaturedItems();
   }, []);
 
-  const getExpertImageUrl = (expert) => {
+  const getExpertImage = (expert) => {
+    if (expert.profile_picture_url) return expert.profile_picture_url;
     if (expert.profile_picture) return expert.profile_picture;
     return "/logo192.png";
   };
@@ -152,7 +153,7 @@ const Home = () => {
                       </div>
                       <div style={{ width: "25%", minWidth: "25%" }}>
                         <Card.Img
-                          src={getExpertImageUrl(expert)}
+                          src={getExpertImage(expert)}
                           alt={expert.name}
                           style={{ height: "100%", objectFit: "cover" }}
                           className="rounded-end-3"

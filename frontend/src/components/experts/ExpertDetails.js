@@ -7,12 +7,12 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
     <Card className="mb-4">
       <Row>
         <Col md={4}>
-          {expert.profile_picture && (
-            <Card.Img
-              src={expert.profile_picture}
+          {expert.profile_picture_url && (
+            <img
+              src={expert.profile_picture_url}
               alt={expert.name}
-              className="h-100"
-              style={{ objectFit: "cover", maxHeight: "300px" }}
+              className="img-fluid rounded"
+              style={{ maxWidth: "200px" }}
             />
           )}
         </Col>

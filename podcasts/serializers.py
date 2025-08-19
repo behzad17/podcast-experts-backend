@@ -57,10 +57,11 @@ class PodcastSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Podcast
-        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
+        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'image_url', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
         read_only_fields = ['created_at']
 
     def get_owner(self, obj):
@@ -69,6 +70,12 @@ class PodcastSerializer(serializers.ModelSerializer):
             'username': obj.owner.user.username,
             'user': obj.owner.user.id
         }
+
+    def get_image_url(self, obj):
+        """Return Cloudinary URL for podcast image"""
+        if obj.image and hasattr(obj.image, 'url'):
+            return obj.image.url
+        return None
 
     def get_comments(self, obj):
         comments = obj.podcast_comments.filter(parent=None)

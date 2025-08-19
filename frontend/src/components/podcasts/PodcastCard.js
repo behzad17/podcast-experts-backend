@@ -10,6 +10,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const getImageUrl = (podcast) => {
+    if (podcast.image_url) return podcast.image_url;
     if (podcast.image) return podcast.image;
     // Use local placeholder image
     return "/logo192.png";

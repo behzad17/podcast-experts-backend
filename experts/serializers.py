@@ -72,10 +72,9 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return obj.get_total_bookmarks()
 
     def get_profile_picture_url(self, obj):
-        if obj.profile_picture:
-            return self.context['request'].build_absolute_uri(
-                obj.profile_picture.url
-            )
+        """Return Cloudinary URL for profile picture"""
+        if obj.profile_picture and hasattr(obj.profile_picture, 'url'):
+            return obj.profile_picture.url
         return None
 
     def get_likes_count(self, obj):
