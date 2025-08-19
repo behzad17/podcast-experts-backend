@@ -216,6 +216,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Add this line to ensure WhiteNoise serves the index.html file
 WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/build')
 
+# WhiteNoise configuration for SPA routing
+WHITENOISE_INDEX_FILE = True
+WHITENOISE_AUTOREFRESH = True
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

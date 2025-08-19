@@ -19,13 +19,19 @@ from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
 from django.views.static import serve
 from backend.admin_dashboard.views import admin_stats
+import os
 
 
 def home_view(request):
     return HttpResponse("<h1>Welcome to Podcast Experts API</h1>")
+
+
+def serve_react_app(request, path):
+    """Serve React app for all routes that don't match API routes"""
+    build_path = os.path.join(settings.BASE_DIR, 'frontend', 'build')
+    return serve(request, 'index.html', document_root=build_path)
 
 
 urlpatterns = [
@@ -37,7 +43,8 @@ urlpatterns = [
     path('api/podcasts/', include('podcasts.urls')),
     path('api/messages/', include('user_messages.urls')),
     # Serve static files
-    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    # Serve React App
-    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^static/(?P<path>.*)$', serve, 
+            {'document_root': settings.STATIC_ROOT}),
+    # Serve React App for all other routes (SPA routing)
+    re_path(r'^.*', serve_react_app, kwargs={'path': 'index.html'}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
