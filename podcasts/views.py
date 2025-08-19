@@ -125,6 +125,50 @@ class PodcastViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        podcast = self.get_object()
+        user = request.user
+        
+        # Check if user already liked this podcast
+        existing_like = PodcastLike.objects.filter(podcast=podcast, user=user).first()
+        
+        if existing_like:
+            # Unlike: remove the like
+            existing_like.delete()
+            return Response({'status': 'unliked'})
+        else:
+            # Like: create new like
+            PodcastLike.objects.create(podcast=podcast, user=user)
+            return Response({'status': 'liked'})
+
+    @action(detail=True, methods=['get'])
+    def likes(self, request, pk=None):
+        podcast = self.get_object()
+        likes = podcast.likes.all()
+        
+        # Get current user's like status
+        current_user_liked = False
+        if request.user.is_authenticated:
+            current_user_liked = likes.filter(user=request.user).exists()
+        
+        # Serialize likes data
+        likes_data = []
+        for like in likes:
+            likes_data.append({
+                'id': like.id,
+                'user': like.user.id,
+                'username': like.user.username,
+                'created_at': like.created_at
+            })
+        
+        return Response({
+            'likes': likes_data,
+            'total_likes': likes.count(),
+            'current_user_liked': current_user_liked,
+            'current_user_id': request.user.id if request.user.is_authenticated else None
+        })
+
+    @action(detail=True, methods=['post'])
     def bookmark(self, request, pk=None):
         podcast = self.get_object()
         if request.user in podcast.bookmarked_by.all():
@@ -207,32 +251,6 @@ class PodcastViewSet(viewsets.ModelViewSet):
         featured_podcasts = self.get_queryset().filter(is_featured=True)[:6]
         serializer = self.get_serializer(featured_podcasts, many=True)
         return Response(serializer.data)
-
-    @action(detail=True, methods=['get'])
-    def likes(self, request, pk=None):
-        podcast = get_object_or_404(Podcast, pk=pk)
-        is_liked = podcast.likes.filter(user=request.user).exists()
-        return Response({
-            'is_liked': is_liked,
-            'count': podcast.likes.count()
-        })
-
-    @action(detail=True, methods=['post'])
-    def like(self, request, pk=None):
-        podcast = get_object_or_404(Podcast, pk=pk)
-        user = request.user
-        
-        # Check if user already liked
-        existing_like = podcast.likes.filter(user=user).first()
-        
-        if existing_like:
-            # Unlike
-            existing_like.delete()
-            return Response({'status': 'unliked'})
-        else:
-            # Like
-            podcast.likes.create(user=user)
-            return Response({'status': 'liked'})
 
 
 class PodcasterProfileViewSet(viewsets.ModelViewSet):

@@ -188,6 +188,7 @@ CSP_IMG_SRC = (
     "data:", 
     "blob:", 
     "https://res.cloudinary.com",
+    "https://*.cloudinary.com",
     "http://localhost:8000/media/", 
     "http://127.0.0.1:8000/media/"
 )

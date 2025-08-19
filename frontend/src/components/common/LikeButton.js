@@ -7,18 +7,52 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Map content types to correct API endpoints
+  const getApiEndpoints = (contentType) => {
+    switch (contentType) {
+      case 'experts/profiles':
+        return {
+          reactions: `/experts/profiles/${itemId}/reactions/`,
+          react: `/experts/profiles/${itemId}/react/`
+        };
+      case 'podcasts':
+        // Podcasts use a different like system
+        return {
+          reactions: `/podcasts/${itemId}/likes/`,
+          react: `/podcasts/${itemId}/like/`
+        };
+      default:
+        return {
+          reactions: `/${contentType}/${itemId}/reactions/`,
+          react: `/${contentType}/${itemId}/react/`
+        };
+    }
+  };
+
   useEffect(() => {
     setCount(initialCount);
     // Check if the user has already liked this item
     const checkLikeStatus = async () => {
       try {
-        const response = await api.get(`/${type}/${itemId}/reactions/`);
-        const userReaction = response.data.find(
-          (reaction) => reaction.reaction_type === "like"
-        );
+        const endpoints = getApiEndpoints(type);
+        const response = await api.get(endpoints.reactions);
+        
+        // Handle different response structures
+        let userReaction;
+        if (type === 'experts/profiles') {
+          userReaction = response.data.find(
+            (reaction) => reaction.reaction_type === "like"
+          );
+        } else if (type === 'podcasts') {
+          // For podcasts, check if user exists in likes array
+          userReaction = response.data.current_user_liked;
+        }
+        
         setIsLiked(!!userReaction);
       } catch (error) {
         console.error("Error checking like status:", error);
+        // Don't set isLiked to true on error
+        setIsLiked(false);
       }
     };
     checkLikeStatus();
@@ -28,15 +62,27 @@ const LikeButton = ({ itemId, type, initialCount = 0, className = "" }) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const endpoint = `/${type}/${itemId}/react/`;
-      const response = await api.post(endpoint, { reaction_type: "like" });
+      const endpoints = getApiEndpoints(type);
+      const response = await api.post(endpoints.react, { reaction_type: "like" });
 
-      if (response.data.status === "reaction removed") {
-        setCount((prev) => prev - 1);
-        setIsLiked(false);
+      if (type === 'podcasts') {
+        // Handle podcast like response
+        if (response.data.status === "unliked") {
+          setCount((prev) => prev - 1);
+          setIsLiked(false);
+        } else if (response.data.status === "liked") {
+          setCount((prev) => prev + 1);
+          setIsLiked(true);
+        }
       } else {
-        setCount((prev) => prev + 1);
-        setIsLiked(true);
+        // Handle expert reaction response
+        if (response.data.status === "reaction removed") {
+          setCount((prev) => prev - 1);
+          setIsLiked(false);
+        } else {
+          setCount((prev) => prev + 1);
+          setIsLiked(true);
+        }
       }
     } catch (error) {
       console.error("Error updating like:", error);
