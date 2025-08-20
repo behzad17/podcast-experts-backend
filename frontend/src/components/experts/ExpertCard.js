@@ -31,8 +31,24 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
   };
 
   const getImageUrl = (expert) => {
-    if (expert.profile_picture_url) return expert.profile_picture_url;
-    if (expert.profile_picture) return expert.profile_picture;
+    // Check if we have a profile picture URL
+    if (expert.profile_picture_url) {
+      // If it's a relative URL, make it absolute
+      if (expert.profile_picture_url.startsWith('/')) {
+        return `http://localhost:8000${expert.profile_picture_url}`;
+      }
+      return expert.profile_picture_url;
+    }
+    
+    // Check if we have a profile picture field
+    if (expert.profile_picture) {
+      // If it's a relative URL, make it absolute
+      if (expert.profile_picture.startsWith('/')) {
+        return `http://localhost:8000${expert.profile_picture}`;
+      }
+      return expert.profile_picture;
+    }
+    
     // Use local placeholder image
     return "/logo192.png";
   };

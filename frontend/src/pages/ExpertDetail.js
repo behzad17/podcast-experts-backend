@@ -78,7 +78,9 @@ const ExpertDetail = () => {
               {expert.profile_picture_url && (
                 <div className="expert-profile-image position-relative">
                   <img
-                    src={expert.profile_picture_url}
+                    src={expert.profile_picture_url.startsWith('/') 
+                      ? `http://localhost:8000${expert.profile_picture_url}` 
+                      : expert.profile_picture_url}
                     alt={expert.name}
                     className="img-fluid rounded-3"
                     style={{

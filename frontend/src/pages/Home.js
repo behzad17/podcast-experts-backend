@@ -38,13 +38,36 @@ const Home = () => {
   }, []);
 
   const getExpertImage = (expert) => {
-    if (expert.profile_picture_url) return expert.profile_picture_url;
-    if (expert.profile_picture) return expert.profile_picture;
+    // Check if we have a profile picture URL
+    if (expert.profile_picture_url) {
+      // If it's a relative URL, make it absolute
+      if (expert.profile_picture_url.startsWith("/")) {
+        return `http://localhost:8000${expert.profile_picture_url}`;
+      }
+      return expert.profile_picture_url;
+    }
+
+    // Check if we have a profile picture field
+    if (expert.profile_picture) {
+      // If it's a relative URL, make it absolute
+      if (expert.profile_picture.startsWith("/")) {
+        return `http://localhost:8000${expert.profile_picture}`;
+      }
+      return expert.profile_picture;
+    }
+
     return "/logo192.png";
   };
 
   const getPodcastImageUrl = (podcast) => {
-    if (podcast.image) return podcast.image;
+    // Check if we have an image
+    if (podcast.image) {
+      // If it's a relative URL, make it absolute
+      if (podcast.image.startsWith('/')) {
+        return `http://localhost:8000${podcast.image}`;
+      }
+      return podcast.image;
+    }
     return "/logo192.png";
   };
 

@@ -10,8 +10,24 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const getImageUrl = (podcast) => {
-    if (podcast.image_url) return podcast.image_url;
-    if (podcast.image) return podcast.image;
+    // Check if we have an image URL
+    if (podcast.image_url) {
+      // If it's a relative URL, make it absolute
+      if (podcast.image_url.startsWith('/')) {
+        return `http://localhost:8000${podcast.image_url}`;
+      }
+      return podcast.image_url;
+    }
+    
+    // Check if we have an image field
+    if (podcast.image) {
+      // If it's a relative URL, make it absolute
+      if (podcast.image.startsWith('/')) {
+        return `http://localhost:8000${podcast.image}`;
+      }
+      return podcast.image;
+    }
+    
     // Use local placeholder image
     return "/logo192.png";
   };

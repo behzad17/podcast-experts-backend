@@ -149,7 +149,9 @@ const Profile = () => {
               {profile.profile_picture_url && (
                 <div className="text-center mb-4">
                   <img
-                    src={profile.profile_picture_url}
+                    src={profile.profile_picture_url.startsWith('/') 
+                      ? `http://localhost:8000${profile.profile_picture_url}` 
+                      : profile.profile_picture_url}
                     alt="Profile"
                     className="rounded-circle"
                     style={{
