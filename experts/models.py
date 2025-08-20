@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from users.models import CustomUser
-from django.db.models import Avg
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 
 # Create your models here.
 class ExpertCategory(models.Model):
@@ -17,6 +17,7 @@ class ExpertCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "Expert Categories"
+
 
 class ExpertProfile(models.Model):
     user = models.OneToOneField(
@@ -31,12 +32,24 @@ class ExpertProfile(models.Model):
     experience_years = models.IntegerField()
     website = models.URLField(blank=True, null=True)
     social_media = models.TextField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='expert_profiles/', blank=True, null=True)
+    profile_picture = models.ImageField(
+        upload_to='expert_profiles/', 
+        blank=True, 
+        null=True
+    )
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
-    views = models.ManyToManyField('users.CustomUser', related_name='viewed_experts', blank=True)
-    bookmarks = models.ManyToManyField('users.CustomUser', related_name='bookmarked_experts', blank=True)
+    views = models.ManyToManyField(
+        'users.CustomUser', 
+        related_name='viewed_experts', 
+        blank=True
+    )
+    bookmarks = models.ManyToManyField(
+        'users.CustomUser', 
+        related_name='bookmarked_experts', 
+        blank=True
+    )
 
     def get_likes_count(self):
         return self.reactions.filter(reaction_type='like').count()
@@ -58,8 +71,12 @@ class ExpertProfile(models.Model):
         """Return Cloudinary URL or default image if no profile picture exists"""
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
-        # Return a default placeholder image from Cloudinary or a local default
-        return "https://res.cloudinary.com/dvveoxz3e/image/upload/v1/expert_profiles/default_profile"
+        
+        # Return a default placeholder image
+        return (
+            "https://res.cloudinary.com/dvveoxz3e/image/upload/"
+            "v1755557653/expert_profiles/default_profile.png"
+        )
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

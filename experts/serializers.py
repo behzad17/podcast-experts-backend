@@ -22,12 +22,22 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 class ExpertCommentSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     replies = serializers.SerializerMethodField()
-    parent = serializers.PrimaryKeyRelatedField(queryset=ExpertComment.objects.all(), required=False, allow_null=True)
-    expert = serializers.PrimaryKeyRelatedField(queryset=ExpertProfile.objects.all(), required=False)
+    parent = serializers.PrimaryKeyRelatedField(
+        queryset=ExpertComment.objects.all(), 
+        required=False, 
+        allow_null=True
+    )
+    expert = serializers.PrimaryKeyRelatedField(
+        queryset=ExpertProfile.objects.all(), 
+        required=False
+    )
 
     class Meta:
         model = ExpertComment
-        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent', 'expert']
+        fields = [
+            'id', 'user', 'content', 'created_at', 'replies', 
+            'parent', 'expert'
+        ]
         read_only_fields = ['created_at']
 
     def get_replies(self, obj):
@@ -72,10 +82,8 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return obj.get_total_bookmarks()
 
     def get_profile_picture_url(self, obj):
-        """Return Cloudinary URL for profile picture"""
-        if obj.profile_picture and hasattr(obj.profile_picture, 'url'):
-            return obj.profile_picture.url
-        return None
+        """Return Cloudinary URL for profile picture or default image"""
+        return obj.profile_picture_url
 
     def get_likes_count(self, obj):
         return obj.get_likes_count()

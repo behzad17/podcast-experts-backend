@@ -1,12 +1,10 @@
 from django.db import models
-from django.db.models import Avg
-from users.models import CustomUser
-from django.conf import settings
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-from experts.models import ExpertProfile
+from django.conf import settings
 
 User = get_user_model()
+
 
 # Create your models here.
 class Category(models.Model):
@@ -24,6 +22,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class PodcasterProfile(models.Model):
     user = models.OneToOneField(
@@ -51,6 +50,7 @@ class PodcasterProfile(models.Model):
             }
         )
         return profile
+
 
 class Podcast(models.Model):
     title = models.CharField(max_length=200)
@@ -84,11 +84,34 @@ class Podcast(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def image_url(self):
+        """Return Cloudinary URL for podcast image or default image"""
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        
+        # Return a default placeholder image
+        return (
+            "https://res.cloudinary.com/dvveoxz3e/image/upload/"
+            "v1755721264/podcast_images/default_podcast.png"
+        )
+
+
 class PodcastComment(models.Model):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='podcast_comments')
+    podcast = models.ForeignKey(
+        Podcast, 
+        on_delete=models.CASCADE, 
+        related_name='podcast_comments'
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    parent = models.ForeignKey(
+        'self', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name='replies'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -98,8 +121,13 @@ class PodcastComment(models.Model):
     def __str__(self):
         return f'Comment by {self.user.username} on {self.podcast.title}'
 
+
 class PodcastLike(models.Model):
-    podcast = models.ForeignKey(Podcast, on_delete=models.CASCADE, related_name='likes')
+    podcast = models.ForeignKey(
+        Podcast, 
+        on_delete=models.CASCADE, 
+        related_name='likes'
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

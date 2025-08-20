@@ -28,11 +28,17 @@ class PodcasterProfileSerializer(serializers.ModelSerializer):
 class PodcastCommentSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     replies = serializers.SerializerMethodField()
-    parent = serializers.PrimaryKeyRelatedField(queryset=PodcastComment.objects.all(), required=False, allow_null=True)
+    parent = serializers.PrimaryKeyRelatedField(
+        queryset=PodcastComment.objects.all(), 
+        required=False, 
+        allow_null=True
+    )
     
     class Meta:
         model = PodcastComment
-        fields = ['id', 'user', 'content', 'created_at', 'replies', 'parent']
+        fields = [
+            'id', 'user', 'content', 'created_at', 'replies', 'parent'
+        ]
         read_only_fields = ['created_at']
 
     def get_user(self, obj):
@@ -53,7 +59,10 @@ class PodcastCommentSerializer(serializers.ModelSerializer):
 class PodcastSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     category = CategorySerializer(read_only=True)
-    category_id = serializers.IntegerField(write_only=True, required=False)
+    category_id = serializers.IntegerField(
+        write_only=True, 
+        required=False
+    )
     comments = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
@@ -61,7 +70,11 @@ class PodcastSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Podcast
-        fields = ['id', 'title', 'description', 'owner', 'category', 'category_id', 'image', 'image_url', 'link', 'is_approved', 'created_at', 'comments', 'likes_count', 'views']
+        fields = [
+            'id', 'title', 'description', 'owner', 'category', 
+            'category_id', 'image', 'image_url', 'link', 'is_approved', 
+            'created_at', 'comments', 'likes_count', 'views'
+        ]
         read_only_fields = ['created_at']
 
     def get_owner(self, obj):
@@ -72,10 +85,8 @@ class PodcastSerializer(serializers.ModelSerializer):
         }
 
     def get_image_url(self, obj):
-        """Return Cloudinary URL for podcast image"""
-        if obj.image and hasattr(obj.image, 'url'):
-            return obj.image.url
-        return None
+        """Return Cloudinary URL for podcast image or default image"""
+        return obj.image_url
 
     def get_comments(self, obj):
         comments = obj.podcast_comments.filter(parent=None)
