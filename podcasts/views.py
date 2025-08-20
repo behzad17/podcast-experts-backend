@@ -82,6 +82,12 @@ class PodcastViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(category__name=category)
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        """Override list action to return podcast data instead of router URLs"""
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
         # Get or create podcaster profile for the user
         podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)

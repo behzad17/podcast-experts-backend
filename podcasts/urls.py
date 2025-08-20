@@ -4,15 +4,12 @@ from .views import (
     PodcastListView,
     PodcastCreateView,
     PodcastDetailView,
-    PodcastViewSet,
     PodcasterProfileViewSet,
     CategoryViewSet,
 )
 
 router = DefaultRouter()
-router.register(
-    r'podcasts', PodcastViewSet, basename='podcast'
-)
+# Remove podcast registration since we have explicit views
 router.register(
     r'profiles', PodcasterProfileViewSet, basename='podcaster-profile'
 )
@@ -21,8 +18,11 @@ router.register(
 )
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # Explicit podcast views must come before router
+    path('', PodcastListView.as_view(), name='podcast-main'),
     path('list/', PodcastListView.as_view(), name='podcast-list'),
     path('create/', PodcastCreateView.as_view(), name='podcast-create'),
     path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
+    # Router comes after explicit views
+    path('', include(router.urls)),
 ]
