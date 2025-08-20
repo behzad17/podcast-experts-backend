@@ -68,7 +68,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -202,20 +201,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Add static file directories
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build'),
 ]
 
 # Media files - Cloudinary Configuration
-MEDIA_URL = 'https://res.cloudinary.com/dvveoxz3e/image/upload/'
+MEDIA_URL = (
+    'https://res.cloudinary.com/dvveoxz3e/image/upload/'
+)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Enable WhiteNoise compression and caching
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# WhiteNoise configuration for SPA routing
-WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/build')
-WHITENOISE_INDEX_FILE = True
+# Disable WhiteNoise for now to use Django's built-in static file serving
+# STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

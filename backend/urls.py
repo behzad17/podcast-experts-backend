@@ -18,15 +18,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.static import serve
 from backend.admin_dashboard.views import admin_stats
-import os
-
-
-def serve_react_app(request, path):
-    """Serve React app for all routes that don't match API routes"""
-    build_path = os.path.join(settings.BASE_DIR, 'frontend', 'build')
-    return serve(request, 'index.html', document_root=build_path)
+from backend.views import serve_react_app
 
 
 urlpatterns = [
@@ -44,10 +37,13 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Serve React App for all other routes (SPA routing) - must come last
-# Use a more specific pattern that excludes admin and API routes
+# Use a more specific pattern that excludes admin, API, static, and media routes
+exclude_pattern = (
+    r'^(?!admin|api|static|media|favicon\.ico|manifest\.json|logo.*\.png).*'
+)
 urlpatterns.append(
     re_path(
-        r'^(?!admin|api|static|media).*',
+        exclude_pattern,
         serve_react_app,
         kwargs={'path': 'index.html'}
     )
