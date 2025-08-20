@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
@@ -45,6 +44,11 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Serve React App for all other routes (SPA routing) - must come last
+# Use a more specific pattern that excludes admin and API routes
 urlpatterns.append(
-    re_path(r'^.*', serve_react_app)
+    re_path(
+        r'^(?!admin|api|static|media).*',
+        serve_react_app,
+        kwargs={'path': 'index.html'}
+    )
 )
