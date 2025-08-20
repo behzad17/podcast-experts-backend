@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://podcast-backend-4e5439705bd3.herokuapp.com/api",
+  baseURL: "http://localhost:8000/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -11,7 +11,7 @@ const api = axios.create({
 
 // List of public routes that don't require authentication
 const publicRoutes = [
-  "/podcasts/podcasts/featured/",
+  "/podcasts/featured/",
   "/experts/profiles/featured/",
   "/experts/",
   "/podcasts/",

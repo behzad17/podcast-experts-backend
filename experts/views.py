@@ -35,9 +35,17 @@ class ExpertListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return ExpertProfile.objects.all()
-        return ExpertProfile.objects.filter(is_approved=True)
+        queryset = ExpertProfile.objects.all()
+        
+        # Check if this is a featured request
+        if self.request.path.endswith('/featured/'):
+            queryset = queryset.filter(is_featured=True)
+        
+        # Filter by approval status for non-staff users
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(is_approved=True)
+        
+        return queryset
 
 
 class ExpertProfileCreateView(generics.CreateAPIView):

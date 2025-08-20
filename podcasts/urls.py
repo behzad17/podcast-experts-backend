@@ -6,6 +6,7 @@ from .views import (
     PodcastDetailView,
     PodcasterProfileViewSet,
     CategoryViewSet,
+    PodcastLikeView,
 )
 
 router = DefaultRouter()
@@ -23,6 +24,9 @@ urlpatterns = [
     path('list/', PodcastListView.as_view(), name='podcast-list'),
     path('create/', PodcastCreateView.as_view(), name='podcast-create'),
     path('<int:pk>/', PodcastDetailView.as_view(), name='podcast-detail'),
+    path('featured/', PodcastListView.as_view(), name='podcast-featured'),
+    # Add likes endpoints
+    path('<int:pk>/likes/', PodcastLikeView.as_view(), name='podcast-likes'),
     # Router comes after explicit views
     path('', include(router.urls)),
 ]

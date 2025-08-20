@@ -207,9 +207,7 @@ STATICFILES_DIRS = [
 ]
 
 # Media files - Cloudinary Configuration
-MEDIA_URL = (
-    'https://res.cloudinary.com/dvveoxz3e/image/upload/'
-)
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Disable WhiteNoise for now to use Django's built-in static file serving

@@ -61,7 +61,7 @@ const Podcasts = () => {
           params.append("category", selectedCategory);
         }
 
-        const response = await api.get(`/podcasts/podcasts/?${params}`);
+        const response = await api.get(`/podcasts/?${params}`);
         setPodcasts(response.data.results || response.data);
         setTotalPages(
           Math.ceil((response.data.count || response.data.length) / pageSize)
@@ -139,7 +139,7 @@ const Podcasts = () => {
       });
 
       const response = await api.put(
-        `/podcasts/podcasts/${editingPodcast.id}/`,
+        `/podcasts/${editingPodcast.id}/`,
         formData,
         {
           headers: {

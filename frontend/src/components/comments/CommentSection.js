@@ -24,8 +24,8 @@ const CommentSection = ({
       setLoading(true);
       const endpoint =
         type === "expert"
-          ? `/experts/profiles/${id}/comments/`
-          : `/podcasts/podcasts/${id}/comments/`;
+                ? `/experts/profiles/${id}/comments/`
+      : `/podcasts/${id}/comments/`;
       const response = await api.get(endpoint);
       setComments(response.data);
       setError("");
@@ -50,8 +50,8 @@ const CommentSection = ({
     try {
       const endpoint =
         type === "expert"
-          ? `/experts/profiles/${id}/add_comment/`
-          : `/podcasts/podcasts/${id}/add_comment/`;
+                ? `/experts/profiles/${id}/add_comment/`
+      : `/podcasts/${id}/add_comment/`;
 
       const data = {
         content: newComment,
@@ -74,7 +74,7 @@ const CommentSection = ({
       const endpoint =
         type === "expert"
           ? `/experts/profiles/${id}/edit_comment/`
-          : `/podcasts/podcasts/${id}/edit_comment/${commentId}/`;
+          : `/podcasts/${id}/edit_comment/${commentId}/`;
 
       const data = {
         comment_id: commentId,
@@ -100,7 +100,7 @@ const CommentSection = ({
       const endpoint =
         type === "expert"
           ? `/experts/profiles/${id}/delete_comment/`
-          : `/podcasts/podcasts/${id}/delete_comment/${commentId}/`;
+          : `/podcasts/${id}/delete_comment/${commentId}/`;
 
       const data = {
         comment_id: commentId,

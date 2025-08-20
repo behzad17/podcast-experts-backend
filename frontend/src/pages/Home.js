@@ -16,8 +16,8 @@ const Home = () => {
     const fetchFeaturedItems = async () => {
       try {
         const [podcastsRes, expertsRes] = await Promise.allSettled([
-          axios.get("/podcasts/podcasts/featured/"),
-          axios.get("/experts/profiles/featured/"),
+          axios.get("/podcasts/featured/"),
+          axios.get("/experts/featured/"),
         ]);
 
         if (podcastsRes.status === "fulfilled") {
@@ -205,7 +205,7 @@ const Home = () => {
                           </Link>
                           <LikeButton
                             itemId={podcast.id}
-                            type="podcasts/podcasts"
+                            type="podcasts"
                             initialCount={podcast.likes_count}
                             className="btn-sm w-100"
                           />

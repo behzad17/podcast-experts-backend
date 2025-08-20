@@ -38,7 +38,7 @@ const PodcastDetail = () => {
       setError("");
 
       // Fetch podcast data
-      const response = await api.get(`/podcasts/podcasts/${id}/`);
+      const response = await api.get(`/podcasts/${id}/`);
       setPodcast(response.data);
       setIsOwner(response.data.user === user?.id);
     } catch (err) {
@@ -115,7 +115,7 @@ const PodcastDetail = () => {
                 <div className="d-flex gap-2">
                   <LikeButton
                     itemId={podcast.id}
-                    type="podcasts/podcasts"
+                    type="podcasts"
                     initialCount={podcast.likes_count}
                     className="btn-lg"
                   />

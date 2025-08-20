@@ -20,7 +20,7 @@ const EditPodcast = () => {
   useEffect(() => {
     const fetchPodcast = async () => {
       try {
-        const response = await api.get(`/podcasts/podcasts/${id}/`);
+        const response = await api.get(`/podcasts/${id}/`);
         setFormData(response.data);
         setLoading(false);
       } catch (error) {
@@ -50,7 +50,7 @@ const EditPodcast = () => {
         }
       });
 
-      await api.put(`/podcasts/podcasts/${id}/`, formDataToSend, {
+      await api.put(`/podcasts/${id}/`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

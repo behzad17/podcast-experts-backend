@@ -49,8 +49,8 @@ export const getProfile = () => api.get("/users/profile/");
 // Podcast endpoints
 export const getPodcasts = async () => {
   try {
-    console.log("Making request to /podcasts/podcasts/");
-    const response = await api.get("/podcasts/podcasts/");
+    console.log("Making request to /podcasts/");
+    const response = await api.get("/podcasts/");
     console.log("Podcasts response data:", response.data);
     return response;
   } catch (error) {

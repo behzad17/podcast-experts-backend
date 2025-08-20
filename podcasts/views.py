@@ -8,6 +8,8 @@ from django.db.models import Sum
 from .models import (
     Podcast, PodcasterProfile, Category, PodcastComment, PodcastLike
 )
+from rest_framework.decorators import action
+from rest_framework.views import APIView
 from .serializers import (
     PodcastSerializer,
     PodcasterProfileSerializer,
@@ -30,9 +32,15 @@ class PodcastListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Podcast.objects.all()
+        
+        # Check if this is a featured request
+        if self.request.path.endswith('/featured/'):
+            queryset = queryset.filter(is_featured=True)
+        
         category_id = self.request.query_params.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id=category_id)
+        
         return queryset
 
 
@@ -283,3 +291,69 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class PodcastLikeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request, pk):
+        """Get likes for a podcast"""
+        try:
+            podcast = Podcast.objects.get(pk=pk)
+            likes = PodcastLike.objects.filter(podcast=podcast)
+            return Response({
+                'podcast_id': pk,
+                'likes_count': likes.count(),
+                'liked_by': [like.user.username for like in likes]
+            })
+        except Podcast.DoesNotExist:
+            return Response(
+                {'error': 'Podcast not found'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    
+    def post(self, request, pk):
+        """Like a podcast"""
+        try:
+            podcast = Podcast.objects.get(pk=pk)
+            like, created = PodcastLike.objects.get_or_create(
+                podcast=podcast, 
+                user=request.user
+            )
+            if created:
+                return Response(
+                    {'message': 'Podcast liked successfully'}, 
+                    status=status.HTTP_201_CREATED
+                )
+            else:
+                return Response(
+                    {'message': 'Podcast already liked'}, 
+                    status=status.HTTP_200_OK
+                )
+        except Podcast.DoesNotExist:
+            return Response(
+                {'error': 'Podcast not found'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    
+    def delete(self, request, pk):
+        """Unlike a podcast"""
+        try:
+            podcast = Podcast.objects.get(pk=pk)
+            try:
+                like = PodcastLike.objects.get(podcast=podcast, user=request.user)
+                like.delete()
+                return Response(
+                    {'message': 'Podcast unliked successfully'}, 
+                    status=status.HTTP_200_OK
+                )
+            except PodcastLike.DoesNotExist:
+                return Response(
+                    {'error': 'Podcast not liked'}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except Podcast.DoesNotExist:
+            return Response(
+                {'error': 'Podcast not found'}, 
+                status=status.HTTP_200_OK
+            )
