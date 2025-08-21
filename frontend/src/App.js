@@ -27,6 +27,8 @@ import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
 import AdminPodcastApproval from "./pages/AdminPodcastApproval";
 import Profile from "./pages/Profile";
+import PodcasterProfile from "./pages/PodcasterProfile";
+import PodcasterProfileEdit from "./pages/PodcasterProfileEdit";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Messages from "./pages/Messages";
@@ -87,6 +89,22 @@ function AppContent() {
               element={
                 <PrivateRoute>
                   <PodcasterProfileCreate />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/podcaster/profile"
+              element={
+                <PrivateRoute>
+                  <PodcasterProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/podcasts/profile/edit"
+              element={
+                <PrivateRoute>
+                  <PodcasterProfileEdit />
                 </PrivateRoute>
               }
             />

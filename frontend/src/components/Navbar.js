@@ -64,13 +64,18 @@ function Navigation() {
                   </Nav.Link>
                 )}
                 {user.user_type === "podcaster" && (
-                  <Nav.Link
-                    as={Link}
-                    to="/podcasts/create"
-                    onClick={closeNavbar}
-                  >
-                    Create Podcast
-                  </Nav.Link>
+                  <>
+                    <Nav.Link as={Link} to="/podcaster/profile" onClick={closeNavbar}>
+                      Profile
+                    </Nav.Link>
+                    <Nav.Link
+                      as={Link}
+                      to="/podcasts/create"
+                      onClick={closeNavbar}
+                    >
+                      Create Podcast
+                    </Nav.Link>
+                  </>
                 )}
                 {user.user_type === "expert" && (
                   <Nav.Link

@@ -323,10 +323,39 @@ class PodcasterProfileViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
-        return PodcasterProfile.objects.all()
+        # For list/retrieve, show all profiles
+        # For other actions, filter by current user
+        if self.action in ['list', 'retrieve']:
+            return PodcasterProfile.objects.all()
+        return PodcasterProfile.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        # Ensure user can only update their own profile
+        if serializer.instance.user != self.request.user:
+            raise PermissionDenied("You can only edit your own profile.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        # Ensure user can only delete their own profile
+        if instance.user != self.request.user:
+            raise PermissionDenied("You can only delete your own profile.")
+        instance.delete()
+
+    @action(detail=False, methods=['get'])
+    def my_profile(self, request):
+        """Get the current user's podcaster profile"""
+        try:
+            profile = PodcasterProfile.objects.get(user=request.user)
+            serializer = self.get_serializer(profile)
+            return Response(serializer.data)
+        except PodcasterProfile.DoesNotExist:
+            return Response(
+                {'detail': 'Podcaster profile not found'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
