@@ -68,10 +68,10 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         model = ExpertProfile
         fields = [
             'id', 'user', 'name', 'bio', 'expertise', 'categories',
-            'experience_years', 'website', 'social_media', 'profile_picture',
-            'profile_picture_url', 'is_approved', 'is_featured', 'created_at',
-            'total_views', 'total_bookmarks', 'comments', 'likes_count',
-            'dislikes_count'
+            'experience_years', 'website', 'social_media', 'email',
+            'profile_picture', 'profile_picture_url', 'is_approved', 
+            'is_featured', 'created_at', 'total_views', 'total_bookmarks', 
+            'comments', 'likes_count', 'dislikes_count'
         ]
         read_only_fields = ['is_approved']
 

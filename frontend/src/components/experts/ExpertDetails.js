@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Badge, Button, Row, Col } from "react-bootstrap";
-import { FaStar, FaGlobe, FaShareAlt } from "react-icons/fa";
+import { FaStar, FaGlobe, FaShareAlt, FaEnvelope } from "react-icons/fa";
 
 const ExpertDetails = ({ expert, currentUser, onEdit }) => {
   return (
@@ -67,6 +67,17 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
                 >
                   <FaGlobe className="me-2" />
                   Website
+                </Button>
+              )}
+              {expert.email && (
+                <Button
+                  variant="outline-primary"
+                  href={`mailto:${expert.email}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaEnvelope className="me-2" />
+                  Email
                 </Button>
               )}
               <Button variant="outline-primary">

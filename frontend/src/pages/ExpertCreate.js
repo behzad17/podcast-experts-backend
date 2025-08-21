@@ -11,6 +11,7 @@ const ExpertCreate = () => {
     experience_years: "",
     website: "",
     social_media: "",
+    email: "",
     profile_picture: null,
   });
   const [errors, setErrors] = useState({});
@@ -125,6 +126,10 @@ const ExpertCreate = () => {
       
       if (formData.social_media) {
         submitData.append("social_media", formData.social_media);
+      }
+      
+      if (formData.email) {
+        submitData.append("email", formData.email);
       }
       
       if (formData.profile_picture) {
@@ -296,6 +301,20 @@ const ExpertCreate = () => {
             onChange={handleChange}
             placeholder="Enter your social media profile"
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your contact email"
+          />
+          <Form.Text className="text-muted">
+            Contact email for potential clients (optional)
+          </Form.Text>
         </Form.Group>
 
         <Button type="submit" variant="primary" disabled={isLoading}>

@@ -41,6 +41,7 @@ class ExpertProfile(models.Model):
     experience_years = models.IntegerField()
     website = models.URLField(blank=True, null=True)
     social_media = models.TextField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True, help_text="Contact email for this expert")
     profile_picture = models.ImageField(
         upload_to='expert_profiles/', 
         blank=True, 
