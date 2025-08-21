@@ -1,0 +1,40 @@
+Database Backup Summary - Thu Aug 21 17:28:15 CEST 2025
+========================
+
+Backup Files Created:
+  db_backup_20250821_172741.json (25K)
+  db_backup_complete_20250821_172800.json (40K)
+  db_backup_complete_20250821_172800.json.gz (5.6K)
+  db_backup_complete_20250821_172803.json.gz (0B)
+
+Data Summary:
+  "model": 80 records
+  "model": 24 records
+  "model": 23 records
+  "model": 20 records
+  "model": 9 records
+  "model": 8 records
+  "model": 6 records
+  "model": 6 records
+  "model": 2 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
+  "model": 1 records
