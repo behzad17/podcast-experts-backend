@@ -8,7 +8,7 @@ const MessageList = () => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const response = await api.get("/messages/conversations/");
+        const response = await api.get("/user_messages/conversations/");
         setConversations(response.data);
       } catch (error) {
         console.error("Error fetching conversations:", error);

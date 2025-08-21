@@ -17,7 +17,7 @@ const ChatWindow = ({ userId }) => {
   const fetchMessages = useCallback(async () => {
     try {
       const response = await api.get(
-        `/messages/chat_with_user/?user_id=${userId}`
+        `/user_messages/chat_with_user/?user_id=${userId}`
       );
       setMessages(response.data.messages || []);
       setOtherUser(response.data.other_user);
@@ -44,7 +44,7 @@ const ChatWindow = ({ userId }) => {
     if (!newMessage.trim() || !userId) return;
 
     try {
-      await api.post("/messages/", {
+      await api.post("/user_messages/", {
         receiver_id: userId,
         content: newMessage,
       });

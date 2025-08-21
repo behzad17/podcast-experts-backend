@@ -86,7 +86,7 @@ export const unlikeExpert = (id) =>
 // User endpoints
 export const getUsers = () => api.get("/users/");
 export const sendMessage = (receiver_id, content) =>
-  api.post("/messages/", { receiver_id, content });
+  api.post("/user_messages/", { receiver_id, content });
 
 export const createPodcast = async (formData) => {
   const response = await api.post("/podcasts/", formData, {

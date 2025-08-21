@@ -73,9 +73,9 @@ export const endpoints = {
   },
   // Message endpoints
   messages: {
-    list: "/messages/",
-    send: "/messages/send/",
-    conversation: (userId) => `/messages/conversation/${userId}/`,
+    list: "/user_messages/",
+    send: "/user_messages/",
+    conversation: (userId) => `/user_messages/chat_with_user/?user_id=${userId}`,
   },
   // Bookmark endpoints
   bookmarks: {
