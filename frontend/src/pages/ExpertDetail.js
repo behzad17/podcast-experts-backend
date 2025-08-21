@@ -113,7 +113,7 @@ const ExpertDetail = () => {
                     </span>
                   </div>
                 </div>
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 flex-wrap">
                   {userData && expert.user?.id && expert.user.id !== userData.id && (
                     <MessageButton
                       targetUserId={expert.user.id}
@@ -121,6 +121,7 @@ const ExpertDetail = () => {
                       targetType="expert"
                       variant="outline-success"
                       size="lg"
+                      className="message-expert-btn"
                     />
                   )}
                   {isOwner && (

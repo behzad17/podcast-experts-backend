@@ -1,56 +1,56 @@
-import React, { useState } from 'react';
-import { Button, Modal, Form, Alert } from 'react-bootstrap';
-import { FaEnvelope } from 'react-icons/fa';
-import api from '../../api/axios';
+import React, { useState } from "react";
+import { Button, Modal, Form, Alert, Badge } from "react-bootstrap";
+import { FaEnvelope, FaPaperPlane, FaTimes } from "react-icons/fa";
+import api from "../../api/axios";
+import "./MessageButton.css";
 
-const MessageButton = ({ 
-  targetUserId, 
-  targetUsername, 
-  targetType = 'user', // 'podcaster', 'expert', or 'user'
-  variant = 'outline-primary',
-  size = 'sm',
-  className = ''
+const MessageButton = ({
+  targetUserId,
+  targetUsername,
+  targetType = "user", // 'podcaster', 'expert', or 'user'
+  variant = "outline-primary",
+  size = "sm",
+  className = "",
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!message.trim()) {
-      setError('Please enter a message');
+      setError("Please enter a message");
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
-      await api.post('/user_messages/', {
+      await api.post("/user_messages/", {
         receiver_id: targetUserId,
-        content: message.trim()
+        content: message.trim(),
       });
 
       setSuccess(true);
-      setMessage('');
-      
+      setMessage("");
+
       // Close modal after 2 seconds
       setTimeout(() => {
         setShowModal(false);
         setSuccess(false);
       }, 2000);
-
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       if (error.response?.data?.detail) {
         setError(error.response.data.detail);
       } else if (error.response?.data?.message) {
         setError(error.response.data.message);
       } else {
-        setError('Failed to send message. Please try again.');
+        setError("Failed to send message. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -59,31 +59,36 @@ const MessageButton = ({
 
   const handleClose = () => {
     setShowModal(false);
-    setMessage('');
-    setError('');
+    setMessage("");
+    setError("");
     setSuccess(false);
   };
 
   const getButtonText = () => {
     switch (targetType) {
-      case 'podcaster':
-        return 'Message Podcaster';
-      case 'expert':
-        return 'Message Expert';
+      case "podcaster":
+        return "Message Podcaster";
+      case "expert":
+        return "Message Expert";
       default:
-        return 'Send Message';
+        return "Send Message";
     }
   };
 
   const getModalTitle = () => {
     switch (targetType) {
-      case 'podcaster':
+      case "podcaster":
         return `Send Message to ${targetUsername}`;
-      case 'expert':
+      case "expert":
         return `Send Message to ${targetUsername}`;
       default:
         return `Send Message to ${targetUsername}`;
     }
+  };
+
+  const getButtonIcon = () => {
+    if (success) return <FaPaperPlane className="me-1" />;
+    return <FaEnvelope className="me-1" />;
   };
 
   return (
@@ -91,62 +96,114 @@ const MessageButton = ({
       <Button
         variant={variant}
         size={size}
-        className={className}
+        className={`message-btn ${className}`}
         onClick={() => setShowModal(true)}
         title={getButtonText()}
       >
-        <FaEnvelope className="me-1" />
+        {getButtonIcon()}
         {getButtonText()}
       </Button>
 
-      <Modal show={showModal} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{getModalTitle()}</Modal.Title>
+      <Modal
+        show={showModal}
+        onHide={handleClose}
+        centered
+        size="lg"
+        className="message-modal"
+      >
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title className="d-flex align-items-center">
+            <FaEnvelope className="me-2 text-primary" />
+            {getModalTitle()}
+          </Modal.Title>
         </Modal.Header>
-        
-        <Modal.Body>
+
+        <Modal.Body className="pt-3">
           {success ? (
-            <Alert variant="success">
-              Message sent successfully! The modal will close automatically.
-            </Alert>
+            <div className="text-center py-4">
+              <div className="mb-3">
+                <FaPaperPlane
+                  className="text-success"
+                  style={{ fontSize: "3rem" }}
+                />
+              </div>
+              <Alert variant="success" className="border-0">
+                <h5 className="mb-2">Message Sent Successfully!</h5>
+                <p className="mb-0 text-muted">
+                  Your message has been delivered to {targetUsername}. The modal
+                  will close automatically.
+                </p>
+              </Alert>
+            </div>
           ) : (
             <Form onSubmit={handleSubmit}>
               {error && (
-                <Alert variant="danger" className="mb-3">
+                <Alert variant="danger" className="mb-3 border-0">
+                  <FaTimes className="me-2" />
                   {error}
                 </Alert>
               )}
-              
+
               <Form.Group className="mb-3">
-                <Form.Label>Message</Form.Label>
+                <Form.Label className="fw-bold">
+                  Message to {targetUsername}
+                </Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows={4}
+                  rows={5}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder={`Type your message to ${targetUsername}...`}
+                  placeholder={`Type your message to ${targetUsername}...\n\nYou can ask questions, request collaboration, or simply introduce yourself.`}
                   maxLength={1000}
                   disabled={isLoading}
+                  className="message-textarea"
                 />
-                <Form.Text className="text-muted">
-                  {message.length}/1000 characters
-                </Form.Text>
+                <div className="d-flex justify-content-between align-items-center mt-2">
+                  <Form.Text className="text-muted">
+                    <small>
+                      <FaEnvelope className="me-1" />
+                      This message will be sent privately to {targetUsername}
+                    </small>
+                  </Form.Text>
+                  <Badge
+                    bg={message.length > 800 ? "warning" : "secondary"}
+                    className="character-count"
+                  >
+                    {message.length}/1000
+                  </Badge>
+                </div>
               </Form.Group>
             </Form>
           )}
         </Modal.Body>
-        
+
         {!success && (
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose} disabled={isLoading}>
+          <Modal.Footer className="border-0 pt-0">
+            <Button
+              variant="light"
+              onClick={handleClose}
+              disabled={isLoading}
+              className="px-4"
+            >
               Cancel
             </Button>
-            <Button 
-              variant="primary" 
-              onClick={handleSubmit} 
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
               disabled={isLoading || !message.trim()}
+              className="px-4 send-message-btn"
             >
-              {isLoading ? 'Sending...' : 'Send Message'}
+              {isLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <FaPaperPlane className="me-2" />
+                  Send Message
+                </>
+              )}
             </Button>
           </Modal.Footer>
         )}

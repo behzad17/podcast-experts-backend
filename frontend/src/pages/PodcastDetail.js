@@ -113,7 +113,7 @@ const PodcastDetail = () => {
                     </span>
                   </div>
                 </div>
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 flex-wrap">
                   <LikeButton
                     itemId={podcast.id}
                     type="podcasts"
@@ -140,15 +140,18 @@ const PodcastDetail = () => {
                     <FaShare className="me-2" />
                     Share
                   </Button>
-                  {user && podcast.owner?.user && podcast.owner.user !== user.id && (
-                    <MessageButton
-                      targetUserId={podcast.owner.user}
-                      targetUsername={podcast.owner.username}
-                      targetType="podcaster"
-                      variant="outline-success"
-                      size="lg"
-                    />
-                  )}
+                  {user &&
+                    podcast.owner?.user &&
+                    podcast.owner.user !== user.id && (
+                      <MessageButton
+                        targetUserId={podcast.owner.user}
+                        targetUsername={podcast.owner.username}
+                        targetType="podcaster"
+                        variant="outline-success"
+                        size="lg"
+                        className="message-podcaster-btn"
+                      />
+                    )}
                   {isOwner && (
                     <Button
                       variant="outline-primary"
