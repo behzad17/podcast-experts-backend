@@ -24,8 +24,8 @@ const CommentSection = ({
       setLoading(true);
       const endpoint =
         type === "expert"
-                ? `/experts/profiles/${id}/comments/`
-      : `/podcasts/${id}/comments/`;
+          ? `/experts/profiles/${id}/comments/`
+          : `/podcasts/${id}/comments/`;
       const response = await api.get(endpoint);
       setComments(response.data);
       setError("");
@@ -50,8 +50,8 @@ const CommentSection = ({
     try {
       const endpoint =
         type === "expert"
-                ? `/experts/profiles/${id}/add_comment/`
-      : `/podcasts/${id}/add_comment/`;
+          ? `/experts/profiles/${id}/add_comment/`
+          : `/podcasts/${id}/comments/`;
 
       const data = {
         content: newComment,
@@ -74,10 +74,9 @@ const CommentSection = ({
       const endpoint =
         type === "expert"
           ? `/experts/profiles/${id}/edit_comment/`
-          : `/podcasts/${id}/edit_comment/${commentId}/`;
+          : `/podcasts/${id}/comments/${commentId}/`;
 
       const data = {
-        comment_id: commentId,
         content: content,
       };
 
@@ -100,13 +99,9 @@ const CommentSection = ({
       const endpoint =
         type === "expert"
           ? `/experts/profiles/${id}/delete_comment/`
-          : `/podcasts/${id}/delete_comment/${commentId}/`;
+          : `/podcasts/${id}/comments/${commentId}/`;
 
-      const data = {
-        comment_id: commentId,
-      };
-
-      await api.delete(endpoint, { data });
+      await api.delete(endpoint);
       setComments((prev) => prev.filter((comment) => comment.id !== commentId));
       setShowDeleteModal(false);
       setError("");

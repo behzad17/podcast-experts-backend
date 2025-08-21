@@ -346,5 +346,33 @@ class PodcastLikeView(APIView):
         except Podcast.DoesNotExist:
             return Response(
                 {'error': 'Podcast not found'}, 
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_200_OK
             )
+
+
+class PodcastCommentViewSet(viewsets.ModelViewSet):
+    serializer_class = PodcastCommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        podcast_id = self.kwargs.get('podcast_pk')
+        return PodcastComment.objects.filter(podcast_id=podcast_id)
+
+    def perform_create(self, serializer):
+        podcast_id = self.kwargs.get('podcast_pk')
+        podcast = get_object_or_404(Podcast, pk=podcast_id)
+        serializer.save(
+            podcast=podcast,
+            user=self.request.user
+        )
+
+    def perform_update(self, serializer):
+        comment = self.get_object()
+        if comment.user != self.request.user:
+            raise PermissionDenied("You can only edit your own comments.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise PermissionDenied("You can only delete your own comments.")
+        instance.delete()
