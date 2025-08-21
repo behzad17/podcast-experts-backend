@@ -27,6 +27,7 @@ urlpatterns = [
     path('featured/', PodcastListView.as_view(), name='podcast-featured'),
     # Add likes endpoints
     path('<int:pk>/likes/', PodcastLikeView.as_view(), name='podcast-likes'),
+    path('<int:pk>/like/', PodcastLikeView.as_view(), name='podcast-like'),
     # Router comes after explicit views
     path('', include(router.urls)),
 ]

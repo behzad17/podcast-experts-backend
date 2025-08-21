@@ -3,6 +3,7 @@ import { Card, Button, Alert, Badge, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { podcastApi } from "../../api/podcastApi";
 import { toast } from "react-toastify";
+import LikeButton from "../common/LikeButton";
 
 const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -75,6 +76,17 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
             )}
           </div>
         </div>
+        
+        {/* Like Button and Count */}
+        <div className="mb-2">
+          <LikeButton
+            itemId={podcast.id}
+            type="podcasts"
+            initialCount={podcast.likes_count || 0}
+            className="btn-sm"
+          />
+        </div>
+        
         <Card.Text className="text-truncate-3" style={{ minHeight: "60px" }}>
           {podcast.description}
         </Card.Text>

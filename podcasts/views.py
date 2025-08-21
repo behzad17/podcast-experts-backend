@@ -303,9 +303,15 @@ class PodcastLikeView(APIView):
         try:
             podcast = Podcast.objects.get(pk=pk)
             likes = PodcastLike.objects.filter(podcast=podcast)
+            current_user_liked = PodcastLike.objects.filter(
+                podcast=podcast, 
+                user=request.user
+            ).exists()
+            
             return Response({
                 'podcast_id': pk,
                 'likes_count': likes.count(),
+                'current_user_liked': current_user_liked,
                 'liked_by': [like.user.username for like in likes]
             })
         except Podcast.DoesNotExist:
@@ -315,47 +321,30 @@ class PodcastLikeView(APIView):
             )
     
     def post(self, request, pk):
-        """Like a podcast"""
+        """Like/unlike a podcast (toggle functionality)"""
         try:
             podcast = Podcast.objects.get(pk=pk)
             like, created = PodcastLike.objects.get_or_create(
                 podcast=podcast, 
                 user=request.user
             )
+            
             if created:
-                return Response(
-                    {'message': 'Podcast liked successfully'}, 
-                    status=status.HTTP_201_CREATED
-                )
+                # User liked the podcast
+                return Response({
+                    'status': 'liked',
+                    'message': 'Podcast liked successfully'
+                }, status=status.HTTP_201_CREATED)
             else:
-                return Response(
-                    {'message': 'Podcast already liked'}, 
-                    status=status.HTTP_200_OK
-                )
+                # User already liked it, so unlike it
+                like.delete()
+                return Response({
+                    'status': 'unliked',
+                    'message': 'Podcast unliked successfully'
+                }, status=status.HTTP_200_OK)
+                
         except Podcast.DoesNotExist:
             return Response(
                 {'error': 'Podcast not found'}, 
                 status=status.HTTP_404_NOT_FOUND
-            )
-    
-    def delete(self, request, pk):
-        """Unlike a podcast"""
-        try:
-            podcast = Podcast.objects.get(pk=pk)
-            try:
-                like = PodcastLike.objects.get(podcast=podcast, user=request.user)
-                like.delete()
-                return Response(
-                    {'message': 'Podcast unliked successfully'}, 
-                    status=status.HTTP_200_OK
-                )
-            except PodcastLike.DoesNotExist:
-                return Response(
-                    {'error': 'Podcast not liked'}, 
-                    status=status.HTTP_404_NOT_FOUND
-                )
-        except Podcast.DoesNotExist:
-            return Response(
-                {'error': 'Podcast not found'}, 
-                status=status.HTTP_200_OK
             )
