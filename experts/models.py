@@ -1,9 +1,18 @@
+import os
+import cloudinary
+import cloudinary.uploader
 from django.db import models
-from django.utils import timezone
-from users.models import CustomUser
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+)
 
 
 # Create your models here.
@@ -21,7 +30,7 @@ class ExpertCategory(models.Model):
 
 class ExpertProfile(models.Model):
     user = models.OneToOneField(
-        CustomUser,
+        'users.CustomUser',
         on_delete=models.CASCADE,
         related_name='expert_profile'
     )
@@ -75,9 +84,40 @@ class ExpertProfile(models.Model):
         # Return a default placeholder image - Cloudinary will construct the full URL
         return "expert_profiles/default_profile.png"
 
+    def save(self, *args, **kwargs):
+        """Override save to handle Cloudinary upload"""
+        # Call the parent save method first
+        super().save(*args, **kwargs)
+        
+        # If there's a profile picture, upload it to Cloudinary
+        if self.profile_picture and hasattr(self.profile_picture, 'path'):
+            try:
+                # Create a unique identifier using username and ID
+                unique_id = f"{self.user.username}_{self.id}".replace(' ', '_').lower()
+                
+                # Upload to Cloudinary
+                result = cloudinary.uploader.upload(
+                    self.profile_picture.path,
+                    public_id=f"expert_profiles/{unique_id}",
+                    resource_type="auto",
+                    overwrite=True
+                )
+                
+                # Update the profile_picture field with Cloudinary URL
+                self.profile_picture.name = result['secure_url']
+                
+                # Save again without triggering the save method
+                super().save(update_fields=['profile_picture'])
+                
+                print(f"✅ Expert profile picture uploaded to Cloudinary: {result['secure_url']}")
+                
+            except Exception as e:
+                print(f"Cloudinary upload failed for expert {self.name}: {e}")
+                # Continue with local storage if Cloudinary fails
+
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
     created_at = models.DateTimeField(auto_now_add=True)
 

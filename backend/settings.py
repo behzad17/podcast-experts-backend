@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cloudinary',
-    'cloudinary_storage',
     # Third party apps
     'rest_framework',
     'rest_framework_simplejwt',
@@ -231,16 +230,17 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Cloudinary Storage Configuration
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'backend.cloudinary_storage.CustomCloudinaryStorage'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-    'SECURE': True,
-    'MEDIA_TAG': 'media',
-    'INVALID_VIDEO_ERROR': True,
-}
+# Remove the problematic django-cloudinary-storage configuration
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+#     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+#     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+#     'SECURE': True,
+#     'MEDIA_TAG': 'media',
+#     'INVALID_VIDEO_ERROR': True,
+# }
 
 # Ensure Cloudinary is properly configured
 cloudinary.config(

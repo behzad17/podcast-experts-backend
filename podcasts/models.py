@@ -1,9 +1,20 @@
+import os
+import cloudinary
+import cloudinary.uploader
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from django.conf import settings
 
 User = get_user_model()
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+)
 
 
 # Create your models here.
@@ -92,6 +103,37 @@ class Podcast(models.Model):
         
         # Return a default placeholder image - Cloudinary will construct the full URL
         return "podcast_images/default_podcast.png"
+
+    def save(self, *args, **kwargs):
+        """Override save to handle Cloudinary upload"""
+        # Call the parent save method first
+        super().save(*args, **kwargs)
+        
+        # If there's an image, upload it to Cloudinary
+        if self.image and hasattr(self.image, 'path'):
+            try:
+                # Create a unique identifier using title and ID
+                unique_id = f"{self.title}_{self.id}".replace(' ', '_').lower()
+                
+                # Upload to Cloudinary
+                result = cloudinary.uploader.upload(
+                    self.image.path,
+                    public_id=f"podcast_images/{unique_id}",
+                    resource_type="auto",
+                    overwrite=True
+                )
+                
+                # Update the image field with Cloudinary URL
+                self.image.name = result['secure_url']
+                
+                # Save again without triggering the save method
+                super().save(update_fields=['image'])
+                
+                print(f"✅ Podcast image uploaded to Cloudinary: {result['secure_url']}")
+                
+            except Exception as e:
+                print(f"Cloudinary upload failed for podcast {self.title}: {e}")
+                # Continue with local storage if Cloudinary fails
 
 
 class PodcastComment(models.Model):
