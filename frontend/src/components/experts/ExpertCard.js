@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import LikeButton from "../common/LikeButton";
 import { expertApi } from "../../api/expertApi";
 import { toast } from "react-toastify";
-import MessageButton from "../common/MessageButton";
 
 const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -110,15 +109,6 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
             >
               View Profile
             </Button>
-            {currentUser && expert.user?.id && expert.user.id !== currentUser.id && (
-              <MessageButton
-                targetUserId={expert.user.id}
-                targetUsername={expert.user.username}
-                targetType="expert"
-                variant="outline-success"
-                size="sm"
-              />
-            )}
             {currentUser && expert.user?.id === currentUser.id && (
               <>
                 <Button

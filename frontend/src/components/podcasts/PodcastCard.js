@@ -3,7 +3,6 @@ import { Card, Button, Alert, Badge, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { podcastApi } from "../../api/podcastApi";
 import { toast } from "react-toastify";
-import MessageButton from "../common/MessageButton";
 
 const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -102,16 +101,6 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
             >
               View
             </Button>
-            {currentUser && podcast.owner?.user && podcast.owner.user !== currentUser.id && (
-              <MessageButton
-                targetUserId={podcast.owner.user}
-                targetUsername={podcast.owner.username}
-                targetType="podcaster"
-                variant="outline-success"
-                size="sm"
-                className="me-2"
-              />
-            )}
             {currentUser && podcast.owner?.user === currentUser.id && (
               <>
                 <Button
