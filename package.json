@@ -2,10 +2,6 @@
   "name": "podcast-experts-backend",
   "version": "1.0.0",
   "description": "Podcast Experts Platform Backend",
-  "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "postinstall": "cd frontend && npm install"
-  },
   "engines": {
     "node": "18.x",
     "npm": "9.x"

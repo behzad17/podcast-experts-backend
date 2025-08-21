@@ -1,11 +1,7 @@
 #!/bin/sh
 
-# Build the React frontend
-echo "Building React frontend..."
-cd frontend
-npm install
-npm run build
-cd ..
+# Note: React frontend should be built locally before deployment
+# This script only handles Django static files and serving
 
 # Collect Django static files
 echo "Collecting Django static files..."
