@@ -8,10 +8,15 @@ from .views import (
     CategoryViewSet,
     PodcastLikeView,
     PodcastCommentViewSet,
+    PodcastApprovalView,
+    PodcastViewSet,
 )
 
 router = DefaultRouter()
-# Remove podcast registration since we have explicit views
+# Register podcast viewsets
+router.register(
+    r'podcasts', PodcastViewSet, basename='podcast'
+)
 router.register(
     r'profiles', PodcasterProfileViewSet, basename='podcaster-profile'
 )
@@ -32,6 +37,8 @@ urlpatterns = [
     # Add comment endpoints
     path('<int:podcast_pk>/comments/', PodcastCommentViewSet.as_view({'get': 'list', 'post': 'create'}), name='podcast-comments'),
     path('<int:podcast_pk>/comments/<int:pk>/', PodcastCommentViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='podcast-comment-detail'),
+    # Add approval endpoint for admins
+    path('<int:pk>/approve/', PodcastApprovalView.as_view(), name='podcast-approve'),
     # Router comes after explicit views
     path('', include(router.urls)),
 ]

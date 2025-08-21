@@ -76,7 +76,7 @@ const PodcastCreate = () => {
         },
       });
       
-      toast.success("Podcast created successfully!");
+      toast.success("Podcast created successfully! It will be published after admin approval.");
       navigate("/podcasts");
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");

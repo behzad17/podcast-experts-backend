@@ -20,6 +20,8 @@ def admin_stats(request):
         'total_experts': ExpertProfile.objects.count(),
         'total_podcasters': PodcasterProfile.objects.count(),
         'total_comments': PodcastComment.objects.count(),
+        'pending_podcasts': Podcast.objects.filter(is_approved=False).count(),
+        'pending_experts': ExpertProfile.objects.filter(is_approved=False).count(),
         'recent_podcasts': Podcast.objects.order_by('-created_at')[:5],
         'recent_experts': ExpertProfile.objects.order_by('-created_at')[:5],
         'recent_users': CustomUser.objects.order_by('-date_joined')[:5],

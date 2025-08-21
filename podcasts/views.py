@@ -37,6 +37,10 @@ class PodcastListView(generics.ListAPIView):
         if self.request.path.endswith('/featured/'):
             queryset = queryset.filter(is_featured=True)
         
+        # Filter by approval status for non-staff users
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(is_approved=True)
+        
         category_id = self.request.query_params.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id=category_id)
@@ -51,7 +55,8 @@ class PodcastCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # Get or create podcaster profile for the user
         podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
-        serializer.save(owner=podcaster_profile)
+        # Save with is_approved=False - requires admin approval
+        serializer.save(owner=podcaster_profile, is_approved=False)
 
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -61,6 +66,11 @@ class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         obj = get_object_or_404(Podcast, pk=self.kwargs['pk'])
+        
+        # Only show approved podcasts to non-staff users
+        if not obj.is_approved and not self.request.user.is_staff:
+            raise PermissionDenied("This podcast is not approved yet.")
+        
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -87,6 +97,11 @@ class PodcastViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Podcast.objects.all()
+        
+        # Filter by approval status for non-staff users
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(is_approved=True)
+        
         category = self.request.query_params.get('category', None)
         if category:
             queryset = queryset.filter(category__name=category)
@@ -267,6 +282,31 @@ class PodcastViewSet(viewsets.ModelViewSet):
         featured_podcasts = self.get_queryset().filter(is_featured=True)[:6]
         serializer = self.get_serializer(featured_podcasts, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def pending(self, request):
+        """Get podcasts pending approval - admin only"""
+        if not request.user.is_staff:
+            return Response(
+                {'detail': 'You do not have permission to view pending podcasts'}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        pending_podcasts = Podcast.objects.filter(is_approved=False)
+        serializer = self.get_serializer(pending_podcasts, many=True)
+        return Response(serializer.data)
+
+
+class PodcastApprovalView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, pk):
+        podcast = get_object_or_404(Podcast, pk=pk)
+        podcast.is_approved = True
+        podcast.save()
+        return Response(
+            {'message': 'Podcast approved successfully'},
+            status=status.HTTP_200_OK
+        )
 
 
 class PodcasterProfileViewSet(viewsets.ModelViewSet):

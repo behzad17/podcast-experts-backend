@@ -25,6 +25,7 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import AdminDashboard from "./pages/AdminDashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import AdminExpertApproval from "./pages/AdminExpertApproval";
+import AdminPodcastApproval from "./pages/AdminPodcastApproval";
 import Profile from "./pages/Profile";
 import PodcasterProfileCreate from "./pages/PodcasterProfileCreate";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
@@ -118,6 +119,14 @@ function AppContent() {
               element={
                 <PrivateRoute>
                   <AdminExpertApproval />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/podcast-approval"
+              element={
+                <PrivateRoute>
+                  <AdminPodcastApproval />
                 </PrivateRoute>
               }
             />

@@ -82,6 +82,17 @@ const AdminDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Col md={4}>
+          <Card>
+            <Card.Body>
+              <Card.Title>Pending Podcasts</Card.Title>
+              <Card.Text>{stats.pending_podcasts || 0}</Card.Text>
+              <Link to="/admin/podcast-approval" className="btn btn-primary">
+                Review Podcasts
+              </Link>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
     </Container>
   );
