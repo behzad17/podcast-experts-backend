@@ -12,6 +12,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import CommentSection from "../components/comments/CommentSection";
 import LikeButton from "../components/common/LikeButton";
+import MessageButton from "../components/common/MessageButton";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -112,16 +113,27 @@ const ExpertDetail = () => {
                     </span>
                   </div>
                 </div>
-                {isOwner && (
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => navigate(`/experts/${id}/edit`)}
-                    className="edit-profile-btn"
-                  >
-                    <i className="fas fa-edit me-2"></i>
-                    Edit Profile
-                  </Button>
-                )}
+                <div className="d-flex gap-2">
+                  {userData && expert.user?.id && expert.user.id !== userData.id && (
+                    <MessageButton
+                      targetUserId={expert.user.id}
+                      targetUsername={expert.user.username}
+                      targetType="expert"
+                      variant="outline-success"
+                      size="lg"
+                    />
+                  )}
+                  {isOwner && (
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => navigate(`/experts/${id}/edit`)}
+                      className="edit-profile-btn"
+                    >
+                      <i className="fas fa-edit me-2"></i>
+                      Edit Profile
+                    </Button>
+                  )}
+                </div>
               </div>
               <div className="expert-bio mb-4">
                 <p>{expert.bio}</p>

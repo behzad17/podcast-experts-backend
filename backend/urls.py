@@ -8,12 +8,13 @@ Function views
     1. Add an import:  from my_app import views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
 Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+    1. Add an import:  from other_app import views
+    2. Add a URL to urlpatterns:  path('', views.Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -29,12 +30,11 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
-    path('api/messages/', include('user_messages.urls')),
+    path('api/user_messages/', include('user_messages.urls')),
 ]
 
 # Add static and media file serving
 # Serve React static files from frontend/build
-import os
 react_static_root = os.path.join(settings.BASE_DIR, 'frontend', 'build')
 urlpatterns += static(settings.STATIC_URL, document_root=react_static_root)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

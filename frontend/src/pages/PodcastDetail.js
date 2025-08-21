@@ -22,6 +22,7 @@ import {
 import CommentSection from "../components/comments/CommentSection";
 import ReactPlayer from "react-player";
 import LikeButton from "../components/common/LikeButton";
+import MessageButton from "../components/common/MessageButton";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -139,6 +140,15 @@ const PodcastDetail = () => {
                     <FaShare className="me-2" />
                     Share
                   </Button>
+                  {user && podcast.owner?.user && podcast.owner.user !== user.id && (
+                    <MessageButton
+                      targetUserId={podcast.owner.user}
+                      targetUsername={podcast.owner.username}
+                      targetType="podcaster"
+                      variant="outline-success"
+                      size="lg"
+                    />
+                  )}
                   {isOwner && (
                     <Button
                       variant="outline-primary"
