@@ -222,7 +222,12 @@ STATICFILES_DIRS = [
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Removed - Cloudinary handles this
 
 # Use WhiteNoise for better static file serving in production
+# WhiteNoise will serve static files directly from STATIC_ROOT
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+
+# WhiteNoise configuration
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend', 'build')
+WHITENOISE_INDEX_FILE = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
