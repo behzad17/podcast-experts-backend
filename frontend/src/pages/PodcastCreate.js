@@ -56,26 +56,32 @@ const PodcastCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // شروع بارگذاری
+    setIsLoading(true);
+    
     try {
-      await api.post("/podcasts/create/", formData);
+      // Create FormData to handle file uploads
+      const submitData = new FormData();
+      submitData.append('title', formData.title);
+      submitData.append('description', formData.description);
+      submitData.append('link', formData.link);
+      submitData.append('category_id', formData.category_id);
+      
+      if (formData.image) {
+        submitData.append('image', formData.image);
+      }
+      
+      await api.post("/podcasts/create/", submitData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      toast.success("Podcast created successfully!");
       navigate("/podcasts");
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     } finally {
-      setIsLoading(false); // پایان بارگذاری
-    }
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        await api.post("/podcasts/upload-image/", { image: file });
-        setFormData({ ...formData, image: file });
-      } catch (error) {
-        setError(error.response?.data?.message || "Error uploading image");
-      }
+      setIsLoading(false);
     }
   };
 
@@ -147,7 +153,7 @@ const PodcastCreate = () => {
           <Form.Control
             type="file"
             name="image"
-            onChange={handleImageUpload}
+            onChange={handleChange}
             accept="image/*"
           />
         </Form.Group>
