@@ -154,8 +154,12 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Security Settings
-CSRF_COOKIE_SECURE = False  # Temporarily disabled for local development
-SESSION_COOKIE_SECURE = False  # Temporarily disabled for local development
+CSRF_COOKIE_SECURE = os.getenv(
+    'CSRF_COOKIE_SECURE', 'False'
+) == 'True'
+SESSION_COOKIE_SECURE = os.getenv(
+    'SESSION_COOKIE_SECURE', 'False'
+) == 'True'
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = True
@@ -171,9 +175,15 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_REFERRER_POLICY = 'same-origin'
 
 # Add these new security headers
-SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
-SECURE_HSTS_PRELOAD = False  # Set to True in production
+SECURE_HSTS_SECONDS = int(
+    os.getenv('SECURE_HSTS_SECONDS', '0')
+)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv(
+    'SECURE_HSTS_INCLUDE_SUBDOMAINS', 'False'
+) == 'True'
+SECURE_HSTS_PRELOAD = os.getenv(
+    'SECURE_HSTS_PRELOAD', 'False'
+) == 'True'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -227,7 +237,9 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # Frontend URL for email verification
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL", "http://localhost:3000"
+)
 
 # Cloudinary Storage Configuration
 DEFAULT_FILE_STORAGE = 'backend.cloudinary_storage.CustomCloudinaryStorage'

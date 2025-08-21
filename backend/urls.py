@@ -35,8 +35,12 @@ urlpatterns = [
 
 # Add static and media file serving
 # Serve React static files from frontend/build
-react_static_root = os.path.join(settings.BASE_DIR, 'frontend', 'build')
-urlpatterns += static(settings.STATIC_URL, document_root=react_static_root)
+react_static_root = os.path.join(
+    settings.BASE_DIR, 'frontend', 'build'
+)
+urlpatterns += static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT
+)
 # Remove media serving since we're using Cloudinary
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
