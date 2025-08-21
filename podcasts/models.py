@@ -90,11 +90,8 @@ class Podcast(models.Model):
         if self.image and hasattr(self.image, 'url'):
             return self.image.url
         
-        # Return a default placeholder image
-        return (
-            "https://res.cloudinary.com/dvveoxz3e/image/upload/"
-            "v1755721264/podcast_images/default_podcast.png"
-        )
+        # Return a default placeholder image - Cloudinary will construct the full URL
+        return "podcast_images/default_podcast.png"
 
 
 class PodcastComment(models.Model):

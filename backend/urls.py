@@ -37,7 +37,8 @@ urlpatterns = [
 # Serve React static files from frontend/build
 react_static_root = os.path.join(settings.BASE_DIR, 'frontend', 'build')
 urlpatterns += static(settings.STATIC_URL, document_root=react_static_root)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Remove media serving since we're using Cloudinary
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Serve React App for all other routes (SPA routing) - must come last
 # Use a more specific pattern that excludes admin, API, static, and media routes

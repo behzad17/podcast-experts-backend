@@ -72,11 +72,8 @@ class ExpertProfile(models.Model):
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
             return self.profile_picture.url
         
-        # Return a default placeholder image
-        return (
-            "https://res.cloudinary.com/dvveoxz3e/image/upload/"
-            "v1755557653/expert_profiles/default_profile.png"
-        )
+        # Return a default placeholder image - Cloudinary will construct the full URL
+        return "expert_profiles/default_profile.png"
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

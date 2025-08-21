@@ -15,6 +15,7 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 import dj_database_url
+import cloudinary
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -207,8 +208,9 @@ STATICFILES_DIRS = [
 ]
 
 # Media files - Cloudinary Configuration
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Remove local media configuration since we're using Cloudinary
+# MEDIA_URL = '/media/'  # Removed - Cloudinary handles this
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Removed - Cloudinary handles this
 
 # Disable WhiteNoise for now to use Django's built-in static file serving
 # STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
@@ -228,6 +230,7 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 # Frontend URL for email verification
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
+# Cloudinary Storage Configuration
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
@@ -238,3 +241,10 @@ CLOUDINARY_STORAGE = {
     'MEDIA_TAG': 'media',
     'INVALID_VIDEO_ERROR': True,
 }
+
+# Ensure Cloudinary is properly configured
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+)
