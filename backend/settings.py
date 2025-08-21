@@ -211,9 +211,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Add static file directories
+# Add static file directories - React build files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/build'),
+    os.path.join(BASE_DIR, 'frontend', 'build'),
 ]
 
 # Media files - Cloudinary Configuration
@@ -221,8 +221,8 @@ STATICFILES_DIRS = [
 # MEDIA_URL = '/media/'  # Removed - Cloudinary handles this
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Removed - Cloudinary handles this
 
-# Disable WhiteNoise for now to use Django's built-in static file serving
-# STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+# Use WhiteNoise for better static file serving in production
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

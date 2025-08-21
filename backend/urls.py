@@ -38,6 +38,7 @@ urlpatterns = [
 react_static_root = os.path.join(
     settings.BASE_DIR, 'frontend', 'build'
 )
+# Use Django's built-in static file serving
 urlpatterns += static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 )
