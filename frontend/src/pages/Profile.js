@@ -45,37 +45,57 @@ const Profile = () => {
 
         // Fetch profile based on user type
         if (userData?.user_type === "expert") {
-          const response = await api.get("/experts/my-profile/");
-          setProfile(response.data);
+          try {
+            const response = await api.get("/experts/my-profile/");
+            setProfile(response.data);
+          } catch (error) {
+            if (error.response?.status === 404) {
+              setError("You don't have an expert profile yet. Please create one to get started.");
+            } else {
+              console.error("Error fetching expert profile:", error);
+              setError("Failed to load expert profile. Please try again later.");
+            }
+          }
         } else if (userData?.user_type === "podcaster") {
-          const response = await api.get("/podcasts/profiles/");
-          // Since the ViewSet returns a list, we need to get the first item
-          if (response.data && response.data.length > 0) {
-            setProfile(response.data[0]);
-            // Fetch podcaster's podcasts using the my-podcasts endpoint
-            try {
-              const podcastsResponse = await api.get("/podcasts/my-podcasts/");
-              if (
-                podcastsResponse.data &&
-                Array.isArray(podcastsResponse.data)
-              ) {
-                setPodcasts(podcastsResponse.data);
-              } else {
-                console.error(
-                  "Unexpected podcasts response format:",
-                  podcastsResponse.data
-                );
+          try {
+            const response = await api.get("/podcasts/profiles/");
+            // Since the ViewSet returns a list, we need to get the first item
+            if (response.data && response.data.length > 0) {
+              setProfile(response.data[0]);
+              // Fetch podcaster's podcasts using the my-podcasts endpoint
+              try {
+                const podcastsResponse = await api.get("/podcasts/my-podcasts/");
+                if (
+                  podcastsResponse.data &&
+                  Array.isArray(podcastsResponse.data)
+                ) {
+                  setPodcasts(podcastsResponse.data);
+                } else {
+                  console.error(
+                    "Unexpected podcasts response format:",
+                    podcastsResponse.data
+                  );
+                  setPodcasts([]);
+                }
+              } catch (podcastError) {
+                console.error("Error fetching podcasts:", podcastError);
                 setPodcasts([]);
               }
-            } catch (podcastError) {
-              console.error("Error fetching podcasts:", podcastError);
-              setPodcasts([]);
+            } else {
+              setError(
+                "No podcaster profile found. Please create a profile first."
+              );
             }
-          } else {
-            setError(
-              "No podcaster profile found. Please create a profile first."
-            );
+          } catch (error) {
+            if (error.response?.status === 404) {
+              setError("You don't have a podcaster profile yet. Please create one to get started.");
+            } else {
+              console.error("Error fetching podcaster profile:", error);
+              setError("Failed to load podcaster profile. Please try again later.");
+            }
           }
+        } else {
+          setError("User type not recognized. Please log in again.");
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -116,6 +136,30 @@ const Profile = () => {
     return (
       <Container className="mt-4">
         <Alert variant="danger">{error}</Alert>
+        {error.includes("don't have") && (
+          <div className="mt-3">
+            {currentUser?.user_type === "expert" ? (
+              <Button 
+                variant="primary" 
+                onClick={() => navigate("/experts/create")}
+                className="me-2"
+              >
+                Create Expert Profile
+              </Button>
+            ) : currentUser?.user_type === "podcaster" ? (
+              <Button 
+                variant="primary" 
+                onClick={() => navigate("/podcaster-profile/create")}
+                className="me-2"
+              >
+                Create Podcaster Profile
+              </Button>
+            ) : null}
+            <Button variant="outline-secondary" onClick={() => navigate("/")}>
+              Go to Home
+            </Button>
+          </div>
+        )}
       </Container>
     );
   }

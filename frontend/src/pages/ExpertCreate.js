@@ -13,6 +13,7 @@ const ExpertCreate = () => {
     social_media: "",
     profile_picture: null,
   });
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +63,29 @@ const ExpertCreate = () => {
     checkAuth();
   }, [navigate]);
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    
+    if (!formData.bio.trim()) {
+      newErrors.bio = "Bio is required";
+    }
+    
+    if (!formData.expertise.trim()) {
+      newErrors.expertise = "Expertise is required";
+    }
+    
+    if (!formData.experience_years || formData.experience_years < 0) {
+      newErrors.experience_years = "Experience years must be a positive number";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "profile_picture" && files?.length > 0) {
@@ -69,16 +93,77 @@ const ExpertCreate = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    // Clear field-specific error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
     setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    setErrors({});
+
     try {
-      await api.post("/experts/create/", formData);
-      navigate("/experts");
+      // Create FormData for file upload
+      const submitData = new FormData();
+      submitData.append("name", formData.name);
+      submitData.append("bio", formData.bio);
+      submitData.append("expertise", formData.expertise);
+      submitData.append("experience_years", formData.experience_years);
+      
+      if (formData.website) {
+        submitData.append("website", formData.website);
+      }
+      
+      if (formData.social_media) {
+        submitData.append("social_media", formData.social_media);
+      }
+      
+      if (formData.profile_picture) {
+        submitData.append("profile_picture", formData.profile_picture);
+      }
+
+      const response = await api.post("/experts/create/", submitData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/experts");
+      }, 2000);
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
+      console.error("Expert creation error:", error);
+      
+      if (error.response?.data) {
+        const errorData = error.response.data;
+        
+        // Handle field-specific validation errors
+        if (typeof errorData === "object" && !errorData.detail) {
+          const fieldErrors = {};
+          Object.keys(errorData).forEach(key => {
+            if (Array.isArray(errorData[key])) {
+              fieldErrors[key] = errorData[key][0];
+            }
+          });
+          setErrors(fieldErrors);
+        } else {
+          setError(errorData.detail || "Failed to create expert profile");
+        }
+      } else {
+        setError("An error occurred while creating your profile. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,16 +202,15 @@ const ExpertCreate = () => {
       )}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Profile Picture *</Form.Label>
+          <Form.Label>Profile Picture</Form.Label>
           <Form.Control
             type="file"
             name="profile_picture"
             onChange={handleChange}
             accept="image/*"
-            required
           />
           <Form.Text className="text-muted">
-            Please upload a profile picture (required)
+            Upload a profile picture (optional)
           </Form.Text>
         </Form.Group>
 
@@ -137,9 +221,12 @@ const ExpertCreate = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.name}
             placeholder="Enter your name"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.name}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -150,9 +237,12 @@ const ExpertCreate = () => {
             name="bio"
             value={formData.bio}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.bio}
             placeholder="Tell us about yourself"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.bio}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -162,9 +252,12 @@ const ExpertCreate = () => {
             name="expertise"
             value={formData.expertise}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.expertise}
             placeholder="Enter your expertise"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.expertise}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -174,16 +267,19 @@ const ExpertCreate = () => {
             name="experience_years"
             value={formData.experience_years}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.experience_years}
             min="0"
             placeholder="Enter years of experience"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.experience_years}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Website</Form.Label>
           <Form.Control
-            type="text"
+            type="url"
             name="website"
             value={formData.website}
             onChange={handleChange}
@@ -198,7 +294,7 @@ const ExpertCreate = () => {
             name="social_media"
             value={formData.social_media}
             onChange={handleChange}
-            placeholder="Enter your social media URL"
+            placeholder="Enter your social media profile"
           />
         </Form.Group>
 
