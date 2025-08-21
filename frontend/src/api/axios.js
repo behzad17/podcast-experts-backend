@@ -19,7 +19,6 @@ const publicRoutes = [
   "/users/login/",
   "/users/register/",
   "/users/verify-email/",
-  "/users/verify-token/",
   "/users/token/refresh/",
 ];
 
@@ -73,13 +72,13 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Only clear auth data and redirect if it's not a refresh token request
+        // Only clear auth data if it's not a refresh token request
         if (!originalRequest.url.includes("/users/token/refresh/")) {
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("userData");
           localStorage.removeItem("userType");
-          window.location.href = "/login";
+          // Don't force redirect - let the component handle it
         }
         return Promise.reject(refreshError);
       }
