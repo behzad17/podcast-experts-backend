@@ -10,6 +10,13 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Helper function to limit text to 5 words
+  const limitToFiveWords = (text) => {
+    if (!text) return "";
+    const words = text.split(' ');
+    return words.slice(0, 5).join(' ') + (words.length > 5 ? '...' : '');
+  };
+
   const getImageUrl = (podcast) => {
     // Check if we have an image URL
     if (podcast.image_url) {
@@ -87,8 +94,12 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           />
         </div>
         
-        <Card.Text className="text-truncate-3" style={{ minHeight: "60px" }}>
-          {podcast.description}
+        <Card.Text 
+          className="text-truncate-3" 
+          style={{ minHeight: "60px" }}
+          title={podcast.description} // Show full description on hover
+        >
+          {limitToFiveWords(podcast.description)}
         </Card.Text>
         <div className="d-flex justify-content-between align-items-center mt-auto">
           <small className="text-muted">
