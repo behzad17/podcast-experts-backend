@@ -49,7 +49,9 @@ class PodcastCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # Get or create podcaster profile for the user
+        podcaster_profile = PodcasterProfile.get_or_create_profile(self.request.user)
+        serializer.save(owner=podcaster_profile)
 
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -65,7 +67,7 @@ class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
     def check_object_permissions(self, request, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if obj.user != request.user:
+        if obj.owner.user != request.user:
             raise PermissionDenied(
                 "You don't have permission to modify this podcast."
             )
