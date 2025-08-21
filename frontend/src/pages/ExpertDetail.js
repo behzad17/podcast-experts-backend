@@ -183,6 +183,22 @@ const ExpertDetail = () => {
                     </div>
                   </div>
                 )}
+                {expert.user?.email && (
+                  <div className="expert-info-box expert-social-links">
+                    <div className="info-icon">
+                      <i className="fas fa-envelope"></i>
+                    </div>
+                    <div className="info-content">
+                      <strong>Email</strong>
+                      <a
+                        href={`mailto:${expert.user.email}`}
+                        className="email-link"
+                      >
+                        Send Email
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>
