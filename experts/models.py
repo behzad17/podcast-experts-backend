@@ -80,9 +80,16 @@ class ExpertProfile(models.Model):
     def profile_picture_url(self):
         """Return Cloudinary URL or default image if no profile picture exists"""
         if self.profile_picture and hasattr(self.profile_picture, 'url'):
-            return self.profile_picture.url
+            # Check if it's already a Cloudinary URL
+            if self.profile_picture.name.startswith('http'):
+                return self.profile_picture.name
+            # If it's a local path, construct Cloudinary URL
+            elif self.profile_picture.name.startswith('expert_profiles/'):
+                cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
+                if cloud_name:
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.profile_picture.name}"
         
-        # Return a default placeholder image - Cloudinary will construct the full URL
+        # Return a default placeholder image
         return "expert_profiles/default_profile.png"
 
     def save(self, *args, **kwargs):
@@ -104,8 +111,8 @@ class ExpertProfile(models.Model):
                     overwrite=True
                 )
                 
-                # Update the profile_picture field with Cloudinary URL
-                self.profile_picture.name = result['secure_url']
+                # Store only the public_id, not the full URL
+                self.profile_picture.name = f"expert_profiles/{unique_id}"
                 
                 # Save again without triggering the save method
                 super().save(update_fields=['profile_picture'])

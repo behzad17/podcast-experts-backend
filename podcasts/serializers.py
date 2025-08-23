@@ -67,6 +67,9 @@ class PodcastSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     views = serializers.IntegerField(read_only=True, default=0)
     image_url = serializers.SerializerMethodField()
+    
+    # Override the image field to return Cloudinary URL
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Podcast
@@ -83,6 +86,10 @@ class PodcastSerializer(serializers.ModelSerializer):
             'username': obj.owner.user.username,
             'user': obj.owner.user.id
         }
+
+    def get_image(self, obj):
+        """Return Cloudinary URL for podcast image"""
+        return obj.image_url
 
     def get_image_url(self, obj):
         """Return Cloudinary URL for podcast image or default image"""

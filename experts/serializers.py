@@ -64,6 +64,9 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField()
     dislikes_count = serializers.SerializerMethodField()
     
+    # Override the profile_picture field to return Cloudinary URL
+    profile_picture = serializers.SerializerMethodField()
+    
     class Meta:
         model = ExpertProfile
         fields = [
@@ -80,6 +83,10 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
 
     def get_total_bookmarks(self, obj):
         return obj.get_total_bookmarks()
+
+    def get_profile_picture(self, obj):
+        """Return Cloudinary URL for profile picture"""
+        return obj.profile_picture_url
 
     def get_profile_picture_url(self, obj):
         """Return Cloudinary URL for profile picture or default image"""

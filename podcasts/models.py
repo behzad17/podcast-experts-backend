@@ -99,9 +99,16 @@ class Podcast(models.Model):
     def image_url(self):
         """Return Cloudinary URL for podcast image or default image"""
         if self.image and hasattr(self.image, 'url'):
-            return self.image.url
+            # Check if it's already a Cloudinary URL
+            if self.image.name.startswith('http'):
+                return self.image.name
+            # If it's a local path, construct Cloudinary URL
+            elif self.image.name.startswith('podcast_images/'):
+                cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
+                if cloud_name:
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.image.name}"
         
-        # Return a default placeholder image - Cloudinary will construct the full URL
+        # Return a default placeholder image
         return "podcast_images/default_podcast.png"
 
     def save(self, *args, **kwargs):
@@ -123,8 +130,8 @@ class Podcast(models.Model):
                     overwrite=True
                 )
                 
-                # Update the image field with Cloudinary URL
-                self.image.name = result['secure_url']
+                # Store only the public_id, not the full URL
+                self.image.name = f"podcast_images/{unique_id}"
                 
                 # Save again without triggering the save method
                 super().save(update_fields=['image'])
