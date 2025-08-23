@@ -86,11 +86,13 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
 
     def get_profile_picture(self, obj):
         """Return profile picture URL for profile picture"""
-        return obj.profile_picture_url
+        # Temporarily return a simple default to test if this fixes the 500 error
+        return "expert_profiles/default_profile.png"
 
     def get_profile_picture_url(self, obj):
         """Return profile picture URL or default image"""
-        return obj.profile_picture_url
+        # Temporarily return a simple default to test if this fixes the 500 error
+        return "expert_profiles/default_profile.png"
 
     def get_likes_count(self, obj):
         return obj.get_likes_count()
