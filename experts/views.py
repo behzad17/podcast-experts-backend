@@ -66,7 +66,7 @@ class ExpertProfileCreateView(generics.CreateAPIView):
 
 class ExpertProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ExpertProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     queryset = ExpertProfile.objects.all()
 
     def get_object(self):

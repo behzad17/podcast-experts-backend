@@ -61,7 +61,7 @@ class PodcastCreateView(generics.CreateAPIView):
 
 class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PodcastSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     queryset = Podcast.objects.all()
 
     def get_object(self):
