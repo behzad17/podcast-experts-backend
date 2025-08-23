@@ -85,9 +85,14 @@ class ExpertProfile(models.Model):
                 return self.profile_picture.name
             # If it's a local path, construct Cloudinary URL
             elif self.profile_picture.name.startswith('expert_profiles/'):
-                cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
-                if cloud_name:
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.profile_picture.name}"
+                try:
+                    # Get cloud name from cloudinary config
+                    import cloudinary
+                    cloud_name = cloudinary.config().cloud_name
+                    if cloud_name:
+                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.profile_picture.name}"
+                except:
+                    pass
         
         # Return a default placeholder image
         return "expert_profiles/default_profile.png"

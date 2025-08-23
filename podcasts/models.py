@@ -104,9 +104,14 @@ class Podcast(models.Model):
                 return self.image.name
             # If it's a local path, construct Cloudinary URL
             elif self.image.name.startswith('podcast_images/'):
-                cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
-                if cloud_name:
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.image.name}"
+                try:
+                    # Get cloud name from cloudinary config
+                    import cloudinary
+                    cloud_name = cloudinary.config().cloud_name
+                    if cloud_name:
+                        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{self.image.name}"
+                except:
+                    pass
         
         # Return a default placeholder image
         return "podcast_images/default_podcast.png"
