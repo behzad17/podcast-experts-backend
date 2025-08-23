@@ -38,21 +38,16 @@ const Home = () => {
   }, []);
 
   const getExpertImage = (expert) => {
-    // Check if we have a profile picture URL
-    if (expert.profile_picture_url) {
-      // If it's a relative URL, make it absolute
-      if (expert.profile_picture_url.startsWith("/")) {
-        return `http://localhost:8000${expert.profile_picture_url}`;
-      }
+    // Check if we have a profile picture URL (Cloudinary URL)
+    if (
+      expert.profile_picture_url &&
+      expert.profile_picture_url.startsWith("http")
+    ) {
       return expert.profile_picture_url;
     }
 
-    // Check if we have a profile picture field
-    if (expert.profile_picture) {
-      // If it's a relative URL, make it absolute
-      if (expert.profile_picture.startsWith("/")) {
-        return `http://localhost:8000${expert.profile_picture}`;
-      }
+    // Check if we have a profile picture field (Cloudinary URL)
+    if (expert.profile_picture && expert.profile_picture.startsWith("http")) {
       return expert.profile_picture;
     }
 
@@ -60,12 +55,8 @@ const Home = () => {
   };
 
   const getPodcastImageUrl = (podcast) => {
-    // Check if we have an image
-    if (podcast.image) {
-      // If it's a relative URL, make it absolute
-      if (podcast.image.startsWith('/')) {
-        return `http://localhost:8000${podcast.image}`;
-      }
+    // Check if we have an image (Cloudinary URL)
+    if (podcast.image && podcast.image.startsWith("http")) {
       return podcast.image;
     }
     return "/logo192.png";

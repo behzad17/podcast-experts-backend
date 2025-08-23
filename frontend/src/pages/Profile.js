@@ -50,10 +50,14 @@ const Profile = () => {
             setProfile(response.data);
           } catch (error) {
             if (error.response?.status === 404) {
-              setError("You don't have an expert profile yet. Please create one to get started.");
+              setError(
+                "You don't have an expert profile yet. Please create one to get started."
+              );
             } else {
               console.error("Error fetching expert profile:", error);
-              setError("Failed to load expert profile. Please try again later.");
+              setError(
+                "Failed to load expert profile. Please try again later."
+              );
             }
           }
         } else if (userData?.user_type === "podcaster") {
@@ -64,7 +68,9 @@ const Profile = () => {
               setProfile(response.data[0]);
               // Fetch podcaster's podcasts using the my-podcasts endpoint
               try {
-                const podcastsResponse = await api.get("/podcasts/my-podcasts/");
+                const podcastsResponse = await api.get(
+                  "/podcasts/my-podcasts/"
+                );
                 if (
                   podcastsResponse.data &&
                   Array.isArray(podcastsResponse.data)
@@ -88,10 +94,14 @@ const Profile = () => {
             }
           } catch (error) {
             if (error.response?.status === 404) {
-              setError("You don't have a podcaster profile yet. Please create one to get started.");
+              setError(
+                "You don't have a podcaster profile yet. Please create one to get started."
+              );
             } else {
               console.error("Error fetching podcaster profile:", error);
-              setError("Failed to load podcaster profile. Please try again later.");
+              setError(
+                "Failed to load podcaster profile. Please try again later."
+              );
             }
           }
         } else {
@@ -139,16 +149,16 @@ const Profile = () => {
         {error.includes("don't have") && (
           <div className="mt-3">
             {currentUser?.user_type === "expert" ? (
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 onClick={() => navigate("/experts/create")}
                 className="me-2"
               >
                 Create Expert Profile
               </Button>
             ) : currentUser?.user_type === "podcaster" ? (
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 onClick={() => navigate("/podcaster-profile/create")}
                 className="me-2"
               >
@@ -193,9 +203,7 @@ const Profile = () => {
               {profile.profile_picture_url && (
                 <div className="text-center mb-4">
                   <img
-                    src={profile.profile_picture_url.startsWith('/') 
-                      ? `http://localhost:8000${profile.profile_picture_url}` 
-                      : profile.profile_picture_url}
+                    src={profile.profile_picture_url}
                     alt="Profile"
                     className="rounded-circle"
                     style={{
