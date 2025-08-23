@@ -85,34 +85,12 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return obj.get_total_bookmarks()
 
     def get_profile_picture(self, obj):
-        """Return Cloudinary URL for profile picture"""
-        return self._get_cloudinary_url(obj.profile_picture_url)
+        """Return profile picture URL for profile picture"""
+        return obj.profile_picture_url
 
     def get_profile_picture_url(self, obj):
-        """Return Cloudinary URL for profile picture or default image"""
-        return self._get_cloudinary_url(obj.profile_picture_url)
-
-    def _get_cloudinary_url(self, image_path):
-        """Helper method to construct Cloudinary URLs"""
-        if not image_path:
-            return "expert_profiles/default_profile.png"
-        
-        # If it's already a full URL, return as is
-        if image_path.startswith('http'):
-            return image_path
-        
-        # If it's a local path, construct Cloudinary URL
-        if image_path.startswith('expert_profiles/'):
-            try:
-                import cloudinary
-                cloud_name = cloudinary.config().cloud_name
-                if cloud_name:
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{image_path}"
-            except:
-                pass
-        
-        # Fallback to the original path
-        return image_path
+        """Return profile picture URL or default image"""
+        return obj.profile_picture_url
 
     def get_likes_count(self, obj):
         return obj.get_likes_count()
