@@ -1,9 +1,13 @@
 #!/bin/sh
 
-# Note: React frontend should be built locally before deployment
-# This script only handles Django static files and serving
+# Build React frontend for production
+echo "Building React frontend..."
+cd frontend
+npm install
+npm run build
+cd ..
 
-# Collect Django static files
+# Collect Django static files (including React build)
 echo "Collecting Django static files..."
 python manage.py collectstatic --noinput
 
