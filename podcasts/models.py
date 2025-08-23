@@ -98,11 +98,11 @@ class Podcast(models.Model):
     @property
     def image_url(self):
         """Return podcast image URL or default image if no image exists"""
-        if self.image and hasattr(self.image, 'url'):
+        if self.image and hasattr(self.image, 'name'):
             # Check if it's already a Cloudinary URL
             if self.image.name.startswith('http'):
                 return self.image.name
-            # If it's a local path, return as is (serializer will handle it)
+            # If it's a local path, return as is
             elif self.image.name.startswith('podcast_images/'):
                 return self.image.name
         

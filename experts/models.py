@@ -79,11 +79,11 @@ class ExpertProfile(models.Model):
     @property
     def profile_picture_url(self):
         """Return profile picture URL or default image if no profile picture exists"""
-        if self.profile_picture and hasattr(self.profile_picture, 'url'):
+        if self.profile_picture and hasattr(self.profile_picture, 'name'):
             # Check if it's already a Cloudinary URL
             if self.profile_picture.name.startswith('http'):
                 return self.profile_picture.name
-            # If it's a local path, return as is (serializer will handle it)
+            # If it's a local path, return as is
             elif self.profile_picture.name.startswith('expert_profiles/'):
                 return self.profile_picture.name
         
