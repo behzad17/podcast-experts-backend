@@ -59,7 +59,7 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     categories = ExpertCategorySerializer(many=True, read_only=True)
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
-    # comments = ExpertCommentSerializer(many=True, read_only=True)  # Temporarily disabled to debug 500 error
+    comments = ExpertCommentSerializer(many=True, read_only=True)
     profile_picture_url = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     dislikes_count = serializers.SerializerMethodField()
@@ -74,33 +74,50 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
             'experience_years', 'website', 'social_media', 'email',
             'profile_picture', 'profile_picture_url', 'is_approved', 
             'is_featured', 'created_at', 'total_views', 'total_bookmarks', 
-            # 'comments',  # Temporarily disabled to debug 500 error
+            'comments',
             'likes_count', 'dislikes_count'
         ]
         read_only_fields = ['is_approved']
 
     def get_total_views(self, obj):
-        # Temporarily return static value to debug 500 error
-        return 0
+        return obj.get_total_views()
 
     def get_total_bookmarks(self, obj):
-        # Temporarily return static value to debug 500 error
-        return 0
+        return obj.get_total_bookmarks()
 
     def get_profile_picture(self, obj):
-        """Return profile picture URL for profile picture"""
-        # Temporarily return a simple default to test if this fixes the 500 error
-        return "expert_profiles/default_profile.png"
+        """Return Cloudinary URL for profile picture"""
+        return self._get_cloudinary_url(obj.profile_picture_url)
 
     def get_profile_picture_url(self, obj):
-        """Return profile picture URL or default image"""
-        # Temporarily return a simple default to test if this fixes the 500 error
-        return "expert_profiles/default_profile.png"
+        """Return Cloudinary URL for profile picture or default image"""
+        return self._get_cloudinary_url(obj.profile_picture_url)
+
+    def _get_cloudinary_url(self, image_path):
+        """Helper method to construct Cloudinary URLs"""
+        if not image_path:
+            return "expert_profiles/default_profile.png"
+        
+        # If it's already a full URL, return as is
+        if image_path.startswith('http'):
+            return image_path
+        
+        # If it's a local path, construct Cloudinary URL
+        if image_path.startswith('expert_profiles/'):
+            try:
+                import cloudinary
+                cloud_name = cloudinary.config().cloud_name
+                if cloud_name:
+                    return (f"https://res.cloudinary.com/{cloud_name}/"
+                       f"image/upload/v1/{image_path}")
+            except Exception:
+                pass
+        
+        # Return the path as is if Cloudinary config fails
+        return image_path
 
     def get_likes_count(self, obj):
-        # Temporarily return static value to debug 500 error
-        return 0
+        return obj.get_likes_count()
 
     def get_dislikes_count(self, obj):
-        # Temporarily return static value to debug 500 error
-        return 0 
+        return obj.get_dislikes_count() 
