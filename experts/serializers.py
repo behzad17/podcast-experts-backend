@@ -59,7 +59,7 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
     categories = ExpertCategorySerializer(many=True, read_only=True)
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
-    comments = ExpertCommentSerializer(many=True, read_only=True)
+    # comments = ExpertCommentSerializer(many=True, read_only=True)  # Temporarily disabled to debug 500 error
     profile_picture_url = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     dislikes_count = serializers.SerializerMethodField()
@@ -74,7 +74,8 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
             'experience_years', 'website', 'social_media', 'email',
             'profile_picture', 'profile_picture_url', 'is_approved', 
             'is_featured', 'created_at', 'total_views', 'total_bookmarks', 
-            'comments', 'likes_count', 'dislikes_count'
+            # 'comments',  # Temporarily disabled to debug 500 error
+            'likes_count', 'dislikes_count'
         ]
         read_only_fields = ['is_approved']
 
