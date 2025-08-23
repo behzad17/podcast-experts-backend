@@ -79,10 +79,12 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_approved']
 
     def get_total_views(self, obj):
-        return obj.get_total_views()
+        # Temporarily return static value to debug 500 error
+        return 0
 
     def get_total_bookmarks(self, obj):
-        return obj.get_total_bookmarks()
+        # Temporarily return static value to debug 500 error
+        return 0
 
     def get_profile_picture(self, obj):
         """Return profile picture URL for profile picture"""
@@ -95,7 +97,9 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return "expert_profiles/default_profile.png"
 
     def get_likes_count(self, obj):
-        return obj.get_likes_count()
+        # Temporarily return static value to debug 500 error
+        return 0
 
     def get_dislikes_count(self, obj):
-        return obj.get_dislikes_count() 
+        # Temporarily return static value to debug 500 error
+        return 0 
