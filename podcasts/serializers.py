@@ -89,11 +89,33 @@ class PodcastSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         """Return Cloudinary URL for podcast image"""
-        return obj.image_url
+        return self._get_cloudinary_url(obj.image_url)
 
     def get_image_url(self, obj):
         """Return Cloudinary URL for podcast image or default image"""
-        return obj.image_url
+        return self._get_cloudinary_url(obj.image_url)
+
+    def _get_cloudinary_url(self, image_path):
+        """Helper method to construct Cloudinary URLs"""
+        if not image_path:
+            return "podcast_images/default_podcast.png"
+        
+        # If it's already a full URL, return as is
+        if image_path.startswith('http'):
+            return image_path
+        
+        # If it's a local path, construct Cloudinary URL
+        if image_path.startswith('podcast_images/'):
+            try:
+                import cloudinary
+                cloud_name = cloudinary.config().cloud_name
+                if cloud_name:
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{image_path}"
+            except:
+                pass
+        
+        # Fallback to the original path
+        return image_path
 
     def get_comments(self, obj):
         comments = obj.podcast_comments.filter(parent=None)
