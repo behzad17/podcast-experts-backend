@@ -23,6 +23,7 @@ import CommentSection from "../components/comments/CommentSection";
 import ReactPlayer from "react-player";
 import LikeButton from "../components/common/LikeButton";
 import MessageButton from "../components/common/MessageButton";
+import { useAuth } from "../contexts/AuthContext";
 
 const PodcastDetail = () => {
   const { id } = useParams();
@@ -31,10 +32,11 @@ const PodcastDetail = () => {
   const [error, setError] = useState("");
   const [isOwner, setIsOwner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem("userData"));
-  console.log("User data from localStorage:", user);
+  const { user, loading: authLoading } = useAuth();
+  console.log("User data from AuthContext:", user);
   console.log("User ID:", user?.id);
   console.log("User authenticated:", !!user);
+  console.log("Auth loading:", authLoading);
 
   const fetchPodcastData = useCallback(async () => {
     try {
@@ -73,7 +75,7 @@ const PodcastDetail = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || authLoading) {
     return (
       <Container className="mt-5">
         <Spinner animation="border" role="status">

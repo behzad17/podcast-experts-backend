@@ -13,6 +13,7 @@ import api from "../api/axios";
 import CommentSection from "../components/comments/CommentSection";
 import LikeButton from "../components/common/LikeButton";
 import MessageButton from "../components/common/MessageButton";
+import { useAuth } from "../contexts/AuthContext";
 
 const ExpertDetail = () => {
   const { id } = useParams();
@@ -21,10 +22,11 @@ const ExpertDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  console.log("User data from localStorage:", userData);
+  const { user: userData, loading: authLoading } = useAuth();
+  console.log("User data from AuthContext:", userData);
   console.log("User ID:", userData?.id);
   console.log("User authenticated:", !!userData);
+  console.log("Auth loading:", authLoading);
 
   useEffect(() => {
     const fetchExpert = async () => {
@@ -53,10 +55,10 @@ const ExpertDetail = () => {
     fetchExpert();
   }, [id, userData]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <Container className="mt-5">
-        <Spinner animation="border" role="status">
+        <Spinner animation="border">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       </Container>
