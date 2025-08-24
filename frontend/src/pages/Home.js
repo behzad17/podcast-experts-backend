@@ -564,7 +564,7 @@ const Home = () => {
         .hero-section {
           position: relative;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 6rem 0 4rem;
+          padding: 5px 0;
           text-align: center;
           color: white;
           overflow: hidden;

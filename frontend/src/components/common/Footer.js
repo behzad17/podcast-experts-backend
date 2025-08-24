@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  FaTwitter, 
-  FaLinkedin, 
-  FaFacebook, 
-  FaInstagram, 
+import {
+  FaTwitter,
+  FaLinkedin,
+  FaFacebook,
+  FaInstagram,
   FaYoutube,
   FaMicrophone,
   FaUsers,
   FaEnvelope,
   FaPhone,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 const Footer = () => {
@@ -28,23 +28,49 @@ const Footer = () => {
                   <span className="brand-text">Podcast Experts</span>
                 </div>
                 <p className="company-description">
-                  Connecting passionate podcasters with industry experts to create 
-                  extraordinary content that inspires, educates, and entertains audiences worldwide.
+                  Connecting passionate podcasters with industry experts to
+                  create extraordinary content that inspires, educates, and
+                  entertains audiences worldwide.
                 </p>
                 <div className="social-links">
-                  <a href="https://twitter.com" className="social-link twitter" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://twitter.com"
+                    className="social-link twitter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaTwitter />
                   </a>
-                  <a href="https://linkedin.com" className="social-link linkedin" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://linkedin.com"
+                    className="social-link linkedin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaLinkedin />
                   </a>
-                  <a href="https://facebook.com" className="social-link facebook" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://facebook.com"
+                    className="social-link facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaFacebook />
                   </a>
-                  <a href="https://instagram.com" className="social-link instagram" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://instagram.com"
+                    className="social-link instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaInstagram />
                   </a>
-                  <a href="https://youtube.com" className="social-link youtube" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://youtube.com"
+                    className="social-link youtube"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaYoutube />
                   </a>
                 </div>
@@ -131,7 +157,6 @@ const Footer = () => {
                     <span>San Francisco, CA 94105</span>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -144,10 +169,10 @@ const Footer = () => {
           <div className="row align-items-center">
             <div className="col-md-6">
               <p className="copyright-text">
-                © {new Date().getFullYear()} <strong>Podcast Experts</strong>. All rights reserved.
+                © {new Date().getFullYear()} <strong>Podcast Experts</strong>.
+                All rights reserved.
               </p>
             </div>
-
           </div>
         </div>
       </div>
@@ -155,14 +180,19 @@ const Footer = () => {
       {/* Custom CSS Styles */}
       <style jsx>{`
         .footer-modern {
-          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+          background: linear-gradient(
+            135deg,
+            #1a1a2e 0%,
+            #16213e 50%,
+            #0f3460 100%
+          );
           color: #ffffff;
           position: relative;
           overflow: hidden;
         }
 
         .footer-modern::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
@@ -226,13 +256,17 @@ const Footer = () => {
         }
 
         .social-link::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(45deg, var(--social-color), var(--social-color-light));
+          background: linear-gradient(
+            45deg,
+            var(--social-color),
+            var(--social-color-light)
+          );
           transform: scale(0);
           transition: transform 0.3s ease;
           border-radius: 50%;
@@ -287,7 +321,7 @@ const Footer = () => {
         }
 
         .section-title::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0;
           left: 0;
@@ -437,16 +471,16 @@ const Footer = () => {
           .footer-main {
             padding: 3rem 0 1.5rem;
           }
-          
+
           .footer-legal {
             justify-content: center;
             margin-top: 1rem;
           }
-          
+
           .social-links {
             justify-content: center;
           }
-          
+
           .brand-logo {
             justify-content: center;
           }
@@ -456,7 +490,7 @@ const Footer = () => {
           .newsletter-signup {
             padding: 1rem;
           }
-          
+
           .footer-legal {
             flex-direction: column;
             align-items: center;
