@@ -291,7 +291,6 @@ const Home = () => {
                     for guests each week. Plus, join our premium expert
                     directory so podcasters can discover you.
                   </p>
-
                 </Card.Body>
               </Card>
             </Col>
@@ -308,20 +307,7 @@ const Home = () => {
                     reaches thousands of experts and podcasters looking for
                     collaboration opportunities.
                   </p>
-                  <div className="card-features">
-                    <span className="feature">
-                      <FaUsers />
-                      Expert Database
-                    </span>
-                    <span className="feature">
-                      <FaNetworkWired />
-                      Network Access
-                    </span>
-                    <span className="feature">
-                      <FaComments />
-                      Direct Messaging
-                    </span>
-                  </div>
+
                 </Card.Body>
               </Card>
             </Col>
