@@ -223,7 +223,7 @@ const Home = () => {
             </p>
           </div>
 
-          <Row className="g-4">
+          <Row className="g-3">
             {loading ? (
               <Col className="text-center">
                 <div className="loading-placeholder">
@@ -236,8 +236,8 @@ const Home = () => {
               </Col>
             ) : featuredPodcasts.length > 0 ? (
               featuredPodcasts.map((podcast) => (
-                <Col key={podcast.id} lg={3} md={4} sm={6}>
-                  <Card className="podcast-card-modern">
+                <Col key={podcast.id} lg={2} md={4} sm={6}>
+                  <Card className="podcast-card-modern compact">
                     <div className="podcast-image-container">
                       <img
                         src={getPodcastImageUrl(podcast)}
@@ -254,7 +254,7 @@ const Home = () => {
                     <Card.Body className="podcast-body">
                       <h3 className="podcast-title">{podcast.title}</h3>
                       <p className="podcast-description">
-                        {podcast.description?.substring(0, 80)}...
+                        {podcast.description?.substring(0, 50)}...
                       </p>
                       <div className="podcast-stats">
                         <span className="stat">
@@ -905,6 +905,54 @@ const Home = () => {
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
 
+        .podcast-card-modern.compact {
+          text-align: center;
+        }
+
+        .podcast-card-modern.compact .podcast-image-container {
+          height: 120px;
+        }
+
+        .podcast-card-modern.compact .podcast-image {
+          height: 120px;
+        }
+
+        .podcast-card-modern.compact .podcast-body {
+          padding: 1rem;
+        }
+
+        .podcast-card-modern.compact .podcast-title {
+          font-size: 0.95rem;
+          margin-bottom: 0.5rem;
+          line-height: 1.2;
+        }
+
+        .podcast-card-modern.compact .podcast-description {
+          font-size: 0.75rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.3;
+        }
+
+        .podcast-card-modern.compact .podcast-stats {
+          margin-bottom: 0.75rem;
+          justify-content: center;
+        }
+
+        .podcast-card-modern.compact .podcast-actions {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .podcast-card-modern.compact .btn-primary-modern {
+          padding: 0.5rem 0.8rem;
+          font-size: 0.8rem;
+        }
+
+        .podcast-card-modern.compact .btn-like-modern {
+          padding: 0.5rem;
+          min-width: 40px;
+        }
+
         .podcast-image-container {
           position: relative;
           height: 200px;
@@ -1378,16 +1426,16 @@ const Home = () => {
           .hero-title {
             font-size: 2.5rem;
           }
-          
+
           .section-title {
             font-size: 2rem;
           }
-          
+
           .mission-stats {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .step-card-modern,
           .feature-card-modern {
             margin-bottom: 2rem;
@@ -1406,21 +1454,43 @@ const Home = () => {
             font-size: 0.8rem;
             padding: 0.4rem 0.8rem;
           }
+
+          /* Podcast cards responsive adjustments */
+          .podcast-card-modern.compact .podcast-title {
+            font-size: 0.9rem;
+          }
+
+          .podcast-card-modern.compact .podcast-description {
+            font-size: 0.7rem;
+          }
+
+          .podcast-card-modern.compact .btn-primary-modern {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.7rem;
+          }
+
+          .podcast-card-modern.compact .podcast-image-container {
+            height: 100px;
+          }
+
+          .podcast-card-modern.compact .podcast-image {
+            height: 100px;
+          }
         }
 
         @media (max-width: 576px) {
           .hero-title {
             font-size: 2rem;
           }
-          
+
           .hero-section {
             padding: 4rem 0 2rem;
           }
-          
+
           .main-content {
             padding: 2rem 0;
           }
-          
+
           .section-modern {
             margin-bottom: 3rem;
           }
@@ -1462,6 +1532,46 @@ const Home = () => {
             padding: 0.3rem;
             min-width: 35px;
           }
+
+          /* Podcast cards mobile adjustments */
+          .podcast-card-modern.compact {
+            padding: 0.5rem;
+          }
+
+          .podcast-card-modern.compact .podcast-body {
+            padding: 0.75rem;
+          }
+
+          .podcast-card-modern.compact .podcast-image-container {
+            height: 80px;
+          }
+
+          .podcast-card-modern.compact .podcast-image {
+            height: 80px;
+          }
+
+          .podcast-card-modern.compact .podcast-title {
+            font-size: 0.85rem;
+          }
+
+          .podcast-card-modern.compact .podcast-description {
+            font-size: 0.65rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .podcast-card-modern.compact .podcast-actions {
+            gap: 0.4rem;
+          }
+
+          .podcast-card-modern.compact .btn-primary-modern {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+          }
+
+          .podcast-card-modern.compact .btn-like-modern {
+            padding: 0.3rem;
+            min-width: 35px;
+          }
         }
 
         /* Extra small screens */
@@ -1476,6 +1586,33 @@ const Home = () => {
 
           .expert-card-modern.compact .expert-bio {
             font-size: 0.65rem;
+          }
+
+          /* Podcast cards extra small screen adjustments */
+          .podcast-card-modern.compact .podcast-image-container {
+            height: 60px;
+          }
+
+          .podcast-card-modern.compact .podcast-image {
+            height: 60px;
+          }
+
+          .podcast-card-modern.compact .podcast-title {
+            font-size: 0.8rem;
+          }
+
+          .podcast-card-modern.compact .podcast-description {
+            font-size: 0.6rem;
+          }
+
+          .podcast-card-modern.compact .btn-primary-modern {
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+          }
+
+          .podcast-card-modern.compact .btn-like-modern {
+            padding: 0.25rem;
+            min-width: 30px;
           }
         }
       `}</style>
