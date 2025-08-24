@@ -1023,16 +1023,17 @@ const Home = () => {
 
         .card-icon {
           position: absolute;
-          top: -35px;
-          right: 20px;
-          width: 60px;
-          height: 60px;
+          top: -30px;
+          right: 30px;
+          width: 70px;
+          height: 70px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.5rem;
+          font-size: 1.8rem;
           color: white;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         .expert-desc .card-icon {
@@ -1048,7 +1049,7 @@ const Home = () => {
           font-weight: 700;
           color: #2c3e50;
           margin-bottom: 1rem;
-          padding-top: 1rem;
+          padding-top: 1.5rem;
         }
 
         .card-text {
