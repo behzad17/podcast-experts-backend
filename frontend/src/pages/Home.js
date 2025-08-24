@@ -918,11 +918,18 @@ const Home = () => {
         }
 
         .podcast-card-modern.compact .podcast-image-container {
-          height: 120px;
+          position: relative;
+          margin-bottom: 0.75rem;
+          width: 100%;
+          aspect-ratio: 1;
         }
 
         .podcast-card-modern.compact .podcast-image {
-          height: 120px;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 12px;
+          aspect-ratio: 1;
         }
 
         .podcast-card-modern.compact .podcast-body {
@@ -963,13 +970,17 @@ const Home = () => {
 
         .podcast-image-container {
           position: relative;
-          height: 200px;
+          margin-bottom: 1rem;
+          width: 100%;
+          aspect-ratio: 1;
         }
 
         .podcast-image {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          border-radius: 15px;
+          aspect-ratio: 1;
         }
 
         .podcast-overlay {
@@ -1478,20 +1489,21 @@ const Home = () => {
           }
 
           .podcast-card-modern.compact .podcast-description {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
           }
 
           .podcast-card-modern.compact .btn-primary-modern {
-            font-size: 0.75rem;
-            padding: 0.4rem 0.7rem;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
           }
 
+          /* Podcast images remain square on tablet */
           .podcast-card-modern.compact .podcast-image-container {
-            height: 100px;
+            aspect-ratio: 1;
           }
 
           .podcast-card-modern.compact .podcast-image {
-            height: 100px;
+            aspect-ratio: 1;
           }
         }
 
@@ -1561,16 +1573,18 @@ const Home = () => {
             padding: 0.5rem;
           }
 
-          .podcast-card-modern.compact .podcast-body {
-            padding: 0.75rem;
+          .podcast-card-modern.compact .podcast-card-header {
+            padding: 0.5rem;
           }
 
           .podcast-card-modern.compact .podcast-image-container {
-            height: 80px;
+            margin-bottom: 0.5rem;
+            aspect-ratio: 1;
           }
 
           .podcast-card-modern.compact .podcast-image {
-            height: 80px;
+            aspect-ratio: 1;
+            border-radius: 8px;
           }
 
           .podcast-card-modern.compact .podcast-title {
@@ -1578,16 +1592,18 @@ const Home = () => {
           }
 
           .podcast-card-modern.compact .podcast-description {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             margin-bottom: 0.5rem;
           }
 
-          .podcast-card-modern.compact .podcast-actions {
+          .podcast-card-modern.compact .podcast-card-actions {
+            padding: 0.5rem;
+            flex-direction: column;
             gap: 0.4rem;
           }
 
           .podcast-card-modern.compact .btn-primary-modern {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             padding: 0.3rem 0.6rem;
           }
 
@@ -1619,11 +1635,13 @@ const Home = () => {
 
           /* Podcast cards extra small screen adjustments */
           .podcast-card-modern.compact .podcast-image-container {
-            height: 60px;
+            aspect-ratio: 1;
+            margin-bottom: 0.4rem;
           }
 
           .podcast-card-modern.compact .podcast-image {
-            height: 60px;
+            aspect-ratio: 1;
+            border-radius: 6px;
           }
 
           .podcast-card-modern.compact .podcast-title {
