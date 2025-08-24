@@ -400,11 +400,7 @@ const Home = () => {
                   profiles to find the perfect match for your needs. Use
                   advanced filters and search to narrow down your options.
                 </p>
-                <div className="step-features">
-                  <span className="feature-tag">Advanced Search</span>
-                  <span className="feature-tag">Smart Matching</span>
-                  <span className="feature-tag">Category Filters</span>
-                </div>
+
               </div>
             </Col>
 
@@ -420,11 +416,7 @@ const Home = () => {
                   messaging system. Discuss collaboration opportunities, share
                   ideas, and plan your content together.
                 </p>
-                <div className="step-features">
-                  <span className="feature-tag">Direct Messaging</span>
-                  <span className="feature-tag">Video Calls</span>
-                  <span className="feature-tag">File Sharing</span>
-                </div>
+
               </div>
             </Col>
 
@@ -440,11 +432,7 @@ const Home = () => {
                   expert's reach and the podcaster's audience. Build lasting
                   professional relationships.
                 </p>
-                <div className="step-features">
-                  <span className="feature-tag">Content Planning</span>
-                  <span className="feature-tag">Recording Tools</span>
-                  <span className="feature-tag">Analytics</span>
-                </div>
+
               </div>
             </Col>
           </Row>
