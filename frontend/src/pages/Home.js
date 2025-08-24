@@ -111,14 +111,16 @@ const Home = () => {
                 <span className="gradient-text">Podcasters</span>
               </h1>
               <p className="hero-subtitle">
-                The ultimate platform for podcast creators and subject matter experts 
-                to collaborate, innovate, and create extraordinary content together.
+                The ultimate platform for podcast creators and subject matter
+                experts to collaborate, innovate, and create extraordinary
+                content together.
               </p>
               {user && (
                 <div className="user-welcome">
                   <FaUserTie className="user-icon" />
                   <span>
-                    Welcome back, {user.user_type === "expert" ? "Expert" : "Podcaster"}!
+                    Welcome back,{" "}
+                    {user.user_type === "expert" ? "Expert" : "Podcaster"}!
                   </span>
                 </div>
               )}
@@ -136,11 +138,12 @@ const Home = () => {
             </div>
             <h2 className="section-title">Expert Spotlights</h2>
             <p className="section-subtitle">
-              Discover brilliant minds ready to share their expertise on your podcast
+              Discover brilliant minds ready to share their expertise on your
+              podcast
             </p>
           </div>
-          
-          <Row className="g-4">
+
+          <Row className="g-3">
             {loading ? (
               <Col className="text-center">
                 <div className="loading-placeholder">
@@ -153,8 +156,8 @@ const Home = () => {
               </Col>
             ) : featuredExperts.length > 0 ? (
               featuredExperts.map((expert) => (
-                <Col key={expert.id} lg={4} md={6}>
-                  <Card className="expert-card-modern">
+                <Col key={expert.id} lg={2} md={4} sm={6}>
+                  <Card className="expert-card-modern compact">
                     <div className="expert-card-header">
                       <div className="expert-image-container">
                         <img
@@ -169,7 +172,7 @@ const Home = () => {
                       <div className="expert-info">
                         <h3 className="expert-name">{expert.name}</h3>
                         <p className="expert-bio">
-                          {expert.bio?.substring(0, 60)}...
+                          {expert.bio?.substring(0, 40)}...
                         </p>
                         <div className="expert-stats">
                           <span className="stat">
@@ -219,7 +222,7 @@ const Home = () => {
               Discover amazing podcasts that are making waves in the industry
             </p>
           </div>
-          
+
           <Row className="g-4">
             {loading ? (
               <Col className="text-center">
@@ -300,9 +303,10 @@ const Home = () => {
                 <Card.Body>
                   <h3 className="card-title">For Experts</h3>
                   <p className="card-text">
-                    Get booked on podcasts to expand your reach and audience. Join our 
-                    exclusive newsletter featuring 20+ podcasts looking for guests each week. 
-                    Plus, join our premium expert directory so podcasters can discover you.
+                    Get booked on podcasts to expand your reach and audience.
+                    Join our exclusive newsletter featuring 20+ podcasts looking
+                    for guests each week. Plus, join our premium expert
+                    directory so podcasters can discover you.
                   </p>
                   <div className="card-features">
                     <span className="feature">
@@ -329,9 +333,10 @@ const Home = () => {
                 <Card.Body>
                   <h3 className="card-title">For Podcasters</h3>
                   <p className="card-text">
-                    Find exceptional experts to be guests on your podcast from our Guest 
-                    Directory. Get featured in our newsletter that reaches thousands of 
-                    experts and podcasters looking for collaboration opportunities.
+                    Find exceptional experts to be guests on your podcast from
+                    our Guest Directory. Get featured in our newsletter that
+                    reaches thousands of experts and podcasters looking for
+                    collaboration opportunities.
                   </p>
                   <div className="card-features">
                     <span className="feature">
@@ -364,7 +369,7 @@ const Home = () => {
               We're on a mission to revolutionize podcast collaboration
             </p>
           </div>
-          
+
           <Row className="justify-content-center">
             <Col lg={10}>
               <Card className="mission-card-modern">
@@ -372,15 +377,17 @@ const Home = () => {
                   <div className="mission-content">
                     <div className="mission-text">
                       <p className="mission-highlight">
-                        <strong>CONNECT</strong> is dedicated to bridging the gap between 
-                        podcast creators and subject matter experts. We believe that 
-                        extraordinary content comes from collaboration between passionate 
-                        creators and knowledgeable specialists.
+                        <strong>CONNECT</strong> is dedicated to bridging the
+                        gap between podcast creators and subject matter experts.
+                        We believe that extraordinary content comes from
+                        collaboration between passionate creators and
+                        knowledgeable specialists.
                       </p>
                       <p className="mission-description">
-                        Our platform serves as the ultimate hub where podcasters can discover 
-                        experts in various fields, and experts can showcase their knowledge 
-                        to reach wider audiences through meaningful podcast collaborations.
+                        Our platform serves as the ultimate hub where podcasters
+                        can discover experts in various fields, and experts can
+                        showcase their knowledge to reach wider audiences
+                        through meaningful podcast collaborations.
                       </p>
                     </div>
                     <div className="mission-stats">
@@ -424,7 +431,7 @@ const Home = () => {
               Three simple steps to start your podcast collaboration journey
             </p>
           </div>
-          
+
           <Row className="g-4">
             <Col lg={4} md={6}>
               <div className="step-card-modern">
@@ -434,9 +441,9 @@ const Home = () => {
                 </div>
                 <h3 className="step-title">Discover</h3>
                 <p className="step-description">
-                  Browse through our curated list of podcasts and expert profiles to find 
-                  the perfect match for your needs. Use advanced filters and search to 
-                  narrow down your options.
+                  Browse through our curated list of podcasts and expert
+                  profiles to find the perfect match for your needs. Use
+                  advanced filters and search to narrow down your options.
                 </p>
                 <div className="step-features">
                   <span className="feature-tag">Advanced Search</span>
@@ -445,7 +452,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="step-card-modern">
                 <div className="step-number">2</div>
@@ -454,9 +461,9 @@ const Home = () => {
                 </div>
                 <h3 className="step-title">Connect</h3>
                 <p className="step-description">
-                  Reach out to experts or podcasters through our built-in messaging 
-                  system. Discuss collaboration opportunities, share ideas, and plan 
-                  your content together.
+                  Reach out to experts or podcasters through our built-in
+                  messaging system. Discuss collaboration opportunities, share
+                  ideas, and plan your content together.
                 </p>
                 <div className="step-features">
                   <span className="feature-tag">Direct Messaging</span>
@@ -465,7 +472,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="step-card-modern">
                 <div className="step-number">3</div>
@@ -474,8 +481,9 @@ const Home = () => {
                 </div>
                 <h3 className="step-title">Collaborate</h3>
                 <p className="step-description">
-                  Work together to create amazing content that benefits both the expert's 
-                  reach and the podcaster's audience. Build lasting professional relationships.
+                  Work together to create amazing content that benefits both the
+                  expert's reach and the podcaster's audience. Build lasting
+                  professional relationships.
                 </p>
                 <div className="step-features">
                   <span className="feature-tag">Content Planning</span>
@@ -498,7 +506,7 @@ const Home = () => {
               Everything you need to succeed in podcast collaboration
             </p>
           </div>
-          
+
           <Row className="g-4">
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
@@ -507,7 +515,8 @@ const Home = () => {
                 </div>
                 <h3 className="feature-title">Podcast Discovery</h3>
                 <p className="feature-description">
-                  Advanced search and filtering to find the perfect podcasts for your expertise
+                  Advanced search and filtering to find the perfect podcasts for
+                  your expertise
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Smart Matching</span>
@@ -515,7 +524,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
                 <div className="feature-icon">
@@ -523,7 +532,8 @@ const Home = () => {
                 </div>
                 <h3 className="feature-title">Expert Profiles</h3>
                 <p className="feature-description">
-                  Create compelling profiles that showcase your expertise and experience
+                  Create compelling profiles that showcase your expertise and
+                  experience
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Portfolio Builder</span>
@@ -531,7 +541,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
                 <div className="feature-icon">
@@ -539,7 +549,8 @@ const Home = () => {
                 </div>
                 <h3 className="feature-title">Direct Messaging</h3>
                 <p className="feature-description">
-                  Built-in communication tools for seamless collaboration planning
+                  Built-in communication tools for seamless collaboration
+                  planning
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Real-time Chat</span>
@@ -547,7 +558,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
                 <div className="feature-icon">
@@ -555,7 +566,8 @@ const Home = () => {
                 </div>
                 <h3 className="feature-title">Bookmark System</h3>
                 <p className="feature-description">
-                  Save and organize your favorite experts and podcasts for easy access
+                  Save and organize your favorite experts and podcasts for easy
+                  access
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Smart Lists</span>
@@ -563,7 +575,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
                 <div className="feature-icon">
@@ -571,7 +583,8 @@ const Home = () => {
                 </div>
                 <h3 className="feature-title">Content Curation</h3>
                 <p className="feature-description">
-                  Featured content and trending topics to inspire your next collaboration
+                  Featured content and trending topics to inspire your next
+                  collaboration
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Trending Topics</span>
@@ -579,7 +592,7 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            
+
             <Col lg={4} md={6}>
               <div className="feature-card-modern">
                 <div className="feature-icon">
@@ -604,7 +617,12 @@ const Home = () => {
       {/* Custom CSS Styles */}
       <style jsx>{`
         .homepage-modern {
-          background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 50%, #f3e5f5 100%);
+          background: linear-gradient(
+            135deg,
+            #f8f9fa 0%,
+            #e3f2fd 50%,
+            #f3e5f5 100%
+          );
           min-height: 100vh;
         }
 
@@ -754,6 +772,57 @@ const Home = () => {
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
 
+        .expert-card-modern.compact {
+          padding: 0.75rem;
+          text-align: center;
+        }
+
+        .expert-card-modern.compact .expert-card-header {
+          padding: 0.75rem;
+        }
+
+        .expert-card-modern.compact .expert-image-container {
+          margin-bottom: 0.75rem;
+        }
+
+        .expert-card-modern.compact .expert-image {
+          height: 80px;
+          border-radius: 12px;
+        }
+
+        .expert-card-modern.compact .expert-name {
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .expert-card-modern.compact .expert-bio {
+          font-size: 0.8rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.4;
+        }
+
+        .expert-card-modern.compact .expert-stats {
+          justify-content: center;
+          margin-bottom: 0.75rem;
+        }
+
+        .expert-card-modern.compact .expert-card-actions {
+          padding: 0.75rem;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .expert-card-modern.compact .btn-primary-modern {
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
+        }
+
+        .expert-card-modern.compact .btn-like-modern {
+          padding: 0.5rem;
+          min-width: 40px;
+        }
+
+        /* Regular Expert Cards (for other sections) */
         .expert-card-header {
           padding: 1.5rem;
           position: relative;
@@ -1247,8 +1316,12 @@ const Home = () => {
         }
 
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
 
         .loading-placeholder {
@@ -1269,12 +1342,22 @@ const Home = () => {
           animation: bounce 1.4s ease-in-out infinite both;
         }
 
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(1) {
+          animation-delay: -0.32s;
+        }
+        .loading-dots span:nth-child(2) {
+          animation-delay: -0.16s;
+        }
 
         @keyframes bounce {
-          0%, 80%, 100% { transform: scale(0); }
-          40% { transform: scale(1); }
+          0%,
+          80%,
+          100% {
+            transform: scale(0);
+          }
+          40% {
+            transform: scale(1);
+          }
         }
 
         /* Empty States */
@@ -1309,6 +1392,20 @@ const Home = () => {
           .feature-card-modern {
             margin-bottom: 2rem;
           }
+
+          /* Expert cards responsive adjustments */
+          .expert-card-modern.compact .expert-name {
+            font-size: 0.9rem;
+          }
+
+          .expert-card-modern.compact .expert-bio {
+            font-size: 0.75rem;
+          }
+
+          .expert-card-modern.compact .btn-primary-modern {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+          }
         }
 
         @media (max-width: 576px) {
@@ -1326,6 +1423,59 @@ const Home = () => {
           
           .section-modern {
             margin-bottom: 3rem;
+          }
+
+          /* Expert cards mobile adjustments */
+          .expert-card-modern.compact {
+            padding: 0.5rem;
+          }
+
+          .expert-card-modern.compact .expert-card-header {
+            padding: 0.5rem;
+          }
+
+          .expert-card-modern.compact .expert-image {
+            height: 60px;
+            border-radius: 8px;
+          }
+
+          .expert-card-modern.compact .expert-name {
+            font-size: 0.85rem;
+          }
+
+          .expert-card-modern.compact .expert-bio {
+            font-size: 0.7rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .expert-card-modern.compact .expert-card-actions {
+            padding: 0.5rem;
+            gap: 0.4rem;
+          }
+
+          .expert-card-modern.compact .btn-primary-modern {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+          }
+
+          .expert-card-modern.compact .btn-like-modern {
+            padding: 0.3rem;
+            min-width: 35px;
+          }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+          .expert-card-modern.compact .expert-image {
+            height: 50px;
+          }
+
+          .expert-card-modern.compact .expert-name {
+            font-size: 0.8rem;
+          }
+
+          .expert-card-modern.compact .expert-bio {
+            font-size: 0.65rem;
           }
         }
       `}</style>
