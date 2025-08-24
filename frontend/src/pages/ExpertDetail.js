@@ -22,6 +22,9 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
+  console.log("User data from localStorage:", userData);
+  console.log("User ID:", userData?.id);
+  console.log("User authenticated:", !!userData);
 
   useEffect(() => {
     const fetchExpert = async () => {
@@ -101,6 +104,10 @@ const ExpertDetail = () => {
                       type="experts/profiles"
                       initialCount={expert.likes_count}
                       className="btn-lg"
+                      style={{
+                        border: "2px solid red",
+                        backgroundColor: "yellow",
+                      }}
                     />
                   </div>
                 </div>
@@ -118,6 +125,9 @@ const ExpertDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
+                  <div style={{ border: '1px solid green', padding: '5px', margin: '5px', fontSize: '12px' }}>
+                    Debug: User={!!userData}, Owner={isOwner}, UserID={userData?.id}
+                  </div>
                   {userData && !isOwner && (
                     <MessageButton
                       targetUserId={expert.user?.id}
@@ -128,6 +138,10 @@ const ExpertDetail = () => {
                       variant="outline-success"
                       size="lg"
                       className="message-expert-btn"
+                      style={{
+                        border: "2px solid blue",
+                        backgroundColor: "lightblue",
+                      }}
                     />
                   )}
                   {isOwner && (

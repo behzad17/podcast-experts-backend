@@ -32,6 +32,9 @@ const PodcastDetail = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("userData"));
+  console.log("User data from localStorage:", user);
+  console.log("User ID:", user?.id);
+  console.log("User authenticated:", !!user);
 
   const fetchPodcastData = useCallback(async () => {
     try {
@@ -117,11 +120,25 @@ const PodcastDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
+                  <div
+                    style={{
+                      border: "1px solid green",
+                      padding: "5px",
+                      margin: "5px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Debug: User={!!user}, Owner={isOwner}, UserID={user?.id}
+                  </div>
                   <LikeButton
                     itemId={podcast.id}
                     type="podcasts"
                     initialCount={podcast.likes_count}
                     className="btn-lg"
+                    style={{
+                      border: "2px solid red",
+                      backgroundColor: "yellow",
+                    }}
                   />
                   {podcast.link && (
                     <Button
@@ -155,6 +172,10 @@ const PodcastDetail = () => {
                       variant="outline-success"
                       size="lg"
                       className="message-podcaster-btn"
+                      style={{
+                        border: "2px solid blue",
+                        backgroundColor: "lightblue",
+                      }}
                     />
                   )}
                   {isOwner && (
