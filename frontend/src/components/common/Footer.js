@@ -131,20 +131,7 @@ const Footer = () => {
                     <span>San Francisco, CA 94105</span>
                   </div>
                 </div>
-                <div className="newsletter-signup mt-3">
-                  <h6 className="newsletter-title">Stay Updated</h6>
-                  <p className="newsletter-text">Get the latest podcast industry insights</p>
-                  <div className="input-group">
-                    <input 
-                      type="email" 
-                      className="form-control newsletter-input" 
-                      placeholder="Enter your email"
-                    />
-                    <button className="btn btn-primary newsletter-btn">
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -160,13 +147,7 @@ const Footer = () => {
                 © {new Date().getFullYear()} <strong>Podcast Experts</strong>. All rights reserved.
               </p>
             </div>
-            <div className="col-md-6 text-md-end">
-              <div className="footer-legal">
-                <Link to="/privacy" className="legal-link">Privacy Policy</Link>
-                <Link to="/terms" className="legal-link">Terms of Service</Link>
-                <Link to="/cookies" className="legal-link">Cookie Policy</Link>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
