@@ -400,7 +400,6 @@ const Home = () => {
                   profiles to find the perfect match for your needs. Use
                   advanced filters and search to narrow down your options.
                 </p>
-
               </div>
             </Col>
 
@@ -416,7 +415,6 @@ const Home = () => {
                   messaging system. Discuss collaboration opportunities, share
                   ideas, and plan your content together.
                 </p>
-
               </div>
             </Col>
 
@@ -432,7 +430,6 @@ const Home = () => {
                   expert's reach and the podcaster's audience. Build lasting
                   professional relationships.
                 </p>
-
               </div>
             </Col>
           </Row>
@@ -462,7 +459,6 @@ const Home = () => {
                   your expertise
                 </p>
                 <div className="feature-tags">
-                  <span className="tag">Smart Matching</span>
                   <span className="tag">Category Filters</span>
                 </div>
               </div>
@@ -480,7 +476,6 @@ const Home = () => {
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Portfolio Builder</span>
-                  <span className="tag">Verification</span>
                 </div>
               </div>
             </Col>
@@ -497,7 +492,6 @@ const Home = () => {
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Real-time Chat</span>
-                  <span className="tag">File Sharing</span>
                 </div>
               </div>
             </Col>
@@ -513,7 +507,6 @@ const Home = () => {
                   access
                 </p>
                 <div className="feature-tags">
-                  <span className="tag">Smart Lists</span>
                   <span className="tag">Quick Access</span>
                 </div>
               </div>
@@ -530,7 +523,6 @@ const Home = () => {
                   collaboration
                 </p>
                 <div className="feature-tags">
-                  <span className="tag">Trending Topics</span>
                   <span className="tag">Featured Content</span>
                 </div>
               </div>
@@ -547,7 +539,6 @@ const Home = () => {
                 </p>
                 <div className="feature-tags">
                   <span className="tag">Worldwide Reach</span>
-                  <span className="tag">Cultural Diversity</span>
                 </div>
               </div>
             </Col>
