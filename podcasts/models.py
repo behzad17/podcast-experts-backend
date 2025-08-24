@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.conf import settings
+import re
 
 User = get_user_model()
 
@@ -133,7 +134,10 @@ class Podcast(models.Model):
         if self.image and hasattr(self.image, 'path'):
             try:
                 # Create a unique identifier using title and ID
-                unique_id = f"{self.title}_{self.id}".replace(' ', '_').lower()
+                # Clean the title for Cloudinary public_id (remove special characters)
+                clean_title = re.sub(r'[^a-zA-Z0-9\s]', '', self.title).strip()
+                clean_title = re.sub(r'\s+', '_', clean_title)  # Replace spaces with underscores
+                unique_id = f"{clean_title}_{self.id}".lower()
                 
                 # Upload to Cloudinary
                 result = cloudinary.uploader.upload(
