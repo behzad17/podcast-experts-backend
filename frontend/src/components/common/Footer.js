@@ -48,6 +48,8 @@ const Footer = () => {
                 <a
                   href="https://twitter.com"
                   className="text-muted text-decoration-none"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Twitter
                 </a>
@@ -56,6 +58,8 @@ const Footer = () => {
                 <a
                   href="https://linkedin.com"
                   className="text-muted text-decoration-none"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   LinkedIn
                 </a>
@@ -64,6 +68,8 @@ const Footer = () => {
                 <a
                   href="https://facebook.com"
                   className="text-muted text-decoration-none"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Facebook
                 </a>
