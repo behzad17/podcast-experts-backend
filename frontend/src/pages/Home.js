@@ -16,6 +16,18 @@ import {
   FaBookmark,
   FaChartLine,
   FaGlobe,
+  FaPlay,
+  FaHeart,
+  FaArrowRight,
+  FaCrown,
+  FaShieldAlt,
+  FaLightbulb as FaBulb,
+  FaNetworkWired,
+  FaUserTie,
+  FaPodcast,
+  FaSearch,
+  FaEnvelope,
+  FaBell,
 } from "react-icons/fa";
 
 const Home = () => {
@@ -50,7 +62,6 @@ const Home = () => {
   }, []);
 
   const getExpertImage = (expert) => {
-    // Check if we have a profile picture URL (Cloudinary URL)
     if (
       expert.profile_picture_url &&
       expert.profile_picture_url.startsWith("http")
@@ -58,7 +69,6 @@ const Home = () => {
       return expert.profile_picture_url;
     }
 
-    // Check if we have a profile picture field (Cloudinary URL)
     if (expert.profile_picture && expert.profile_picture.startsWith("http")) {
       return expert.profile_picture;
     }
@@ -67,7 +77,6 @@ const Home = () => {
   };
 
   const getPodcastImageUrl = (podcast) => {
-    // Check if we have an image (Cloudinary URL)
     if (podcast.image && podcast.image.startsWith("http")) {
       return podcast.image;
     }
@@ -76,345 +85,1250 @@ const Home = () => {
 
   if (authLoading) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div className="loading-container">
+        <div className="loading-spinner">
+          <div className="spinner-ring"></div>
+          <p>Loading amazing content...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="container-fluid"
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(to right, #f8f9fa, #e3f2fd)",
-        backgroundAttachment: "fixed",
-        margin: 0,
-        padding: 0,
-      }}
-    >
-      <Container className="py-4">
-        <h3
-          className="mb-4 text-center"
-          style={{ color: "#000000", fontSize: "1.5rem", fontWeight: "500" }}
-        >
-          Welcome to Sweden's podcast and expert connection platform
-        </h3>
-        <div className="d-flex flex-column align-items-center mb-4">
-          <h3
-            style={{
-              fontSize: "1.2rem",
-              fontWeight: "400",
-              color: "#6495ED",
-              border: "2px solid #6495ED",
-              borderRadius: "10px",
-              padding: "15px",
-              textAlign: "center",
-              width: "100%",
-              margin: "0 auto",
-            }}
-          >
-            This platform provides a convenient and reliable way for experts and
-            specialists to connect with podcasters and content creators
-          </h3>
-          {user && (
-            <div
-              className="text-muted mt-3"
-              style={{
-                fontSize: "1.1rem",
-                fontWeight: "500",
-                color: "#6495ED",
-              }}
-            >
-              You are logged in as{" "}
-              {user.user_type === "expert" ? "an Expert" : "a Podcaster"}
-            </div>
-          )}
-        </div>
+    <div className="homepage-modern">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <Container className="hero-content">
+          <Row className="justify-content-center text-center">
+            <Col lg={10}>
+              <div className="hero-badge">
+                <FaCrown className="hero-icon" />
+                <span>Sweden's Premier Platform</span>
+              </div>
+              <h1 className="hero-title">
+                Connect with <span className="gradient-text">Experts</span> &{" "}
+                <span className="gradient-text">Podcasters</span>
+              </h1>
+              <p className="hero-subtitle">
+                The ultimate platform for podcast creators and subject matter experts 
+                to collaborate, innovate, and create extraordinary content together.
+              </p>
+              {user && (
+                <div className="user-welcome">
+                  <FaUserTie className="user-icon" />
+                  <span>
+                    Welcome back, {user.user_type === "expert" ? "Expert" : "Podcaster"}!
+                  </span>
+                </div>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </section>
 
+      <Container className="main-content">
         {/* Featured Experts Section */}
-        <section className="mb-5">
-          <h2 className="section-title mb-4">Expert Spotlights</h2>
+        <section className="section-modern experts-section">
+          <div className="section-header">
+            <div className="section-icon">
+              <FaUsers />
+            </div>
+            <h2 className="section-title">Expert Spotlights</h2>
+            <p className="section-subtitle">
+              Discover brilliant minds ready to share their expertise on your podcast
+            </p>
+          </div>
+          
           <Row className="g-4">
             {loading ? (
-              <Col>Loading...</Col>
+              <Col className="text-center">
+                <div className="loading-placeholder">
+                  <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </Col>
             ) : featuredExperts.length > 0 ? (
               featuredExperts.map((expert) => (
-                <Col key={expert.id} md={4}>
-                  <Card className="h-100 shadow-lg rounded-3 expert-card">
-                    <div className="d-flex h-100">
-                      <div
-                        className="p-3"
-                        style={{
-                          width: "75%",
-                          borderRight: "2px solid #ced4da",
-                          backgroundColor: "#F0F8FF",
-                        }}
-                      >
-                        <Card.Title className="h6 mb-2">
-                          {expert.name}
-                        </Card.Title>
-                        <Card.Text className="small text-muted mb-2">
-                          {expert.bio?.substring(0, 10)}...
-                        </Card.Text>
-                        <div className="d-flex gap-2 align-items-center">
-                          <Link
-                            to={`/experts/${expert.id}`}
-                            className="btn btn-sm btn-primary"
-                          >
-                            View Profile
-                          </Link>
-                          <LikeButton
-                            itemId={expert.id}
-                            type="experts/profiles"
-                            initialCount={expert.likes_count}
-                            className="btn-sm"
-                          />
-                        </div>
-                      </div>
-                      <div style={{ width: "25%", minWidth: "25%" }}>
-                        <Card.Img
+                <Col key={expert.id} lg={4} md={6}>
+                  <Card className="expert-card-modern">
+                    <div className="expert-card-header">
+                      <div className="expert-image-container">
+                        <img
                           src={getExpertImage(expert)}
                           alt={expert.name}
-                          style={{ height: "100%", objectFit: "cover" }}
-                          className="rounded-end-3"
+                          className="expert-image"
                         />
+                        <div className="expert-badge">
+                          <FaStar />
+                        </div>
                       </div>
+                      <div className="expert-info">
+                        <h3 className="expert-name">{expert.name}</h3>
+                        <p className="expert-bio">
+                          {expert.bio?.substring(0, 60)}...
+                        </p>
+                        <div className="expert-stats">
+                          <span className="stat">
+                            <FaHeart />
+                            {expert.likes_count || 0}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="expert-card-actions">
+                      <Link
+                        to={`/experts/${expert.id}`}
+                        className="btn btn-primary-modern btn-full"
+                      >
+                        <FaUserTie className="me-2" />
+                        View Profile
+                      </Link>
+                      <LikeButton
+                        itemId={expert.id}
+                        type="experts/profiles"
+                        initialCount={expert.likes_count}
+                        className="btn-like-modern"
+                      />
                     </div>
                   </Card>
                 </Col>
               ))
             ) : (
-              <Col>No featured experts available</Col>
+              <Col className="text-center">
+                <div className="empty-state">
+                  <FaUsers className="empty-icon" />
+                  <p>No featured experts available yet</p>
+                </div>
+              </Col>
             )}
           </Row>
         </section>
 
         {/* Featured Podcasts Section */}
-        <section className="mb-5">
-          <h2 className="section-title mb-4">Great and Engaging Podcasts</h2>
+        <section className="section-modern podcasts-section">
+          <div className="section-header">
+            <div className="section-icon">
+              <FaMicrophone />
+            </div>
+            <h2 className="section-title">Featured Podcasts</h2>
+            <p className="section-subtitle">
+              Discover amazing podcasts that are making waves in the industry
+            </p>
+          </div>
+          
           <Row className="g-4">
             {loading ? (
-              <Col>Loading...</Col>
+              <Col className="text-center">
+                <div className="loading-placeholder">
+                  <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </Col>
             ) : featuredPodcasts.length > 0 ? (
               featuredPodcasts.map((podcast) => (
-                <Col key={podcast.id} xs={12} sm={6} md={4} lg={2}>
-                  <div className="podcast-card">
-                    <Card className="h-100 shadow-sm">
-                      <Card.Img
+                <Col key={podcast.id} lg={3} md={4} sm={6}>
+                  <Card className="podcast-card-modern">
+                    <div className="podcast-image-container">
+                      <img
                         src={getPodcastImageUrl(podcast)}
                         alt={podcast.title}
-                        style={{ height: "200px", objectFit: "cover" }}
-                        className="rounded-top-3"
+                        className="podcast-image"
                       />
-                      <Card.Body
-                        className="p-3"
-                        style={{ backgroundColor: "#DCE2E8" }}
-                      >
-                        <Card.Title className="h6 mb-2 text-truncate">
-                          {podcast.title}
-                        </Card.Title>
-                        <Card.Text className="small text-muted mb-3">
-                          {podcast.description?.substring(0, 30)}...
-                        </Card.Text>
-                        <div className="d-flex flex-column gap-2">
-                          <Link
-                            to={`/podcasts/${podcast.id}`}
-                            className="btn btn-sm btn-primary w-100"
-                          >
-                            Listen Now
-                          </Link>
-                          <LikeButton
-                            itemId={podcast.id}
-                            type="podcasts"
-                            initialCount={podcast.likes_count}
-                            className="btn-sm w-100"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </div>
+                      <div className="podcast-overlay">
+                        <FaPlay className="play-icon" />
+                      </div>
+                      <div className="podcast-badge">
+                        <FaStar />
+                      </div>
+                    </div>
+                    <Card.Body className="podcast-body">
+                      <h3 className="podcast-title">{podcast.title}</h3>
+                      <p className="podcast-description">
+                        {podcast.description?.substring(0, 80)}...
+                      </p>
+                      <div className="podcast-stats">
+                        <span className="stat">
+                          <FaHeart />
+                          {podcast.likes_count || 0}
+                        </span>
+                      </div>
+                      <div className="podcast-actions">
+                        <Link
+                          to={`/podcasts/${podcast.id}`}
+                          className="btn btn-primary-modern btn-full"
+                        >
+                          <FaPlay className="me-2" />
+                          Listen Now
+                        </Link>
+                        <LikeButton
+                          itemId={podcast.id}
+                          type="podcasts"
+                          initialCount={podcast.likes_count}
+                          className="btn-like-modern"
+                        />
+                      </div>
+                    </Card.Body>
+                  </Card>
                 </Col>
               ))
             ) : (
-              <Col>No featured podcasts available</Col>
+              <Col className="text-center">
+                <div className="empty-state">
+                  <FaMicrophone className="empty-icon" />
+                  <p>No featured podcasts available yet</p>
+                </div>
+              </Col>
             )}
           </Row>
         </section>
 
-        <Row className="g-4">
-          <Col md={6}>
-            <Card className="shadow-sm rounded-3">
-              <Card.Body className="p-3">
-                <h3 className="h5">Experts:</h3>
-                <p className="small text-muted mb-0">
-                  Get booked on podcasts to expand your reach and audience. Join
-                  the free newsletter featuring 20 podcasts looking for guests
-                  each week. And join our paid expert directory so podcasts can
-                  find you.
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className="shadow-sm rounded-3">
-              <Card.Body className="p-3">
-                <h3 className="h5">Podcasts:</h3>
-                <p className="small text-muted mb-0">
-                  Find experts to be guests on your podcast, from our Guest
-                  Directory and/or a free podcast feature in our newsletter that
-                  goes to many experts and podcasters, that goes to many experts
-                  and podcasters.
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+        {/* Platform Description Boxes */}
+        <section className="section-modern description-section">
+          <Row className="g-4">
+            <Col lg={6}>
+              <Card className="description-card-modern expert-desc">
+                <div className="card-icon">
+                  <FaUserTie />
+                </div>
+                <Card.Body>
+                  <h3 className="card-title">For Experts</h3>
+                  <p className="card-text">
+                    Get booked on podcasts to expand your reach and audience. Join our 
+                    exclusive newsletter featuring 20+ podcasts looking for guests each week. 
+                    Plus, join our premium expert directory so podcasters can discover you.
+                  </p>
+                  <div className="card-features">
+                    <span className="feature">
+                      <FaBell />
+                      Weekly Newsletter
+                    </span>
+                    <span className="feature">
+                      <FaSearch />
+                      Expert Directory
+                    </span>
+                    <span className="feature">
+                      <FaEnvelope />
+                      Direct Bookings
+                    </span>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col lg={6}>
+              <Card className="description-card-modern podcaster-desc">
+                <div className="card-icon">
+                  <FaPodcast />
+                </div>
+                <Card.Body>
+                  <h3 className="card-title">For Podcasters</h3>
+                  <p className="card-text">
+                    Find exceptional experts to be guests on your podcast from our Guest 
+                    Directory. Get featured in our newsletter that reaches thousands of 
+                    experts and podcasters looking for collaboration opportunities.
+                  </p>
+                  <div className="card-features">
+                    <span className="feature">
+                      <FaUsers />
+                      Expert Database
+                    </span>
+                    <span className="feature">
+                      <FaNetworkWired />
+                      Network Access
+                    </span>
+                    <span className="feature">
+                      <FaComments />
+                      Direct Messaging
+                    </span>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </section>
 
         {/* Our Mission Section */}
-        <Row className="mt-5 mb-5">
-          <Col lg={8} className="mx-auto">
-            <Card className="border-0 shadow-sm">
-              <Card.Body className="p-4">
-                <h2 className="h3 text-primary mb-3">
-                  <FaLightbulb className="me-2" />
-                  Our Mission
-                </h2>
-                <p className="text-muted mb-3">
-                  CONNECT is dedicated to bridging the gap between podcast
-                  creators and subject matter experts. We believe that great
-                  content comes from collaboration between passionate creators
-                  and knowledgeable specialists.
-                </p>
-                <p className="text-muted mb-0">
-                  Our platform serves as a hub where podcasters can discover
-                  experts in various fields, and experts can showcase their
-                  knowledge to reach wider audiences through podcast
-                  collaborations.
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+        <section className="section-modern mission-section">
+          <div className="section-header text-center">
+            <div className="section-icon large">
+              <FaLightbulb />
+            </div>
+            <h2 className="section-title">Our Mission</h2>
+            <p className="section-subtitle">
+              We're on a mission to revolutionize podcast collaboration
+            </p>
+          </div>
+          
+          <Row className="justify-content-center">
+            <Col lg={10}>
+              <Card className="mission-card-modern">
+                <Card.Body>
+                  <div className="mission-content">
+                    <div className="mission-text">
+                      <p className="mission-highlight">
+                        <strong>CONNECT</strong> is dedicated to bridging the gap between 
+                        podcast creators and subject matter experts. We believe that 
+                        extraordinary content comes from collaboration between passionate 
+                        creators and knowledgeable specialists.
+                      </p>
+                      <p className="mission-description">
+                        Our platform serves as the ultimate hub where podcasters can discover 
+                        experts in various fields, and experts can showcase their knowledge 
+                        to reach wider audiences through meaningful podcast collaborations.
+                      </p>
+                    </div>
+                    <div className="mission-stats">
+                      <div className="stat-item">
+                        <FaUsers className="stat-icon" />
+                        <div className="stat-content">
+                          <span className="stat-number">1000+</span>
+                          <span className="stat-label">Experts</span>
+                        </div>
+                      </div>
+                      <div className="stat-item">
+                        <FaMicrophone className="stat-icon" />
+                        <div className="stat-content">
+                          <span className="stat-number">500+</span>
+                          <span className="stat-label">Podcasts</span>
+                        </div>
+                      </div>
+                      <div className="stat-item">
+                        <FaHandshake className="stat-icon" />
+                        <div className="stat-content">
+                          <span className="stat-number">2000+</span>
+                          <span className="stat-label">Connections</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </section>
 
-        {/* How the Platform Works */}
-        <Row className="mb-5">
-          <Col>
-            <h2 className="h3 text-primary mb-4 text-center">
-              <FaRocket className="me-2" />
-              How It Works
-            </h2>
-            <Row>
-              <Col md={4} className="mb-4">
-                <Card className="border-0 shadow-sm h-100 text-center">
-                  <Card.Body className="p-4">
-                    <div
-                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                      style={{ width: "60px", height: "60px" }}
-                    >
-                      <FaMicrophone size={24} />
-                    </div>
-                    <h5>1. Discover</h5>
-                    <p className="text-muted">
-                      Browse through our curated list of podcasts and expert
-                      profiles to find the perfect match for your needs.
-                    </p>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={4} className="mb-4">
-                <Card className="border-0 shadow-sm h-100 text-center">
-                  <Card.Body className="p-4">
-                    <div
-                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                      style={{ width: "60px", height: "60px" }}
-                    >
-                      <FaHandshake size={24} />
-                    </div>
-                    <h5>2. Connect</h5>
-                    <p className="text-muted">
-                      Reach out to experts or podcasters through our built-in
-                      messaging system to discuss collaboration opportunities.
-                    </p>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={4} className="mb-4">
-                <Card className="border-0 shadow-sm h-100 text-center">
-                  <Card.Body className="p-4">
-                    <div
-                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                      style={{ width: "60px", height: "60px" }}
-                    >
-                      <FaUsers size={24} />
-                    </div>
-                    <h5>3. Collaborate</h5>
-                    <p className="text-muted">
-                      Work together to create amazing content that benefits both
-                      the expert's reach and the podcaster's audience.
-                    </p>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        {/* How It Works Section */}
+        <section className="section-modern how-it-works-section">
+          <div className="section-header text-center">
+            <div className="section-icon large">
+              <FaRocket />
+            </div>
+            <h2 className="section-title">How It Works</h2>
+            <p className="section-subtitle">
+              Three simple steps to start your podcast collaboration journey
+            </p>
+          </div>
+          
+          <Row className="g-4">
+            <Col lg={4} md={6}>
+              <div className="step-card-modern">
+                <div className="step-number">1</div>
+                <div className="step-icon">
+                  <FaSearch />
+                </div>
+                <h3 className="step-title">Discover</h3>
+                <p className="step-description">
+                  Browse through our curated list of podcasts and expert profiles to find 
+                  the perfect match for your needs. Use advanced filters and search to 
+                  narrow down your options.
+                </p>
+                <div className="step-features">
+                  <span className="feature-tag">Advanced Search</span>
+                  <span className="feature-tag">Smart Matching</span>
+                  <span className="feature-tag">Category Filters</span>
+                </div>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="step-card-modern">
+                <div className="step-number">2</div>
+                <div className="step-icon">
+                  <FaHandshake />
+                </div>
+                <h3 className="step-title">Connect</h3>
+                <p className="step-description">
+                  Reach out to experts or podcasters through our built-in messaging 
+                  system. Discuss collaboration opportunities, share ideas, and plan 
+                  your content together.
+                </p>
+                <div className="step-features">
+                  <span className="feature-tag">Direct Messaging</span>
+                  <span className="feature-tag">Video Calls</span>
+                  <span className="feature-tag">File Sharing</span>
+                </div>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="step-card-modern">
+                <div className="step-number">3</div>
+                <div className="step-icon">
+                  <FaUsers />
+                </div>
+                <h3 className="step-title">Collaborate</h3>
+                <p className="step-description">
+                  Work together to create amazing content that benefits both the expert's 
+                  reach and the podcaster's audience. Build lasting professional relationships.
+                </p>
+                <div className="step-features">
+                  <span className="feature-tag">Content Planning</span>
+                  <span className="feature-tag">Recording Tools</span>
+                  <span className="feature-tag">Analytics</span>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </section>
 
-        {/* Platform Features Overview */}
-        <Row className="mb-5">
-          <Col>
-            <h2 className="h3 text-primary mb-4 text-center">
-              <FaStar className="me-2" />
-              Platform Features
-            </h2>
-            <Row>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaMicrophone className="text-primary me-2" />
-                  <span>Podcast Discovery & Management</span>
+        {/* Platform Features Section */}
+        <section className="section-modern features-section">
+          <div className="section-header text-center">
+            <div className="section-icon large">
+              <FaStar />
+            </div>
+            <h2 className="section-title">Platform Features</h2>
+            <p className="section-subtitle">
+              Everything you need to succeed in podcast collaboration
+            </p>
+          </div>
+          
+          <Row className="g-4">
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaMicrophone />
                 </div>
-              </Col>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaUsers className="text-primary me-2" />
-                  <span>Expert Profile Creation</span>
+                <h3 className="feature-title">Podcast Discovery</h3>
+                <p className="feature-description">
+                  Advanced search and filtering to find the perfect podcasts for your expertise
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Smart Matching</span>
+                  <span className="tag">Category Filters</span>
                 </div>
-              </Col>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaComments className="text-primary me-2" />
-                  <span>Direct Messaging System</span>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaUserTie />
                 </div>
-              </Col>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaBookmark className="text-primary me-2" />
-                  <span>Bookmark & Save Favorites</span>
+                <h3 className="feature-title">Expert Profiles</h3>
+                <p className="feature-description">
+                  Create compelling profiles that showcase your expertise and experience
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Portfolio Builder</span>
+                  <span className="tag">Verification</span>
                 </div>
-              </Col>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaChartLine className="text-primary me-2" />
-                  <span>Featured Content Curation</span>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaComments />
                 </div>
-              </Col>
-              <Col md={6} className="mb-3">
-                <div className="d-flex align-items-center mb-2">
-                  <FaGlobe className="text-primary me-2" />
-                  <span>Category-based Organization</span>
+                <h3 className="feature-title">Direct Messaging</h3>
+                <p className="feature-description">
+                  Built-in communication tools for seamless collaboration planning
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Real-time Chat</span>
+                  <span className="tag">File Sharing</span>
                 </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaBookmark />
+                </div>
+                <h3 className="feature-title">Bookmark System</h3>
+                <p className="feature-description">
+                  Save and organize your favorite experts and podcasts for easy access
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Smart Lists</span>
+                  <span className="tag">Quick Access</span>
+                </div>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaChartLine />
+                </div>
+                <h3 className="feature-title">Content Curation</h3>
+                <p className="feature-description">
+                  Featured content and trending topics to inspire your next collaboration
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Trending Topics</span>
+                  <span className="tag">Featured Content</span>
+                </div>
+              </div>
+            </Col>
+            
+            <Col lg={4} md={6}>
+              <div className="feature-card-modern">
+                <div className="feature-icon">
+                  <FaGlobe />
+                </div>
+                <h3 className="feature-title">Global Network</h3>
+                <p className="feature-description">
+                  Connect with experts and podcasters from around the world
+                </p>
+                <div className="feature-tags">
+                  <span className="tag">Worldwide Reach</span>
+                  <span className="tag">Cultural Diversity</span>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </section>
 
         <Footer />
       </Container>
+
+      {/* Custom CSS Styles */}
+      <style jsx>{`
+        .homepage-modern {
+          background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 50%, #f3e5f5 100%);
+          min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero-section {
+          position: relative;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: 6rem 0 4rem;
+          text-align: center;
+          color: white;
+          overflow: hidden;
+        }
+
+        .hero-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+          pointer-events: none;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+        }
+
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.75rem 1.5rem;
+          border-radius: 50px;
+          backdrop-filter: blur(10px);
+          margin-bottom: 2rem;
+          font-weight: 600;
+        }
+
+        .hero-icon {
+          color: #ffd700;
+        }
+
+        .hero-title {
+          font-size: 3.5rem;
+          font-weight: 800;
+          margin-bottom: 1.5rem;
+          line-height: 1.2;
+        }
+
+        .gradient-text {
+          background: linear-gradient(45deg, #ffd700, #ff6b6b);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .hero-subtitle {
+          font-size: 1.25rem;
+          margin-bottom: 2rem;
+          opacity: 0.9;
+          line-height: 1.6;
+        }
+
+        .user-welcome {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          background: rgba(255, 255, 255, 0.15);
+          padding: 1rem 2rem;
+          border-radius: 50px;
+          backdrop-filter: blur(10px);
+          font-weight: 600;
+        }
+
+        .user-icon {
+          color: #ffd700;
+        }
+
+        /* Main Content */
+        .main-content {
+          padding: 4rem 0;
+        }
+
+        /* Section Styling */
+        .section-modern {
+          margin-bottom: 5rem;
+        }
+
+        .section-header {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+
+        .section-header.text-center {
+          text-align: center;
+        }
+
+        .section-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 50%;
+          margin: 0 auto 1.5rem;
+          color: white;
+          font-size: 2rem;
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-icon.large {
+          width: 100px;
+          height: 100px;
+          font-size: 2.5rem;
+        }
+
+        .section-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+          font-size: 1.1rem;
+          color: #7f8c8d;
+          max-width: 600px;
+          margin: 0 auto;
+          line-height: 1.6;
+        }
+
+        /* Expert Cards */
+        .expert-card-modern {
+          border: none;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          background: white;
+        }
+
+        .expert-card-modern:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .expert-card-header {
+          padding: 1.5rem;
+          position: relative;
+        }
+
+        .expert-image-container {
+          position: relative;
+          margin-bottom: 1rem;
+        }
+
+        .expert-image {
+          width: 100%;
+          height: 120px;
+          object-fit: cover;
+          border-radius: 15px;
+        }
+
+        .expert-badge {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: linear-gradient(45deg, #ffd700, #ff6b6b);
+          color: white;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.8rem;
+        }
+
+        .expert-name {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 0.5rem;
+        }
+
+        .expert-bio {
+          color: #7f8c8d;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+
+        .expert-stats {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .stat {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: #e74c3c;
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+
+        .expert-card-actions {
+          padding: 1rem 1.5rem;
+          background: #f8f9fa;
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        /* Podcast Cards */
+        .podcast-card-modern {
+          border: none;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          background: white;
+        }
+
+        .podcast-card-modern:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .podcast-image-container {
+          position: relative;
+          height: 200px;
+        }
+
+        .podcast-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .podcast-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .podcast-card-modern:hover .podcast-overlay {
+          opacity: 1;
+        }
+
+        .play-icon {
+          color: white;
+          font-size: 3rem;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .podcast-badge {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: linear-gradient(45deg, #ffd700, #ff6b6b);
+          color: white;
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+        }
+
+        .podcast-body {
+          padding: 1.5rem;
+        }
+
+        .podcast-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 0.75rem;
+          line-height: 1.3;
+        }
+
+        .podcast-description {
+          color: #7f8c8d;
+          font-size: 0.85rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+
+        .podcast-stats {
+          margin-bottom: 1rem;
+        }
+
+        .podcast-actions {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        /* Description Cards */
+        .description-card-modern {
+          border: none;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          background: white;
+          position: relative;
+        }
+
+        .description-card-modern:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+          position: absolute;
+          top: -20px;
+          right: 20px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: white;
+        }
+
+        .expert-desc .card-icon {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .podcaster-desc .card-icon {
+          background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .card-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+          padding-top: 1rem;
+        }
+
+        .card-text {
+          color: #7f8c8d;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .card-features {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .feature {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: #2c3e50;
+          font-weight: 600;
+          font-size: 0.9rem;
+        }
+
+        .feature svg {
+          color: #667eea;
+        }
+
+        /* Mission Section */
+        .mission-card-modern {
+          border: none;
+          border-radius: 25px;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+        }
+
+        .mission-content {
+          padding: 2rem;
+        }
+
+        .mission-highlight {
+          font-size: 1.1rem;
+          line-height: 1.7;
+          margin-bottom: 1.5rem;
+          opacity: 0.95;
+        }
+
+        .mission-description {
+          font-size: 1rem;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+          opacity: 0.9;
+        }
+
+        .mission-stats {
+          display: flex;
+          justify-content: space-around;
+          gap: 2rem;
+          margin-top: 2rem;
+        }
+
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .stat-icon {
+          font-size: 2rem;
+          color: #ffd700;
+        }
+
+        .stat-content {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #ffd700;
+        }
+
+        .stat-label {
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+
+        /* How It Works */
+        .step-card-modern {
+          background: white;
+          border-radius: 20px;
+          padding: 2rem;
+          text-align: center;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          position: relative;
+          height: 100%;
+        }
+
+        .step-card-modern:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .step-number {
+          position: absolute;
+          top: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1.2rem;
+        }
+
+        .step-icon {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #f093fb, #f5576c);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 1rem auto 1.5rem;
+          color: white;
+          font-size: 2rem;
+        }
+
+        .step-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+
+        .step-description {
+          color: #7f8c8d;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .step-features {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+
+        .feature-tag {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+
+        /* Features Section */
+        .feature-card-modern {
+          background: white;
+          border-radius: 20px;
+          padding: 2rem;
+          text-align: center;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          height: 100%;
+        }
+
+        .feature-card-modern:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+          width: 70px;
+          height: 70px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1.5rem;
+          color: white;
+          font-size: 1.8rem;
+        }
+
+        .feature-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+
+        .feature-description {
+          color: #7f8c8d;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .feature-tags {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        .tag {
+          background: linear-gradient(135deg, #f093fb, #f5576c);
+          color: white;
+          padding: 0.4rem 0.8rem;
+          border-radius: 15px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn-primary-modern {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border: none;
+          border-radius: 25px;
+          padding: 0.75rem 1.5rem;
+          font-weight: 600;
+          color: white;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .btn-primary-modern:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+          color: white;
+          text-decoration: none;
+        }
+
+        .btn-full {
+          width: 100%;
+        }
+
+        .btn-like-modern {
+          background: linear-gradient(135deg, #e74c3c, #c0392b);
+          border: none;
+          border-radius: 25px;
+          padding: 0.75rem;
+          color: white;
+          transition: all 0.3s ease;
+          min-width: 45px;
+        }
+
+        .btn-like-modern:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Loading States */
+        .loading-container {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+        }
+
+        .loading-spinner {
+          text-align: center;
+        }
+
+        .spinner-ring {
+          width: 60px;
+          height: 60px;
+          border: 4px solid #667eea;
+          border-top: 4px solid transparent;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .loading-placeholder {
+          padding: 3rem;
+        }
+
+        .loading-dots {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+
+        .loading-dots span {
+          width: 12px;
+          height: 12px;
+          background: #667eea;
+          border-radius: 50%;
+          animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+          0%, 80%, 100% { transform: scale(0); }
+          40% { transform: scale(1); }
+        }
+
+        /* Empty States */
+        .empty-state {
+          padding: 3rem;
+          text-align: center;
+          color: #7f8c8d;
+        }
+
+        .empty-icon {
+          font-size: 3rem;
+          color: #bdc3c7;
+          margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .hero-title {
+            font-size: 2.5rem;
+          }
+          
+          .section-title {
+            font-size: 2rem;
+          }
+          
+          .mission-stats {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          
+          .step-card-modern,
+          .feature-card-modern {
+            margin-bottom: 2rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .hero-title {
+            font-size: 2rem;
+          }
+          
+          .hero-section {
+            padding: 4rem 0 2rem;
+          }
+          
+          .main-content {
+            padding: 2rem 0;
+          }
+          
+          .section-modern {
+            margin-bottom: 3rem;
+          }
+        }
+      `}</style>
     </div>
   );
 };
