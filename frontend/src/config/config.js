@@ -9,7 +9,20 @@ const config = {
 };
 
 // Get current environment
-const environment = process.env.NODE_ENV || "development";
+// Check if we're on Heroku (production) or local development
+const isHeroku = window.location.hostname.includes('herokuapp.com') || 
+                 window.location.hostname.includes('podcast-backend') ||
+                 process.env.NODE_ENV === 'production';
+
+const environment = isHeroku ? "production" : "development";
+
+// Debug logging
+console.log('🔧 Environment Detection:', {
+  hostname: window.location.hostname,
+  isHeroku,
+  environment,
+  apiUrl: config[environment].API_BASE_URL
+});
 
 // Export the configuration for the current environment
 export const currentConfig = config[environment];
