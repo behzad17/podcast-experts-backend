@@ -33,10 +33,6 @@ const PodcastDetail = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { user, loading: authLoading } = useAuth();
-  console.log("User data from AuthContext:", user);
-  console.log("User ID:", user?.id);
-  console.log("User authenticated:", !!user);
-  console.log("Auth loading:", authLoading);
 
   const fetchPodcastData = useCallback(async () => {
     try {
@@ -45,11 +41,8 @@ const PodcastDetail = () => {
 
       // Fetch podcast data
       const response = await api.get(`/podcasts/${id}/`);
-      console.log("Podcast data received:", response.data);
       setPodcast(response.data);
       setIsOwner(response.data.user === user?.id);
-      console.log("Is owner:", response.data.user === user?.id);
-      console.log("Current user:", user?.id);
     } catch (err) {
       setError(err.response?.data?.detail || "Error fetching podcast details");
       console.error("Error:", err);
@@ -122,25 +115,11 @@ const PodcastDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
-                  <div
-                    style={{
-                      border: "1px solid green",
-                      padding: "5px",
-                      margin: "5px",
-                      fontSize: "12px",
-                    }}
-                  >
-                    Debug: User={!!user}, Owner={isOwner}, UserID={user?.id}
-                  </div>
                   <LikeButton
                     itemId={podcast.id}
                     type="podcasts"
                     initialCount={podcast.likes_count}
                     className="btn-lg"
-                    style={{
-                      border: "2px solid red",
-                      backgroundColor: "yellow",
-                    }}
                   />
                   {podcast.link && (
                     <Button
@@ -174,10 +153,6 @@ const PodcastDetail = () => {
                       variant="outline-success"
                       size="lg"
                       className="message-podcaster-btn"
-                      style={{
-                        border: "2px solid blue",
-                        backgroundColor: "lightblue",
-                      }}
                     />
                   )}
                   {isOwner && (

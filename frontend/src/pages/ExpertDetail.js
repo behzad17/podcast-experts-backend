@@ -23,27 +23,17 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const { user: userData, loading: authLoading } = useAuth();
-  console.log("User data from AuthContext:", userData);
-  console.log("User ID:", userData?.id);
-  console.log("User authenticated:", !!userData);
-  console.log("Auth loading:", authLoading);
 
   useEffect(() => {
     const fetchExpert = async () => {
       try {
         const response = await api.get(`/experts/profiles/${id}/`);
-        console.log("Expert data received:", response.data);
         setExpert(response.data);
 
         // Check if the current user is the owner
         if (userData && userData.id === response.data.user?.id) {
           setIsOwner(true);
         }
-        console.log(
-          "Is owner:",
-          userData && userData.id === response.data.user?.id
-        );
-        console.log("Current user:", userData?.id);
       } catch (err) {
         setError(err.response?.data?.detail || "Error fetching expert details");
         console.error("Error:", err);
@@ -106,10 +96,6 @@ const ExpertDetail = () => {
                       type="experts/profiles"
                       initialCount={expert.likes_count}
                       className="btn-lg"
-                      style={{
-                        border: "2px solid red",
-                        backgroundColor: "yellow",
-                      }}
                     />
                   </div>
                 </div>
@@ -127,17 +113,6 @@ const ExpertDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
-                  <div
-                    style={{
-                      border: "1px solid green",
-                      padding: "5px",
-                      margin: "5px",
-                      fontSize: "12px",
-                    }}
-                  >
-                    Debug: User={!!userData}, Owner={isOwner}, UserID=
-                    {userData?.id}
-                  </div>
                   {userData && !isOwner && (
                     <MessageButton
                       targetUserId={expert.user?.id}
@@ -148,10 +123,6 @@ const ExpertDetail = () => {
                       variant="outline-success"
                       size="lg"
                       className="message-expert-btn"
-                      style={{
-                        border: "2px solid blue",
-                        backgroundColor: "lightblue",
-                      }}
                     />
                   )}
                   {isOwner && (
