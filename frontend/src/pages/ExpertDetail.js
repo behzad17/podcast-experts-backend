@@ -34,7 +34,10 @@ const ExpertDetail = () => {
         if (userData && userData.id === response.data.user?.id) {
           setIsOwner(true);
         }
-        console.log("Is owner:", userData && userData.id === response.data.user?.id);
+        console.log(
+          "Is owner:",
+          userData && userData.id === response.data.user?.id
+        );
         console.log("Current user:", userData?.id);
       } catch (err) {
         setError(err.response?.data?.detail || "Error fetching expert details");
