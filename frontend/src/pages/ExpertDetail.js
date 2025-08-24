@@ -125,8 +125,16 @@ const ExpertDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
-                  <div style={{ border: '1px solid green', padding: '5px', margin: '5px', fontSize: '12px' }}>
-                    Debug: User={!!userData}, Owner={isOwner}, UserID={userData?.id}
+                  <div
+                    style={{
+                      border: "1px solid green",
+                      padding: "5px",
+                      margin: "5px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Debug: User={!!userData}, Owner={isOwner}, UserID=
+                    {userData?.id}
                   </div>
                   {userData && !isOwner && (
                     <MessageButton
