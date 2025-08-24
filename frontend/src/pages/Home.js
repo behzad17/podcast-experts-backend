@@ -190,12 +190,7 @@ const Home = () => {
                         <FaUserTie className="me-2" />
                         View Profile
                       </Link>
-                      <LikeButton
-                        itemId={expert.id}
-                        type="experts/profiles"
-                        initialCount={expert.likes_count}
-                        className="btn-like-modern"
-                      />
+
                     </div>
                   </Card>
                 </Col>
