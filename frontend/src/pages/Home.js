@@ -5,6 +5,18 @@ import { Link } from "react-router-dom";
 import LikeButton from "../components/common/LikeButton";
 import Footer from "../components/common/Footer";
 import { useAuth } from "../contexts/AuthContext";
+import {
+  FaMicrophone,
+  FaUsers,
+  FaHandshake,
+  FaRocket,
+  FaLightbulb,
+  FaStar,
+  FaComments,
+  FaBookmark,
+  FaChartLine,
+  FaGlobe,
+} from "react-icons/fa";
 
 const Home = () => {
   const { user, loading: authLoading } = useAuth();
@@ -263,6 +275,144 @@ const Home = () => {
             </Card>
           </Col>
         </Row>
+
+        {/* Our Mission Section */}
+        <Row className="mb-5">
+          <Col lg={8} className="mx-auto">
+            <Card className="border-0 shadow-sm">
+              <Card.Body className="p-4">
+                <h2 className="h3 text-primary mb-3">
+                  <FaLightbulb className="me-2" />
+                  Our Mission
+                </h2>
+                <p className="text-muted mb-3">
+                  CONNECT is dedicated to bridging the gap between podcast
+                  creators and subject matter experts. We believe that great
+                  content comes from collaboration between passionate creators
+                  and knowledgeable specialists.
+                </p>
+                <p className="text-muted mb-0">
+                  Our platform serves as a hub where podcasters can discover
+                  experts in various fields, and experts can showcase their
+                  knowledge to reach wider audiences through podcast
+                  collaborations.
+                </p>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        {/* How the Platform Works */}
+        <Row className="mb-5">
+          <Col>
+            <h2 className="h3 text-primary mb-4 text-center">
+              <FaRocket className="me-2" />
+              How It Works
+            </h2>
+            <Row>
+              <Col md={4} className="mb-4">
+                <Card className="border-0 shadow-sm h-100 text-center">
+                  <Card.Body className="p-4">
+                    <div
+                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                      style={{ width: "60px", height: "60px" }}
+                    >
+                      <FaMicrophone size={24} />
+                    </div>
+                    <h5>1. Discover</h5>
+                    <p className="text-muted">
+                      Browse through our curated list of podcasts and expert
+                      profiles to find the perfect match for your needs.
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={4} className="mb-4">
+                <Card className="border-0 shadow-sm h-100 text-center">
+                  <Card.Body className="p-4">
+                    <div
+                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                      style={{ width: "60px", height: "60px" }}
+                    >
+                      <FaHandshake size={24} />
+                    </div>
+                    <h5>2. Connect</h5>
+                    <p className="text-muted">
+                      Reach out to experts or podcasters through our built-in
+                      messaging system to discuss collaboration opportunities.
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={4} className="mb-4">
+                <Card className="border-0 shadow-sm h-100 text-center">
+                  <Card.Body className="p-4">
+                    <div
+                      className="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                      style={{ width: "60px", height: "60px" }}
+                    >
+                      <FaUsers size={24} />
+                    </div>
+                    <h5>3. Collaborate</h5>
+                    <p className="text-muted">
+                      Work together to create amazing content that benefits both
+                      the expert's reach and the podcaster's audience.
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        {/* Platform Features Overview */}
+        <Row className="mb-5">
+          <Col>
+            <h2 className="h3 text-primary mb-4 text-center">
+              <FaStar className="me-2" />
+              Platform Features
+            </h2>
+            <Row>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaMicrophone className="text-primary me-2" />
+                  <span>Podcast Discovery & Management</span>
+                </div>
+              </Col>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaUsers className="text-primary me-2" />
+                  <span>Expert Profile Creation</span>
+                </div>
+              </Col>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaComments className="text-primary me-2" />
+                  <span>Direct Messaging System</span>
+                </div>
+              </Col>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaBookmark className="text-primary me-2" />
+                  <span>Bookmark & Save Favorites</span>
+                </div>
+              </Col>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaChartLine className="text-primary me-2" />
+                  <span>Featured Content Curation</span>
+                </div>
+              </Col>
+              <Col md={6} className="mb-3">
+                <div className="d-flex align-items-center mb-2">
+                  <FaGlobe className="text-primary me-2" />
+                  <span>Category-based Organization</span>
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
         <Footer />
       </Container>
     </div>
