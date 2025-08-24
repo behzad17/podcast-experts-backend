@@ -783,11 +783,16 @@ const Home = () => {
 
         .expert-card-modern.compact .expert-image-container {
           margin-bottom: 0.75rem;
+          width: 100%;
+          aspect-ratio: 1;
         }
 
         .expert-card-modern.compact .expert-image {
-          height: 80px;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           border-radius: 12px;
+          aspect-ratio: 1;
         }
 
         .expert-card-modern.compact .expert-name {
@@ -831,13 +836,16 @@ const Home = () => {
         .expert-image-container {
           position: relative;
           margin-bottom: 1rem;
+          width: 100%;
+          aspect-ratio: 1;
         }
 
         .expert-image {
           width: 100%;
-          height: 120px;
+          height: 100%;
           object-fit: cover;
           border-radius: 15px;
+          aspect-ratio: 1;
         }
 
         .expert-badge {
@@ -1455,6 +1463,15 @@ const Home = () => {
             padding: 0.4rem 0.8rem;
           }
 
+          /* Expert images remain square on tablet */
+          .expert-card-modern.compact .expert-image-container {
+            aspect-ratio: 1;
+          }
+
+          .expert-card-modern.compact .expert-image {
+            aspect-ratio: 1;
+          }
+
           /* Podcast cards responsive adjustments */
           .podcast-card-modern.compact .podcast-title {
             font-size: 0.9rem;
@@ -1504,8 +1521,13 @@ const Home = () => {
             padding: 0.5rem;
           }
 
+          .expert-card-modern.compact .expert-image-container {
+            margin-bottom: 0.5rem;
+            aspect-ratio: 1;
+          }
+
           .expert-card-modern.compact .expert-image {
-            height: 60px;
+            aspect-ratio: 1;
             border-radius: 8px;
           }
 
@@ -1520,6 +1542,7 @@ const Home = () => {
 
           .expert-card-modern.compact .expert-card-actions {
             padding: 0.5rem;
+            flex-direction: column;
             gap: 0.4rem;
           }
 
@@ -1576,8 +1599,14 @@ const Home = () => {
 
         /* Extra small screens */
         @media (max-width: 480px) {
+          .expert-card-modern.compact .expert-image-container {
+            aspect-ratio: 1;
+            margin-bottom: 0.4rem;
+          }
+
           .expert-card-modern.compact .expert-image {
-            height: 50px;
+            aspect-ratio: 1;
+            border-radius: 6px;
           }
 
           .expert-card-modern.compact .expert-name {
