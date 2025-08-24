@@ -277,7 +277,7 @@ const Home = () => {
         </Row>
 
         {/* Our Mission Section */}
-        <Row className="mb-5">
+        <Row className="mt-5 mb-5">
           <Col lg={8} className="mx-auto">
             <Card className="border-0 shadow-sm">
               <Card.Body className="p-4">
