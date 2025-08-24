@@ -259,7 +259,6 @@ const Home = () => {
                           <FaPlay className="me-2" />
                           Listen Now
                         </Link>
-
                       </div>
                     </Card.Body>
                   </Card>
@@ -292,20 +291,7 @@ const Home = () => {
                     for guests each week. Plus, join our premium expert
                     directory so podcasters can discover you.
                   </p>
-                  <div className="card-features">
-                    <span className="feature">
-                      <FaBell />
-                      Weekly Newsletter
-                    </span>
-                    <span className="feature">
-                      <FaSearch />
-                      Expert Directory
-                    </span>
-                    <span className="feature">
-                      <FaEnvelope />
-                      Direct Bookings
-                    </span>
-                  </div>
+
                 </Card.Body>
               </Card>
             </Col>
