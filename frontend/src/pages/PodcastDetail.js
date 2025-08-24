@@ -40,8 +40,11 @@ const PodcastDetail = () => {
 
       // Fetch podcast data
       const response = await api.get(`/podcasts/${id}/`);
+      console.log("Podcast data received:", response.data);
       setPodcast(response.data);
       setIsOwner(response.data.user === user?.id);
+      console.log("Is owner:", response.data.user === user?.id);
+      console.log("Current user:", user?.id);
     } catch (err) {
       setError(err.response?.data?.detail || "Error fetching podcast details");
       console.error("Error:", err);
@@ -140,18 +143,20 @@ const PodcastDetail = () => {
                     <FaShare className="me-2" />
                     Share
                   </Button>
-                  {user &&
-                    podcast.owner?.user &&
-                    podcast.owner.user !== user.id && (
-                      <MessageButton
-                        targetUserId={podcast.owner.user}
-                        targetUsername={podcast.owner.username}
-                        targetType="podcaster"
-                        variant="outline-success"
-                        size="lg"
-                        className="message-podcaster-btn"
-                      />
-                    )}
+                  {user && !isOwner && (
+                    <MessageButton
+                      targetUserId={podcast.user || podcast.owner?.user}
+                      targetUsername={
+                        podcast.creator_name ||
+                        podcast.owner?.username ||
+                        "Podcaster"
+                      }
+                      targetType="podcaster"
+                      variant="outline-success"
+                      size="lg"
+                      className="message-podcaster-btn"
+                    />
+                  )}
                   {isOwner && (
                     <Button
                       variant="outline-primary"

@@ -27,12 +27,15 @@ const ExpertDetail = () => {
     const fetchExpert = async () => {
       try {
         const response = await api.get(`/experts/profiles/${id}/`);
+        console.log("Expert data received:", response.data);
         setExpert(response.data);
 
         // Check if the current user is the owner
         if (userData && userData.id === response.data.user?.id) {
           setIsOwner(true);
         }
+        console.log("Is owner:", userData && userData.id === response.data.user?.id);
+        console.log("Current user:", userData?.id);
       } catch (err) {
         setError(err.response?.data?.detail || "Error fetching expert details");
         console.error("Error:", err);
@@ -86,7 +89,7 @@ const ExpertDetail = () => {
                       width: "100%",
                       height: "300px",
                       objectFit: "cover",
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                     }}
                   />
                   <div className="position-absolute bottom-0 end-0 p-2">
@@ -112,10 +115,12 @@ const ExpertDetail = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-2 flex-wrap">
-                  {userData && expert.user?.id && expert.user.id !== userData.id && (
+                  {userData && !isOwner && (
                     <MessageButton
-                      targetUserId={expert.user.id}
-                      targetUsername={expert.user.username}
+                      targetUserId={expert.user?.id}
+                      targetUsername={
+                        expert.name || expert.user?.username || "Expert"
+                      }
                       targetType="expert"
                       variant="outline-success"
                       size="lg"
