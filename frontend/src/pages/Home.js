@@ -307,7 +307,6 @@ const Home = () => {
                     reaches thousands of experts and podcasters looking for
                     collaboration opportunities.
                   </p>
-
                 </Card.Body>
               </Card>
             </Col>
@@ -1024,7 +1023,7 @@ const Home = () => {
 
         .card-icon {
           position: absolute;
-          top: -20px;
+          top: -35px;
           right: 20px;
           width: 60px;
           height: 60px;
