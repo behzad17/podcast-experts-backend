@@ -83,11 +83,26 @@ class ExpertProfile(models.Model):
             # Check if it's already a Cloudinary URL
             if self.profile_picture.name.startswith('http'):
                 return self.profile_picture.name
-            # If it's a local path, return as is
+            # If it's a Cloudinary public_id, construct the full URL
             elif self.profile_picture.name.startswith('expert_profiles/'):
-                return self.profile_picture.name
+                try:
+                    cloud_name = cloudinary.config().cloud_name
+                    if cloud_name:
+                        return (f"https://res.cloudinary.com/{cloud_name}/"
+                               f"image/upload/v1/{self.profile_picture.name}")
+                except Exception:
+                    pass
         
-        # Return a default placeholder image
+        # Return a default placeholder image URL
+        try:
+            cloud_name = cloudinary.config().cloud_name
+            if cloud_name:
+                return (f"https://res.cloudinary.com/{cloud_name}/"
+                       f"image/upload/v1/expert_profiles/default_profile.png")
+        except Exception:
+            pass
+        
+        # Fallback to relative path if Cloudinary config fails
         return "expert_profiles/default_profile.png"
 
     def save(self, *args, **kwargs):
