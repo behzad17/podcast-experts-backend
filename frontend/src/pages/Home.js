@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
-import LikeButton from "../components/common/LikeButton";
+
 import Footer from "../components/common/Footer";
 import { useAuth } from "../contexts/AuthContext";
 import {
@@ -190,7 +190,6 @@ const Home = () => {
                         <FaUserTie className="me-2" />
                         View Profile
                       </Link>
-
                     </div>
                   </Card>
                 </Col>
@@ -251,12 +250,7 @@ const Home = () => {
                       <p className="podcast-description">
                         {podcast.description?.substring(0, 50)}...
                       </p>
-                      <div className="podcast-stats">
-                        <span className="stat">
-                          <FaHeart />
-                          {podcast.likes_count || 0}
-                        </span>
-                      </div>
+
                       <div className="podcast-actions">
                         <Link
                           to={`/podcasts/${podcast.id}`}
@@ -265,12 +259,7 @@ const Home = () => {
                           <FaPlay className="me-2" />
                           Listen Now
                         </Link>
-                        <LikeButton
-                          itemId={podcast.id}
-                          type="podcasts"
-                          initialCount={podcast.likes_count}
-                          className="btn-like-modern"
-                        />
+
                       </div>
                     </Card.Body>
                   </Card>
