@@ -1007,13 +1007,13 @@ const Home = () => {
 
         /* Description Cards */
         .description-card-modern {
+          position: relative;
           border: none;
           border-radius: 20px;
-          overflow: hidden;
+          padding: 2rem;
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
-          background: white;
-          position: relative;
+          margin-top: 1.5rem;
         }
 
         .description-card-modern:hover {
@@ -1023,15 +1023,15 @@ const Home = () => {
 
         .card-icon {
           position: absolute;
-          top: -30px;
-          right: 30px;
-          width: 70px;
-          height: 70px;
+          top: -25px;
+          right: 25px;
+          width: 65px;
+          height: 65px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.8rem;
+          font-size: 1.7rem;
           color: white;
           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
@@ -1049,7 +1049,7 @@ const Home = () => {
           font-weight: 700;
           color: #2c3e50;
           margin-bottom: 1rem;
-          padding-top: 1.5rem;
+          padding-top: 2rem;
         }
 
         .card-text {
