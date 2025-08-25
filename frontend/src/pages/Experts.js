@@ -230,7 +230,7 @@ const Experts = () => {
         {experts.length > 0 ? (
           <Row className="g-4 mb-5">
             {experts.map((expert) => (
-              <Col key={expert.id} lg={3} md={4} sm={6}>
+              <Col key={expert.id} lg={4} md={6} sm={12}>
                 <ExpertCard
                   expert={expert}
                   currentUser={currentUser}
@@ -311,31 +311,31 @@ const Experts = () => {
           );
           backdrop-filter: blur(10px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 4rem 0;
+          padding: 2rem 0;
           color: white;
         }
         .hero-content {
           text-align: left;
         }
         .hero-icon {
-          font-size: 3rem;
+          font-size: 2.5rem;
           color: #ffd700;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
         }
         .hero-title {
-          font-size: 3.5rem;
+          font-size: 2.8rem;
           font-weight: 700;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
           background: linear-gradient(45deg, #ffffff, #ffd700);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
         .hero-subtitle {
-          font-size: 1.2rem;
-          margin-bottom: 2rem;
+          font-size: 1.1rem;
+          margin-bottom: 1.5rem;
           opacity: 0.9;
-          line-height: 1.6;
+          line-height: 1.5;
         }
         .hero-cta {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
@@ -354,16 +354,16 @@ const Experts = () => {
         .hero-stats {
           display: flex;
           justify-content: space-around;
-          margin-top: 2rem;
+          margin-top: 1.5rem;
         }
         .stat-item {
           text-align: center;
         }
         .stat-number {
-          font-size: 2.5rem;
+          font-size: 2rem;
           font-weight: 700;
           color: #ffd700;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
         .stat-label {
           font-size: 0.9rem;
