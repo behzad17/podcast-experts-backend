@@ -246,6 +246,9 @@ FRONTEND_URL = os.getenv(
     "FRONTEND_URL", "http://localhost:3000"
 )
 
+# Admin email for contact form submissions
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', EMAIL_HOST_USER)
+
 # Cloudinary Storage Configuration
 DEFAULT_FILE_STORAGE = 'backend.cloudinary_storage.CustomCloudinaryStorage'
 

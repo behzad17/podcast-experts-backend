@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from backend.admin_dashboard.views import admin_stats
-from backend.views import serve_react_app
+from backend.views import serve_react_app, contact_submit
 
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/experts/', include('experts.urls')),
     path('api/podcasts/', include('podcasts.urls')),
     path('api/user_messages/', include('user_messages.urls')),
+    path('api/contact/', contact_submit, name='contact_submit'),
 ]
 
 # Add static and media file serving
