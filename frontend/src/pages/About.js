@@ -503,7 +503,7 @@ const About = () => {
           );
           backdrop-filter: blur(10px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 4rem 0;
+          padding: 2rem 0;
           color: white;
         }
         .hero-badge {
@@ -519,9 +519,9 @@ const About = () => {
           color: #ffd700;
         }
         .hero-title {
-          font-size: 3.5rem;
+          font-size: 2.5rem;
           font-weight: 700;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           line-height: 1.2;
         }
         .gradient-text {
@@ -531,24 +531,24 @@ const About = () => {
           background-clip: text;
         }
         .hero-subtitle {
-          font-size: 1.2rem;
-          margin-bottom: 2rem;
+          font-size: 1.1rem;
+          margin-bottom: 1.5rem;
           opacity: 0.9;
-          line-height: 1.6;
+          line-height: 1.5;
         }
         .hero-stats {
           display: flex;
-          gap: 2rem;
-          margin-top: 2rem;
+          gap: 1.5rem;
+          margin-top: 1.5rem;
         }
         .stat-item {
           text-align: center;
         }
         .stat-number {
-          font-size: 2.5rem;
+          font-size: 2rem;
           font-weight: 700;
           color: #ffd700;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.4rem;
         }
         .stat-label {
           font-size: 0.9rem;
@@ -556,10 +556,14 @@ const About = () => {
         }
         .hero-visual {
           position: relative;
-          height: 300px;
+          height: 250px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
         }
         .floating-card {
-          position: absolute;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
@@ -568,21 +572,20 @@ const About = () => {
           text-align: center;
           color: white;
           animation: float 6s ease-in-out infinite;
+          width: 120px;
+          transition: all 0.3s ease;
+        }
+        .floating-card:hover {
+          transform: scale(1.05);
+          background: rgba(255, 255, 255, 0.15);
         }
         .floating-card.card-1 {
-          top: 20px;
-          left: 20px;
           animation-delay: 0s;
         }
         .floating-card.card-2 {
-          top: 100px;
-          right: 20px;
           animation-delay: 2s;
         }
         .floating-card.card-3 {
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
           animation-delay: 4s;
         }
         .floating-card svg {
@@ -941,7 +944,10 @@ const About = () => {
         }
         @media (max-width: 768px) {
           .hero-title {
-            font-size: 2.5rem;
+            font-size: 2rem;
+          }
+          .hero-subtitle {
+            font-size: 1rem;
           }
           .hero-stats {
             flex-direction: column;
@@ -953,14 +959,49 @@ const About = () => {
           .card-title {
             font-size: 1.5rem;
           }
-          .floating-card {
-            position: relative;
-            margin-bottom: 1rem;
-            animation: none;
-          }
           .hero-visual {
             height: auto;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          .floating-card {
+            width: 100px;
+            padding: 0.75rem;
+          }
+          .floating-card svg {
+            font-size: 1.5rem;
+          }
+          .floating-card span {
+            font-size: 0.8rem;
+          }
+        }
+        @media (max-width: 576px) {
+          .hero-title {
+            font-size: 1.8rem;
+          }
+          .hero-subtitle {
+            font-size: 0.9rem;
+          }
+          .hero-stats {
+            gap: 0.75rem;
+          }
+          .stat-number {
+            font-size: 1.5rem;
+          }
+          .stat-label {
+            font-size: 0.8rem;
+          }
+          .floating-card {
+            width: 90px;
+            padding: 0.5rem;
+          }
+          .floating-card svg {
+            font-size: 1.2rem;
+          }
+          .floating-card span {
+            font-size: 0.7rem;
           }
         }
       `}</style>
