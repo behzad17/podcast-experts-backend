@@ -4,7 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { podcastApi } from "../../api/podcastApi";
 import { toast } from "react-toastify";
 import LikeButton from "../common/LikeButton";
-import { FaPlay, FaEdit, FaTrash, FaEye, FaMicrophone, FaClock, FaUser } from "react-icons/fa";
+import {
+  FaPlay,
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaMicrophone,
+  FaClock,
+  FaUser,
+} from "react-icons/fa";
 
 const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -14,21 +22,21 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   // Helper function to limit text to 5 words
   const limitToFiveWords = (text) => {
     if (!text) return "";
-    const words = text.split(' ');
-    return words.slice(0, 5).join(' ') + (words.length > 5 ? '...' : '');
+    const words = text.split(" ");
+    return words.slice(0, 5).join(" ") + (words.length > 5 ? "..." : "");
   };
 
   const getImageUrl = (podcast) => {
     // Check if we have an image URL (Cloudinary URL)
-    if (podcast.image_url && podcast.image_url.startsWith('http')) {
+    if (podcast.image_url && podcast.image_url.startsWith("http")) {
       return podcast.image_url;
     }
-    
+
     // Check if we have an image field (Cloudinary URL)
-    if (podcast.image && podcast.image.startsWith('http')) {
+    if (podcast.image && podcast.image.startsWith("http")) {
       return podcast.image;
     }
-    
+
     // Fallback to local placeholder image
     return "/logo192.png";
   };
@@ -53,10 +61,10 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -72,7 +80,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
             loading="lazy"
             className="podcast-image"
           />
-          
+
           {/* Play Button Overlay */}
           <div className="play-overlay">
             <div className="play-button">
@@ -115,7 +123,10 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           </div>
 
           {/* Description */}
-          <Card.Text className="podcast-description" title={podcast.description}>
+          <Card.Text
+            className="podcast-description"
+            title={podcast.description}
+          >
             {limitToFiveWords(podcast.description)}
           </Card.Text>
 
@@ -160,7 +171,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
                 Listen
               </Button>
             )}
-            
+
             <Button
               variant="outline-primary"
               size="sm"
@@ -183,7 +194,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
                   <FaEdit className="me-1" />
                   Edit
                 </Button>
-                
+
                 <Button
                   variant="outline-danger"
                   size="sm"
@@ -205,18 +216,14 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           <Modal.Title>Delete Podcast</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete the podcast <strong>"{podcast.title}"</strong>? 
-          This action cannot be undone.
+          Are you sure you want to delete the podcast{" "}
+          <strong>"{podcast.title}"</strong>? This action cannot be undone.
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
             Cancel
           </Button>
-          <Button 
-            variant="danger" 
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
+          <Button variant="danger" onClick={handleDelete} disabled={isDeleting}>
             {isDeleting ? "Deleting..." : "Delete Podcast"}
           </Button>
         </Modal.Footer>
@@ -236,13 +243,13 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           border: none;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
           background: white;
         }
 
         .podcast-card:hover {
-          box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
         .podcast-image-container {
@@ -268,7 +275,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0,0,0,0.4);
+          background: rgba(0, 0, 0, 0.4);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -493,11 +500,11 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
           .podcast-card-body {
             padding: 1rem;
           }
-          
+
           .action-buttons {
             flex-direction: column;
           }
-          
+
           .action-btn {
             width: 100%;
           }
