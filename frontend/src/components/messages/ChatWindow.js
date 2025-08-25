@@ -28,7 +28,7 @@ const ChatWindow = ({ userId }) => {
 
   const fetchMessages = useCallback(async () => {
     if (!userId) return;
-    
+
     try {
       const response = await api.get(
         `/user_messages/chat_with_user/?user_id=${userId}`
@@ -48,7 +48,7 @@ const ChatWindow = ({ userId }) => {
     if (userId) {
       setLoading(true);
       fetchMessages();
-      
+
       const interval = setInterval(fetchMessages, 5000);
       return () => clearInterval(interval);
     }
@@ -70,35 +70,37 @@ const ChatWindow = ({ userId }) => {
     }
   }, [userId]);
 
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !userId || isSubmitting) return;
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!newMessage.trim() || !userId || isSubmitting) return;
 
-    try {
-      setIsSubmitting(true);
-      await api.post("/user_messages/", {
-        receiver_id: userId,
-        content: newMessage,
-      });
-      
-      // Clear input immediately for better UX
-      setNewMessage("");
-      
-      // Refetch messages to show the new message
-      await fetchMessages();
-      
-      // Refocus input after sending
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-      
-    } catch (error) {
-      console.error("Error sending message:", error);
-      // Keep the message in input if sending failed
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [newMessage, userId, isSubmitting, fetchMessages]);
+      try {
+        setIsSubmitting(true);
+        await api.post("/user_messages/", {
+          receiver_id: userId,
+          content: newMessage,
+        });
+
+        // Clear input immediately for better UX
+        setNewMessage("");
+
+        // Refetch messages to show the new message
+        await fetchMessages();
+
+        // Refocus input after sending
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 100);
+      } catch (error) {
+        console.error("Error sending message:", error);
+        // Keep the message in input if sending failed
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [newMessage, userId, isSubmitting, fetchMessages]
+  );
 
   const handleInputChange = useCallback((e) => {
     setNewMessage(e.target.value);
@@ -106,7 +108,7 @@ const ChatWindow = ({ userId }) => {
 
   const formatTimestamp = useCallback((timestamp) => {
     if (!timestamp) return "";
-    
+
     const now = new Date();
     const messageTime = new Date(timestamp);
     const diffInHours = Math.floor((now - messageTime) / (1000 * 60 * 60));
