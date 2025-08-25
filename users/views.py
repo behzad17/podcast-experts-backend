@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.mail import EmailMultiAlternatives
+# EmailMultiAlternatives no longer needed for simple text emails
 from django.conf import settings
 from .serializers import (
     UserRegisterSerializer,
@@ -36,70 +36,45 @@ class UserRegisterView(generics.CreateAPIView):
     def send_verification_email(self, user, token):
         verification_url = f"{settings.FRONTEND_URL}/verify-email/{token}"
         
-        # Create a very simple, guaranteed-to-work HTML email
-        html_content = f"""
-        <html>
-        <body>
-            <h1>Welcome to CONNECT!</h1>
-            <p>Hi {user.username},</p>
-            <p>Please verify your email by clicking this link:</p>
-            <p><a href="{verification_url}">VERIFY EMAIL</a></p>
-            <p>If the link doesn't work, copy and paste this URL into your browser:</p>
-            <p>{verification_url}</p>
-        </body>
-        </html>
-        """
-        
-        # Create plain text version
+        # Create a simple text email with verification code
+        # This approach is guaranteed to work across all email clients
         text_content = f"""
         Welcome to CONNECT!
         
         Hi {user.username},
         
-        Please verify your email by visiting this link:
-        {verification_url}
+        Your verification code is: {token[:8].upper()}
         
-        If the link doesn't work, copy and paste the URL into your browser.
+        To verify your email, please:
+        1. Go to: {verification_url}
+        2. OR enter the code: {token[:8].upper()}
+        
+        If you have any issues, please contact support.
+        
+        This email was sent from CONNECT Platform.
         """
         
         subject = "Verify your email - CONNECT Platform"
         
         try:
-            # Send as HTML email
-            email = EmailMultiAlternatives(
+            # Send as simple text email - guaranteed to work
+            from django.core.mail import send_mail
+            result = send_mail(
                 subject=subject,
-                body=text_content,
+                message=text_content,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[user.email]
+                recipient_list=[user.email],
+                fail_silently=False,
             )
             
-            # Attach HTML version
-            email.attach_alternative(html_content, "text/html")
-            
-            # Send the email
-            result = email.send(fail_silently=False)
-            
-            print(f"[DEBUG] Email sent to {user.email}")
+            print(f"[DEBUG] Verification email sent to {user.email}")
             print(f"[DEBUG] Verification URL: {verification_url}")
+            print(f"[DEBUG] Verification code: {token[:8].upper()}")
             print(f"[DEBUG] Email result: {result}")
             
         except Exception as e:
             print(f"[ERROR] Email failed: {str(e)}")
-            
-            # Fallback to plain text email
-            try:
-                from django.core.mail import send_mail
-                send_mail(
-                    subject=subject,
-                    message=text_content,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
-                )
-                print(f"[DEBUG] Fallback plain text email sent to {user.email}")
-            except Exception as e2:
-                print(f"[ERROR] Fallback email also failed: {str(e2)}")
-                raise e2
+            raise e
 
 
 class VerifyEmailView(APIView):
