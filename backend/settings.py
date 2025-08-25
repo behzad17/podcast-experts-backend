@@ -241,11 +241,12 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
-# Frontend URL for email verification
-FRONTEND_URL = os.getenv(
-    "FRONTEND_URL", 
-    "https://podcast-backend-4e5439705bd3.herokuapp.com"
-)
+# Frontend URL for email verification - Auto-detect environment
+if (os.getenv('ENVIRONMENT') == 'production' or 
+    'heroku' in os.getenv('DATABASE_URL', '')):
+    FRONTEND_URL = "https://podcast-backend-4e5439705bd3.herokuapp.com"
+else:
+    FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Admin email for contact form submissions
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', EMAIL_HOST_USER)
