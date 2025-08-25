@@ -23,7 +23,7 @@ import {
   FaBriefcase,
   FaCalendarAlt,
   FaLink,
-  FaTimes
+  FaTimes,
 } from "react-icons/fa";
 
 const ExpertCreate = () => {
@@ -91,9 +91,9 @@ const ExpertCreate = () => {
 
   // Calculate form progress
   useEffect(() => {
-    const requiredFields = ['name', 'bio', 'expertise', 'experience_years'];
-    const filledFields = requiredFields.filter(field => 
-      formData[field] && formData[field].toString().trim() !== ''
+    const requiredFields = ["name", "bio", "expertise", "experience_years"];
+    const filledFields = requiredFields.filter(
+      (field) => formData[field] && formData[field].toString().trim() !== ""
     );
     const progress = (filledFields.length / requiredFields.length) * 100;
     setFormProgress(progress);
@@ -101,19 +101,19 @@ const ExpertCreate = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
-    
+
     if (!formData.bio.trim()) {
       newErrors.bio = "Bio is required";
     }
-    
+
     if (!formData.expertise.trim()) {
       newErrors.expertise = "Expertise is required";
     }
-    
+
     if (!formData.experience_years || formData.experience_years < 0) {
       newErrors.experience_years = "Experience years must be a positive number";
     }
@@ -127,7 +127,7 @@ const ExpertCreate = () => {
     if (name === "profile_picture" && files?.length > 0) {
       const file = files[0];
       setFormData({ ...formData, [name]: file });
-      
+
       // Create image preview
       const reader = new FileReader();
       reader.onload = (e) => setImagePreview(e.target.result);
@@ -149,7 +149,7 @@ const ExpertCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -165,19 +165,19 @@ const ExpertCreate = () => {
       submitData.append("bio", formData.bio);
       submitData.append("expertise", formData.expertise);
       submitData.append("experience_years", formData.experience_years);
-      
+
       if (formData.website) {
         submitData.append("website", formData.website);
       }
-      
+
       if (formData.social_media) {
         submitData.append("social_media", formData.social_media);
       }
-      
+
       if (formData.email) {
         submitData.append("email", formData.email);
       }
-      
+
       if (formData.profile_picture) {
         submitData.append("profile_picture", formData.profile_picture);
       }
@@ -187,21 +187,21 @@ const ExpertCreate = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       setSuccess(true);
       setTimeout(() => {
         navigate("/experts");
       }, 2000);
     } catch (error) {
       console.error("Expert creation error:", error);
-      
+
       if (error.response?.data) {
         const errorData = error.response.data;
-        
+
         // Handle field-specific validation errors
         if (typeof errorData === "object" && !errorData.detail) {
           const fieldErrors = {};
-          Object.keys(errorData).forEach(key => {
+          Object.keys(errorData).forEach((key) => {
             if (Array.isArray(errorData[key])) {
               fieldErrors[key] = errorData[key][0];
             }
@@ -211,7 +211,9 @@ const ExpertCreate = () => {
           setError(errorData.detail || "Failed to create expert profile");
         }
       } else {
-        setError("An error occurred while creating your profile. Please try again.");
+        setError(
+          "An error occurred while creating your profile. Please try again."
+        );
       }
     } finally {
       setIsLoading(false);
@@ -229,7 +231,7 @@ const ExpertCreate = () => {
               </div>
               <h2 className="auth-required-title">Authentication Required</h2>
               <p className="auth-required-subtitle">
-                Please log in to create your expert profile. This ensures your 
+                Please log in to create your expert profile. This ensures your
                 profile is properly linked to your account.
               </p>
               <Button
@@ -258,8 +260,8 @@ const ExpertCreate = () => {
               </div>
               <h2 className="profile-exists-title">Profile Already Exists</h2>
               <p className="profile-exists-subtitle">
-                You already have an expert profile. You cannot create another one.
-                You can view and edit your existing profile instead.
+                You already have an expert profile. You cannot create another
+                one. You can view and edit your existing profile instead.
               </p>
               <div className="profile-exists-actions">
                 <Button
@@ -298,12 +300,11 @@ const ExpertCreate = () => {
               <span>Create Expert Profile</span>
             </div>
             <h1 className="hero-title">
-              Showcase Your{" "}
-              <span className="gradient-text">Expertise</span>
+              Showcase Your <span className="gradient-text">Expertise</span>
             </h1>
             <p className="hero-subtitle">
-              Build a professional expert profile, connect with clients, and grow 
-              your business. Join our network of trusted professionals.
+              Build a professional expert profile, connect with clients, and
+              grow your business. Join our network of trusted professionals.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
@@ -340,13 +341,15 @@ const ExpertCreate = () => {
               </h3>
               <div className="progress-info">
                 <span className="progress-text">Form Progress</span>
-                <span className="progress-percentage">{Math.round(formProgress)}%</span>
+                <span className="progress-percentage">
+                  {Math.round(formProgress)}%
+                </span>
               </div>
             </div>
             <div className="progress-bar-container">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
+                <div
+                  className="progress-fill"
                   style={{ width: `${formProgress}%` }}
                 ></div>
               </div>
@@ -365,7 +368,8 @@ const ExpertCreate = () => {
           {success && (
             <Alert variant="success" className="success-alert">
               <FaCheckCircle className="me-2" />
-              Expert profile created successfully! Redirecting to experts page...
+              Expert profile created successfully! Redirecting to experts
+              page...
             </Alert>
           )}
 
@@ -381,9 +385,9 @@ const ExpertCreate = () => {
                 <div className="image-upload-section">
                   {imagePreview ? (
                     <div className="image-preview-container">
-                      <img 
-                        src={imagePreview} 
-                        alt="Profile picture preview" 
+                      <img
+                        src={imagePreview}
+                        alt="Profile picture preview"
                         className="image-preview"
                       />
                       <Button
@@ -512,7 +516,8 @@ const ExpertCreate = () => {
                   {errors.bio}
                 </Form.Control.Feedback>
                 <small className="form-help">
-                  Write a compelling bio that highlights your expertise and experience
+                  Write a compelling bio that highlights your expertise and
+                  experience
                 </small>
               </div>
 
@@ -590,7 +595,7 @@ const ExpertCreate = () => {
                   <span>Connect with clients and grow your business</span>
                 </div>
               </div>
-              
+
               <div className="submit-actions">
                 <Button
                   type="submit"
@@ -601,7 +606,10 @@ const ExpertCreate = () => {
                 >
                   {isLoading ? (
                     <>
-                      <div className="spinner-border spinner-border-sm me-2" role="status">
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      >
                         <span className="visually-hidden">Creating...</span>
                       </div>
                       Creating Profile...
@@ -613,7 +621,7 @@ const ExpertCreate = () => {
                     </>
                   )}
                 </Button>
-                
+
                 <Button
                   variant="outline-secondary"
                   className="cancel-btn"
@@ -633,7 +641,7 @@ const ExpertCreate = () => {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         .create-hero {
           background: linear-gradient(
             135deg,
@@ -646,7 +654,7 @@ const ExpertCreate = () => {
           color: white;
           text-align: center;
         }
-        
+
         .hero-badge {
           display: inline-flex;
           align-items: center;
@@ -660,21 +668,21 @@ const ExpertCreate = () => {
           color: #ffd700;
           font-weight: 600;
         }
-        
+
         .hero-title {
           font-size: 3rem;
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
         }
-        
+
         .gradient-text {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        
+
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
@@ -684,30 +692,30 @@ const ExpertCreate = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .hero-stats {
           display: flex;
           justify-content: center;
           gap: 3rem;
           margin-top: 2rem;
         }
-        
+
         .stat-item {
           text-align: center;
         }
-        
+
         .stat-number {
           font-size: 2.5rem;
           color: #ffd700;
           margin-bottom: 0.5rem;
         }
-        
+
         .stat-label {
           font-size: 1rem;
           opacity: 0.9;
           font-weight: 500;
         }
-        
+
         .create-form-section {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -716,49 +724,49 @@ const ExpertCreate = () => {
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
           margin-bottom: 3rem;
         }
-        
+
         .form-progress-section {
           margin-bottom: 2.5rem;
           padding-bottom: 2rem;
           border-bottom: 2px solid rgba(102, 126, 234, 0.1);
         }
-        
+
         .progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1.5rem;
         }
-        
+
         .progress-title {
           font-size: 1.8rem;
           font-weight: 700;
           color: #333;
           margin: 0;
         }
-        
+
         .progress-info {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
           gap: 0.25rem;
         }
-        
+
         .progress-text {
           font-size: 0.9rem;
           color: #666;
         }
-        
+
         .progress-percentage {
           font-size: 1.5rem;
           font-weight: 700;
           color: #667eea;
         }
-        
+
         .progress-bar-container {
           width: 100%;
         }
-        
+
         .progress-bar {
           width: 100%;
           height: 8px;
@@ -766,46 +774,46 @@ const ExpertCreate = () => {
           border-radius: 4px;
           overflow: hidden;
         }
-        
+
         .progress-fill {
           height: 100%;
           background: linear-gradient(45deg, #667eea, #764ba2);
           border-radius: 4px;
           transition: width 0.5s ease;
         }
-        
+
         .error-alert,
         .success-alert {
           border-radius: 15px;
           border: none;
           margin-bottom: 2rem;
         }
-        
+
         .error-alert {
           background: rgba(220, 53, 69, 0.1);
           color: #dc3545;
         }
-        
+
         .success-alert {
           background: rgba(40, 167, 69, 0.1);
           color: #28a745;
         }
-        
+
         .create-form {
           margin: 0;
         }
-        
+
         .form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 2rem;
           margin-bottom: 3rem;
         }
-        
+
         .form-group.featured {
           grid-column: 1 / -1;
         }
-        
+
         .form-label {
           display: flex;
           align-items: center;
@@ -815,12 +823,12 @@ const ExpertCreate = () => {
           margin-bottom: 0.75rem;
           font-size: 1.1rem;
         }
-        
+
         .label-icon {
           color: #667eea;
           font-size: 1rem;
         }
-        
+
         .form-input {
           border-radius: 15px;
           border: 2px solid #e9ecef;
@@ -829,32 +837,32 @@ const ExpertCreate = () => {
           transition: all 0.3s ease;
           background: white;
         }
-        
+
         .form-input:focus {
           border-color: #667eea;
           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
           outline: none;
         }
-        
+
         .form-input.is-invalid {
           border-color: #dc3545;
         }
-        
+
         .form-help {
           color: #666;
           font-size: 0.9rem;
           margin-top: 0.5rem;
           display: block;
         }
-        
+
         .image-upload-section {
           margin-top: 0.5rem;
         }
-        
+
         .image-preview-container {
           text-align: center;
         }
-        
+
         .image-preview {
           width: 200px;
           height: 200px;
@@ -863,12 +871,12 @@ const ExpertCreate = () => {
           margin-bottom: 1rem;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .remove-image-btn {
           border-radius: 20px;
           padding: 0.5rem 1rem;
         }
-        
+
         .image-upload-area {
           position: relative;
           border: 2px dashed #ddd;
@@ -878,12 +886,12 @@ const ExpertCreate = () => {
           transition: all 0.3s ease;
           background: rgba(102, 126, 234, 0.02);
         }
-        
+
         .image-upload-area:hover {
           border-color: #667eea;
           background: rgba(102, 126, 234, 0.05);
         }
-        
+
         .image-input {
           position: absolute;
           top: 0;
@@ -893,34 +901,34 @@ const ExpertCreate = () => {
           opacity: 0;
           cursor: pointer;
         }
-        
+
         .upload-placeholder {
           pointer-events: none;
         }
-        
+
         .upload-icon {
           font-size: 3rem;
           color: #667eea;
           margin-bottom: 1rem;
         }
-        
+
         .upload-text {
           font-size: 1.1rem;
           color: #333;
           margin-bottom: 0.5rem;
         }
-        
+
         .upload-subtext {
           font-size: 0.9rem;
           color: #666;
           margin: 0;
         }
-        
+
         .submit-section {
           border-top: 2px solid rgba(102, 126, 234, 0.1);
           padding-top: 2rem;
         }
-        
+
         .submit-info {
           display: flex;
           justify-content: space-around;
@@ -929,7 +937,7 @@ const ExpertCreate = () => {
           background: rgba(102, 126, 234, 0.05);
           border-radius: 15px;
         }
-        
+
         .info-item {
           display: flex;
           align-items: center;
@@ -937,19 +945,19 @@ const ExpertCreate = () => {
           color: #333;
           font-size: 0.95rem;
         }
-        
+
         .info-icon {
           color: #667eea;
           font-size: 1.1rem;
         }
-        
+
         .submit-actions {
           display: flex;
           gap: 1rem;
           justify-content: center;
           align-items: center;
         }
-        
+
         .submit-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
@@ -958,22 +966,22 @@ const ExpertCreate = () => {
           transition: all 0.3s ease;
           min-width: 200px;
         }
-        
+
         .submit-btn:hover:not(:disabled) {
           transform: translateY(-2px);
         }
-        
+
         .cancel-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
           font-weight: 600;
         }
-        
+
         .auth-required-section,
         .profile-exists-section {
           padding: 4rem 0;
         }
-        
+
         .auth-required-card,
         .profile-exists-card {
           background: rgba(255, 255, 255, 0.95);
@@ -985,7 +993,7 @@ const ExpertCreate = () => {
           max-width: 600px;
           margin: 0 auto;
         }
-        
+
         .auth-required-icon,
         .profile-exists-icon {
           width: 100px;
@@ -998,15 +1006,15 @@ const ExpertCreate = () => {
           font-size: 3rem;
           margin: 0 auto 2rem;
         }
-        
+
         .auth-required-icon {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
         }
-        
+
         .profile-exists-icon {
           background: linear-gradient(45deg, #28a745, #20c997);
         }
-        
+
         .auth-required-title,
         .profile-exists-title {
           font-size: 2.5rem;
@@ -1014,7 +1022,7 @@ const ExpertCreate = () => {
           color: #333;
           margin-bottom: 1rem;
         }
-        
+
         .auth-required-subtitle,
         .profile-exists-subtitle {
           font-size: 1.1rem;
@@ -1022,7 +1030,7 @@ const ExpertCreate = () => {
           line-height: 1.6;
           margin-bottom: 2rem;
         }
-        
+
         .login-btn,
         .view-profile-btn {
           border-radius: 25px;
@@ -1032,85 +1040,85 @@ const ExpertCreate = () => {
           margin-bottom: 1rem;
           transition: all 0.3s ease;
         }
-        
+
         .login-btn:hover,
         .view-profile-btn:hover {
           transform: translateY(-2px);
         }
-        
+
         .profile-exists-actions {
           display: flex;
           flex-direction: column;
           gap: 1rem;
           align-items: center;
         }
-        
+
         .back-btn {
           border-radius: 25px;
           padding: 0.75rem 1.5rem;
         }
-        
+
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.5rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1.1rem;
           }
-          
+
           .hero-stats {
             flex-direction: column;
             gap: 2rem;
           }
-          
+
           .form-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          
+
           .submit-info {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-actions {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-btn,
           .cancel-btn {
             width: 100%;
           }
-          
+
           .create-form-section {
             padding: 2rem;
           }
-          
+
           .auth-required-card,
           .profile-exists-card {
             padding: 2rem;
           }
         }
-        
+
         @media (max-width: 576px) {
           .hero-title {
             font-size: 2rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1rem;
           }
-          
+
           .create-hero {
             padding: 2rem 0;
           }
-          
+
           .create-form-section {
             padding: 1.5rem;
           }
-          
+
           .auth-required-card,
           .profile-exists-card {
             padding: 1.5rem;
