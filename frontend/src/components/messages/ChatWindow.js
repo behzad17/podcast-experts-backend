@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Card, Form, Button, ListGroup } from "react-bootstrap";
+import { Card, Form, Button, Badge } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
+import {
+  FaUser,
+  FaUserTie,
+  FaMicrophone,
+  FaUsers,
+  FaPaperPlane,
+  FaClock,
+  FaEllipsisV,
+} from "react-icons/fa";
 
 const ChatWindow = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [otherUser, setOtherUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { user: currentUser } = useAuth();
   const messagesEndRef = useRef(null);
 
@@ -16,6 +26,7 @@ const ChatWindow = ({ userId }) => {
 
   const fetchMessages = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await api.get(
         `/user_messages/chat_with_user/?user_id=${userId}`
       );
@@ -24,6 +35,8 @@ const ChatWindow = ({ userId }) => {
     } catch (error) {
       console.error("Error fetching messages:", error);
       setMessages([]);
+    } finally {
+      setLoading(false);
     }
   }, [userId]);
 
@@ -56,69 +69,159 @@ const ChatWindow = ({ userId }) => {
   };
 
   const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleString();
+    const now = new Date();
+    const messageTime = new Date(timestamp);
+    const diffInHours = Math.floor((now - messageTime) / (1000 * 60 * 60));
+
+    if (diffInHours < 1) return "Just now";
+    if (diffInHours < 24)
+      return messageTime.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    return messageTime.toLocaleDateString();
+  };
+
+  const getUserAvatar = (userType) => {
+    switch (userType) {
+      case "expert":
+        return <FaUserTie className="avatar-icon expert" />;
+      case "podcaster":
+        return <FaMicrophone className="avatar-icon podcaster" />;
+      case "listener":
+        return <FaUsers className="avatar-icon listener" />;
+      default:
+        return <FaUser className="avatar-icon default" />;
+    }
+  };
+
+  const getUserTypeBadge = (userType) => {
+    let variant = "secondary";
+    if (userType === "expert") variant = "warning";
+    else if (userType === "podcaster") variant = "info";
+
+    return (
+      <Badge bg={variant} className="type-badge">
+        {userType.charAt(0).toUpperCase() + userType.slice(1)}
+      </Badge>
+    );
   };
 
   if (!userId) {
     return (
-      <Card className="h-100">
-        <Card.Body className="d-flex align-items-center justify-content-center">
-          <p className="text-muted mb-0">
-            Select a conversation to start chatting
+      <div className="welcome-chat">
+        <div className="welcome-content">
+          <div className="welcome-icon">
+            <FaUser />
+          </div>
+          <h3 className="welcome-title">Welcome to Messages</h3>
+          <p className="welcome-subtitle">
+            Select a conversation from the left sidebar to start chatting, or
+            search for new people to connect with.
           </p>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="chat-loading">
+        <div className="loading-spinner">
+          <div className="spinner-ring"></div>
+        </div>
+        <p className="loading-text">Loading conversation...</p>
+      </div>
     );
   }
 
   return (
-    <Card className="h-100">
-      <Card.Header>
-        <h4>{otherUser?.username || "Chat"}</h4>
-      </Card.Header>
-      <Card.Body className="d-flex flex-column" style={{ height: "500px" }}>
-        <div className="flex-grow-1 overflow-auto mb-3">
-          <ListGroup variant="flush">
+    <div className="chat-window-modern">
+      {/* Chat Header */}
+      <div className="chat-header">
+        <div className="chat-user-info">
+          <div className="user-avatar">
+            {getUserAvatar(otherUser?.user_type || "default")}
+          </div>
+          <div className="user-details">
+            <h5 className="user-name">{otherUser?.username || "Chat"}</h5>
+            <div className="user-meta">
+              {getUserTypeBadge(otherUser?.user_type || "default")}
+              <span className="status-indicator online">Online</span>
+            </div>
+          </div>
+        </div>
+        <div className="chat-actions">
+          <Button variant="outline-secondary" size="sm" className="action-btn">
+            <FaEllipsisV />
+          </Button>
+        </div>
+      </div>
+
+      {/* Messages Area */}
+      <div className="messages-area">
+        {messages.length === 0 ? (
+          <div className="no-messages">
+            <div className="no-messages-icon">
+              <FaUser />
+            </div>
+            <h6>No messages yet</h6>
+            <p>Start the conversation by sending a message!</p>
+          </div>
+        ) : (
+          <div className="messages-list">
             {messages.map((message) => (
-              <ListGroup.Item
+              <div
                 key={message.id}
-                className={`border-0 ${
-                  message.sender?.id === currentUser?.id ? "text-end" : ""
+                className={`message-item ${
+                  message.sender?.id === currentUser?.id ? "sent" : "received"
                 }`}
               >
-                <div
-                  className={`d-inline-block p-2 rounded ${
-                    message.sender?.id === currentUser?.id
-                      ? "bg-primary text-white"
-                      : "bg-light"
-                  }`}
-                  style={{ maxWidth: "75%", textAlign: "left" }}
-                >
-                  <div>{message.content}</div>
-                  <small className="text-muted">
-                    {formatTimestamp(message.timestamp)}
-                  </small>
+                {message.sender?.id !== currentUser?.id && (
+                  <div className="message-avatar">
+                    {getUserAvatar(otherUser?.user_type || "default")}
+                  </div>
+                )}
+
+                <div className="message-content">
+                  <div className="message-bubble">
+                    <div className="message-text">{message.content}</div>
+                    <div className="message-time">
+                      <FaClock className="time-icon" />
+                      <span>{formatTimestamp(message.timestamp)}</span>
+                    </div>
+                  </div>
                 </div>
-              </ListGroup.Item>
+              </div>
             ))}
             <div ref={messagesEndRef} />
-          </ListGroup>
-        </div>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="d-flex">
+          </div>
+        )}
+      </div>
+
+      {/* Message Input */}
+      <div className="message-input-area">
+        <Form onSubmit={handleSubmit} className="message-form">
+          <Form.Group className="input-group">
             <Form.Control
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
+              className="message-input"
             />
-            <Button type="submit" variant="primary" className="ms-2">
-              Send
+            <Button
+              type="submit"
+              variant="primary"
+              className="send-btn"
+              disabled={!newMessage.trim()}
+            >
+              <FaPaperPlane />
             </Button>
           </Form.Group>
         </Form>
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 };
 
