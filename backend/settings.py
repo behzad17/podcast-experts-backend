@@ -243,7 +243,8 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # Frontend URL for email verification
 FRONTEND_URL = os.getenv(
-    "FRONTEND_URL", "http://localhost:3000"
+    "FRONTEND_URL", 
+    "https://podcast-backend-4e5439705bd3.herokuapp.com"
 )
 
 # Admin email for contact form submissions

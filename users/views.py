@@ -36,189 +36,95 @@ class UserRegisterView(generics.CreateAPIView):
     def send_verification_email(self, user, token):
         verification_url = f"{settings.FRONTEND_URL}/verify-email/{token}"
         
-        # Create HTML email content
+        # Create a very simple, email-client-friendly HTML content
         html_content = f"""
-        <!DOCTYPE html>
         <html>
         <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Verify Your Email - CONNECT Platform</title>
-            <style>
-                body {{
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    line-height: 1.6;
-                    color: #333;
-                    margin: 0;
-                    padding: 0;
-                    background-color: #f4f4f4;
-                }}
-                .email-container {{
-                    max-width: 600px;
-                    margin: 0 auto;
-                    background-color: #ffffff;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                }}
-                .header {{
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    padding: 30px;
-                    text-align: center;
-                }}
-                .header h1 {{
-                    margin: 0;
-                    font-size: 28px;
-                    font-weight: 600;
-                }}
-                .header p {{
-                    margin: 10px 0 0 0;
-                    opacity: 0.9;
-                    font-size: 16px;
-                }}
-                .content {{
-                    padding: 40px 30px;
-                    text-align: center;
-                }}
-                .welcome-text {{
-                    font-size: 18px;
-                    color: #333;
-                    margin-bottom: 25px;
-                }}
-                .verification-button {{
-                    display: inline-block;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    text-decoration: none;
-                    padding: 15px 30px;
-                    border-radius: 25px;
-                    font-size: 16px;
-                    font-weight: 600;
-                    margin: 20px 0;
-                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-                    transition: all 0.3s ease;
-                }}
-                .verification-button:hover {{
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-                }}
-                .verification-link {{
-                    color: #667eea;
-                    text-decoration: none;
-                    word-break: break-all;
-                }}
-                .verification-link:hover {{
-                    text-decoration: underline;
-                }}
-                .info-text {{
-                    color: #666;
-                    font-size: 14px;
-                    margin-top: 25px;
-                    line-height: 1.5;
-                }}
-                .footer {{
-                    background-color: #f8f9fa;
-                    padding: 20px 30px;
-                    text-align: center;
-                    border-top: 1px solid #e9ecef;
-                }}
-                .footer p {{
-                    margin: 0;
-                    color: #666;
-                    font-size: 12px;
-                }}
-                .logo {{
-                    font-size: 24px;
-                    font-weight: bold;
-                    color: #ffd700;
-                    margin-bottom: 10px;
-                }}
-            </style>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <div class="logo">🎙️ CONNECT</div>
-                    <h1>Welcome to CONNECT!</h1>
-                    <p>Your Professional Podcast & Expert Network</p>
-                </div>
+        <body style="font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px;">
+                <h1 style="color: #667eea; text-align: center;">Welcome to CONNECT!</h1>
                 
-                <div class="content">
-                    <p class="welcome-text">Hi <strong>{user.username}</strong>,</p>
-                    
-                    <p>Thank you for joining CONNECT! To complete your registration 
-                    and start building your professional network, please verify your 
-                    email address.</p>
-                    
-                    <a href="{verification_url}" class="verification-button">
-                        ✅ Verify Email Address
+                <p>Hi <strong>{user.username}</strong>,</p>
+                
+                <p>Thank you for joining CONNECT! Please verify your email address to complete your registration.</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{verification_url}" style="background-color: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+                        Click Here to Verify Email
                     </a>
-                    
-                    <p class="info-text">
-                        If the button above doesn't work, you can copy and paste this 
-                        link into your browser:<br>
-                        <a href="{verification_url}" class="verification-link">
-                            {verification_url}
-                        </a>
-                    </p>
-                    
-                    <p class="info-text">
-                        <strong>What happens next?</strong><br>
-                        After verification, you'll be able to log in and start creating 
-                        your profile, connecting with other professionals, and building 
-                        your network on CONNECT.
-                    </p>
                 </div>
                 
-                <div class="footer">
-                    <p>This email was sent from CONNECT Platform. If you didn't create 
-                    an account, please ignore this email.</p>
-                    <p>&copy; 2024 CONNECT Platform. All rights reserved.</p>
-                </div>
+                <p>If the button above doesn't work, copy and paste this link into your browser:</p>
+                <p><a href="{verification_url}" style="color: #667eea;">{verification_url}</a></p>
+                
+                <hr style="margin: 30px 0;">
+                <p style="font-size: 12px; color: #666;">This email was sent from CONNECT Platform.</p>
             </div>
         </body>
         </html>
         """
         
-        # Create plain text version for email clients that don't support HTML
+        # Create plain text version with guaranteed-clickable link
         text_content = f"""
         Welcome to CONNECT!
         
         Hi {user.username},
         
-        Thank you for joining CONNECT! To complete your registration and start building 
-        your professional network, please verify your email address.
+        Thank you for joining CONNECT! Please verify your email address to complete your registration.
         
-        Click this link to verify your email:
+        VERIFICATION LINK (click or copy-paste):
         {verification_url}
         
-        What happens next?
-        After verification, you'll be able to log in and start creating your profile, 
-        connecting with other professionals, and building your network on CONNECT.
+        IMPORTANT: If the link above doesn't work when clicked, please copy and paste it into your web browser's address bar.
         
-        This email was sent from CONNECT Platform. If you didn't create an account, 
-        please ignore this email.
-        
-        © 2024 CONNECT Platform. All rights reserved.
+        This email was sent from CONNECT Platform.
         """
         
-        # Send HTML email with both HTML and plain text versions
-        subject = "Verify your email address - Welcome to CONNECT!"
+        subject = "Verify your email - CONNECT Platform"
         
-        # Create EmailMultiAlternatives object for HTML email
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_content,  # Plain text version
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email]
-        )
-        
-        # Attach HTML version
-        email.attach_alternative(html_content, "text/html")
-        
-        # Send the email
-        email.send(fail_silently=False)
+        try:
+            # Try sending as HTML email first
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email]
+            )
+            
+            # Attach HTML version
+            email.attach_alternative(html_content, "text/html")
+            
+            # Set content type explicitly
+            email.content_subtype = "html"
+            
+            # Send the email
+            result = email.send(fail_silently=False)
+            
+            print(f"[DEBUG] HTML email sent to {user.email}")
+            print(f"[DEBUG] Verification URL: {verification_url}")
+            print(f"[DEBUG] Email result: {result}")
+            print(f"[DEBUG] HTML content length: {len(html_content)}")
+            print(f"[DEBUG] HTML content preview: {html_content[:200]}...")
+            
+        except Exception as e:
+            print(f"[ERROR] HTML email failed: {str(e)}")
+            
+            # Fallback to plain text email
+            try:
+                from django.core.mail import send_mail
+                send_mail(
+                    subject=subject,
+                    message=text_content,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+                print(f"[DEBUG] Fallback plain text email sent to {user.email}")
+            except Exception as e2:
+                print(f"[ERROR] Fallback email also failed: {str(e2)}")
+                raise e2
 
 
 class VerifyEmailView(APIView):
