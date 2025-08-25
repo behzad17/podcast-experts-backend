@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from .serializers import (
     UserRegisterSerializer,
@@ -35,21 +35,190 @@ class UserRegisterView(generics.CreateAPIView):
 
     def send_verification_email(self, user, token):
         verification_url = f"{settings.FRONTEND_URL}/verify-email/{token}"
-        subject = "Verify your email address"
-        message = f"""
-        Hi {user.username},
-        Please verify your email address by clicking the link below:
-        {verification_url}
-
-        If you did not create this account, please ignore this email.
+        
+        # Create HTML email content
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Verify Your Email - CONNECT Platform</title>
+            <style>
+                body {{
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                }}
+                .email-container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }}
+                .header {{
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                }}
+                .header h1 {{
+                    margin: 0;
+                    font-size: 28px;
+                    font-weight: 600;
+                }}
+                .header p {{
+                    margin: 10px 0 0 0;
+                    opacity: 0.9;
+                    font-size: 16px;
+                }}
+                .content {{
+                    padding: 40px 30px;
+                    text-align: center;
+                }}
+                .welcome-text {{
+                    font-size: 18px;
+                    color: #333;
+                    margin-bottom: 25px;
+                }}
+                .verification-button {{
+                    display: inline-block;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    text-decoration: none;
+                    padding: 15px 30px;
+                    border-radius: 25px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin: 20px 0;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                    transition: all 0.3s ease;
+                }}
+                .verification-button:hover {{
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+                }}
+                .verification-link {{
+                    color: #667eea;
+                    text-decoration: none;
+                    word-break: break-all;
+                }}
+                .verification-link:hover {{
+                    text-decoration: underline;
+                }}
+                .info-text {{
+                    color: #666;
+                    font-size: 14px;
+                    margin-top: 25px;
+                    line-height: 1.5;
+                }}
+                .footer {{
+                    background-color: #f8f9fa;
+                    padding: 20px 30px;
+                    text-align: center;
+                    border-top: 1px solid #e9ecef;
+                }}
+                .footer p {{
+                    margin: 0;
+                    color: #666;
+                    font-size: 12px;
+                }}
+                .logo {{
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #ffd700;
+                    margin-bottom: 10px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <div class="logo">🎙️ CONNECT</div>
+                    <h1>Welcome to CONNECT!</h1>
+                    <p>Your Professional Podcast & Expert Network</p>
+                </div>
+                
+                <div class="content">
+                    <p class="welcome-text">Hi <strong>{user.username}</strong>,</p>
+                    
+                    <p>Thank you for joining CONNECT! To complete your registration 
+                    and start building your professional network, please verify your 
+                    email address.</p>
+                    
+                    <a href="{verification_url}" class="verification-button">
+                        ✅ Verify Email Address
+                    </a>
+                    
+                    <p class="info-text">
+                        If the button above doesn't work, you can copy and paste this 
+                        link into your browser:<br>
+                        <a href="{verification_url}" class="verification-link">
+                            {verification_url}
+                        </a>
+                    </p>
+                    
+                    <p class="info-text">
+                        <strong>What happens next?</strong><br>
+                        After verification, you'll be able to log in and start creating 
+                        your profile, connecting with other professionals, and building 
+                        your network on CONNECT.
+                    </p>
+                </div>
+                
+                <div class="footer">
+                    <p>This email was sent from CONNECT Platform. If you didn't create 
+                    an account, please ignore this email.</p>
+                    <p>&copy; 2024 CONNECT Platform. All rights reserved.</p>
+                </div>
+            </div>
+        </body>
+        </html>
         """
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            fail_silently=False,
+        
+        # Create plain text version for email clients that don't support HTML
+        text_content = f"""
+        Welcome to CONNECT!
+        
+        Hi {user.username},
+        
+        Thank you for joining CONNECT! To complete your registration and start building 
+        your professional network, please verify your email address.
+        
+        Click this link to verify your email:
+        {verification_url}
+        
+        What happens next?
+        After verification, you'll be able to log in and start creating your profile, 
+        connecting with other professionals, and building your network on CONNECT.
+        
+        This email was sent from CONNECT Platform. If you didn't create an account, 
+        please ignore this email.
+        
+        © 2024 CONNECT Platform. All rights reserved.
+        """
+        
+        # Send HTML email with both HTML and plain text versions
+        subject = "Verify your email address - Welcome to CONNECT!"
+        
+        # Create EmailMultiAlternatives object for HTML email
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,  # Plain text version
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[user.email]
         )
+        
+        # Attach HTML version
+        email.attach_alternative(html_content, "text/html")
+        
+        # Send the email
+        email.send(fail_silently=False)
 
 
 class VerifyEmailView(APIView):
