@@ -19,7 +19,7 @@ import {
   FaImage,
   FaTag,
   FaFileAlt,
-  FaGlobe
+  FaGlobe,
 } from "react-icons/fa";
 
 const PodcastCreate = () => {
@@ -66,8 +66,10 @@ const PodcastCreate = () => {
 
   // Calculate form progress
   useEffect(() => {
-    const fields = ['title', 'description', 'category_id'];
-    const filledFields = fields.filter(field => formData[field] && formData[field].toString().trim() !== '');
+    const fields = ["title", "description", "category_id"];
+    const filledFields = fields.filter(
+      (field) => formData[field] && formData[field].toString().trim() !== ""
+    );
     const progress = (filledFields.length / fields.length) * 100;
     setFormProgress(progress);
   }, [formData]);
@@ -77,7 +79,7 @@ const PodcastCreate = () => {
     if (name === "image" && files?.length > 0) {
       const file = files[0];
       setFormData({ ...formData, [name]: file });
-      
+
       // Create image preview
       const reader = new FileReader();
       reader.onload = (e) => setImagePreview(e.target.result);
@@ -91,26 +93,28 @@ const PodcastCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       // Create FormData to handle file uploads
       const submitData = new FormData();
-      submitData.append('title', formData.title);
-      submitData.append('description', formData.description);
-      submitData.append('link', formData.link);
-      submitData.append('category_id', formData.category_id);
-      
+      submitData.append("title", formData.title);
+      submitData.append("description", formData.description);
+      submitData.append("link", formData.link);
+      submitData.append("category_id", formData.category_id);
+
       if (formData.image) {
-        submitData.append('image', formData.image);
+        submitData.append("image", formData.image);
       }
-      
+
       await api.post("/podcasts/create/", submitData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
-      
-      toast.success("Podcast created successfully! It will be published after admin approval.");
+
+      toast.success(
+        "Podcast created successfully! It will be published after admin approval."
+      );
       navigate("/podcasts");
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
@@ -135,8 +139,9 @@ const PodcastCreate = () => {
               </div>
               <h2 className="profile-required-title">Profile Required</h2>
               <p className="profile-required-subtitle">
-                You need to create a podcaster profile before creating your first podcast.
-                This helps us understand your background and expertise.
+                You need to create a podcaster profile before creating your
+                first podcast. This helps us understand your background and
+                expertise.
               </p>
               <div className="profile-required-features">
                 <div className="feature-item">
@@ -191,8 +196,8 @@ const PodcastCreate = () => {
               <span className="gradient-text">World</span>
             </h1>
             <p className="hero-subtitle">
-              Create engaging podcast content, reach your audience, and build your 
-              personal brand. Start your podcasting journey today.
+              Create engaging podcast content, reach your audience, and build
+              your personal brand. Start your podcasting journey today.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
@@ -229,13 +234,15 @@ const PodcastCreate = () => {
               </h3>
               <div className="progress-info">
                 <span className="progress-text">Form Progress</span>
-                <span className="progress-percentage">{Math.round(formProgress)}%</span>
+                <span className="progress-percentage">
+                  {Math.round(formProgress)}%
+                </span>
               </div>
             </div>
             <div className="progress-bar-container">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
+                <div
+                  className="progress-fill"
                   style={{ width: `${formProgress}%` }}
                 ></div>
               </div>
@@ -290,7 +297,8 @@ const PodcastCreate = () => {
                   className="form-input"
                 />
                 <small className="form-help">
-                  Write a compelling description that will attract your target audience
+                  Write a compelling description that will attract your target
+                  audience
                 </small>
               </div>
 
@@ -347,9 +355,9 @@ const PodcastCreate = () => {
                 <div className="image-upload-section">
                   {imagePreview ? (
                     <div className="image-preview-container">
-                      <img 
-                        src={imagePreview} 
-                        alt="Podcast cover preview" 
+                      <img
+                        src={imagePreview}
+                        alt="Podcast cover preview"
                         className="image-preview"
                       />
                       <Button
@@ -404,7 +412,7 @@ const PodcastCreate = () => {
                   <span>Reach a global audience of podcast enthusiasts</span>
                 </div>
               </div>
-              
+
               <div className="submit-actions">
                 <Button
                   type="submit"
@@ -415,7 +423,10 @@ const PodcastCreate = () => {
                 >
                   {isLoading ? (
                     <>
-                      <div className="spinner-border spinner-border-sm me-2" role="status">
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      >
                         <span className="visually-hidden">Creating...</span>
                       </div>
                       Creating Podcast...
@@ -427,7 +438,7 @@ const PodcastCreate = () => {
                     </>
                   )}
                 </Button>
-                
+
                 <Button
                   variant="outline-secondary"
                   className="cancel-btn"
@@ -447,7 +458,7 @@ const PodcastCreate = () => {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         .create-hero {
           background: linear-gradient(
             135deg,
@@ -460,7 +471,7 @@ const PodcastCreate = () => {
           color: white;
           text-align: center;
         }
-        
+
         .hero-badge {
           display: inline-flex;
           align-items: center;
@@ -474,21 +485,21 @@ const PodcastCreate = () => {
           color: #ffd700;
           font-weight: 600;
         }
-        
+
         .hero-title {
           font-size: 3rem;
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
         }
-        
+
         .gradient-text {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        
+
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
@@ -498,30 +509,30 @@ const PodcastCreate = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .hero-stats {
           display: flex;
           justify-content: center;
           gap: 3rem;
           margin-top: 2rem;
         }
-        
+
         .stat-item {
           text-align: center;
         }
-        
+
         .stat-number {
           font-size: 2.5rem;
           color: #ffd700;
           margin-bottom: 0.5rem;
         }
-        
+
         .stat-label {
           font-size: 1rem;
           opacity: 0.9;
           font-weight: 500;
         }
-        
+
         .create-form-section {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -530,49 +541,49 @@ const PodcastCreate = () => {
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
           margin-bottom: 3rem;
         }
-        
+
         .form-progress-section {
           margin-bottom: 2.5rem;
           padding-bottom: 2rem;
           border-bottom: 2px solid rgba(102, 126, 234, 0.1);
         }
-        
+
         .progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1.5rem;
         }
-        
+
         .progress-title {
           font-size: 1.8rem;
           font-weight: 700;
           color: #333;
           margin: 0;
         }
-        
+
         .progress-info {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
           gap: 0.25rem;
         }
-        
+
         .progress-text {
           font-size: 0.9rem;
           color: #666;
         }
-        
+
         .progress-percentage {
           font-size: 1.5rem;
           font-weight: 700;
           color: #667eea;
         }
-        
+
         .progress-bar-container {
           width: 100%;
         }
-        
+
         .progress-bar {
           width: 100%;
           height: 8px;
@@ -580,14 +591,14 @@ const PodcastCreate = () => {
           border-radius: 4px;
           overflow: hidden;
         }
-        
+
         .progress-fill {
           height: 100%;
           background: linear-gradient(45deg, #667eea, #764ba2);
           border-radius: 4px;
           transition: width 0.5s ease;
         }
-        
+
         .error-alert {
           border-radius: 15px;
           border: none;
@@ -595,22 +606,22 @@ const PodcastCreate = () => {
           color: #dc3545;
           margin-bottom: 2rem;
         }
-        
+
         .create-form {
           margin: 0;
         }
-        
+
         .form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 2rem;
           margin-bottom: 3rem;
         }
-        
+
         .form-group.featured {
           grid-column: 1 / -1;
         }
-        
+
         .form-label {
           display: flex;
           align-items: center;
@@ -620,12 +631,12 @@ const PodcastCreate = () => {
           margin-bottom: 0.75rem;
           font-size: 1.1rem;
         }
-        
+
         .label-icon {
           color: #667eea;
           font-size: 1rem;
         }
-        
+
         .form-input,
         .form-select {
           border-radius: 15px;
@@ -635,29 +646,29 @@ const PodcastCreate = () => {
           transition: all 0.3s ease;
           background: white;
         }
-        
+
         .form-input:focus,
         .form-select:focus {
           border-color: #667eea;
           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
           outline: none;
         }
-        
+
         .form-help {
           color: #666;
           font-size: 0.9rem;
           margin-top: 0.5rem;
           display: block;
         }
-        
+
         .image-upload-section {
           margin-top: 0.5rem;
         }
-        
+
         .image-preview-container {
           text-align: center;
         }
-        
+
         .image-preview {
           width: 200px;
           height: 200px;
@@ -666,12 +677,12 @@ const PodcastCreate = () => {
           margin-bottom: 1rem;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .remove-image-btn {
           border-radius: 20px;
           padding: 0.5rem 1rem;
         }
-        
+
         .image-upload-area {
           position: relative;
           border: 2px dashed #ddd;
@@ -681,12 +692,12 @@ const PodcastCreate = () => {
           transition: all 0.3s ease;
           background: rgba(102, 126, 234, 0.02);
         }
-        
+
         .image-upload-area:hover {
           border-color: #667eea;
           background: rgba(102, 126, 234, 0.05);
         }
-        
+
         .image-input {
           position: absolute;
           top: 0;
@@ -696,34 +707,34 @@ const PodcastCreate = () => {
           opacity: 0;
           cursor: pointer;
         }
-        
+
         .upload-placeholder {
           pointer-events: none;
         }
-        
+
         .upload-icon {
           font-size: 3rem;
           color: #667eea;
           margin-bottom: 1rem;
         }
-        
+
         .upload-text {
           font-size: 1.1rem;
           color: #333;
           margin-bottom: 0.5rem;
         }
-        
+
         .upload-subtext {
           font-size: 0.9rem;
           color: #666;
           margin: 0;
         }
-        
+
         .submit-section {
           border-top: 2px solid rgba(102, 126, 234, 0.1);
           padding-top: 2rem;
         }
-        
+
         .submit-info {
           display: flex;
           justify-content: space-around;
@@ -732,7 +743,7 @@ const PodcastCreate = () => {
           background: rgba(102, 126, 234, 0.05);
           border-radius: 15px;
         }
-        
+
         .info-item {
           display: flex;
           align-items: center;
@@ -740,19 +751,19 @@ const PodcastCreate = () => {
           color: #333;
           font-size: 0.95rem;
         }
-        
+
         .info-icon {
           color: #667eea;
           font-size: 1.1rem;
         }
-        
+
         .submit-actions {
           display: flex;
           gap: 1rem;
           justify-content: center;
           align-items: center;
         }
-        
+
         .submit-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
@@ -761,21 +772,21 @@ const PodcastCreate = () => {
           transition: all 0.3s ease;
           min-width: 200px;
         }
-        
+
         .submit-btn:hover:not(:disabled) {
           transform: translateY(-2px);
         }
-        
+
         .cancel-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
           font-weight: 600;
         }
-        
+
         .needs-profile-section {
           padding: 4rem 0;
         }
-        
+
         .profile-required-card {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -786,7 +797,7 @@ const PodcastCreate = () => {
           max-width: 600px;
           margin: 0 auto;
         }
-        
+
         .profile-required-icon {
           width: 100px;
           height: 100px;
@@ -799,28 +810,28 @@ const PodcastCreate = () => {
           font-size: 3rem;
           margin: 0 auto 2rem;
         }
-        
+
         .profile-required-title {
           font-size: 2.5rem;
           font-weight: 700;
           color: #333;
           margin-bottom: 1rem;
         }
-        
+
         .profile-required-subtitle {
           font-size: 1.1rem;
           color: #666;
           line-height: 1.6;
           margin-bottom: 2rem;
         }
-        
+
         .profile-required-features {
           display: flex;
           flex-direction: column;
           gap: 1rem;
           margin-bottom: 2rem;
         }
-        
+
         .feature-item {
           display: flex;
           align-items: center;
@@ -830,12 +841,12 @@ const PodcastCreate = () => {
           border-radius: 15px;
           color: #333;
         }
-        
+
         .feature-icon {
           color: #667eea;
           font-size: 1.2rem;
         }
-        
+
         .create-profile-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
@@ -844,76 +855,76 @@ const PodcastCreate = () => {
           margin-bottom: 1rem;
           transition: all 0.3s ease;
         }
-        
+
         .create-profile-btn:hover {
           transform: translateY(-2px);
         }
-        
+
         .back-btn {
           border-radius: 25px;
           padding: 0.75rem 1.5rem;
         }
-        
+
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.5rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1.1rem;
           }
-          
+
           .hero-stats {
             flex-direction: column;
             gap: 2rem;
           }
-          
+
           .form-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          
+
           .submit-info {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-actions {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-btn,
           .cancel-btn {
             width: 100%;
           }
-          
+
           .create-form-section {
             padding: 2rem;
           }
-          
+
           .profile-required-card {
             padding: 2rem;
           }
         }
-        
+
         @media (max-width: 576px) {
           .hero-title {
             font-size: 2rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1rem;
           }
-          
+
           .create-hero {
             padding: 2rem 0;
           }
-          
+
           .create-form-section {
             padding: 1.5rem;
           }
-          
+
           .profile-required-card {
             padding: 1.5rem;
           }
