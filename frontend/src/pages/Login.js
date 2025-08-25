@@ -8,10 +8,6 @@ import {
   FaEye,
   FaEyeSlash,
   FaSignInAlt,
-  FaGoogle,
-  FaFacebook,
-  FaLinkedin,
-  FaGithub,
   FaShieldAlt,
   FaRocket,
   FaUsers,
@@ -22,7 +18,6 @@ import {
   FaEnvelope,
   FaKey,
   FaUserTie,
-  FaMicrophone
 } from "react-icons/fa";
 
 const Login = () => {
@@ -62,11 +57,6 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSocialLogin = (provider) => {
-    // Placeholder for social login functionality
-    console.log(`Logging in with ${provider}`);
-  };
-
   return (
     <div className="login-page-modern">
       {/* Hero Section */}
@@ -81,8 +71,8 @@ const Login = () => {
               Ready to <span className="gradient-text">Connect</span> Again?
             </h1>
             <p className="hero-subtitle">
-              Access your expert profile, manage your podcasts, and continue building 
-              meaningful connections in our professional network.
+              Access your expert profile, manage your podcasts, and continue
+              building meaningful connections in our professional network.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
@@ -216,7 +206,10 @@ const Login = () => {
               >
                 {isLoading ? (
                   <>
-                    <div className="spinner-border spinner-border-sm me-2" role="status">
+                    <div
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    >
                       <span className="visually-hidden">Logging in...</span>
                     </div>
                     Signing In...
@@ -230,39 +223,6 @@ const Login = () => {
               </Button>
             </div>
 
-            {/* Divider */}
-            <div className="divider">
-              <span>or continue with</span>
-            </div>
-
-            {/* Social Login Options */}
-            <div className="social-login">
-              <Button
-                variant="outline-primary"
-                className="social-btn google-btn"
-                onClick={() => handleSocialLogin('Google')}
-              >
-                <FaGoogle className="me-2" />
-                Google
-              </Button>
-              <Button
-                variant="outline-primary"
-                className="social-btn facebook-btn"
-                onClick={() => handleSocialLogin('Facebook')}
-              >
-                <FaFacebook className="me-2" />
-                Facebook
-              </Button>
-              <Button
-                variant="outline-primary"
-                className="social-btn linkedin-btn"
-                onClick={() => handleSocialLogin('LinkedIn')}
-              >
-                <FaLinkedin className="me-2" />
-                LinkedIn
-              </Button>
-            </div>
-
             {/* Registration Link */}
             <div className="registration-section">
               <div className="registration-content">
@@ -271,7 +231,10 @@ const Login = () => {
                 </div>
                 <div className="registration-text">
                   <h4>New to CONNECT?</h4>
-                  <p>Join our professional network and start building your expert profile</p>
+                  <p>
+                    Join our professional network and start building your expert
+                    profile
+                  </p>
                 </div>
               </div>
               <Button
@@ -319,7 +282,7 @@ const Login = () => {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         .login-hero {
           background: linear-gradient(
             135deg,
@@ -332,7 +295,7 @@ const Login = () => {
           color: white;
           text-align: center;
         }
-        
+
         .hero-badge {
           display: inline-flex;
           align-items: center;
@@ -346,21 +309,21 @@ const Login = () => {
           color: #ffd700;
           font-weight: 600;
         }
-        
+
         .hero-title {
           font-size: 3rem;
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
         }
-        
+
         .gradient-text {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        
+
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
@@ -370,30 +333,30 @@ const Login = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .hero-stats {
           display: flex;
           justify-content: center;
           gap: 3rem;
           margin-top: 2rem;
         }
-        
+
         .stat-item {
           text-align: center;
         }
-        
+
         .stat-number {
           font-size: 2.5rem;
           color: #ffd700;
           margin-bottom: 0.5rem;
         }
-        
+
         .stat-label {
           font-size: 1rem;
           opacity: 0.9;
           font-weight: 500;
         }
-        
+
         .login-form-section {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -405,12 +368,12 @@ const Login = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .form-header {
           text-align: center;
           margin-bottom: 2.5rem;
         }
-        
+
         .form-header-icon {
           width: 80px;
           height: 80px;
@@ -423,20 +386,20 @@ const Login = () => {
           font-size: 2rem;
           margin: 0 auto 1.5rem;
         }
-        
+
         .form-title {
           font-size: 2rem;
           font-weight: 700;
           color: #333;
           margin-bottom: 0.5rem;
         }
-        
+
         .form-subtitle {
           font-size: 1.1rem;
           color: #666;
           margin: 0;
         }
-        
+
         .error-alert {
           border-radius: 15px;
           border: none;
@@ -444,15 +407,15 @@ const Login = () => {
           background: rgba(220, 53, 69, 0.1);
           color: #dc3545;
         }
-        
+
         .login-form {
           margin: 0;
         }
-        
+
         .form-group {
           margin-bottom: 2rem;
         }
-        
+
         .form-label {
           display: flex;
           align-items: center;
@@ -462,16 +425,16 @@ const Login = () => {
           margin-bottom: 0.75rem;
           font-size: 1.1rem;
         }
-        
+
         .label-icon {
           color: #667eea;
           font-size: 1rem;
         }
-        
+
         .input-container {
           position: relative;
         }
-        
+
         .form-input {
           border-radius: 15px;
           border: 2px solid #e9ecef;
@@ -481,13 +444,13 @@ const Login = () => {
           background: white;
           width: 100%;
         }
-        
+
         .form-input:focus {
           border-color: #667eea;
           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
           outline: none;
         }
-        
+
         .input-icon {
           position: absolute;
           left: 1rem;
@@ -496,7 +459,7 @@ const Login = () => {
           color: #667eea;
           font-size: 1.1rem;
         }
-        
+
         .password-toggle-btn {
           position: absolute;
           right: 1rem;
@@ -507,55 +470,55 @@ const Login = () => {
           border: none;
           background: none;
         }
-        
+
         .password-toggle-btn:hover {
           color: #764ba2;
         }
-        
+
         .form-help {
           color: #666;
           font-size: 0.9rem;
           margin-top: 0.5rem;
           display: block;
         }
-        
+
         .form-options {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 2rem;
         }
-        
+
         .custom-checkbox {
           margin: 0;
         }
-        
+
         .custom-checkbox .form-check-input {
           border-radius: 4px;
           border: 2px solid #667eea;
         }
-        
+
         .custom-checkbox .form-check-input:checked {
           background-color: #667eea;
           border-color: #667eea;
         }
-        
+
         .forgot-link {
           color: #667eea;
           text-decoration: none;
           font-weight: 500;
           transition: color 0.3s ease;
         }
-        
+
         .forgot-link:hover {
           color: #764ba2;
           text-decoration: underline;
         }
-        
+
         .submit-section {
           margin-bottom: 2rem;
         }
-        
+
         .submit-btn {
           width: 100%;
           border-radius: 25px;
@@ -566,73 +529,23 @@ const Login = () => {
           border: none;
           transition: all 0.3s ease;
         }
-        
+
         .submit-btn:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-        
+
         .submit-btn:disabled {
           opacity: 0.7;
         }
-        
-        .divider {
-          text-align: center;
-          margin: 2rem 0;
-          position: relative;
+
+        .cancel-btn {
+          border-radius: 25px;
+          padding: 1rem 2rem;
+          font-weight: 600;
         }
-        
-        .divider::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: #e9ecef;
-        }
-        
-        .divider span {
-          background: white;
-          padding: 0 1rem;
-          color: #666;
-          font-size: 0.9rem;
-        }
-        
-        .social-login {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 1rem;
-          margin-bottom: 2rem;
-        }
-        
-        .social-btn {
-          border-radius: 15px;
-          padding: 0.75rem 1rem;
-          font-weight: 500;
-          transition: all 0.3s ease;
-          border: 2px solid #e9ecef;
-        }
-        
-        .social-btn:hover {
-          transform: translateY(-2px);
-        }
-        
-        .google-btn:hover {
-          border-color: #ea4335;
-          color: #ea4335;
-        }
-        
-        .facebook-btn:hover {
-          border-color: #1877f2;
-          color: #1877f2;
-        }
-        
-        .linkedin-btn:hover {
-          border-color: #0077b5;
-          color: #0077b5;
-        }
-        
+
+        .auth-required-section,
         .registration-section {
           background: rgba(102, 126, 234, 0.05);
           border-radius: 15px;
@@ -640,11 +553,11 @@ const Login = () => {
           text-align: center;
           border: 1px solid rgba(102, 126, 234, 0.1);
         }
-        
+
         .registration-content {
           margin-bottom: 1.5rem;
         }
-        
+
         .registration-icon {
           width: 60px;
           height: 60px;
@@ -657,19 +570,19 @@ const Login = () => {
           font-size: 1.5rem;
           margin: 0 auto 1rem;
         }
-        
+
         .registration-text h4 {
           color: #333;
           font-weight: 600;
           margin-bottom: 0.5rem;
         }
-        
+
         .registration-text p {
           color: #666;
           margin: 0;
           font-size: 0.95rem;
         }
-        
+
         .register-btn {
           border-radius: 25px;
           padding: 0.75rem 2rem;
@@ -678,23 +591,23 @@ const Login = () => {
           color: #28a745;
           transition: all 0.3s ease;
         }
-        
+
         .register-btn:hover {
           background: #28a745;
           color: white;
           transform: translateY(-2px);
         }
-        
+
         .features-section {
           margin-bottom: 3rem;
         }
-        
+
         .features-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 2rem;
         }
-        
+
         .feature-card {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -704,11 +617,11 @@ const Login = () => {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           transition: transform 0.3s ease;
         }
-        
+
         .feature-card:hover {
           transform: translateY(-5px);
         }
-        
+
         .feature-icon {
           width: 70px;
           height: 70px;
@@ -721,66 +634,62 @@ const Login = () => {
           font-size: 1.8rem;
           margin: 0 auto 1.5rem;
         }
-        
+
         .feature-card h4 {
           color: #333;
           font-weight: 600;
           margin-bottom: 1rem;
         }
-        
+
         .feature-card p {
           color: #666;
           margin: 0;
           line-height: 1.6;
         }
-        
+
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.5rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1.1rem;
           }
-          
+
           .hero-stats {
             flex-direction: column;
             gap: 2rem;
           }
-          
+
           .login-form-section {
             padding: 2rem;
             margin: 2rem 1rem;
           }
-          
-          .social-login {
-            grid-template-columns: 1fr;
-          }
-          
+
           .features-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
         }
-        
+
         @media (max-width: 576px) {
           .hero-title {
             font-size: 2rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1rem;
           }
-          
+
           .login-hero {
             padding: 2rem 0;
           }
-          
+
           .login-form-section {
             padding: 1.5rem;
             margin: 1rem;
           }
-          
+
           .form-options {
             flex-direction: column;
             gap: 1rem;
