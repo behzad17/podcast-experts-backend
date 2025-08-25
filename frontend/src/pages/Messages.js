@@ -1068,6 +1068,52 @@ const Messages = () => {
         .send-btn:disabled {
           opacity: 0.6;
         }
+        
+        /* Prevent flickering and ensure smooth transitions */
+        .message-input-area {
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+        
+        .message-input {
+          transition: all 0.2s ease;
+          will-change: transform;
+          transform: translateZ(0);
+        }
+        
+        .message-input:focus {
+          transform: translateZ(0);
+          outline: none;
+          box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .send-btn {
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+        
+        .send-btn:not(:disabled):hover {
+          transform: translateY(-2px) translateZ(0);
+        }
+        
+        /* Smooth loading states */
+        .spinner-border-sm {
+          width: 1rem;
+          height: 1rem;
+          border-width: 0.15em;
+        }
+        
+        /* Prevent layout shift during message sending */
+        .messages-area {
+          will-change: scroll-position;
+        }
+        
+        .message-item {
+          will-change: transform;
+          transform: translateZ(0);
+        }
         .chat-loading {
           display: flex;
           flex-direction: column;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Card, Form, Button, Badge } from "react-bootstrap";
+import { Form, Button, Badge } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
 import {
@@ -17,16 +17,19 @@ const ChatWindow = ({ userId }) => {
   const [newMessage, setNewMessage] = useState("");
   const [otherUser, setOtherUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user: currentUser } = useAuth();
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   const fetchMessages = useCallback(async () => {
+    if (!userId) return;
+    
     try {
-      setLoading(true);
       const response = await api.get(
         `/user_messages/chat_with_user/?user_id=${userId}`
       );
@@ -40,35 +43,70 @@ const ChatWindow = ({ userId }) => {
     }
   }, [userId]);
 
+  // Initial fetch and polling setup
   useEffect(() => {
     if (userId) {
+      setLoading(true);
       fetchMessages();
-      const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
+      
+      const interval = setInterval(fetchMessages, 5000);
       return () => clearInterval(interval);
     }
-  }, [fetchMessages, userId]);
+  }, [userId, fetchMessages]);
 
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  const handleSubmit = async (e) => {
+  // Focus input when component mounts or userId changes
+  useEffect(() => {
+    if (userId && inputRef.current) {
+      // Small delay to ensure component is fully rendered
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [userId]);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !userId) return;
+    if (!newMessage.trim() || !userId || isSubmitting) return;
 
     try {
+      setIsSubmitting(true);
       await api.post("/user_messages/", {
         receiver_id: userId,
         content: newMessage,
       });
+      
+      // Clear input immediately for better UX
       setNewMessage("");
-      fetchMessages();
+      
+      // Refetch messages to show the new message
+      await fetchMessages();
+      
+      // Refocus input after sending
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      
     } catch (error) {
       console.error("Error sending message:", error);
+      // Keep the message in input if sending failed
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }, [newMessage, userId, isSubmitting, fetchMessages]);
 
-  const formatTimestamp = (timestamp) => {
+  const handleInputChange = useCallback((e) => {
+    setNewMessage(e.target.value);
+  }, []);
+
+  const formatTimestamp = useCallback((timestamp) => {
+    if (!timestamp) return "";
+    
     const now = new Date();
     const messageTime = new Date(timestamp);
     const diffInHours = Math.floor((now - messageTime) / (1000 * 60 * 60));
@@ -80,9 +118,9 @@ const ChatWindow = ({ userId }) => {
         minute: "2-digit",
       });
     return messageTime.toLocaleDateString();
-  };
+  }, []);
 
-  const getUserAvatar = (userType) => {
+  const getUserAvatar = useCallback((userType) => {
     switch (userType) {
       case "expert":
         return <FaUserTie className="avatar-icon expert" />;
@@ -93,9 +131,9 @@ const ChatWindow = ({ userId }) => {
       default:
         return <FaUser className="avatar-icon default" />;
     }
-  };
+  }, []);
 
-  const getUserTypeBadge = (userType) => {
+  const getUserTypeBadge = useCallback((userType) => {
     let variant = "secondary";
     if (userType === "expert") variant = "warning";
     else if (userType === "podcaster") variant = "info";
@@ -105,7 +143,7 @@ const ChatWindow = ({ userId }) => {
         {userType.charAt(0).toUpperCase() + userType.slice(1)}
       </Badge>
     );
-  };
+  }, []);
 
   if (!userId) {
     return (
@@ -204,19 +242,27 @@ const ChatWindow = ({ userId }) => {
         <Form onSubmit={handleSubmit} className="message-form">
           <Form.Group className="input-group">
             <Form.Control
+              ref={inputRef}
               type="text"
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={handleInputChange}
               placeholder="Type a message..."
               className="message-input"
+              disabled={isSubmitting}
             />
             <Button
               type="submit"
               variant="primary"
               className="send-btn"
-              disabled={!newMessage.trim()}
+              disabled={!newMessage.trim() || isSubmitting}
             >
-              <FaPaperPlane />
+              {isSubmitting ? (
+                <div className="spinner-border spinner-border-sm" role="status">
+                  <span className="visually-hidden">Sending...</span>
+                </div>
+              ) : (
+                <FaPaperPlane />
+              )}
             </Button>
           </Form.Group>
         </Form>
