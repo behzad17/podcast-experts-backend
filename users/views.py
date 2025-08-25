@@ -36,20 +36,16 @@ class UserRegisterView(generics.CreateAPIView):
     def send_verification_email(self, user, token):
         verification_url = f"{settings.FRONTEND_URL}/verify-email/{token}"
         
-        # Create a simple text email with verification code
-        # This approach is guaranteed to work across all email clients
+        # Create a simple, clean verification email
         text_content = f"""
         Welcome to CONNECT!
         
         Hi {user.username},
         
-        Your verification code is: {token[:8].upper()}
+        Please verify your email by clicking this link:
+        {verification_url}
         
-        To verify your email, please:
-        1. Go to: {verification_url}
-        2. OR enter the code: {token[:8].upper()}
-        
-        If you have any issues, please contact support.
+        If the link doesn't work, copy and paste it into your browser.
         
         This email was sent from CONNECT Platform.
         """
@@ -69,7 +65,6 @@ class UserRegisterView(generics.CreateAPIView):
             
             print(f"[DEBUG] Verification email sent to {user.email}")
             print(f"[DEBUG] Verification URL: {verification_url}")
-            print(f"[DEBUG] Verification code: {token[:8].upper()}")
             print(f"[DEBUG] Email result: {result}")
             
         except Exception as e:
