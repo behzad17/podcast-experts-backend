@@ -36,56 +36,36 @@ class UserRegisterView(generics.CreateAPIView):
     def send_verification_email(self, user, token):
         verification_url = f"{settings.FRONTEND_URL}/verify-email/{token}"
         
-        # Create a very simple, email-client-friendly HTML content
+        # Create a very simple, guaranteed-to-work HTML email
         html_content = f"""
         <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        </head>
-        <body style="font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4;">
-            <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px;">
-                <h1 style="color: #667eea; text-align: center;">Welcome to CONNECT!</h1>
-                
-                <p>Hi <strong>{user.username}</strong>,</p>
-                
-                <p>Thank you for joining CONNECT! Please verify your email address to complete your registration.</p>
-                
-                <div style="text-align: center; margin: 30px 0;">
-                    <a href="{verification_url}" style="background-color: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
-                        Click Here to Verify Email
-                    </a>
-                </div>
-                
-                <p>If the button above doesn't work, copy and paste this link into your browser:</p>
-                <p><a href="{verification_url}" style="color: #667eea;">{verification_url}</a></p>
-                
-                <hr style="margin: 30px 0;">
-                <p style="font-size: 12px; color: #666;">This email was sent from CONNECT Platform.</p>
-            </div>
+        <body>
+            <h1>Welcome to CONNECT!</h1>
+            <p>Hi {user.username},</p>
+            <p>Please verify your email by clicking this link:</p>
+            <p><a href="{verification_url}">VERIFY EMAIL</a></p>
+            <p>If the link doesn't work, copy and paste this URL into your browser:</p>
+            <p>{verification_url}</p>
         </body>
         </html>
         """
         
-        # Create plain text version with guaranteed-clickable link
+        # Create plain text version
         text_content = f"""
         Welcome to CONNECT!
         
         Hi {user.username},
         
-        Thank you for joining CONNECT! Please verify your email address to complete your registration.
-        
-        VERIFICATION LINK (click or copy-paste):
+        Please verify your email by visiting this link:
         {verification_url}
         
-        IMPORTANT: If the link above doesn't work when clicked, please copy and paste it into your web browser's address bar.
-        
-        This email was sent from CONNECT Platform.
+        If the link doesn't work, copy and paste the URL into your browser.
         """
         
         subject = "Verify your email - CONNECT Platform"
         
         try:
-            # Try sending as HTML email first
+            # Send as HTML email
             email = EmailMultiAlternatives(
                 subject=subject,
                 body=text_content,
@@ -96,20 +76,15 @@ class UserRegisterView(generics.CreateAPIView):
             # Attach HTML version
             email.attach_alternative(html_content, "text/html")
             
-            # Set content type explicitly
-            email.content_subtype = "html"
-            
             # Send the email
             result = email.send(fail_silently=False)
             
-            print(f"[DEBUG] HTML email sent to {user.email}")
+            print(f"[DEBUG] Email sent to {user.email}")
             print(f"[DEBUG] Verification URL: {verification_url}")
             print(f"[DEBUG] Email result: {result}")
-            print(f"[DEBUG] HTML content length: {len(html_content)}")
-            print(f"[DEBUG] HTML content preview: {html_content[:200]}...")
             
         except Exception as e:
-            print(f"[ERROR] HTML email failed: {str(e)}")
+            print(f"[ERROR] Email failed: {str(e)}")
             
             # Fallback to plain text email
             try:
