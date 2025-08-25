@@ -2,6 +2,30 @@ import React, { useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaUserPlus,
+  FaMicrophone,
+  FaUserTie,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaArrowRight,
+  FaArrowLeft,
+  FaShieldAlt,
+  FaRocket,
+  FaUsers,
+  FaStar,
+  FaGlobe,
+  FaKey,
+  FaUserCheck,
+  FaLightbulb,
+  FaHandshake,
+  FaNetworkWired
+} from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +37,27 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [formProgress, setFormProgress] = useState(0);
   const navigate = useNavigate();
+
+  // Calculate form progress
+  React.useEffect(() => {
+    const requiredFields = ['username', 'email', 'password'];
+    const filledFields = requiredFields.filter(field => 
+      formData[field] && formData[field].toString().trim() !== ''
+    );
+    const progress = (filledFields.length / requiredFields.length) * 100;
+    setFormProgress(progress);
+  }, [formData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
@@ -74,224 +114,870 @@ const Register = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "2rem 0",
-      }}
-    >
-      <Container
-        style={{
-          maxWidth: "500px",
-          backgroundColor: "white",
-          padding: "2rem",
-          borderRadius: "15px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h2
-          className="text-center mb-4"
-          style={{
-            color: "#455a64",
-            fontWeight: "600",
-            fontSize: "2rem",
-          }}
-        >
-          Create Account
-        </h2>
-        {error && (
-          <Alert
-            variant="danger"
-            style={{
-              backgroundColor: "#ffebee",
-              borderColor: "#ffcdd2",
-              color: "#c62828",
-              borderRadius: "8px",
-              marginBottom: "1.5rem",
-            }}
-          >
-            {error}
-          </Alert>
-        )}
-        {success && (
-          <Alert
-            variant="success"
-            style={{
-              backgroundColor: "#e8f5e9",
-              borderColor: "#c8e6c9",
-              color: "#2e7d32",
-              borderRadius: "8px",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Registration successful! Please check your email for verification.
-            You will be redirected to the login page in 10 seconds. If you don't
-            see the verification email, please check your spam folder.
-          </Alert>
-        )}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-4">
-            <Form.Label
-              style={{
-                color: "#455a64",
-                fontWeight: "500",
-                marginBottom: "0.5rem",
-              }}
-            >
-              Username
-            </Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder="Choose a username"
-              style={{
-                padding: "0.75rem",
-                borderRadius: "8px",
-                border: "1px solid #e0e0e0",
-                transition: "border-color 0.2s ease",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label
-              style={{
-                color: "#455a64",
-                fontWeight: "500",
-                marginBottom: "0.5rem",
-              }}
-            >
-              Email
-            </Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-              style={{
-                padding: "0.75rem",
-                borderRadius: "8px",
-                border: "1px solid #e0e0e0",
-                transition: "border-color 0.2s ease",
-              }}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label
-              style={{
-                color: "#455a64",
-                fontWeight: "500",
-                marginBottom: "0.5rem",
-              }}
-            >
-              Password
-            </Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Create a password"
-              style={{
-                padding: "0.75rem",
-                borderRadius: "8px",
-                border: "1px solid #e0e0e0",
-                transition: "border-color 0.2s ease",
-              }}
-            />
-            <Form.Text className="text-muted">
-              Password must be at least 8 characters long
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-4">
-            <Form.Label
-              style={{
-                color: "#455a64",
-                fontWeight: "500",
-                marginBottom: "0.5rem",
-              }}
-            >
-              I want to join as a:
-            </Form.Label>
-            <Form.Select
-              name="user_type"
-              value={formData.user_type}
-              onChange={handleChange}
-              style={{
-                padding: "0.75rem",
-                borderRadius: "8px",
-                border: "1px solid #e0e0e0",
-                transition: "border-color 0.2s ease",
-              }}
-            >
-              <option value="podcaster">Podcaster</option>
-              <option value="expert">Expert</option>
-            </Form.Select>
-          </Form.Group>
-
-          <div className="d-grid gap-2">
-            <Button
-              type="submit"
-              disabled={isLoading}
-              style={{
-                backgroundColor: "#6495ED",
-                border: "none",
-                padding: "0.75rem",
-                borderRadius: "8px",
-                fontWeight: "500",
-                transition: "background-color 0.2s ease",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#5c85d6")}
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#6495ED")}
-            >
-              {isLoading ? (
-                <span>
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Creating Account...
-                </span>
-              ) : (
-                "Create Account"
-              )}
-            </Button>
+    <div className="register-page-modern">
+      {/* Hero Section */}
+      <div className="register-hero">
+        <Container>
+          <div className="hero-content">
+            <div className="hero-badge">
+              <FaUserPlus />
+              <span>Join CONNECT</span>
+            </div>
+            <h1 className="hero-title">
+              Start Your <span className="gradient-text">Professional</span> Journey
+            </h1>
+            <p className="hero-subtitle">
+              Create your account and join our network of podcasters and experts. 
+              Build your professional presence, connect with others, and grow your business.
+            </p>
+            <div className="hero-stats">
+              <div className="stat-item">
+                <div className="stat-number">
+                  <FaUsers />
+                </div>
+                <div className="stat-label">Growing Community</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">
+                  <FaStar />
+                </div>
+                <div className="stat-label">Quality Network</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">
+                  <FaRocket />
+                </div>
+                <div className="stat-label">Fast Growth</div>
+              </div>
+            </div>
           </div>
-        </Form>
-        <div
-          className="text-center mt-4"
-          style={{ color: "#666", fontSize: "0.9rem" }}
-        >
-          <p className="mb-0">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              style={{
-                color: "#6495ED",
-                textDecoration: "none",
-                fontWeight: "500",
-              }}
-              onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
-              onMouseOut={(e) => (e.target.style.textDecoration = "none")}
-            >
-              Login here
-            </a>
-          </p>
+        </Container>
+      </div>
+
+      <Container className="mt-5">
+        <div className="register-form-section">
+          {/* Form Header */}
+          <div className="form-header">
+            <div className="form-header-icon">
+              <FaUserPlus />
+            </div>
+            <h2 className="form-title">Create Your Account</h2>
+            <p className="form-subtitle">
+              Join our professional network and start building your presence
+            </p>
+          </div>
+
+          {/* Form Progress */}
+          <div className="form-progress-section">
+            <div className="progress-header">
+              <span className="progress-text">Form Progress</span>
+              <span className="progress-percentage">{Math.round(formProgress)}%</span>
+            </div>
+            <div className="progress-bar-container">
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill" 
+                  style={{ width: `${formProgress}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Error Alert */}
+          {error && (
+            <Alert variant="danger" className="error-alert">
+              <FaExclamationTriangle className="me-2" />
+              {error}
+            </Alert>
+          )}
+
+          {/* Success Alert */}
+          {success && (
+            <Alert variant="success" className="success-alert">
+              <FaCheckCircle className="me-2" />
+              Registration successful! Please check your email for verification.
+              You will be redirected to the login page in 10 seconds. If you don't
+              see the verification email, please check your spam folder.
+            </Alert>
+          )}
+
+          {/* Registration Form */}
+          <Form onSubmit={handleSubmit} className="register-form">
+            {/* User Type Selection */}
+            <div className="user-type-section">
+              <h4 className="section-title">
+                <FaUserCheck className="me-2" />
+                Choose Your Path
+              </h4>
+              <p className="section-subtitle">
+                Select how you want to join our professional network
+              </p>
+              <div className="user-type-cards">
+                <div 
+                  className={`user-type-card ${formData.user_type === 'podcaster' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, user_type: 'podcaster' })}
+                >
+                  <div className="card-icon">
+                    <FaMicrophone />
+                  </div>
+                  <h5>Podcaster</h5>
+                  <p>Create and manage your podcasts, reach audiences, and grow your brand</p>
+                  <div className="card-features">
+                    <span className="feature-tag">Content Creation</span>
+                    <span className="feature-tag">Audience Growth</span>
+                    <span className="feature-tag">Analytics</span>
+                  </div>
+                </div>
+                <div 
+                  className={`user-type-card ${formData.user_type === 'expert' ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, user_type: 'expert' })}
+                >
+                  <div className="card-icon">
+                    <FaUserTie />
+                  </div>
+                  <h5>Expert</h5>
+                  <p>Showcase your expertise, connect with clients, and build your business</p>
+                  <div className="card-features">
+                    <span className="feature-tag">Expert Profile</span>
+                    <span className="feature-tag">Client Connections</span>
+                    <span className="feature-tag">Professional Network</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Account Details */}
+            <div className="account-details-section">
+              <h4 className="section-title">
+                <FaUser className="me-2" />
+                Account Details
+              </h4>
+              <p className="section-subtitle">
+                Set up your basic account information
+              </p>
+              
+              <div className="form-grid">
+                {/* Username Field */}
+                <div className="form-group">
+                  <Form.Label className="form-label">
+                    <FaUser className="label-icon" />
+                    Username
+                  </Form.Label>
+                  <div className="input-container">
+                    <Form.Control
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      required
+                      placeholder="Choose a unique username"
+                      className="form-input"
+                    />
+                    <div className="input-icon">
+                      <FaUser />
+                    </div>
+                  </div>
+                  <small className="form-help">
+                    This will be your unique identifier on the platform
+                  </small>
+                </div>
+
+                {/* Email Field */}
+                <div className="form-group">
+                  <Form.Label className="form-label">
+                    <FaEnvelope className="label-icon" />
+                    Email Address
+                  </Form.Label>
+                  <div className="input-container">
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter your email address"
+                      className="form-input"
+                    />
+                    <div className="input-icon">
+                      <FaEnvelope />
+                    </div>
+                  </div>
+                  <small className="form-help">
+                    We'll send a verification email to this address
+                  </small>
+                </div>
+
+                {/* Password Field */}
+                <div className="form-group featured">
+                  <Form.Label className="form-label">
+                    <FaLock className="label-icon" />
+                    Password
+                  </Form.Label>
+                  <div className="input-container">
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      placeholder="Create a strong password"
+                      className="form-input"
+                    />
+                    <div className="input-icon">
+                      <FaKey />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="password-toggle-btn"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </Button>
+                  </div>
+                  <small className="form-help">
+                    Password must be at least 8 characters long
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Section */}
+            <div className="submit-section">
+              <div className="submit-info">
+                <div className="info-item">
+                  <FaShieldAlt className="info-icon" />
+                  <span>Your data is secure and encrypted</span>
+                </div>
+                <div className="info-item">
+                  <FaCheckCircle className="info-icon" />
+                  <span>Free to join, no hidden fees</span>
+                </div>
+                <div className="info-item">
+                  <FaUsers className="info-icon" />
+                  <span>Join thousands of professionals</span>
+                </div>
+              </div>
+              
+              <div className="submit-actions">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="submit-btn"
+                  size="lg"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="spinner-border spinner-border-sm me-2" role="status">
+                        <span className="visually-hidden">Creating...</span>
+                      </div>
+                      Creating Account...
+                    </>
+                  ) : (
+                    <>
+                      <FaUserPlus className="me-2" />
+                      Create Account
+                    </>
+                  )}
+                </Button>
+                
+                <Button
+                  variant="outline-secondary"
+                  className="cancel-btn"
+                  onClick={() => navigate("/login")}
+                >
+                  <FaArrowLeft className="me-2" />
+                  Back to Login
+                </Button>
+              </div>
+            </div>
+          </Form>
+        </div>
+
+        {/* Features Section */}
+        <div className="features-section">
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaLightbulb />
+              </div>
+              <h4>Smart Matching</h4>
+              <p>Connect with the right people using our intelligent matching system</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaHandshake />
+              </div>
+              <h4>Professional Network</h4>
+              <p>Build meaningful connections with industry professionals</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaNetworkWired />
+              </div>
+              <h4>Global Reach</h4>
+              <p>Access opportunities from anywhere in the world</p>
+            </div>
+          </div>
         </div>
       </Container>
+
+      <style jsx>{`
+        .register-page-modern {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .register-hero {
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+          );
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          padding: 3rem 0;
+          color: white;
+          text-align: center;
+        }
+        
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255, 215, 0, 0.2);
+          border: 1px solid rgba(255, 215, 0, 0.3);
+          border-radius: 25px;
+          padding: 0.75rem 1.5rem;
+          margin-bottom: 2rem;
+          font-size: 1rem;
+          color: #ffd700;
+          font-weight: 600;
+        }
+        
+        .hero-title {
+          font-size: 3rem;
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          line-height: 1.2;
+        }
+        
+        .gradient-text {
+          background: linear-gradient(45deg, #ffd700, #ffed4e);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .hero-subtitle {
+          font-size: 1.2rem;
+          margin-bottom: 2rem;
+          opacity: 0.9;
+          line-height: 1.6;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        .hero-stats {
+          display: flex;
+          justify-content: center;
+          gap: 3rem;
+          margin-top: 2rem;
+        }
+        
+        .stat-item {
+          text-align: center;
+        }
+        
+        .stat-number {
+          font-size: 2.5rem;
+          color: #ffd700;
+          margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+          font-size: 1rem;
+          opacity: 0.9;
+          font-weight: 500;
+        }
+        
+        .register-form-section {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 25px;
+          padding: 3rem;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          margin-bottom: 3rem;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        .form-header {
+          text-align: center;
+          margin-bottom: 2.5rem;
+        }
+        
+        .form-header-icon {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 2rem;
+          margin: 0 auto 1.5rem;
+        }
+        
+        .form-title {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #333;
+          margin-bottom: 0.5rem;
+        }
+        
+        .form-subtitle {
+          font-size: 1.1rem;
+          color: #666;
+          margin: 0;
+        }
+        
+        .form-progress-section {
+          background: rgba(102, 126, 234, 0.05);
+          border-radius: 15px;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+          border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+        
+        .progress-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+        
+        .progress-text {
+          font-size: 0.9rem;
+          color: #666;
+          font-weight: 500;
+        }
+        
+        .progress-percentage {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #667eea;
+        }
+        
+        .progress-bar-container {
+          width: 100%;
+        }
+        
+        .progress-bar {
+          width: 100%;
+          height: 8px;
+          background: rgba(102, 126, 234, 0.1);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          border-radius: 4px;
+          transition: width 0.5s ease;
+        }
+        
+        .error-alert,
+        .success-alert {
+          border-radius: 15px;
+          border: none;
+          margin-bottom: 2rem;
+        }
+        
+        .error-alert {
+          background: rgba(220, 53, 69, 0.1);
+          color: #dc3545;
+        }
+        
+        .success-alert {
+          background: rgba(40, 167, 69, 0.1);
+          color: #28a745;
+        }
+        
+        .register-form {
+          margin: 0;
+        }
+        
+        .user-type-section {
+          margin-bottom: 3rem;
+          padding-bottom: 2rem;
+          border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+        
+        .section-title {
+          display: flex;
+          align-items: center;
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 0.5rem;
+        }
+        
+        .section-subtitle {
+          color: #666;
+          margin-bottom: 1.5rem;
+          font-size: 0.95rem;
+        }
+        
+        .user-type-cards {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+        }
+        
+        .user-type-card {
+          background: white;
+          border: 2px solid #e9ecef;
+          border-radius: 15px;
+          padding: 1.5rem;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+        
+        .user-type-card:hover {
+          border-color: #667eea;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+        }
+        
+        .user-type-card.selected {
+          border-color: #667eea;
+          background: rgba(102, 126, 234, 0.05);
+          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.15);
+        }
+        
+        .user-type-card.selected::before {
+          content: '✓';
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          width: 30px;
+          height: 30px;
+          background: #667eea;
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1.2rem;
+        }
+        
+        .card-icon {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.5rem;
+          margin: 0 auto 1rem;
+        }
+        
+        .user-type-card h5 {
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+        }
+        
+        .user-type-card p {
+          color: #666;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+        
+        .card-features {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+        
+        .feature-tag {
+          background: rgba(102, 126, 234, 0.1);
+          color: #667eea;
+          padding: 0.25rem 0.75rem;
+          border-radius: 15px;
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+        
+        .account-details-section {
+          margin-bottom: 3rem;
+        }
+        
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        
+        .form-group.featured {
+          grid-column: 1 / -1;
+        }
+        
+        .form-label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 0.75rem;
+          font-size: 1.1rem;
+        }
+        
+        .label-icon {
+          color: #667eea;
+          font-size: 1rem;
+        }
+        
+        .input-container {
+          position: relative;
+        }
+        
+        .form-input {
+          border-radius: 15px;
+          border: 2px solid #e9ecef;
+          padding: 1rem 3rem 1rem 1.25rem;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          background: white;
+          width: 100%;
+        }
+        
+        .form-input:focus {
+          border-color: #667eea;
+          box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+          outline: none;
+        }
+        
+        .input-icon {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #667eea;
+          font-size: 1.1rem;
+        }
+        
+        .password-toggle-btn {
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #667eea;
+          padding: 0;
+          border: none;
+          background: none;
+        }
+        
+        .password-toggle-btn:hover {
+          color: #764ba2;
+        }
+        
+        .form-help {
+          color: #666;
+          font-size: 0.9rem;
+          margin-top: 0.5rem;
+          display: block;
+        }
+        
+        .submit-section {
+          border-top: 2px solid rgba(102, 126, 234, 0.1);
+          padding-top: 2rem;
+        }
+        
+        .submit-info {
+          display: flex;
+          justify-content: space-around;
+          margin-bottom: 2rem;
+          padding: 1.5rem;
+          background: rgba(102, 126, 234, 0.05);
+          border-radius: 15px;
+        }
+        
+        .info-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: #333;
+          font-size: 0.95rem;
+        }
+        
+        .info-icon {
+          color: #667eea;
+          font-size: 1.1rem;
+        }
+        
+        .submit-actions {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          align-items: center;
+        }
+        
+        .submit-btn {
+          border-radius: 25px;
+          padding: 1rem 2rem;
+          font-weight: 600;
+          font-size: 1.1rem;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          border: none;
+          transition: all 0.3s ease;
+          min-width: 200px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:disabled {
+          opacity: 0.7;
+        }
+        
+        .cancel-btn {
+          border-radius: 25px;
+          padding: 1rem 2rem;
+          font-weight: 600;
+        }
+        
+        .features-section {
+          margin-bottom: 3rem;
+        }
+        
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+        }
+        
+        .feature-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 2rem;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+          transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.8rem;
+          margin: 0 auto 1.5rem;
+        }
+        
+        .feature-card h4 {
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        
+        .feature-card p {
+          color: #666;
+          margin: 0;
+          line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+          .hero-title {
+            font-size: 2.5rem;
+          }
+          
+          .hero-subtitle {
+            font-size: 1.1rem;
+          }
+          
+          .hero-stats {
+            flex-direction: column;
+            gap: 2rem;
+          }
+          
+          .register-form-section {
+            padding: 2rem;
+            margin: 2rem 1rem;
+          }
+          
+          .user-type-cards {
+            grid-template-columns: 1fr;
+          }
+          
+          .form-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          
+          .submit-info {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          
+          .submit-actions {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          
+          .submit-btn,
+          .cancel-btn {
+            width: 100%;
+          }
+          
+          .features-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+        }
+        
+        @media (max-width: 576px) {
+          .hero-title {
+            font-size: 2rem;
+          }
+          
+          .hero-subtitle {
+            font-size: 1rem;
+          }
+          
+          .register-hero {
+            padding: 2rem 0;
+          }
+          
+          .register-form-section {
+            padding: 1.5rem;
+            margin: 1rem;
+          }
+        }
+      `}</style>
     </div>
   );
 };
