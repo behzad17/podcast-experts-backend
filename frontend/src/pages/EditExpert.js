@@ -3,6 +3,7 @@ import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
+import { FaImage, FaTimes } from "react-icons/fa";
 
 const EditExpert = () => {
   const navigate = useNavigate();
@@ -14,9 +15,12 @@ const EditExpert = () => {
     experience_years: "",
     website: "",
     social_media: "",
+    email: "",
   });
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
@@ -28,10 +32,32 @@ const EditExpert = () => {
           return;
         }
 
-        const response = await api.get(`/experts/${id}/`);
-        setFormData(response.data);
+        // First check if this is the user's own profile
+        const myProfileResponse = await api.get("/experts/my-profile/");
+        
+        // If the profile ID doesn't match, redirect to their own profile
+        if (myProfileResponse.data.id !== parseInt(id)) {
+          toast.error("You can only edit your own profile");
+          navigate(`/experts/${myProfileResponse.data.id}/edit`);
+          return;
+        }
+
+        // Use the my-profile endpoint to get the profile data
+        setFormData(myProfileResponse.data);
+        
+        // Set image preview if profile picture exists
+        if (myProfileResponse.data.profile_picture_url) {
+          setImagePreview(myProfileResponse.data.profile_picture_url);
+        }
+        
         setFetching(false);
       } catch (error) {
+        console.error("Fetch profile error:", error);
+        if (error.response?.status === 404) {
+          toast.error("You don't have an expert profile yet. Please create one first.");
+          navigate("/experts/create");
+          return;
+        }
         toast.error("Failed to load profile");
         setError(
           error.response?.data?.detail ||
@@ -51,6 +77,23 @@ const EditExpert = () => {
     });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePicture(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => setImagePreview(e.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setProfilePicture(null);
+    setImagePreview(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -63,11 +106,47 @@ const EditExpert = () => {
         return;
       }
 
-      await api.put(`/experts/${id}/`, formData);
+      console.log("Submitting form data:", formData);
+      console.log("Profile picture:", profilePicture);
+
+      // Create FormData for file upload
+      const submitData = new FormData();
+      submitData.append("name", formData.name);
+      submitData.append("bio", formData.bio);
+      submitData.append("expertise", formData.expertise);
+      submitData.append("experience_years", formData.experience_years);
+      
+      if (formData.website) {
+        submitData.append("website", formData.website);
+      }
+      
+      if (formData.social_media) {
+        submitData.append("social_media", formData.social_media);
+      }
+      
+      if (formData.email) {
+        submitData.append("email", formData.email);
+      }
+
+      if (profilePicture) {
+        submitData.append("profile_picture", profilePicture);
+      }
+
+      console.log("Submitting to /experts/my-profile/");
+      const response = await api.put("/experts/my-profile/", submitData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      console.log("Update response:", response.data);
       toast.success("Profile updated successfully");
       navigate(`/experts/${id}`);
     } catch (error) {
+      console.error("Update error:", error);
+      console.error("Error response:", error.response);
       toast.error(error.response?.data?.detail || "Failed to update profile");
+      setError(error.response?.data?.detail || "Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -161,8 +240,74 @@ const EditExpert = () => {
           />
         </Form.Group>
 
+        <Form.Group className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={formData.email || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Profile Picture</Form.Label>
+          {imagePreview ? (
+            <div className="mb-2">
+              <img
+                src={imagePreview}
+                alt="Profile preview"
+                style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "8px" }}
+                className="mb-2"
+              />
+              <div>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={removeImage}
+                  className="me-2"
+                >
+                  <FaTimes className="me-1" />
+                  Remove
+                </Button>
+              </div>
+            </div>
+          ) : null}
+          <Form.Control
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+          <Form.Text className="text-muted">
+            Upload a new profile picture (optional)
+          </Form.Text>
+        </Form.Group>
+
         <Button type="submit" variant="primary" disabled={loading}>
-          {loading ? "Updating..." : "Update Profile"}
+          {loading ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                className="me-2"
+              />
+              Updating...
+            </>
+          ) : (
+            "Update Profile"
+          )}
+        </Button>
+        
+        <Button
+          type="button"
+          variant="outline-secondary"
+          className="ms-2"
+          onClick={() => navigate(`/experts/${id}`)}
+        >
+          Cancel
         </Button>
       </Form>
     </Container>
