@@ -79,19 +79,10 @@ class ExpertProfile(models.Model):
     @property
     def profile_picture_url(self):
         """Return profile picture URL or default image if no profile picture exists"""
-        if self.profile_picture and hasattr(self.profile_picture, 'name'):
-            # Check if it's already a Cloudinary URL
-            if self.profile_picture.name.startswith('http'):
-                return self.profile_picture.name
-            # If it's a Cloudinary public_id, construct the full URL
-            elif self.profile_picture.name.startswith('expert_profiles/'):
-                try:
-                    cloud_name = cloudinary.config().cloud_name
-                    if cloud_name:
-                        return (f"https://res.cloudinary.com/{cloud_name}/"
-                               f"image/upload/v1/{self.profile_picture.name}")
-                except Exception:
-                    pass
+        if self.profile_picture and hasattr(self.profile_picture, 'name') and self.profile_picture.name:
+            # Use the storage backend's url method
+            from django.core.files.storage import default_storage
+            return default_storage.url(self.profile_picture.name)
         
         # Return a default placeholder image URL
         try:
@@ -106,35 +97,9 @@ class ExpertProfile(models.Model):
         return "expert_profiles/default_profile.png"
 
     def save(self, *args, **kwargs):
-        """Override save to handle Cloudinary upload"""
-        # Call the parent save method first
+        """Override save to handle any additional logic if needed"""
+        # Call the parent save method
         super().save(*args, **kwargs)
-        
-        # If there's a profile picture, upload it to Cloudinary
-        if self.profile_picture and hasattr(self.profile_picture, 'path'):
-            try:
-                # Create a unique identifier using username and ID
-                unique_id = f"{self.user.username}_{self.id}".replace(' ', '_').lower()
-                
-                # Upload to Cloudinary
-                result = cloudinary.uploader.upload(
-                    self.profile_picture.path,
-                    public_id=f"expert_profiles/{unique_id}",
-                    resource_type="auto",
-                    overwrite=True
-                )
-                
-                # Store only the public_id, not the full URL
-                self.profile_picture.name = f"expert_profiles/{unique_id}"
-                
-                # Save again without triggering the save method
-                super().save(update_fields=['profile_picture'])
-                
-                print(f"✅ Expert profile picture uploaded to Cloudinary: {result['secure_url']}")
-                
-            except Exception as e:
-                print(f"Cloudinary upload failed for expert {self.name}: {e}")
-                # Continue with local storage if Cloudinary fails
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)

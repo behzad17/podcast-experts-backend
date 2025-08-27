@@ -4,9 +4,7 @@ import cloudinary.uploader
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.conf import settings
-import re
 
 User = get_user_model()
 
@@ -99,19 +97,10 @@ class Podcast(models.Model):
     @property
     def image_url(self):
         """Return podcast image URL or default image if no image exists"""
-        if self.image and hasattr(self.image, 'name'):
-            # Check if it's already a Cloudinary URL
-            if self.image.name.startswith('http'):
-                return self.image.name
-            # If it's a Cloudinary public_id, construct the full URL
-            elif self.image.name.startswith('podcast_images/'):
-                try:
-                    cloud_name = cloudinary.config().cloud_name
-                    if cloud_name:
-                        return (f"https://res.cloudinary.com/{cloud_name}/"
-                                f"image/upload/v1/{self.image.name}")
-                except Exception:
-                    pass
+        if self.image and hasattr(self.image, 'name') and self.image.name:
+            # Use the storage backend's url method
+            from django.core.files.storage import default_storage
+            return default_storage.url(self.image.name)
         
         # Return a default placeholder image URL
         try:
@@ -126,38 +115,9 @@ class Podcast(models.Model):
         return "podcast_images/default_podcast.png"
 
     def save(self, *args, **kwargs):
-        """Override save to handle Cloudinary upload"""
-        # Call the parent save method first
+        """Override save to handle any additional logic if needed"""
+        # Call the parent save method
         super().save(*args, **kwargs)
-        
-        # If there's an image, upload it to Cloudinary
-        if self.image and hasattr(self.image, 'path'):
-            try:
-                # Create a unique identifier using title and ID
-                # Clean the title for Cloudinary public_id (remove special characters)
-                clean_title = re.sub(r'[^a-zA-Z0-9\s]', '', self.title).strip()
-                clean_title = re.sub(r'\s+', '_', clean_title)  # Replace spaces with underscores
-                unique_id = f"{clean_title}_{self.id}".lower()
-                
-                # Upload to Cloudinary
-                result = cloudinary.uploader.upload(
-                    self.image.path,
-                    public_id=f"podcast_images/{unique_id}",
-                    resource_type="auto",
-                    overwrite=True
-                )
-                
-                # Store only the public_id, not the full URL
-                self.image.name = f"podcast_images/{unique_id}"
-                
-                # Save again without triggering the save method
-                super().save(update_fields=['image'])
-                
-                print(f"✅ Podcast image uploaded to Cloudinary: {result['secure_url']}")
-                
-            except Exception as e:
-                print(f"Cloudinary upload failed for podcast {self.title}: {e}")
-                # Continue with local storage if Cloudinary fails
 
 
 class PodcastComment(models.Model):
