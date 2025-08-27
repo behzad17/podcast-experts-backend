@@ -98,9 +98,15 @@ class Podcast(models.Model):
     def image_url(self):
         """Return podcast image URL or default image if no image exists"""
         if self.image and hasattr(self.image, 'name') and self.image.name:
-            # Use the storage backend's url method
-            from django.core.files.storage import default_storage
-            return default_storage.url(self.image.name)
+            # Generate Cloudinary URL directly
+            try:
+                cloud_name = cloudinary.config().cloud_name
+                if cloud_name:
+                    # Remove leading slash if present
+                    clean_name = self.image.name.lstrip('/')
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{clean_name}"
+            except Exception:
+                pass
         
         # Return a default placeholder image URL
         try:
