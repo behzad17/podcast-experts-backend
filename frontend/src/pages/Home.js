@@ -119,8 +119,8 @@ const Home = () => {
                 <div className="user-welcome">
                   <FaUserTie className="user-icon" />
                   <span>
-                    Welcome back,{" "}
-                    {user.user_type === "expert" ? "Expert" : "Podcaster"}!
+                    Welcome back, {user.username}! You are logged in as{" "}
+                    {user.user_type === "expert" ? "an Expert" : "a Podcaster"}.
                   </span>
                 </div>
               )}

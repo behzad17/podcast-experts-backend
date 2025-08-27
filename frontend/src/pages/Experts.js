@@ -207,7 +207,7 @@ const Experts = () => {
                 <FaUsers />
               </div>
               <div className="user-details">
-                <h6 className="user-welcome">Welcome back!</h6>
+                <h6 className="user-welcome">Welcome back, {currentUser.username}!</h6>
                 <p className="user-role">
                   You are logged in as{" "}
                   <span className="user-type">
