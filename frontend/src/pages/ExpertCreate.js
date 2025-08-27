@@ -650,7 +650,7 @@ const ExpertCreate = () => {
           );
           backdrop-filter: blur(10px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 3rem 0;
+          padding: 1.5rem 0;
           color: white;
           text-align: center;
         }
@@ -662,17 +662,17 @@ const ExpertCreate = () => {
           background: rgba(255, 215, 0, 0.2);
           border: 1px solid rgba(255, 215, 0, 0.3);
           border-radius: 25px;
-          padding: 0.75rem 1.5rem;
-          margin-bottom: 2rem;
-          font-size: 1rem;
+          padding: 0.5rem 1rem;
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
           color: #ffd700;
           font-weight: 600;
         }
 
         .hero-title {
-          font-size: 3rem;
+          font-size: 2.2rem;
           font-weight: 700;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           line-height: 1.2;
         }
 
@@ -684,8 +684,8 @@ const ExpertCreate = () => {
         }
 
         .hero-subtitle {
-          font-size: 1.2rem;
-          margin-bottom: 2rem;
+          font-size: 1rem;
+          margin-bottom: 1.5rem;
           opacity: 0.9;
           line-height: 1.6;
           max-width: 600px;
@@ -696,8 +696,8 @@ const ExpertCreate = () => {
         .hero-stats {
           display: flex;
           justify-content: center;
-          gap: 3rem;
-          margin-top: 2rem;
+          gap: 2rem;
+          margin-top: 1rem;
         }
 
         .stat-item {
@@ -705,13 +705,13 @@ const ExpertCreate = () => {
         }
 
         .stat-number {
-          font-size: 2.5rem;
+          font-size: 1.8rem;
           color: #ffd700;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.3rem;
         }
 
         .stat-label {
-          font-size: 1rem;
+          font-size: 0.85rem;
           opacity: 0.9;
           font-weight: 500;
         }
@@ -1060,11 +1060,11 @@ const ExpertCreate = () => {
 
         @media (max-width: 768px) {
           .hero-title {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
           }
 
           .hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
           }
 
           .hero-stats {
@@ -1104,15 +1104,15 @@ const ExpertCreate = () => {
 
         @media (max-width: 576px) {
           .hero-title {
-            font-size: 2rem;
+            font-size: 1.5rem;
           }
 
           .hero-subtitle {
-            font-size: 1rem;
+            font-size: 0.85rem;
           }
 
           .create-hero {
-            padding: 2rem 0;
+            padding: 1rem 0;
           }
 
           .create-form-section {
