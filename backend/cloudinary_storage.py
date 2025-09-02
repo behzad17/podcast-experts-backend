@@ -9,6 +9,7 @@ from django.core.files.storage import Storage
 from django.core.files.base import File
 from django.utils.deconstruct import deconstructible
 from urllib.parse import urlparse
+from cloudinary.utils import cloudinary_url
 
 
 @deconstructible
@@ -91,12 +92,12 @@ class CustomCloudinaryStorage(Storage):
             # Return local URL
             return f"/media/{name}"
         
-        # Try to construct Cloudinary URL
+        # Try to construct Cloudinary URL via SDK
         try:
-            cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
-            if cloud_name:
-                return f"https://res.cloudinary.com/{cloud_name}/image/upload/{name}"
-        except:
+            url, _ = cloudinary_url(name, secure=True, resource_type="image")
+            if url:
+                return url
+        except Exception:
             pass
         
         # Fallback to local URL

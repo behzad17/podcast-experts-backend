@@ -1,6 +1,7 @@
 import os
 import cloudinary
 import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -82,20 +83,19 @@ class ExpertProfile(models.Model):
         if self.profile_picture and hasattr(self.profile_picture, 'name') and self.profile_picture.name:
             # Generate Cloudinary URL directly
             try:
-                cloud_name = cloudinary.config().cloud_name
-                if cloud_name:
-                    # Remove leading slash if present
-                    clean_name = self.profile_picture.name.lstrip('/')
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/{clean_name}"
+                # Remove leading slash if present and build URL via Cloudinary
+                clean_name = self.profile_picture.name.lstrip('/')
+                url, _ = cloudinary_url(clean_name, secure=True, resource_type="image")
+                if url:
+                    return url
             except Exception:
                 pass
         
         # Return a default placeholder image URL
         try:
-            cloud_name = cloudinary.config().cloud_name
-            if cloud_name:
-                return (f"https://res.cloudinary.com/{cloud_name}/"
-                       f"image/upload/expert_profiles/default_profile.png")
+            url, _ = cloudinary_url("expert_profiles/default_profile.png", secure=True, resource_type="image")
+            if url:
+                return url
         except Exception:
             pass
         

@@ -1,6 +1,7 @@
 import os
 import cloudinary
 import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
@@ -100,20 +101,19 @@ class Podcast(models.Model):
         if self.image and hasattr(self.image, 'name') and self.image.name:
             # Generate Cloudinary URL directly
             try:
-                cloud_name = cloudinary.config().cloud_name
-                if cloud_name:
-                    # Remove leading slash if present
-                    clean_name = self.image.name.lstrip('/')
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/{clean_name}"
+                # Remove leading slash if present and build URL via Cloudinary
+                clean_name = self.image.name.lstrip('/')
+                url, _ = cloudinary_url(clean_name, secure=True, resource_type="image")
+                if url:
+                    return url
             except Exception:
                 pass
         
         # Return a default placeholder image URL
         try:
-            cloud_name = cloudinary.config().cloud_name
-            if cloud_name:
-                return (f"https://res.cloudinary.com/{cloud_name}/"
-                        f"image/upload/podcast_images/default_podcast.png")
+            url, _ = cloudinary_url("podcast_images/default_podcast.png", secure=True, resource_type="image")
+            if url:
+                return url
         except Exception:
             pass
         
