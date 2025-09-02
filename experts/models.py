@@ -86,7 +86,7 @@ class ExpertProfile(models.Model):
                 if cloud_name:
                     # Remove leading slash if present
                     clean_name = self.profile_picture.name.lstrip('/')
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{clean_name}"
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/{clean_name}"
             except Exception:
                 pass
         
@@ -95,7 +95,7 @@ class ExpertProfile(models.Model):
             cloud_name = cloudinary.config().cloud_name
             if cloud_name:
                 return (f"https://res.cloudinary.com/{cloud_name}/"
-                       f"image/upload/v1/expert_profiles/default_profile.png")
+                       f"image/upload/expert_profiles/default_profile.png")
         except Exception:
             pass
         

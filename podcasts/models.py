@@ -104,7 +104,7 @@ class Podcast(models.Model):
                 if cloud_name:
                     # Remove leading slash if present
                     clean_name = self.image.name.lstrip('/')
-                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{clean_name}"
+                    return f"https://res.cloudinary.com/{cloud_name}/image/upload/{clean_name}"
             except Exception:
                 pass
         
@@ -113,7 +113,7 @@ class Podcast(models.Model):
             cloud_name = cloudinary.config().cloud_name
             if cloud_name:
                 return (f"https://res.cloudinary.com/{cloud_name}/"
-                        f"image/upload/v1/podcast_images/default_podcast.png")
+                        f"image/upload/podcast_images/default_podcast.png")
         except Exception:
             pass
         

@@ -95,7 +95,7 @@ class CustomCloudinaryStorage(Storage):
         try:
             cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
             if cloud_name:
-                return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/{name}"
+                return f"https://res.cloudinary.com/{cloud_name}/image/upload/{name}"
         except:
             pass
         
