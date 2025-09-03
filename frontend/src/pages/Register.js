@@ -729,10 +729,10 @@ const Register = () => {
         .user-type-card.selected::before {
           content: "✓";
           position: absolute;
-          top: -10px;
-          right: -10px;
-          width: 30px;
-          height: 30px;
+          top: clamp(-8px, -2vw, -10px);
+          right: clamp(-8px, -2vw, -10px);
+          width: clamp(25px, 6vw, 30px);
+          height: clamp(25px, 6vw, 30px);
           background: #667eea;
           color: white;
           border-radius: 50%;
@@ -740,7 +740,7 @@ const Register = () => {
           align-items: center;
           justify-content: center;
           font-weight: bold;
-          font-size: 1.2rem;
+          font-size: clamp(1rem, 2.5vw, 1.2rem);
         }
 
         .card-icon {
@@ -836,22 +836,23 @@ const Register = () => {
 
         .input-icon {
           position: absolute;
-          left: 1rem;
+          left: clamp(0.75rem, 2vw, 1rem);
           top: 50%;
           transform: translateY(-50%);
           color: #667eea;
-          font-size: 1.1rem;
+          font-size: clamp(1rem, 2.5vw, 1.1rem);
         }
 
         .password-toggle-btn {
           position: absolute;
-          right: 1rem;
+          right: clamp(0.75rem, 2vw, 1rem);
           top: 50%;
           transform: translateY(-50%);
           color: #667eea;
           padding: 0;
           border: none;
           background: none;
+          font-size: clamp(1rem, 2.5vw, 1.1rem);
         }
 
         .password-toggle-btn:hover {
@@ -974,6 +975,44 @@ const Register = () => {
           line-height: 1.6;
         }
 
+        @media (max-width: 1200px) {
+          .hero-title {
+            font-size: 2.8rem;
+          }
+
+          .register-form-section {
+            max-width: 700px;
+          }
+
+          .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          }
+        }
+
+        @media (max-width: 992px) {
+          .hero-title {
+            font-size: 2.6rem;
+          }
+
+          .hero-stats {
+            gap: 2rem;
+          }
+
+          .register-form-section {
+            max-width: 600px;
+            padding: 2.5rem;
+          }
+
+          .form-grid {
+            gap: 1.5rem;
+          }
+
+          .features-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+          }
+        }
+
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.5rem;
@@ -1039,6 +1078,49 @@ const Register = () => {
           .register-form-section {
             padding: 1.5rem;
             margin: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.8rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.9rem;
+          }
+
+          .register-hero {
+            padding: 1.5rem 0;
+          }
+
+          .register-form-section {
+            padding: 1rem;
+            margin: 0.5rem;
+          }
+
+          .form-header-icon {
+            width: clamp(60px, 15vw, 80px);
+            height: clamp(60px, 15vw, 80px);
+            font-size: clamp(1.5rem, 4vw, 2rem);
+          }
+
+          .card-icon {
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+          }
+
+          .user-type-card.selected::before {
+            width: clamp(25px, 6vw, 30px);
+            height: clamp(25px, 6vw, 30px);
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+          }
+
+          .feature-icon {
+            width: clamp(60px, 15vw, 70px);
+            height: clamp(60px, 15vw, 70px);
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
           }
         }
       `}</style>

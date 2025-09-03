@@ -134,8 +134,8 @@ const Experts = () => {
                 </div>
                 <h1 className="hero-title">Discover Expert Professionals</h1>
                 <p className="hero-subtitle">
-                  Connect with industry leaders, thought leaders, and domain experts
-                  who can elevate your podcast to the next level
+                  Connect with industry leaders, thought leaders, and domain
+                  experts who can elevate your podcast to the next level
                 </p>
                 {currentUser && (
                   <Button
@@ -207,7 +207,9 @@ const Experts = () => {
                 <FaUsers />
               </div>
               <div className="user-details">
-                <h6 className="user-welcome">Welcome back, {currentUser.username}!</h6>
+                <h6 className="user-welcome">
+                  Welcome back, {currentUser.username}!
+                </h6>
                 <p className="user-role">
                   You are logged in as{" "}
                   <span className="user-type">
@@ -532,6 +534,39 @@ const Experts = () => {
           }
           .search-input-group {
             margin-bottom: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.8rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.9rem;
+          }
+
+          .hero-stats {
+            gap: 0.5rem;
+          }
+
+          .stat-number {
+            font-size: 1.3rem;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+          }
+
+          .user-avatar {
+            width: clamp(45px, 11vw, 50px);
+            height: clamp(45px, 11vw, 50px);
+            font-size: clamp(1.3rem, 3vw, 1.5rem);
+          }
+
+          .spinner-ring {
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
           }
         }
       `}</style>

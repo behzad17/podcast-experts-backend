@@ -26,7 +26,7 @@ import {
   FaArrowRight,
   FaUsers,
   FaMicrophone,
-  FaUserTie
+  FaUserTie,
 } from "react-icons/fa";
 
 const Messages = () => {
@@ -115,7 +115,7 @@ const Messages = () => {
                   <span className="gradient-text">Your Network</span>
                 </h1>
                 <p className="hero-subtitle">
-                  Message experts, podcasters, and listeners. Build meaningful 
+                  Message experts, podcasters, and listeners. Build meaningful
                   connections and collaborate on amazing content together.
                 </p>
                 <div className="hero-stats">
@@ -176,7 +176,7 @@ const Messages = () => {
                     Search for experts, podcasters, or listeners
                   </p>
                 </div>
-                
+
                 <Form onSubmit={handleSearch} className="search-form">
                   <Form.Group className="form-group">
                     <Form.Control
@@ -187,7 +187,7 @@ const Messages = () => {
                       className="search-input"
                     />
                   </Form.Group>
-                  
+
                   <Form.Group className="form-group">
                     <Form.Select
                       value={userType}
@@ -200,7 +200,7 @@ const Messages = () => {
                       <option value="listener">Listeners</option>
                     </Form.Select>
                   </Form.Group>
-                  
+
                   {userType === "expert" && (
                     <Form.Group className="form-group">
                       <Form.Select
@@ -217,16 +217,20 @@ const Messages = () => {
                       </Form.Select>
                     </Form.Group>
                   )}
-                  
-                  <Button 
-                    type="submit" 
-                    variant="primary" 
+
+                  <Button
+                    type="submit"
+                    variant="primary"
                     disabled={searching}
                     className="search-btn"
                   >
                     {searching ? (
                       <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
                         Searching...
                       </>
                     ) : (
@@ -247,7 +251,7 @@ const Messages = () => {
                         {searchResults.length} found
                       </Badge>
                     </div>
-                    
+
                     <div className="results-list">
                       {searchResults.map((user) => (
                         <div key={user.id} className="user-result-card">
@@ -260,16 +264,22 @@ const Messages = () => {
                               <FaUsers className="avatar-icon listener" />
                             )}
                           </div>
-                          
+
                           <div className="user-info">
                             <h6 className="user-name">{user.username}</h6>
                             <div className="user-type">
-                              <Badge 
-                                bg={user.user_type === "expert" ? "warning" : 
-                                    user.user_type === "podcaster" ? "info" : "secondary"}
+                              <Badge
+                                bg={
+                                  user.user_type === "expert"
+                                    ? "warning"
+                                    : user.user_type === "podcaster"
+                                    ? "info"
+                                    : "secondary"
+                                }
                                 className="type-badge"
                               >
-                                {user.user_type.charAt(0).toUpperCase() + user.user_type.slice(1)}
+                                {user.user_type.charAt(0).toUpperCase() +
+                                  user.user_type.slice(1)}
                               </Badge>
                             </div>
                             {user.user_type === "expert" && (
@@ -280,7 +290,7 @@ const Messages = () => {
                               </div>
                             )}
                           </div>
-                          
+
                           <Button
                             variant="outline-primary"
                             size="sm"
@@ -292,7 +302,7 @@ const Messages = () => {
                           </Button>
                         </div>
                       ))}
-                      
+
                       {searchResults.length === 0 && (
                         <div className="no-results">
                           <FaSearch className="no-results-icon" />
@@ -316,7 +326,7 @@ const Messages = () => {
                     Continue your ongoing chats
                   </p>
                 </div>
-                
+
                 <MessageList />
               </div>
             </div>
@@ -334,8 +344,8 @@ const Messages = () => {
                   </div>
                   <h3 className="welcome-title">Welcome to Messages</h3>
                   <p className="welcome-subtitle">
-                    Select a conversation from the left sidebar to start chatting, 
-                    or search for new people to connect with.
+                    Select a conversation from the left sidebar to start
+                    chatting, or search for new people to connect with.
                   </p>
                   <div className="welcome-features">
                     <div className="feature-item">
@@ -465,8 +475,13 @@ const Messages = () => {
           font-weight: 600;
         }
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
         .messages-sidebar {
           display: flex;
@@ -743,6 +758,63 @@ const Messages = () => {
           }
         }
 
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.6rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.85rem;
+          }
+
+          .hero-stats {
+            gap: 0.5rem;
+          }
+
+          .stat-number {
+            font-size: 1.3rem;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+          }
+
+          .floating-card {
+            width: clamp(80px, 20vw, 90px);
+            padding: 0.4rem;
+          }
+
+          .floating-card svg {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+          }
+
+          .floating-card span {
+            font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+          }
+
+          .welcome-icon {
+            width: clamp(80px, 20vw, 100px);
+            height: clamp(80px, 20vw, 100px);
+            font-size: clamp(2.5rem, 6vw, 3rem);
+          }
+
+          .user-avatar {
+            width: clamp(45px, 11vw, 50px);
+            height: clamp(45px, 11vw, 50px);
+            font-size: clamp(1.3rem, 3vw, 1.5rem);
+          }
+
+          .conversation-avatar {
+            width: clamp(45px, 11vw, 50px);
+            height: clamp(45px, 11vw, 50px);
+          }
+
+          .message-avatar {
+            width: clamp(30px, 7vw, 35px);
+            height: clamp(30px, 7vw, 35px);
+          }
+        }
+
         /* Enhanced MessageList Styles */
         .conversations-list {
           display: flex;
@@ -856,8 +928,12 @@ const Messages = () => {
           margin: 0 auto;
         }
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
         .loading-text {
           color: #666;
@@ -1068,48 +1144,48 @@ const Messages = () => {
         .send-btn:disabled {
           opacity: 0.6;
         }
-        
+
         /* Prevent flickering and ensure smooth transitions */
         .message-input-area {
           will-change: transform;
           transform: translateZ(0);
           backface-visibility: hidden;
         }
-        
+
         .message-input {
           transition: all 0.2s ease;
           will-change: transform;
           transform: translateZ(0);
         }
-        
+
         .message-input:focus {
           transform: translateZ(0);
           outline: none;
           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
-        
+
         .send-btn {
           will-change: transform;
           transform: translateZ(0);
           backface-visibility: hidden;
         }
-        
+
         .send-btn:not(:disabled):hover {
           transform: translateY(-2px) translateZ(0);
         }
-        
+
         /* Smooth loading states */
         .spinner-border-sm {
           width: 1rem;
           height: 1rem;
           border-width: 0.15em;
         }
-        
+
         /* Prevent layout shift during message sending */
         .messages-area {
           will-change: scroll-position;
         }
-        
+
         .message-item {
           will-change: transform;
           transform: translateZ(0);

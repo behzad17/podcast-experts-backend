@@ -696,6 +696,43 @@ const Login = () => {
             align-items: flex-start;
           }
         }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.8rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.9rem;
+          }
+
+          .login-hero {
+            padding: 1.5rem 0;
+          }
+
+          .login-form-section {
+            padding: 1rem;
+            margin: 0.5rem;
+          }
+
+          .form-header-icon {
+            width: clamp(60px, 15vw, 80px);
+            height: clamp(60px, 15vw, 80px);
+            font-size: clamp(1.5rem, 4vw, 2rem);
+          }
+
+          .registration-icon {
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+          }
+
+          .feature-icon {
+            width: clamp(60px, 15vw, 70px);
+            height: clamp(60px, 15vw, 70px);
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+          }
+        }
       `}</style>
     </div>
   );

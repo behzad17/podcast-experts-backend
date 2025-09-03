@@ -39,9 +39,9 @@ const About = () => {
                   <span className="gradient-text">Podcast Excellence</span>
                 </h1>
                 <p className="hero-subtitle">
-                  Bridging the gap between passionate podcast creators and industry
-                  experts to deliver exceptional content that educates, entertains,
-                  and inspires audiences worldwide.
+                  Bridging the gap between passionate podcast creators and
+                  industry experts to deliver exceptional content that educates,
+                  entertains, and inspires audiences worldwide.
                 </p>
                 <div className="hero-stats">
                   <div className="stat-item">
@@ -89,11 +89,11 @@ const About = () => {
               </div>
               <h2 className="card-title">Our Mission</h2>
               <p className="card-description">
-                CONNECT is dedicated to bridging the gap between podcast creators
-                and subject matter experts. We believe that great content comes
-                from collaboration between passionate creators and knowledgeable
-                specialists who share a common goal of delivering value to
-                audiences.
+                CONNECT is dedicated to bridging the gap between podcast
+                creators and subject matter experts. We believe that great
+                content comes from collaboration between passionate creators and
+                knowledgeable specialists who share a common goal of delivering
+                value to audiences.
               </p>
               <p className="card-description">
                 Our platform serves as a hub where podcasters can discover
@@ -443,7 +443,11 @@ const About = () => {
                       Need help? Our support team is here to assist you with any
                       questions or issues you may have.
                     </p>
-                    <Button variant="outline-primary" size="sm" className="support-btn">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      className="support-btn"
+                    >
                       Contact Support
                     </Button>
                   </div>
@@ -598,8 +602,13 @@ const About = () => {
           font-weight: 600;
         }
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
         .section-header {
           margin-bottom: 3rem;
@@ -1002,6 +1011,77 @@ const About = () => {
           }
           .floating-card span {
             font-size: 0.7rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.6rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.85rem;
+          }
+
+          .hero-stats {
+            gap: 0.5rem;
+          }
+
+          .stat-number {
+            font-size: 1.3rem;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+          }
+
+          .floating-card {
+            width: clamp(80px, 20vw, 90px);
+            padding: 0.4rem;
+          }
+
+          .floating-card svg {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+          }
+
+          .floating-card span {
+            font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+          }
+
+          .card-icon {
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+          }
+
+          .step-number {
+            width: clamp(35px, 8vw, 40px);
+            height: clamp(35px, 8vw, 40px);
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+          }
+
+          .step-icon {
+            width: clamp(70px, 18vw, 80px);
+            height: clamp(70px, 18vw, 80px);
+            font-size: clamp(1.8rem, 4.5vw, 2rem);
+          }
+
+          .feature-icon {
+            width: clamp(60px, 15vw, 70px);
+            height: clamp(60px, 15vw, 70px);
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+          }
+
+          .user-type-icon {
+            width: clamp(45px, 11vw, 50px);
+            height: clamp(45px, 11vw, 50px);
+            font-size: clamp(1.3rem, 3vw, 1.5rem);
+          }
+
+          .team-avatar {
+            width: clamp(70px, 18vw, 80px);
+            height: clamp(70px, 18vw, 80px);
+            font-size: clamp(1.8rem, 4.5vw, 2rem);
           }
         }
       `}</style>

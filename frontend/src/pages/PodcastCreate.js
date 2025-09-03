@@ -929,6 +929,39 @@ const PodcastCreate = () => {
             padding: 1.5rem;
           }
         }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.8rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.9rem;
+          }
+
+          .create-hero {
+            padding: 1.5rem 0;
+          }
+
+          .create-form-section {
+            padding: 1rem;
+          }
+
+          .profile-required-card {
+            padding: 1rem;
+          }
+
+          .image-preview {
+            width: clamp(150px, 40vw, 200px);
+            height: clamp(150px, 40vw, 200px);
+          }
+
+          .profile-required-icon {
+            width: clamp(80px, 20vw, 100px);
+            height: clamp(80px, 20vw, 100px);
+            font-size: clamp(2.5rem, 6vw, 3rem);
+          }
+        }
       `}</style>
     </div>
   );

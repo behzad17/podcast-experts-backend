@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { 
-  FaEnvelope, 
-  FaPhone, 
-  FaMapMarkerAlt, 
-  FaClock, 
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaClock,
   FaGlobe,
   FaFacebook,
   FaTwitter,
@@ -18,7 +18,7 @@ import {
   FaArrowRight,
   FaStar,
   FaUsers,
-  FaRocket
+  FaRocket,
 } from "react-icons/fa";
 
 const Contact = () => {
@@ -27,7 +27,7 @@ const Contact = () => {
     email: "",
     subject: "",
     message: "",
-    category: "general"
+    category: "general",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -35,9 +35,9 @@ const Contact = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -48,10 +48,10 @@ const Contact = () => {
 
     try {
       // Make real API call to backend
-      const response = await fetch('/api/contact/', {
-        method: 'POST',
+      const response = await fetch("/api/contact/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -65,17 +65,21 @@ const Contact = () => {
           email: "",
           subject: "",
           message: "",
-          category: "general"
+          category: "general",
         });
-        
+
         // Reset success message after 5 seconds
         setTimeout(() => setSubmitSuccess(false), 5000);
       } else {
-        setSubmitError(result.error || 'Failed to send message. Please try again.');
+        setSubmitError(
+          result.error || "Failed to send message. Please try again."
+        );
       }
     } catch (error) {
-      console.error('Contact form error:', error);
-      setSubmitError('Network error. Please check your connection and try again.');
+      console.error("Contact form error:", error);
+      setSubmitError(
+        "Network error. Please check your connection and try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -88,7 +92,7 @@ const Contact = () => {
       content: "info@connect-podcast-experts.com",
       link: "mailto:info@connect-podcast-experts.com",
       color: "#667eea",
-      description: "Send us an email and we'll respond within 24 hours"
+      description: "Send us an email and we'll respond within 24 hours",
     },
     {
       icon: <FaPhone size={24} />,
@@ -96,7 +100,7 @@ const Contact = () => {
       content: "+46 8 123 45 67",
       link: "tel:+4681234567",
       color: "#28a745",
-      description: "Speak directly with our support team during business hours"
+      description: "Speak directly with our support team during business hours",
     },
     {
       icon: <FaMapMarkerAlt size={24} />,
@@ -104,38 +108,63 @@ const Contact = () => {
       content: "Stockholm, Sweden",
       link: "#",
       color: "#ffc107",
-      description: "Our headquarters in the heart of Stockholm"
-    }
+      description: "Our headquarters in the heart of Stockholm",
+    },
   ];
 
   const socialMedia = [
-    { icon: <FaFacebook size={20} />, name: "Facebook", url: "https://facebook.com", color: "#1877f2" },
-    { icon: <FaTwitter size={20} />, name: "Twitter", url: "https://twitter.com", color: "#1da1f2" },
-    { icon: <FaLinkedin size={20} />, name: "LinkedIn", url: "https://linkedin.com", color: "#0077b5" },
-    { icon: <FaInstagram size={20} />, name: "Instagram", url: "https://instagram.com", color: "#e4405f" }
+    {
+      icon: <FaFacebook size={20} />,
+      name: "Facebook",
+      url: "https://facebook.com",
+      color: "#1877f2",
+    },
+    {
+      icon: <FaTwitter size={20} />,
+      name: "Twitter",
+      url: "https://twitter.com",
+      color: "#1da1f2",
+    },
+    {
+      icon: <FaLinkedin size={20} />,
+      name: "LinkedIn",
+      url: "https://linkedin.com",
+      color: "#0077b5",
+    },
+    {
+      icon: <FaInstagram size={20} />,
+      name: "Instagram",
+      url: "https://instagram.com",
+      color: "#e4405f",
+    },
   ];
 
   const faqData = [
     {
       question: "How do I get started as a podcaster?",
-      answer: "Simply create an account, set up your podcaster profile, and start browsing expert profiles to find the perfect match for your content."
+      answer:
+        "Simply create an account, set up your podcaster profile, and start browsing expert profiles to find the perfect match for your content.",
     },
     {
       question: "How can I become an expert on the platform?",
-      answer: "Register as an expert, create a detailed profile showcasing your expertise, and wait for podcasters to discover and contact you."
+      answer:
+        "Register as an expert, create a detailed profile showcasing your expertise, and wait for podcasters to discover and contact you.",
     },
     {
       question: "Is there a fee to use the platform?",
-      answer: "Basic features are free. Premium features and advanced matching algorithms are available with our subscription plans."
+      answer:
+        "Basic features are free. Premium features and advanced matching algorithms are available with our subscription plans.",
     },
     {
       question: "How do I contact support?",
-      answer: "You can reach our support team through this contact form, email us directly, or use the live chat feature during business hours."
+      answer:
+        "You can reach our support team through this contact form, email us directly, or use the live chat feature during business hours.",
     },
     {
       question: "What types of experts are available?",
-      answer: "We have experts across all major categories including technology, health, business, entertainment, science, and many more specialized fields."
-    }
+      answer:
+        "We have experts across all major categories including technology, health, business, entertainment, science, and many more specialized fields.",
+    },
   ];
 
   const supportCategories = [
@@ -144,22 +173,24 @@ const Contact = () => {
       title: "Technical Support",
       description: "Help with platform features, bugs, or technical issues",
       responseTime: "Within 24 hours",
-      color: "#667eea"
+      color: "#667eea",
     },
     {
       icon: <FaComments size={20} />,
       title: "General Inquiries",
-      description: "Questions about our services, partnerships, or general information",
+      description:
+        "Questions about our services, partnerships, or general information",
       responseTime: "Within 48 hours",
-      color: "#28a745"
+      color: "#28a745",
     },
     {
       icon: <FaGlobe size={20} />,
       title: "Business Development",
-      description: "Partnership opportunities, business inquiries, or collaboration requests",
+      description:
+        "Partnership opportunities, business inquiries, or collaboration requests",
       responseTime: "Within 72 hours",
-      color: "#ffc107"
-    }
+      color: "#ffc107",
+    },
   ];
 
   return (
@@ -175,12 +206,12 @@ const Contact = () => {
                   <span>Get in Touch</span>
                 </div>
                 <h1 className="hero-title">
-                  We're Here to{" "}
-                  <span className="gradient-text">Help You</span>
+                  We're Here to <span className="gradient-text">Help You</span>
                 </h1>
                 <p className="hero-subtitle">
-                  Have questions about CONNECT? Need support? Want to collaborate? 
-                  Our team is ready to assist you with anything you need.
+                  Have questions about CONNECT? Need support? Want to
+                  collaborate? Our team is ready to assist you with anything you
+                  need.
                 </p>
                 <div className="hero-stats">
                   <div className="stat-item">
@@ -235,19 +266,28 @@ const Contact = () => {
               {contactMethods.map((method, index) => (
                 <Col lg={4} md={6} className="mb-4" key={index}>
                   <div className="contact-method-card">
-                    <div className="method-icon" style={{ backgroundColor: method.color }}>
+                    <div
+                      className="method-icon"
+                      style={{ backgroundColor: method.color }}
+                    >
                       {method.icon}
                     </div>
                     <h4 className="method-title">{method.title}</h4>
                     <p className="method-content">{method.content}</p>
                     <p className="method-description">{method.description}</p>
-                    <Button 
-                      as="a" 
-                      href={method.link} 
-                      variant="outline-primary" 
+                    <Button
+                      as="a"
+                      href={method.link}
+                      variant="outline-primary"
                       size="sm"
-                      target={method.link.startsWith('http') ? "_blank" : undefined}
-                      rel={method.link.startsWith('http') ? "noopener noreferrer" : undefined}
+                      target={
+                        method.link.startsWith("http") ? "_blank" : undefined
+                      }
+                      rel={
+                        method.link.startsWith("http")
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
                       className="method-btn"
                     >
                       {method.title}
@@ -270,14 +310,16 @@ const Contact = () => {
                   Send us a Message
                 </h3>
                 <p className="form-subtitle">
-                  Fill out the form below and we'll get back to you as soon as possible
+                  Fill out the form below and we'll get back to you as soon as
+                  possible
                 </p>
               </div>
 
               {submitSuccess && (
                 <Alert variant="success" className="success-alert">
                   <FaCheckCircle className="me-2" />
-                  Thank you! Your message has been sent successfully. We'll get back to you soon.
+                  Thank you! Your message has been sent successfully. We'll get
+                  back to you soon.
                 </Alert>
               )}
 
@@ -362,16 +404,20 @@ const Contact = () => {
                   />
                 </Form.Group>
 
-                <Button 
-                  type="submit" 
-                  variant="primary" 
-                  size="lg" 
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
                   disabled={isSubmitting}
                   className="submit-btn"
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
                       Sending...
                     </>
                   ) : (
@@ -428,7 +474,10 @@ const Contact = () => {
                         variant="outline-secondary"
                         size="sm"
                         className="social-btn"
-                        style={{ borderColor: social.color, color: social.color }}
+                        style={{
+                          borderColor: social.color,
+                          color: social.color,
+                        }}
                       >
                         {social.icon}
                       </Button>
@@ -447,7 +496,10 @@ const Contact = () => {
                   {supportCategories.map((category, index) => (
                     <div key={index} className="support-category">
                       <div className="category-header">
-                        <span className="category-icon" style={{ color: category.color }}>
+                        <span
+                          className="category-icon"
+                          style={{ color: category.color }}
+                        >
                           {category.icon}
                         </span>
                         <strong>{category.title}</strong>
@@ -502,14 +554,19 @@ const Contact = () => {
               <div className="cta-content">
                 <h2 className="cta-title">Still Have Questions?</h2>
                 <p className="cta-description">
-                  Can't find what you're looking for? Our team is here to help you get the most out of CONNECT.
+                  Can't find what you're looking for? Our team is here to help
+                  you get the most out of CONNECT.
                 </p>
                 <div className="cta-buttons">
                   <Button variant="light" size="lg" className="cta-btn primary">
                     <FaHeadset className="me-2" />
                     Live Chat
                   </Button>
-                  <Button variant="outline-light" size="lg" className="cta-btn secondary">
+                  <Button
+                    variant="outline-light"
+                    size="lg"
+                    className="cta-btn secondary"
+                  >
                     <FaEnvelope className="me-2" />
                     Email Support
                   </Button>
@@ -628,8 +685,13 @@ const Contact = () => {
           font-weight: 600;
         }
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
         .section-header {
           margin-bottom: 3rem;
@@ -993,6 +1055,59 @@ const Contact = () => {
           }
           .cta-title {
             font-size: 2rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-title {
+            font-size: 1.6rem;
+          }
+
+          .hero-subtitle {
+            font-size: 0.85rem;
+          }
+
+          .hero-stats {
+            gap: 0.5rem;
+          }
+
+          .stat-number {
+            font-size: 1.3rem;
+          }
+
+          .stat-label {
+            font-size: 0.75rem;
+          }
+
+          .floating-card {
+            width: clamp(80px, 20vw, 90px);
+            padding: 0.4rem;
+          }
+
+          .floating-card svg {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+          }
+
+          .floating-card span {
+            font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+          }
+
+          .contact-form-card {
+            padding: 1.5rem;
+          }
+
+          .cta-card {
+            padding: 1.5rem;
+          }
+
+          .cta-title {
+            font-size: 1.8rem;
+          }
+
+          .method-icon {
+            width: clamp(70px, 18vw, 80px);
+            height: clamp(70px, 18vw, 80px);
+            font-size: clamp(1.8rem, 4.5vw, 2rem);
           }
         }
       `}</style>
