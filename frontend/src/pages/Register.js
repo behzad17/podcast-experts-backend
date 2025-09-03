@@ -24,7 +24,7 @@ import {
   FaUserCheck,
   FaLightbulb,
   FaHandshake,
-  FaNetworkWired
+  FaNetworkWired,
 } from "react-icons/fa";
 
 const Register = () => {
@@ -34,6 +34,7 @@ const Register = () => {
     password: "",
     user_type: "podcaster",
   });
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,9 +44,9 @@ const Register = () => {
 
   // Calculate form progress
   React.useEffect(() => {
-    const requiredFields = ['username', 'email', 'password'];
-    const filledFields = requiredFields.filter(field => 
-      formData[field] && formData[field].toString().trim() !== ''
+    const requiredFields = ["username", "email", "password"];
+    const filledFields = requiredFields.filter(
+      (field) => formData[field] && formData[field].toString().trim() !== ""
     );
     const progress = (filledFields.length / requiredFields.length) * 100;
     setFormProgress(progress);
@@ -54,6 +55,10 @@ const Register = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError("");
+    // Clear field-specific error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -63,12 +68,26 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setErrors({});
     setSuccess(false);
     setIsLoading(true);
 
     // Basic validation
+    const newErrors = {};
     if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters long");
+      newErrors.password = "Password must be at least 8 characters long";
+    }
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       setIsLoading(false);
       return;
     }
@@ -88,11 +107,20 @@ const Register = () => {
       if (error.response) {
         console.error("Error response:", error.response.data);
         // Handle specific error messages from the backend
-        if (typeof error.response.data === "object") {
-          const errorMessages = Object.entries(error.response.data)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join("\n");
-          setError(errorMessages);
+        if (
+          typeof error.response.data === "object" &&
+          !error.response.data.detail
+        ) {
+          // Field-specific validation errors
+          const fieldErrors = {};
+          Object.keys(error.response.data).forEach((key) => {
+            if (Array.isArray(error.response.data[key])) {
+              fieldErrors[key] = error.response.data[key][0];
+            } else {
+              fieldErrors[key] = error.response.data[key];
+            }
+          });
+          setErrors(fieldErrors);
         } else {
           setError(
             error.response.data.detail ||
@@ -124,11 +152,13 @@ const Register = () => {
               <span>Join CONNECT</span>
             </div>
             <h1 className="hero-title">
-              Start Your <span className="gradient-text">Professional</span> Journey
+              Start Your <span className="gradient-text">Professional</span>{" "}
+              Journey
             </h1>
             <p className="hero-subtitle">
-              Create your account and join our network of podcasters and experts. 
-              Build your professional presence, connect with others, and grow your business.
+              Create your account and join our network of podcasters and
+              experts. Build your professional presence, connect with others,
+              and grow your business.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
@@ -171,12 +201,14 @@ const Register = () => {
           <div className="form-progress-section">
             <div className="progress-header">
               <span className="progress-text">Form Progress</span>
-              <span className="progress-percentage">{Math.round(formProgress)}%</span>
+              <span className="progress-percentage">
+                {Math.round(formProgress)}%
+              </span>
             </div>
             <div className="progress-bar-container">
               <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
+                <div
+                  className="progress-fill"
                   style={{ width: `${formProgress}%` }}
                 ></div>
               </div>
@@ -196,8 +228,8 @@ const Register = () => {
             <Alert variant="success" className="success-alert">
               <FaCheckCircle className="me-2" />
               Registration successful! Please check your email for verification.
-              You will be redirected to the login page in 10 seconds. If you don't
-              see the verification email, please check your spam folder.
+              You will be redirected to the login page in 10 seconds. If you
+              don't see the verification email, please check your spam folder.
             </Alert>
           )}
 
@@ -213,30 +245,44 @@ const Register = () => {
                 Select how you want to join our professional network
               </p>
               <div className="user-type-cards">
-                <div 
-                  className={`user-type-card ${formData.user_type === 'podcaster' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, user_type: 'podcaster' })}
+                <div
+                  className={`user-type-card ${
+                    formData.user_type === "podcaster" ? "selected" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData({ ...formData, user_type: "podcaster" })
+                  }
                 >
                   <div className="card-icon">
                     <FaMicrophone />
                   </div>
                   <h5>Podcaster</h5>
-                  <p>Create and manage your podcasts, reach audiences, and grow your brand</p>
+                  <p>
+                    Create and manage your podcasts, reach audiences, and grow
+                    your brand
+                  </p>
                   <div className="card-features">
                     <span className="feature-tag">Content Creation</span>
                     <span className="feature-tag">Audience Growth</span>
                     <span className="feature-tag">Analytics</span>
                   </div>
                 </div>
-                <div 
-                  className={`user-type-card ${formData.user_type === 'expert' ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, user_type: 'expert' })}
+                <div
+                  className={`user-type-card ${
+                    formData.user_type === "expert" ? "selected" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData({ ...formData, user_type: "expert" })
+                  }
                 >
                   <div className="card-icon">
                     <FaUserTie />
                   </div>
                   <h5>Expert</h5>
-                  <p>Showcase your expertise, connect with clients, and build your business</p>
+                  <p>
+                    Showcase your expertise, connect with clients, and build
+                    your business
+                  </p>
                   <div className="card-features">
                     <span className="feature-tag">Expert Profile</span>
                     <span className="feature-tag">Client Connections</span>
@@ -255,7 +301,7 @@ const Register = () => {
               <p className="section-subtitle">
                 Set up your basic account information
               </p>
-              
+
               <div className="form-grid">
                 {/* Username Field */}
                 <div className="form-group">
@@ -269,6 +315,7 @@ const Register = () => {
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
+                      isInvalid={!!errors.username}
                       required
                       placeholder="Choose a unique username"
                       className="form-input"
@@ -277,6 +324,9 @@ const Register = () => {
                       <FaUser />
                     </div>
                   </div>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.username}
+                  </Form.Control.Feedback>
                   <small className="form-help">
                     This will be your unique identifier on the platform
                   </small>
@@ -294,6 +344,7 @@ const Register = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      isInvalid={!!errors.email}
                       required
                       placeholder="Enter your email address"
                       className="form-input"
@@ -302,6 +353,9 @@ const Register = () => {
                       <FaEnvelope />
                     </div>
                   </div>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
                   <small className="form-help">
                     We'll send a verification email to this address
                   </small>
@@ -319,6 +373,7 @@ const Register = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
+                      isInvalid={!!errors.password}
                       required
                       placeholder="Create a strong password"
                       className="form-input"
@@ -335,6 +390,9 @@ const Register = () => {
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </Button>
                   </div>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
                   <small className="form-help">
                     Password must be at least 8 characters long
                   </small>
@@ -358,7 +416,7 @@ const Register = () => {
                   <span>Join thousands of professionals</span>
                 </div>
               </div>
-              
+
               <div className="submit-actions">
                 <Button
                   type="submit"
@@ -368,7 +426,10 @@ const Register = () => {
                 >
                   {isLoading ? (
                     <>
-                      <div className="spinner-border spinner-border-sm me-2" role="status">
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      >
                         <span className="visually-hidden">Creating...</span>
                       </div>
                       Creating Account...
@@ -380,7 +441,7 @@ const Register = () => {
                     </>
                   )}
                 </Button>
-                
+
                 <Button
                   variant="outline-secondary"
                   className="cancel-btn"
@@ -402,7 +463,10 @@ const Register = () => {
                 <FaLightbulb />
               </div>
               <h4>Smart Matching</h4>
-              <p>Connect with the right people using our intelligent matching system</p>
+              <p>
+                Connect with the right people using our intelligent matching
+                system
+              </p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">
@@ -427,7 +491,7 @@ const Register = () => {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         .register-hero {
           background: linear-gradient(
             135deg,
@@ -440,7 +504,7 @@ const Register = () => {
           color: white;
           text-align: center;
         }
-        
+
         .hero-badge {
           display: inline-flex;
           align-items: center;
@@ -454,21 +518,21 @@ const Register = () => {
           color: #ffd700;
           font-weight: 600;
         }
-        
+
         .hero-title {
           font-size: 3rem;
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
         }
-        
+
         .gradient-text {
           background: linear-gradient(45deg, #ffd700, #ffed4e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        
+
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
@@ -478,30 +542,30 @@ const Register = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .hero-stats {
           display: flex;
           justify-content: center;
           gap: 3rem;
           margin-top: 2rem;
         }
-        
+
         .stat-item {
           text-align: center;
         }
-        
+
         .stat-number {
           font-size: 2.5rem;
           color: #ffd700;
           margin-bottom: 0.5rem;
         }
-        
+
         .stat-label {
           font-size: 1rem;
           opacity: 0.9;
           font-weight: 500;
         }
-        
+
         .register-form-section {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -513,12 +577,12 @@ const Register = () => {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .form-header {
           text-align: center;
           margin-bottom: 2.5rem;
         }
-        
+
         .form-header-icon {
           width: 80px;
           height: 80px;
@@ -531,20 +595,20 @@ const Register = () => {
           font-size: 2rem;
           margin: 0 auto 1.5rem;
         }
-        
+
         .form-title {
           font-size: 2rem;
           font-weight: 700;
           color: #333;
           margin-bottom: 0.5rem;
         }
-        
+
         .form-subtitle {
           font-size: 1.1rem;
           color: #666;
           margin: 0;
         }
-        
+
         .form-progress-section {
           background: rgba(102, 126, 234, 0.05);
           border-radius: 15px;
@@ -552,30 +616,30 @@ const Register = () => {
           margin-bottom: 2rem;
           border: 1px solid rgba(102, 126, 234, 0.1);
         }
-        
+
         .progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
         }
-        
+
         .progress-text {
           font-size: 0.9rem;
           color: #666;
           font-weight: 500;
         }
-        
+
         .progress-percentage {
           font-size: 1.2rem;
           font-weight: 700;
           color: #667eea;
         }
-        
+
         .progress-bar-container {
           width: 100%;
         }
-        
+
         .progress-bar {
           width: 100%;
           height: 8px;
@@ -583,41 +647,41 @@ const Register = () => {
           border-radius: 4px;
           overflow: hidden;
         }
-        
+
         .progress-fill {
           height: 100%;
           background: linear-gradient(45deg, #667eea, #764ba2);
           border-radius: 4px;
           transition: width 0.5s ease;
         }
-        
+
         .error-alert,
         .success-alert {
           border-radius: 15px;
           border: none;
           margin-bottom: 2rem;
         }
-        
+
         .error-alert {
           background: rgba(220, 53, 69, 0.1);
           color: #dc3545;
         }
-        
+
         .success-alert {
           background: rgba(40, 167, 69, 0.1);
           color: #28a745;
         }
-        
+
         .register-form {
           margin: 0;
         }
-        
+
         .user-type-section {
           margin-bottom: 3rem;
           padding-bottom: 2rem;
           border-bottom: 2px solid rgba(102, 126, 234, 0.1);
         }
-        
+
         .section-title {
           display: flex;
           align-items: center;
@@ -626,19 +690,19 @@ const Register = () => {
           color: #333;
           margin-bottom: 0.5rem;
         }
-        
+
         .section-subtitle {
           color: #666;
           margin-bottom: 1.5rem;
           font-size: 0.95rem;
         }
-        
+
         .user-type-cards {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1.5rem;
         }
-        
+
         .user-type-card {
           background: white;
           border: 2px solid #e9ecef;
@@ -649,21 +713,21 @@ const Register = () => {
           transition: all 0.3s ease;
           position: relative;
         }
-        
+
         .user-type-card:hover {
           border-color: #667eea;
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
         }
-        
+
         .user-type-card.selected {
           border-color: #667eea;
           background: rgba(102, 126, 234, 0.05);
           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.15);
         }
-        
+
         .user-type-card.selected::before {
-          content: '✓';
+          content: "✓";
           position: absolute;
           top: -10px;
           right: -10px;
@@ -678,7 +742,7 @@ const Register = () => {
           font-weight: bold;
           font-size: 1.2rem;
         }
-        
+
         .card-icon {
           width: 60px;
           height: 60px;
@@ -691,27 +755,27 @@ const Register = () => {
           font-size: 1.5rem;
           margin: 0 auto 1rem;
         }
-        
+
         .user-type-card h5 {
           color: #333;
           font-weight: 600;
           margin-bottom: 0.75rem;
         }
-        
+
         .user-type-card p {
           color: #666;
           font-size: 0.9rem;
           line-height: 1.5;
           margin-bottom: 1rem;
         }
-        
+
         .card-features {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
           justify-content: center;
         }
-        
+
         .feature-tag {
           background: rgba(102, 126, 234, 0.1);
           color: #667eea;
@@ -720,21 +784,21 @@ const Register = () => {
           font-size: 0.8rem;
           font-weight: 500;
         }
-        
+
         .account-details-section {
           margin-bottom: 3rem;
         }
-        
+
         .form-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 2rem;
         }
-        
+
         .form-group.featured {
           grid-column: 1 / -1;
         }
-        
+
         .form-label {
           display: flex;
           align-items: center;
@@ -744,16 +808,16 @@ const Register = () => {
           margin-bottom: 0.75rem;
           font-size: 1.1rem;
         }
-        
+
         .label-icon {
           color: #667eea;
           font-size: 1rem;
         }
-        
+
         .input-container {
           position: relative;
         }
-        
+
         .form-input {
           border-radius: 15px;
           border: 2px solid #e9ecef;
@@ -763,13 +827,13 @@ const Register = () => {
           background: white;
           width: 100%;
         }
-        
+
         .form-input:focus {
           border-color: #667eea;
           box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
           outline: none;
         }
-        
+
         .input-icon {
           position: absolute;
           left: 1rem;
@@ -778,7 +842,7 @@ const Register = () => {
           color: #667eea;
           font-size: 1.1rem;
         }
-        
+
         .password-toggle-btn {
           position: absolute;
           right: 1rem;
@@ -789,23 +853,23 @@ const Register = () => {
           border: none;
           background: none;
         }
-        
+
         .password-toggle-btn:hover {
           color: #764ba2;
         }
-        
+
         .form-help {
           color: #666;
           font-size: 0.9rem;
           margin-top: 0.5rem;
           display: block;
         }
-        
+
         .submit-section {
           border-top: 2px solid rgba(102, 126, 234, 0.1);
           padding-top: 2rem;
         }
-        
+
         .submit-info {
           display: flex;
           justify-content: space-around;
@@ -814,7 +878,7 @@ const Register = () => {
           background: rgba(102, 126, 234, 0.05);
           border-radius: 15px;
         }
-        
+
         .info-item {
           display: flex;
           align-items: center;
@@ -822,19 +886,19 @@ const Register = () => {
           color: #333;
           font-size: 0.95rem;
         }
-        
+
         .info-icon {
           color: #667eea;
           font-size: 1.1rem;
         }
-        
+
         .submit-actions {
           display: flex;
           gap: 1rem;
           justify-content: center;
           align-items: center;
         }
-        
+
         .submit-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
@@ -845,32 +909,32 @@ const Register = () => {
           transition: all 0.3s ease;
           min-width: 200px;
         }
-        
+
         .submit-btn:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-        
+
         .submit-btn:disabled {
           opacity: 0.7;
         }
-        
+
         .cancel-btn {
           border-radius: 25px;
           padding: 1rem 2rem;
           font-weight: 600;
         }
-        
+
         .features-section {
           margin-bottom: 3rem;
         }
-        
+
         .features-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 2rem;
         }
-        
+
         .feature-card {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(10px);
@@ -880,11 +944,11 @@ const Register = () => {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           transition: transform 0.3s ease;
         }
-        
+
         .feature-card:hover {
           transform: translateY(-5px);
         }
-        
+
         .feature-icon {
           width: 70px;
           height: 70px;
@@ -897,81 +961,81 @@ const Register = () => {
           font-size: 1.8rem;
           margin: 0 auto 1.5rem;
         }
-        
+
         .feature-card h4 {
           color: #333;
           font-weight: 600;
           margin-bottom: 1rem;
         }
-        
+
         .feature-card p {
           color: #666;
           margin: 0;
           line-height: 1.6;
         }
-        
+
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.5rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1.1rem;
           }
-          
+
           .hero-stats {
             flex-direction: column;
             gap: 2rem;
           }
-          
+
           .register-form-section {
             padding: 2rem;
             margin: 2rem 1rem;
           }
-          
+
           .user-type-cards {
             grid-template-columns: 1fr;
           }
-          
+
           .form-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          
+
           .submit-info {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-actions {
             flex-direction: column;
             gap: 1rem;
           }
-          
+
           .submit-btn,
           .cancel-btn {
             width: 100%;
           }
-          
+
           .features-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
         }
-        
+
         @media (max-width: 576px) {
           .hero-title {
             font-size: 2rem;
           }
-          
+
           .hero-subtitle {
             font-size: 1rem;
           }
-          
+
           .register-hero {
             padding: 2rem 0;
           }
-          
+
           .register-form-section {
             padding: 1.5rem;
             margin: 1rem;

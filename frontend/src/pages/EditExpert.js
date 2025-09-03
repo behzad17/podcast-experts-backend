@@ -19,6 +19,7 @@ const EditExpert = () => {
   });
   const [profilePicture, setProfilePicture] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -34,7 +35,7 @@ const EditExpert = () => {
 
         // First check if this is the user's own profile
         const myProfileResponse = await api.get("/experts/my-profile/");
-        
+
         // If the profile ID doesn't match, redirect to their own profile
         if (myProfileResponse.data.id !== parseInt(id)) {
           toast.error("You can only edit your own profile");
@@ -44,17 +45,19 @@ const EditExpert = () => {
 
         // Use the my-profile endpoint to get the profile data
         setFormData(myProfileResponse.data);
-        
+
         // Set image preview if profile picture exists
         if (myProfileResponse.data.profile_picture_url) {
           setImagePreview(myProfileResponse.data.profile_picture_url);
         }
-        
+
         setFetching(false);
       } catch (error) {
         console.error("Fetch profile error:", error);
         if (error.response?.status === 404) {
-          toast.error("You don't have an expert profile yet. Please create one first.");
+          toast.error(
+            "You don't have an expert profile yet. Please create one first."
+          );
           navigate("/experts/create");
           return;
         }
@@ -75,13 +78,41 @@ const EditExpert = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setError(null);
+    // Clear field-specific error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.bio.trim()) {
+      newErrors.bio = "Bio is required";
+    }
+
+    if (!formData.expertise.trim()) {
+      newErrors.expertise = "Expertise is required";
+    }
+
+    if (!formData.experience_years || formData.experience_years < 0) {
+      newErrors.experience_years = "Experience years must be a positive number";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfilePicture(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => setImagePreview(e.target.result);
@@ -96,8 +127,14 @@ const EditExpert = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
     setError(null);
+    setErrors({});
 
     try {
       const token = localStorage.getItem("token");
@@ -115,15 +152,15 @@ const EditExpert = () => {
       submitData.append("bio", formData.bio);
       submitData.append("expertise", formData.expertise);
       submitData.append("experience_years", formData.experience_years);
-      
+
       if (formData.website) {
         submitData.append("website", formData.website);
       }
-      
+
       if (formData.social_media) {
         submitData.append("social_media", formData.social_media);
       }
-      
+
       if (formData.email) {
         submitData.append("email", formData.email);
       }
@@ -138,15 +175,36 @@ const EditExpert = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       console.log("Update response:", response.data);
       toast.success("Profile updated successfully");
       navigate(`/experts/${id}`);
     } catch (error) {
       console.error("Update error:", error);
       console.error("Error response:", error.response);
-      toast.error(error.response?.data?.detail || "Failed to update profile");
-      setError(error.response?.data?.detail || "Failed to update profile");
+
+      if (error.response?.data) {
+        const errorData = error.response.data;
+
+        // Handle field-specific validation errors
+        if (typeof errorData === "object" && !errorData.detail) {
+          const fieldErrors = {};
+          Object.keys(errorData).forEach((key) => {
+            if (Array.isArray(errorData[key])) {
+              fieldErrors[key] = errorData[key][0];
+            } else {
+              fieldErrors[key] = errorData[key];
+            }
+          });
+          setErrors(fieldErrors);
+        } else {
+          setError(errorData.detail || "Failed to update profile");
+        }
+      } else {
+        setError(
+          "An error occurred while updating your profile. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -181,8 +239,12 @@ const EditExpert = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            isInvalid={!!errors.name}
             required
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.name}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -193,8 +255,12 @@ const EditExpert = () => {
             name="bio"
             value={formData.bio}
             onChange={handleChange}
+            isInvalid={!!errors.bio}
             required
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.bio}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -204,8 +270,12 @@ const EditExpert = () => {
             name="expertise"
             value={formData.expertise}
             onChange={handleChange}
+            isInvalid={!!errors.expertise}
             required
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.expertise}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -215,9 +285,13 @@ const EditExpert = () => {
             name="experience_years"
             value={formData.experience_years}
             onChange={handleChange}
+            isInvalid={!!errors.experience_years}
             required
             min="0"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.experience_years}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -257,7 +331,12 @@ const EditExpert = () => {
               <img
                 src={imagePreview}
                 alt="Profile preview"
-                style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "8px" }}
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
                 className="mb-2"
               />
               <div>
@@ -300,7 +379,7 @@ const EditExpert = () => {
             "Update Profile"
           )}
         </Button>
-        
+
         <Button
           type="button"
           variant="outline-secondary"

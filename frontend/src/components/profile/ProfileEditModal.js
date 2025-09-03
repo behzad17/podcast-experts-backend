@@ -12,6 +12,7 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     social_media: "",
     profile_picture: null,
   });
+  const [errors, setErrors] = React.useState({});
   const [error, setError] = React.useState("");
 
   React.useEffect(() => {
@@ -35,10 +36,46 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    setError("");
+    // Clear field-specific error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.bio.trim()) {
+      newErrors.bio = "Bio is required";
+    }
+
+    if (!formData.expertise.trim()) {
+      newErrors.expertise = "Expertise is required";
+    }
+
+    if (!formData.experience_years || formData.experience_years < 0) {
+      newErrors.experience_years = "Experience years must be a positive number";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setError("");
+    setErrors({});
+
     try {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach((key) => {
@@ -61,10 +98,31 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
       onHide();
     } catch (error) {
       console.error("Error updating profile:", error);
-      setError(
-        error.response?.data?.detail ||
-          "Failed to update profile. Please try again."
-      );
+
+      if (error.response?.data) {
+        const errorData = error.response.data;
+
+        // Handle field-specific validation errors
+        if (typeof errorData === "object" && !errorData.detail) {
+          const fieldErrors = {};
+          Object.keys(errorData).forEach((key) => {
+            if (Array.isArray(errorData[key])) {
+              fieldErrors[key] = errorData[key][0];
+            } else {
+              fieldErrors[key] = errorData[key];
+            }
+          });
+          setErrors(fieldErrors);
+        } else {
+          setError(
+            errorData.detail || "Failed to update profile. Please try again."
+          );
+        }
+      } else {
+        setError(
+          "An error occurred while updating your profile. Please try again."
+        );
+      }
     }
   };
 
@@ -84,8 +142,12 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              isInvalid={!!errors.name}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.name}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -96,8 +158,12 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               name="bio"
               value={formData.bio}
               onChange={handleChange}
+              isInvalid={!!errors.bio}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.bio}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -107,8 +173,12 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               name="expertise"
               value={formData.expertise}
               onChange={handleChange}
+              isInvalid={!!errors.expertise}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.expertise}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -118,8 +188,13 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               name="experience_years"
               value={formData.experience_years}
               onChange={handleChange}
+              isInvalid={!!errors.experience_years}
               required
+              min="0"
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.experience_years}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
