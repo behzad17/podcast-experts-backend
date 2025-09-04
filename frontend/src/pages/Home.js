@@ -1183,7 +1183,8 @@ const Home = () => {
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
           background: white;
-          min-height: 400px;
+          height: 450px;
+          min-height: 450px;
           display: flex;
           flex-direction: column;
         }
@@ -1201,6 +1202,7 @@ const Home = () => {
           position: relative;
           margin-bottom: 0.75rem;
           width: 100%;
+          height: 180px;
           aspect-ratio: 1;
         }
 
@@ -1256,6 +1258,7 @@ const Home = () => {
           position: relative;
           margin-bottom: 1rem;
           width: 100%;
+          height: 200px;
           aspect-ratio: 1;
         }
 
