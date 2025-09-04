@@ -345,18 +345,6 @@ const Home = () => {
                     directory so podcasters can discover you.
                   </p>
                   <div className="card-features">
-                    <div className="feature-item">
-                      <FaStar className="feature-icon" />
-                      <span>Premium Directory</span>
-                    </div>
-                    <div className="feature-item">
-                      <FaBell className="feature-icon" />
-                      <span>Weekly Opportunities</span>
-                    </div>
-                    <div className="feature-item">
-                      <FaChartLine className="feature-icon" />
-                      <span>Expand Your Reach</span>
-                    </div>
                   </div>
                 </Card.Body>
               </Card>
@@ -375,18 +363,6 @@ const Home = () => {
                     collaboration opportunities.
                   </p>
                   <div className="card-features">
-                    <div className="feature-item">
-                      <FaSearch className="feature-icon" />
-                      <span>Expert Discovery</span>
-                    </div>
-                    <div className="feature-item">
-                      <FaEnvelope className="feature-icon" />
-                      <span>Newsletter Features</span>
-                    </div>
-                    <div className="feature-item">
-                      <FaHandshake className="feature-icon" />
-                      <span>Easy Collaboration</span>
-                    </div>
                   </div>
                 </Card.Body>
               </Card>
