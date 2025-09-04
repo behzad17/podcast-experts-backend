@@ -497,18 +497,14 @@ const About = () => {
       <style jsx>{`
         .about-page-modern {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #EFF3FB;
         }
         .about-hero {
-          background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-          );
+          background: rgba(102, 126, 234, 0.1);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 1px solid rgba(102, 126, 234, 0.2);
           padding: 2rem 0;
-          color: white;
+          color: #2c3e50;
         }
         .hero-badge {
           display: inline-flex;

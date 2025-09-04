@@ -280,19 +280,15 @@ const Login = () => {
       <style jsx>{`
         .login-page-modern {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #EFF3FB;
         }
 
         .login-hero {
-          background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-          );
+          background: rgba(102, 126, 234, 0.1);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 1px solid rgba(102, 126, 234, 0.2);
           padding: 3rem 0;
-          color: white;
+          color: #2c3e50;
           text-align: center;
         }
 
@@ -300,13 +296,13 @@ const Login = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(255, 215, 0, 0.2);
-          border: 1px solid rgba(255, 215, 0, 0.3);
+          background: rgba(102, 126, 234, 0.1);
+          border: 1px solid rgba(102, 126, 234, 0.2);
           border-radius: 25px;
           padding: 0.75rem 1.5rem;
           margin-bottom: 2rem;
           font-size: 1rem;
-          color: #ffd700;
+          color: #667eea;
           font-weight: 600;
         }
 
@@ -315,6 +311,7 @@ const Login = () => {
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
+          color: #2c3e50;
         }
 
         .gradient-text {
@@ -327,7 +324,7 @@ const Login = () => {
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
-          opacity: 0.9;
+          color: #7f8c8d;
           line-height: 1.6;
           max-width: 600px;
           margin-left: auto;
@@ -347,13 +344,13 @@ const Login = () => {
 
         .stat-number {
           font-size: 2.5rem;
-          color: #ffd700;
+          color: #667eea;
           margin-bottom: 0.5rem;
         }
 
         .stat-label {
           font-size: 1rem;
-          opacity: 0.9;
+          color: #7f8c8d;
           font-weight: 500;
         }
 

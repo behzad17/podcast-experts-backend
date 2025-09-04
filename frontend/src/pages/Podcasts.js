@@ -396,19 +396,15 @@ const Podcasts = () => {
       <style jsx>{`
         .podcasts-page-modern {
           min-height: 100vh;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: #EFF3FB;
         }
 
         .podcasts-hero {
-          background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-          );
+          background: rgba(102, 126, 234, 0.1);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 1px solid rgba(102, 126, 234, 0.2);
           padding: 2rem 0;
-          color: white;
+          color: #2c3e50;
         }
 
         .hero-content {
@@ -417,7 +413,7 @@ const Podcasts = () => {
 
         .hero-icon {
           font-size: 2.5rem;
-          color: #ffd700;
+          color: #667eea;
           margin-bottom: 0.75rem;
         }
 
@@ -425,33 +421,30 @@ const Podcasts = () => {
           font-size: 2.8rem;
           font-weight: 700;
           margin-bottom: 0.75rem;
-          background: linear-gradient(45deg, #ffffff, #ffd700);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #2c3e50;
         }
 
         .hero-subtitle {
           font-size: 1.1rem;
           margin-bottom: 1.5rem;
-          opacity: 0.9;
+          color: #7f8c8d;
           line-height: 1.5;
         }
 
         .hero-cta {
-          background: linear-gradient(45deg, #ffd700, #ffed4e);
+          background: linear-gradient(45deg, #667eea, #764ba2);
           border: none;
-          color: #333;
+          color: white;
           font-weight: 600;
           padding: 1rem 2rem;
           border-radius: 50px;
-          box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+          box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
           transition: all 0.3s ease;
         }
 
         .hero-cta:hover {
           transform: translateY(-2px);
-          box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+          box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
         }
 
         .hero-stats {
@@ -467,13 +460,13 @@ const Podcasts = () => {
         .stat-number {
           font-size: 2rem;
           font-weight: 700;
-          color: #ffd700;
+          color: #667eea;
           margin-bottom: 0.4rem;
         }
 
         .stat-label {
           font-size: 0.9rem;
-          opacity: 0.8;
+          color: #7f8c8d;
         }
 
         .search-input-group {
