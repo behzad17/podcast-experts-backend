@@ -100,8 +100,8 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-overlay"></div>
         <Container className="hero-content">
-          <Row className="justify-content-center text-center">
-            <Col lg={10}>
+          <Row className="align-items-center">
+            <Col lg={6} className="hero-text-section">
               <div className="hero-badge">
                 <FaCrown className="hero-icon" />
                 <span>Sweden's Premier Platform</span>
@@ -115,6 +115,16 @@ const Home = () => {
                 experts to collaborate, innovate, and create extraordinary
                 content together.
               </p>
+              <div className="hero-actions">
+                <Link to="/podcasts" className="btn btn-primary-hero">
+                  <FaMicrophone className="me-2" />
+                  Explore Podcasts
+                </Link>
+                <Link to="/experts" className="btn btn-outline-hero">
+                  <FaUsers className="me-2" />
+                  Find Experts
+                </Link>
+              </div>
               {user && (
                 <div className="user-welcome">
                   <FaUserTie className="user-icon" />
@@ -124,6 +134,27 @@ const Home = () => {
                   </span>
                 </div>
               )}
+            </Col>
+            <Col lg={6} className="hero-visual-section">
+              <div className="hero-image-container">
+                <div className="hero-main-image">
+                  <FaMicrophone className="hero-microphone-icon" />
+                  <div className="floating-elements">
+                    <div className="floating-card floating-card-1">
+                      <FaUsers />
+                      <span>1000+ Experts</span>
+                    </div>
+                    <div className="floating-card floating-card-2">
+                      <FaPodcast />
+                      <span>500+ Podcasts</span>
+                    </div>
+                    <div className="floating-card floating-card-3">
+                      <FaHandshake />
+                      <span>2000+ Connections</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Col>
           </Row>
         </Container>
@@ -141,6 +172,12 @@ const Home = () => {
               Discover brilliant minds ready to share their expertise on your
               podcast
             </p>
+            <div className="section-actions">
+              <Link to="/experts" className="btn btn-outline-primary">
+                View All Experts
+                <FaArrowRight className="ms-2" />
+              </Link>
+            </div>
           </div>
 
           <Row className="g-3">
@@ -215,6 +252,12 @@ const Home = () => {
             <p className="section-subtitle">
               Discover amazing podcasts that are making waves in the industry
             </p>
+            <div className="section-actions">
+              <Link to="/podcasts" className="btn btn-outline-primary">
+                View All Podcasts
+                <FaArrowRight className="ms-2" />
+              </Link>
+            </div>
           </div>
 
           <Row className="g-3">
@@ -277,6 +320,15 @@ const Home = () => {
 
         {/* Platform Description Boxes */}
         <section className="section-modern description-section">
+          <div className="section-header text-center">
+            <div className="section-icon large">
+              <FaUsers />
+            </div>
+            <h2 className="section-title">Who Can Use CONNECT?</h2>
+            <p className="section-subtitle">
+              Designed for both experts and podcasters to create amazing content together
+            </p>
+          </div>
           <Row className="g-4">
             <Col lg={6}>
               <Card className="description-card-modern expert-desc">
@@ -291,6 +343,20 @@ const Home = () => {
                     for guests each week. Plus, join our premium expert
                     directory so podcasters can discover you.
                   </p>
+                  <div className="card-features">
+                    <div className="feature-item">
+                      <FaStar className="feature-icon" />
+                      <span>Premium Directory</span>
+                    </div>
+                    <div className="feature-item">
+                      <FaBell className="feature-icon" />
+                      <span>Weekly Opportunities</span>
+                    </div>
+                    <div className="feature-item">
+                      <FaChartLine className="feature-icon" />
+                      <span>Expand Your Reach</span>
+                    </div>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
@@ -307,8 +373,109 @@ const Home = () => {
                     reaches thousands of experts and podcasters looking for
                     collaboration opportunities.
                   </p>
+                  <div className="card-features">
+                    <div className="feature-item">
+                      <FaSearch className="feature-icon" />
+                      <span>Expert Discovery</span>
+                    </div>
+                    <div className="feature-item">
+                      <FaEnvelope className="feature-icon" />
+                      <span>Newsletter Features</span>
+                    </div>
+                    <div className="feature-item">
+                      <FaHandshake className="feature-icon" />
+                      <span>Easy Collaboration</span>
+                    </div>
+                  </div>
                 </Card.Body>
               </Card>
+            </Col>
+          </Row>
+        </section>
+
+        {/* Trust Indicators Section */}
+        <section className="section-modern trust-section">
+          <div className="section-header text-center">
+            <div className="section-icon large">
+              <FaShieldAlt />
+            </div>
+            <h2 className="section-title">Why Choose CONNECT?</h2>
+            <p className="section-subtitle">
+              Trusted by thousands of podcasters and experts worldwide
+            </p>
+          </div>
+
+          <Row className="g-4">
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaShieldAlt />
+                </div>
+                <h3 className="trust-title">Verified Experts</h3>
+                <p className="trust-description">
+                  All experts are thoroughly vetted and verified to ensure quality and authenticity
+                </p>
+              </div>
+            </Col>
+
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaGlobe />
+                </div>
+                <h3 className="trust-title">Global Reach</h3>
+                <p className="trust-description">
+                  Connect with experts and podcasters from around the world, expanding your network
+                </p>
+              </div>
+            </Col>
+
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaRocket />
+                </div>
+                <h3 className="trust-title">Fast Matching</h3>
+                <p className="trust-description">
+                  Our smart algorithm quickly matches you with the perfect collaboration partners
+                </p>
+              </div>
+            </Col>
+
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaComments />
+                </div>
+                <h3 className="trust-title">Direct Communication</h3>
+                <p className="trust-description">
+                  Built-in messaging system for seamless communication and collaboration planning
+                </p>
+              </div>
+            </Col>
+
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaStar />
+                </div>
+                <h3 className="trust-title">Quality Content</h3>
+                <p className="trust-description">
+                  Focus on creating high-quality, engaging content that resonates with your audience
+                </p>
+              </div>
+            </Col>
+
+            <Col lg={4} md={6}>
+              <div className="trust-card">
+                <div className="trust-icon">
+                  <FaHandshake />
+                </div>
+                <h3 className="trust-title">Professional Network</h3>
+                <p className="trust-description">
+                  Build lasting professional relationships and grow your industry network
+                </p>
+              </div>
             </Col>
           </Row>
         </section>
@@ -564,10 +731,12 @@ const Home = () => {
         .hero-section {
           position: relative;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 5px 0;
-          text-align: center;
+          padding: 6rem 0;
           color: white;
           overflow: hidden;
+          min-height: 80vh;
+          display: flex;
+          align-items: center;
         }
 
         .hero-overlay {
@@ -637,6 +806,143 @@ const Home = () => {
           color: #ffd700;
         }
 
+        .hero-text-section {
+          padding-right: 2rem;
+        }
+
+        .hero-visual-section {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 1rem;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .btn-primary-hero {
+          background: linear-gradient(45deg, #ffd700, #ff6b6b);
+          border: none;
+          color: white;
+          padding: 1rem 2rem;
+          border-radius: 50px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.3s ease;
+          box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-primary-hero:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+          color: white;
+        }
+
+        .btn-outline-hero {
+          background: transparent;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          color: white;
+          padding: 1rem 2rem;
+          border-radius: 50px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+        }
+
+        .btn-outline-hero:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.5);
+          color: white;
+          transform: translateY(-3px);
+        }
+
+        .hero-image-container {
+          position: relative;
+          width: 100%;
+          height: 500px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .hero-main-image {
+          position: relative;
+          width: 300px;
+          height: 300px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-microphone-icon {
+          font-size: 4rem;
+          color: #ffd700;
+          animation: pulse 2s infinite;
+        }
+
+        .floating-elements {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+        }
+
+        .floating-card {
+          position: absolute;
+          background: rgba(255, 255, 255, 0.15);
+          backdrop-filter: blur(10px);
+          border-radius: 15px;
+          padding: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 600;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-card-1 {
+          top: 10%;
+          right: -10%;
+          animation-delay: 0s;
+        }
+
+        .floating-card-2 {
+          bottom: 20%;
+          left: -15%;
+          animation-delay: 1s;
+        }
+
+        .floating-card-3 {
+          top: 50%;
+          right: -20%;
+          animation-delay: 2s;
+        }
+
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+
         /* Main Content */
         .main-content {
           padding: 4rem 0;
@@ -687,8 +993,38 @@ const Home = () => {
           font-size: 1.1rem;
           color: #7f8c8d;
           max-width: 600px;
-          margin: 0 auto;
+          margin: 0 auto 2rem;
           line-height: 1.6;
+        }
+
+        .section-actions {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
+        .section-actions .btn {
+          padding: 0.75rem 2rem;
+          border-radius: 25px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+        }
+
+        .section-actions .btn-outline-primary {
+          border: 2px solid #667eea;
+          color: #667eea;
+          background: transparent;
+        }
+
+        .section-actions .btn-outline-primary:hover {
+          background: #667eea;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
         /* Expert Cards */
@@ -1253,6 +1589,256 @@ const Home = () => {
           font-weight: 600;
         }
 
+        /* Trust Section */
+        .trust-section {
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          padding: 5rem 0;
+          border-radius: 30px;
+          margin: 3rem 0;
+        }
+
+        .trust-card {
+          background: white;
+          border-radius: 20px;
+          padding: 2.5rem 2rem;
+          text-align: center;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+          height: 100%;
+          border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .trust-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 25px 50px rgba(102, 126, 234, 0.15);
+          border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .trust-icon {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1.5rem;
+          color: white;
+          font-size: 2rem;
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .trust-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+        }
+
+        .trust-description {
+          color: #7f8c8d;
+          line-height: 1.6;
+          font-size: 1rem;
+        }
+
+        /* Enhanced Description Cards */
+        .description-section {
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          padding: 5rem 0;
+          border-radius: 30px;
+          margin: 3rem 0;
+        }
+
+        .description-card-modern {
+          background: white;
+          border-radius: 25px;
+          padding: 0;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+          height: 100%;
+          border: 1px solid rgba(102, 126, 234, 0.1);
+          overflow: hidden;
+        }
+
+        .description-card-modern:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 30px 60px rgba(102, 126, 234, 0.15);
+          border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .description-card-modern .card-icon {
+          width: 100px;
+          height: 100px;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 2rem auto 1.5rem;
+          color: white;
+          font-size: 2.5rem;
+          box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .description-card-modern:hover .card-icon {
+          transform: scale(1.1);
+          box-shadow: 0 20px 45px rgba(102, 126, 234, 0.4);
+        }
+
+        .expert-desc .card-icon {
+          background: linear-gradient(135deg, #ffd700, #ff6b6b);
+        }
+
+        .podcaster-desc .card-icon {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .description-card-modern .card-title {
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: #2c3e50;
+          margin-bottom: 1.5rem;
+          text-align: center;
+        }
+
+        .description-card-modern .card-text {
+          color: #7f8c8d;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+          text-align: center;
+          font-size: 1.1rem;
+        }
+
+        .card-features {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          padding: 0 2rem 2rem;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          background: rgba(102, 126, 234, 0.05);
+          border-radius: 15px;
+          transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+          background: rgba(102, 126, 234, 0.1);
+          transform: translateX(5px);
+        }
+
+        .feature-item .feature-icon {
+          width: 20px;
+          height: 20px;
+          color: #667eea;
+          font-size: 1rem;
+        }
+
+        .feature-item span {
+          font-weight: 600;
+          color: #2c3e50;
+          font-size: 0.95rem;
+        }
+
+        /* Enhanced Visual Polish */
+        .section-modern {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .section-modern::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+        }
+
+        .expert-card-modern,
+        .podcast-card-modern,
+        .trust-card,
+        .description-card-modern {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .expert-card-modern::before,
+        .podcast-card-modern::before,
+        .trust-card::before,
+        .description-card-modern::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .expert-card-modern:hover::before,
+        .podcast-card-modern:hover::before,
+        .trust-card:hover::before,
+        .description-card-modern:hover::before {
+          left: 100%;
+        }
+
+        /* Improved Typography */
+        .section-title {
+          position: relative;
+        }
+
+        .section-title::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 3px;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          border-radius: 2px;
+        }
+
+        /* Enhanced Loading States */
+        .loading-placeholder {
+          padding: 3rem 0;
+        }
+
+        .loading-dots {
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .loading-dots span {
+          width: 12px;
+          height: 12px;
+          background: linear-gradient(45deg, #667eea, #764ba2);
+          border-radius: 50%;
+          animation: loading-bounce 1.4s ease-in-out infinite both;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes loading-bounce {
+          0%, 80%, 100% {
+            transform: scale(0);
+          }
+          40% {
+            transform: scale(1);
+          }
+        }
+
         /* Buttons */
         .btn-primary-modern {
           background: linear-gradient(135deg, #667eea, #764ba2);
@@ -1377,8 +1963,120 @@ const Home = () => {
 
         /* Responsive Design */
         @media (max-width: 768px) {
+          .hero-section {
+            padding: 4rem 0;
+            min-height: 70vh;
+          }
+
+          .hero-text-section {
+            padding-right: 0;
+            text-align: center;
+            margin-bottom: 3rem;
+          }
+
+          .hero-visual-section {
+            order: -1;
+          }
+
           .hero-title {
             font-size: 2.5rem;
+          }
+
+          .hero-actions {
+            justify-content: center;
+          }
+
+          .hero-image-container {
+            height: 300px;
+          }
+
+          .hero-main-image {
+            width: 200px;
+            height: 200px;
+          }
+
+          .hero-microphone-icon {
+            font-size: 3rem;
+          }
+
+          .floating-card {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+          }
+
+          .floating-card-1 {
+            top: 5%;
+            right: -5%;
+          }
+
+          .floating-card-2 {
+            bottom: 15%;
+            left: -10%;
+          }
+
+          .floating-card-3 {
+            top: 40%;
+            right: -15%;
+          }
+
+          .trust-section {
+            padding: 3rem 0;
+            margin: 2rem 0;
+          }
+
+          .trust-card {
+            padding: 2rem 1.5rem;
+          }
+
+          .trust-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+          }
+
+          .trust-title {
+            font-size: 1.3rem;
+          }
+
+          .description-section {
+            padding: 3rem 0;
+            margin: 2rem 0;
+          }
+
+          .description-card-modern .card-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            margin: 1.5rem auto 1rem;
+          }
+
+          .description-card-modern .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+          }
+
+          .description-card-modern .card-text {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .card-features {
+            padding: 0 1.5rem 1.5rem;
+            gap: 0.75rem;
+          }
+
+          .feature-item {
+            padding: 0.5rem 0.75rem;
+          }
+
+          .feature-item .feature-icon {
+            width: 18px;
+            height: 18px;
+            font-size: 0.9rem;
+          }
+
+          .feature-item span {
+            font-size: 0.9rem;
           }
 
           .section-title {
