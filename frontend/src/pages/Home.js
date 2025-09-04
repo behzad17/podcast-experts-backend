@@ -738,10 +738,10 @@ const Home = () => {
         .hero-section {
           position: relative;
           background: #819dde;
-          padding: 4rem 0;
+          padding: 2.7rem 0;
           color: white;
           overflow: hidden;
-          min-height: 53vh;
+          min-height: 35vh;
           display: flex;
           align-items: center;
           border-radius: 5px;
@@ -2017,8 +2017,8 @@ const Home = () => {
         /* Responsive Design */
         @media (max-width: 768px) {
           .hero-section {
-            padding: 2.5rem 0;
-            min-height: 47vh;
+            padding: 1.7rem 0;
+            min-height: 31vh;
           }
 
           .hero-text-section {
