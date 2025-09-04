@@ -741,7 +741,7 @@ const Home = () => {
           padding: 6rem 0;
           color: white;
           overflow: hidden;
-          min-height: 80vh;
+          min-height: 53vh;
           display: flex;
           align-items: center;
           border-radius: 5px;
@@ -2018,7 +2018,7 @@ const Home = () => {
         @media (max-width: 768px) {
           .hero-section {
             padding: 4rem 0;
-            min-height: 70vh;
+            min-height: 47vh;
           }
 
           .hero-text-section {
