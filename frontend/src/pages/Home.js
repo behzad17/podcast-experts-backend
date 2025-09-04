@@ -326,7 +326,8 @@ const Home = () => {
             </div>
             <h2 className="section-title">Who Can Use CONNECT?</h2>
             <p className="section-subtitle">
-              Designed for both experts and podcasters to create amazing content together
+              Designed for both experts and podcasters to create amazing content
+              together
             </p>
           </div>
           <Row className="g-4">
@@ -413,7 +414,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Verified Experts</h3>
                 <p className="trust-description">
-                  All experts are thoroughly vetted and verified to ensure quality and authenticity
+                  All experts are thoroughly vetted and verified to ensure
+                  quality and authenticity
                 </p>
               </div>
             </Col>
@@ -425,7 +427,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Global Reach</h3>
                 <p className="trust-description">
-                  Connect with experts and podcasters from around the world, expanding your network
+                  Connect with experts and podcasters from around the world,
+                  expanding your network
                 </p>
               </div>
             </Col>
@@ -437,7 +440,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Fast Matching</h3>
                 <p className="trust-description">
-                  Our smart algorithm quickly matches you with the perfect collaboration partners
+                  Our smart algorithm quickly matches you with the perfect
+                  collaboration partners
                 </p>
               </div>
             </Col>
@@ -449,7 +453,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Direct Communication</h3>
                 <p className="trust-description">
-                  Built-in messaging system for seamless communication and collaboration planning
+                  Built-in messaging system for seamless communication and
+                  collaboration planning
                 </p>
               </div>
             </Col>
@@ -461,7 +466,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Quality Content</h3>
                 <p className="trust-description">
-                  Focus on creating high-quality, engaging content that resonates with your audience
+                  Focus on creating high-quality, engaging content that
+                  resonates with your audience
                 </p>
               </div>
             </Col>
@@ -473,7 +479,8 @@ const Home = () => {
                 </div>
                 <h3 className="trust-title">Professional Network</h3>
                 <p className="trust-description">
-                  Build lasting professional relationships and grow your industry network
+                  Build lasting professional relationships and grow your
+                  industry network
                 </p>
               </div>
             </Col>
@@ -737,6 +744,7 @@ const Home = () => {
           min-height: 80vh;
           display: flex;
           align-items: center;
+          border-radius: 5px;
         }
 
         .hero-overlay {
@@ -941,13 +949,23 @@ const Home = () => {
         }
 
         @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1); }
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
         }
 
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
 
         /* Main Content */
@@ -1769,13 +1787,18 @@ const Home = () => {
         }
 
         .section-modern::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(102, 126, 234, 0.3),
+            transparent
+          );
         }
 
         .expert-card-modern,
@@ -1790,13 +1813,18 @@ const Home = () => {
         .podcast-card-modern::before,
         .trust-card::before,
         .description-card-modern::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
           transition: left 0.5s ease;
         }
 
@@ -1813,7 +1841,7 @@ const Home = () => {
         }
 
         .section-title::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -10px;
           left: 50%;
@@ -1843,12 +1871,20 @@ const Home = () => {
           animation: loading-bounce 1.4s ease-in-out infinite both;
         }
 
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+        .loading-dots span:nth-child(1) {
+          animation-delay: -0.32s;
+        }
+        .loading-dots span:nth-child(2) {
+          animation-delay: -0.16s;
+        }
+        .loading-dots span:nth-child(3) {
+          animation-delay: 0s;
+        }
 
         @keyframes loading-bounce {
-          0%, 80%, 100% {
+          0%,
+          80%,
+          100% {
             transform: scale(0);
           }
           40% {
