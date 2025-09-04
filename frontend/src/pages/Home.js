@@ -1183,6 +1183,9 @@ const Home = () => {
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
           background: white;
+          min-height: 400px;
+          display: flex;
+          flex-direction: column;
         }
 
         .podcast-card-modern:hover {
@@ -1211,6 +1214,9 @@ const Home = () => {
 
         .podcast-card-modern.compact .podcast-body {
           padding: 1rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .podcast-card-modern.compact .podcast-title {
@@ -1233,6 +1239,7 @@ const Home = () => {
         .podcast-card-modern.compact .podcast-actions {
           flex-direction: column;
           gap: 0.5rem;
+          margin-top: auto;
         }
 
         .podcast-card-modern.compact .btn-primary-modern {
