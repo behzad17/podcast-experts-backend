@@ -738,7 +738,7 @@ const Home = () => {
         .hero-section {
           position: relative;
           background: #819dde;
-          padding: 6rem 0;
+          padding: 4rem 0;
           color: white;
           overflow: hidden;
           min-height: 53vh;
@@ -2017,7 +2017,7 @@ const Home = () => {
         /* Responsive Design */
         @media (max-width: 768px) {
           .hero-section {
-            padding: 4rem 0;
+            padding: 2.5rem 0;
             min-height: 47vh;
           }
 
