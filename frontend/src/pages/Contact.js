@@ -580,7 +580,7 @@ const Contact = () => {
       <style jsx>{`
         .contact-page-modern {
           min-height: 100vh;
-          background: #EFF3FB;
+          background: #819dde;
         }
         .contact-hero {
           background: linear-gradient(

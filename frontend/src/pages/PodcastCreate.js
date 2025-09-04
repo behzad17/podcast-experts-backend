@@ -456,15 +456,15 @@ const PodcastCreate = () => {
       <style jsx>{`
         .podcast-create-page-modern {
           min-height: 100vh;
-          background: #EFF3FB;
+          background: #819dde;
         }
 
         .create-hero {
-          background: rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
           padding: 3rem 0;
-          color: #2c3e50;
+          color: white;
           text-align: center;
         }
 

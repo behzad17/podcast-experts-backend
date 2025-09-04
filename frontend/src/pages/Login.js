@@ -280,15 +280,15 @@ const Login = () => {
       <style jsx>{`
         .login-page-modern {
           min-height: 100vh;
-          background: #EFF3FB;
+          background: #819dde;
         }
 
         .login-hero {
-          background: rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
           padding: 3rem 0;
-          color: #2c3e50;
+          color: white;
           text-align: center;
         }
 
@@ -296,13 +296,13 @@ const Login = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(102, 126, 234, 0.1);
-          border: 1px solid rgba(102, 126, 234, 0.2);
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           border-radius: 25px;
           padding: 0.75rem 1.5rem;
           margin-bottom: 2rem;
           font-size: 1rem;
-          color: #667eea;
+          color: white;
           font-weight: 600;
         }
 
@@ -311,7 +311,7 @@ const Login = () => {
           font-weight: 700;
           margin-bottom: 1.5rem;
           line-height: 1.2;
-          color: #2c3e50;
+          color: white;
         }
 
         .gradient-text {
@@ -324,7 +324,7 @@ const Login = () => {
         .hero-subtitle {
           font-size: 1.2rem;
           margin-bottom: 2rem;
-          color: #7f8c8d;
+          color: rgba(255, 255, 255, 0.9);
           line-height: 1.6;
           max-width: 600px;
           margin-left: auto;
@@ -344,13 +344,13 @@ const Login = () => {
 
         .stat-number {
           font-size: 2.5rem;
-          color: #667eea;
+          color: #ffd700;
           margin-bottom: 0.5rem;
         }
 
         .stat-label {
           font-size: 1rem;
-          color: #7f8c8d;
+          color: rgba(255, 255, 255, 0.9);
           font-weight: 500;
         }
 

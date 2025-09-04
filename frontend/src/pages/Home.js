@@ -730,9 +730,9 @@ const Home = () => {
         /* Hero Section */
         .hero-section {
           position: relative;
-          background: #EFF3FB;
+          background: #819dde;
           padding: 6rem 0;
-          color: #2c3e50;
+          color: white;
           overflow: hidden;
           min-height: 80vh;
           display: flex;
@@ -758,14 +758,14 @@ const Home = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 0.2);
           padding: 0.75rem 1.5rem;
           border-radius: 50px;
           backdrop-filter: blur(10px);
           margin-bottom: 2rem;
           font-weight: 600;
-          color: #667eea;
-          border: 1px solid rgba(102, 126, 234, 0.2);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .hero-icon {
@@ -777,7 +777,7 @@ const Home = () => {
           font-weight: 800;
           margin-bottom: 1.5rem;
           line-height: 1.2;
-          color: #2c3e50;
+          color: white;
         }
 
         .gradient-text {
@@ -790,7 +790,7 @@ const Home = () => {
         .hero-subtitle {
           font-size: 1.25rem;
           margin-bottom: 2rem;
-          color: #7f8c8d;
+          color: rgba(255, 255, 255, 0.9);
           line-height: 1.6;
         }
 
@@ -798,13 +798,13 @@ const Home = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          background: rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 0.2);
           padding: 1rem 2rem;
           border-radius: 50px;
           backdrop-filter: blur(10px);
           font-weight: 600;
-          color: #667eea;
-          border: 1px solid rgba(102, 126, 234, 0.2);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .user-icon {
@@ -882,13 +882,13 @@ const Home = () => {
           position: relative;
           width: 300px;
           height: 300px;
-          background: rgba(102, 126, 234, 0.1);
+          background: rgba(255, 255, 255, 0.1);
           border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
           backdrop-filter: blur(10px);
-          border: 2px solid rgba(102, 126, 234, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .hero-microphone-icon {
@@ -919,7 +919,7 @@ const Home = () => {
           color: #2c3e50;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           animation: float 3s ease-in-out infinite;
-          border: 1px solid rgba(102, 126, 234, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .floating-card-1 {
