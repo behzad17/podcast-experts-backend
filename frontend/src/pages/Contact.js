@@ -592,6 +592,7 @@ const Contact = () => {
           border-bottom: 1px solid rgba(255, 255, 255, 0.2);
           padding: 2rem 0;
           color: white;
+          border-radius: 10px;
         }
         .hero-badge {
           display: inline-flex;

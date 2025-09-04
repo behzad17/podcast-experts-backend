@@ -720,7 +720,7 @@ const Home = () => {
           min-height: 35vh;
           display: flex;
           align-items: center;
-          border-radius: 5px;
+          border-radius: 10px;
         }
 
         .hero-overlay {

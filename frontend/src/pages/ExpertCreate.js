@@ -653,6 +653,7 @@ const ExpertCreate = () => {
           padding: 1.5rem 0;
           color: white;
           text-align: center;
+          border-radius: 10px;
         }
 
         .hero-badge {
