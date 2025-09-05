@@ -27,6 +27,11 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
   };
 
   const getImageUrl = (podcast) => {
+    // Check if we have an image display URL (Cloudinary URL)
+    if (podcast.image_display_url && podcast.image_display_url.startsWith("http")) {
+      return podcast.image_display_url;
+    }
+
     // Check if we have an image URL (Cloudinary URL)
     if (podcast.image_url && podcast.image_url.startsWith("http")) {
       return podcast.image_url;
