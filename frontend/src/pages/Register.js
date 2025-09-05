@@ -247,28 +247,6 @@ const Register = () => {
               <div className="user-type-cards">
                 <div
                   className={`user-type-card ${
-                    formData.user_type === "podcaster" ? "selected" : ""
-                  }`}
-                  onClick={() =>
-                    setFormData({ ...formData, user_type: "podcaster" })
-                  }
-                >
-                  <div className="card-icon">
-                    <FaMicrophone />
-                  </div>
-                  <h5>Podcaster</h5>
-                  <p>
-                    Create and manage your podcasts, reach audiences, and grow
-                    your brand
-                  </p>
-                  <div className="card-features">
-                    <span className="feature-tag">Content Creation</span>
-                    <span className="feature-tag">Audience Growth</span>
-                    <span className="feature-tag">Analytics</span>
-                  </div>
-                </div>
-                <div
-                  className={`user-type-card ${
                     formData.user_type === "expert" ? "selected" : ""
                   }`}
                   onClick={() =>
@@ -287,6 +265,28 @@ const Register = () => {
                     <span className="feature-tag">Expert Profile</span>
                     <span className="feature-tag">Client Connections</span>
                     <span className="feature-tag">Professional Network</span>
+                  </div>
+                </div>
+                <div
+                  className={`user-type-card ${
+                    formData.user_type === "podcaster" ? "selected" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData({ ...formData, user_type: "podcaster" })
+                  }
+                >
+                  <div className="card-icon">
+                    <FaMicrophone />
+                  </div>
+                  <h5>Podcaster</h5>
+                  <p>
+                    Create and manage your podcasts, reach audiences, and grow
+                    your brand
+                  </p>
+                  <div className="card-features">
+                    <span className="feature-tag">Content Creation</span>
+                    <span className="feature-tag">Audience Growth</span>
+                    <span className="feature-tag">Analytics</span>
                   </div>
                 </div>
               </div>
@@ -719,6 +719,12 @@ const Register = () => {
           border-color: #667eea;
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 100%
+          );
+          backdrop-filter: blur(10px);
         }
 
         .user-type-card.selected {
