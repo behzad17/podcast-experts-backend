@@ -47,8 +47,7 @@ class ExpertProfile(models.Model):
     profile_picture = models.ImageField(
         upload_to='expert_profiles/', 
         blank=True, 
-        null=True,
-        storage=settings.DEFAULT_FILE_STORAGE
+        null=True
     )
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)

@@ -45,6 +45,5 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(
         upload_to="profiles/",
         blank=True,
-        null=True,
-        storage=settings.DEFAULT_FILE_STORAGE
+        null=True
     )

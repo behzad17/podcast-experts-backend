@@ -223,7 +223,7 @@ STATICFILES_DIRS = [
 
 # Use WhiteNoise for better static file serving in production
 # WhiteNoise will serve static files directly from STATIC_ROOT
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+# STATICFILES_STORAGE is now handled by STORAGES configuration above
 
 # WhiteNoise configuration
 WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend', 'build')
@@ -253,7 +253,14 @@ else:
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', EMAIL_HOST_USER)
 
 # Cloudinary Storage Configuration
-DEFAULT_FILE_STORAGE = 'backend.cloudinary_storage.CustomCloudinaryStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "backend.cloudinary_storage.CustomCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
+    },
+}
 
 # Remove the problematic django-cloudinary-storage configuration
 # CLOUDINARY_STORAGE = {
