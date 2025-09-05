@@ -436,7 +436,7 @@ const Login = () => {
         .form-input {
           border-radius: 15px;
           border: 2px solid #e9ecef;
-          padding: 1rem 3rem 1rem 1.25rem;
+          padding: 1rem 3rem 1rem 2.5rem;
           font-size: 1rem;
           transition: all 0.3s ease;
           background: white;
