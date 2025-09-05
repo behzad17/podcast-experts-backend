@@ -5,6 +5,7 @@ from cloudinary.utils import cloudinary_url
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.conf import settings
 
 User = get_user_model()
 
@@ -46,7 +47,8 @@ class ExpertProfile(models.Model):
     profile_picture = models.ImageField(
         upload_to='expert_profiles/', 
         blank=True, 
-        null=True
+        null=True,
+        storage=settings.DEFAULT_FILE_STORAGE
     )
     is_approved = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)

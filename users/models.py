@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.conf import settings
 
 
 class CustomUser(AbstractUser):
@@ -44,5 +45,6 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(
         upload_to="profiles/",
         blank=True,
-        null=True
+        null=True,
+        storage=settings.DEFAULT_FILE_STORAGE
     )

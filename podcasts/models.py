@@ -81,7 +81,8 @@ class Podcast(models.Model):
     image = models.ImageField(
         upload_to='podcast_images/',
         null=True,
-        blank=True
+        blank=True,
+        storage=settings.DEFAULT_FILE_STORAGE
     )
     link = models.URLField(null=True, blank=True, default='')
     is_approved = models.BooleanField(default=False)
