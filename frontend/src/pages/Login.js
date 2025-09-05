@@ -9,9 +9,6 @@ import {
   FaEyeSlash,
   FaSignInAlt,
   FaShieldAlt,
-  FaRocket,
-  FaUsers,
-  FaStar,
   FaArrowRight,
   FaExclamationTriangle,
   FaCheckCircle,
@@ -74,26 +71,6 @@ const Login = () => {
               Access your expert profile, manage your podcasts, and continue
               building meaningful connections in our professional network.
             </p>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">
-                  <FaUsers />
-                </div>
-                <div className="stat-label">Active Users</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">
-                  <FaStar />
-                </div>
-                <div className="stat-label">Trusted Platform</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">
-                  <FaRocket />
-                </div>
-                <div className="stat-label">Fast & Secure</div>
-              </div>
-            </div>
           </div>
         </Container>
       </div>
@@ -261,14 +238,14 @@ const Login = () => {
             </div>
             <div className="feature-card">
               <div className="feature-icon">
-                <FaRocket />
+                <FaArrowRight />
               </div>
               <h4>Fast Access</h4>
               <p>Quick login and instant access to your professional tools</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon">
-                <FaUsers />
+                <FaUserTie />
               </div>
               <h4>Professional Network</h4>
               <p>Connect with experts and grow your professional presence</p>
@@ -332,28 +309,6 @@ const Login = () => {
           margin-right: auto;
         }
 
-        .hero-stats {
-          display: flex;
-          justify-content: center;
-          gap: 3rem;
-          margin-top: 2rem;
-        }
-
-        .stat-item {
-          text-align: center;
-        }
-
-        .stat-number {
-          font-size: 2.5rem;
-          color: #ffd700;
-          margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-          font-size: 1rem;
-          color: rgba(255, 255, 255, 0.9);
-          font-weight: 500;
-        }
 
         .login-form-section {
           background: rgba(255, 255, 255, 0.95);
@@ -654,10 +609,6 @@ const Login = () => {
             font-size: 1.1rem;
           }
 
-          .hero-stats {
-            flex-direction: column;
-            gap: 2rem;
-          }
 
           .login-form-section {
             padding: 2rem;
