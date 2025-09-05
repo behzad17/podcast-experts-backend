@@ -57,6 +57,12 @@ class ExpertReactionSerializer(serializers.ModelSerializer):
 class ExpertProfileSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     categories = ExpertCategorySerializer(many=True, read_only=True)
+    category_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True,
+        required=False,
+        help_text="List of category IDs to associate with this expert profile"
+    )
     total_views = serializers.SerializerMethodField()
     total_bookmarks = serializers.SerializerMethodField()
     comments = ExpertCommentSerializer(many=True, read_only=True)
@@ -71,11 +77,10 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         model = ExpertProfile
         fields = [
             'id', 'user', 'name', 'bio', 'expertise', 'categories',
-            'experience_years', 'website', 'social_media', 'email',
-            'profile_picture', 'profile_picture_url', 'is_approved', 
-            'is_featured', 'created_at', 'total_views', 'total_bookmarks', 
-            'comments',
-            'likes_count', 'dislikes_count'
+            'category_ids', 'experience_years', 'website', 'social_media',
+            'email', 'profile_picture', 'profile_picture_url', 'is_approved',
+            'is_featured', 'created_at', 'total_views', 'total_bookmarks',
+            'comments', 'likes_count', 'dislikes_count'
         ]
         read_only_fields = ['is_approved']
 
@@ -97,4 +102,22 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
         return obj.get_likes_count()
 
     def get_dislikes_count(self, obj):
-        return obj.get_dislikes_count() 
+        return obj.get_dislikes_count()
+
+    def create(self, validated_data):
+        category_ids = validated_data.pop('category_ids', [])
+        expert_profile = super().create(validated_data)
+
+        if category_ids:
+            expert_profile.categories.set(category_ids)
+
+        return expert_profile
+
+    def update(self, instance, validated_data):
+        category_ids = validated_data.pop('category_ids', None)
+        expert_profile = super().update(instance, validated_data)
+
+        if category_ids is not None:
+            expert_profile.categories.set(category_ids)
+
+        return expert_profile

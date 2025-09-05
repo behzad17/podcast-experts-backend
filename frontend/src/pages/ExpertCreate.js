@@ -24,6 +24,7 @@ import {
   FaCalendarAlt,
   FaLink,
   FaTimes,
+  FaTag,
 } from "react-icons/fa";
 
 const ExpertCreate = () => {
@@ -36,7 +37,9 @@ const ExpertCreate = () => {
     social_media: "",
     email: "",
     profile_picture: null,
+    category_ids: [],
   });
+  const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -86,7 +89,18 @@ const ExpertCreate = () => {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/experts/categories/");
+        setCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError("Failed to load categories");
+      }
+    };
+
     checkAuth();
+    fetchCategories();
   }, [navigate]);
 
   // Calculate form progress
@@ -142,6 +156,28 @@ const ExpertCreate = () => {
     setError("");
   };
 
+  const handleCategoryChange = (categoryId) => {
+    const categoryIdInt = parseInt(categoryId);
+    setFormData(prev => {
+      const currentCategories = prev.category_ids || [];
+      const isSelected = currentCategories.includes(categoryIdInt);
+      
+      if (isSelected) {
+        // Remove category
+        return {
+          ...prev,
+          category_ids: currentCategories.filter(id => id !== categoryIdInt)
+        };
+      } else {
+        // Add category
+        return {
+          ...prev,
+          category_ids: [...currentCategories, categoryIdInt]
+        };
+      }
+    });
+  };
+
   const removeImage = () => {
     setFormData({ ...formData, profile_picture: null });
     setImagePreview(null);
@@ -176,6 +212,12 @@ const ExpertCreate = () => {
 
       if (formData.email) {
         submitData.append("email", formData.email);
+      }
+
+      if (formData.category_ids && formData.category_ids.length > 0) {
+        formData.category_ids.forEach((categoryId) => {
+          submitData.append("category_ids", categoryId);
+        });
       }
 
       if (formData.profile_picture) {
@@ -575,6 +617,41 @@ const ExpertCreate = () => {
                 />
                 <small className="form-help">
                   Contact email for potential clients (optional)
+                </small>
+              </div>
+
+              {/* Categories Field */}
+              <div className="form-group">
+                <Form.Label className="form-label">
+                  <FaTag className="label-icon" />
+                  Categories *
+                </Form.Label>
+                <div className="category-selection">
+                  {categories.map((category) => (
+                    <div
+                      key={category.id}
+                      className={`category-option ${
+                        formData.category_ids?.includes(category.id) ? 'selected' : ''
+                      }`}
+                      onClick={() => handleCategoryChange(category.id)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.category_ids?.includes(category.id) || false}
+                        onChange={() => {}} // Handled by onClick
+                        className="category-checkbox"
+                      />
+                      <span className="category-name">{category.name}</span>
+                      {category.description && (
+                        <small className="category-description">
+                          {category.description}
+                        </small>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <small className="form-help">
+                  Select the categories that best describe your expertise areas
                 </small>
               </div>
             </div>
@@ -1158,6 +1235,89 @@ const ExpertCreate = () => {
             width: clamp(80px, 20vw, 100px);
             height: clamp(80px, 20vw, 100px);
             font-size: clamp(2.5rem, 6vw, 3rem);
+          }
+        }
+
+        /* Category Selection Styles */
+        .category-selection {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+          margin-top: 0.5rem;
+        }
+
+        .category-option {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          padding: 1rem;
+          border: 2px solid #e1e5e9;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: white;
+        }
+
+        .category-option:hover {
+          border-color: #667eea;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+          transform: translateY(-2px);
+        }
+
+        .category-option.selected {
+          border-color: #667eea;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .category-checkbox {
+          margin: 0;
+          width: 18px;
+          height: 18px;
+          accent-color: #667eea;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+
+        .category-option.selected .category-checkbox {
+          accent-color: white;
+        }
+
+        .category-name {
+          font-weight: 600;
+          font-size: 1rem;
+          margin-bottom: 0.25rem;
+          display: block;
+        }
+
+        .category-description {
+          font-size: 0.85rem;
+          opacity: 0.8;
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        .category-option.selected .category-description {
+          opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+          .category-selection {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+
+          .category-option {
+            padding: 0.75rem;
+          }
+
+          .category-name {
+            font-size: 0.9rem;
+          }
+
+          .category-description {
+            font-size: 0.8rem;
           }
         }
       `}</style>

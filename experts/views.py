@@ -399,6 +399,15 @@ class ExpertCategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
+class ExpertCategoryListView(generics.ListAPIView):
+    """
+    List all expert categories.
+    """
+    queryset = ExpertCategory.objects.all()
+    serializer_class = ExpertCategorySerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class ExpertReactionViewSet(viewsets.ModelViewSet):
     serializer_class = ExpertReactionSerializer
     permission_classes = [permissions.IsAuthenticated]
