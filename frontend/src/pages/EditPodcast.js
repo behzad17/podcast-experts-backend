@@ -20,6 +20,14 @@ const EditPodcast = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Check if user is authenticated
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Please log in to edit podcasts");
+          navigate("/login");
+          return;
+        }
+
         // Fetch podcast data
         const response = await api.get(`/podcasts/${id}/`);
         const podcast = response.data;
@@ -40,8 +48,17 @@ const EditPodcast = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load podcast data");
-        navigate("/podcasts");
+        
+        if (error.response?.status === 401) {
+          toast.error("Please log in to edit podcasts");
+          navigate("/login");
+        } else if (error.response?.status === 403) {
+          toast.error("You don't have permission to edit this podcast");
+          navigate("/podcasts");
+        } else {
+          toast.error("Failed to load podcast data");
+          navigate("/podcasts");
+        }
       }
     };
 
@@ -85,7 +102,20 @@ const EditPodcast = () => {
       navigate(`/podcasts/${id}`);
     } catch (error) {
       console.error("Error updating podcast:", error);
-      toast.error(error.response?.data?.detail || "Failed to update podcast");
+      
+      // Handle specific error cases
+      if (error.response?.status === 401) {
+        toast.error("Please log in to edit this podcast");
+        navigate("/login");
+      } else if (error.response?.status === 403) {
+        toast.error("You don't have permission to edit this podcast");
+        navigate("/podcasts");
+      } else {
+        const errorMessage = error.response?.data?.detail || 
+                           error.response?.data?.message || 
+                           "Failed to update podcast";
+        toast.error(errorMessage);
+      }
     }
   };
 

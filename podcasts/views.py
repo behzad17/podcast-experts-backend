@@ -77,6 +77,14 @@ class PodcastDetailView(generics.RetrieveUpdateDestroyAPIView):
     def check_object_permissions(self, request, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
+        
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            raise PermissionDenied(
+                "Authentication required to modify this podcast."
+            )
+        
+        # Check if user owns the podcast
         if obj.owner.user != request.user:
             raise PermissionDenied(
                 "You don't have permission to modify this podcast."
