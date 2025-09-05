@@ -11,44 +11,70 @@ const EditPodcast = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "",
-    language: "",
-    website: "",
-    social_media: "",
+    category_id: "",
+    link: "",
+    image: null,
   });
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchPodcast = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch podcast data
         const response = await api.get(`/podcasts/${id}/`);
-        setFormData(response.data);
+        const podcast = response.data;
+        
+        // Fetch categories
+        const categoriesResponse = await api.get("/podcasts/categories/");
+        setCategories(categoriesResponse.data);
+        
+        // Set form data with proper field mapping
+        setFormData({
+          title: podcast.title || "",
+          description: podcast.description || "",
+          category_id: podcast.category?.id || "",
+          link: podcast.link || "",
+          image: null, // Don't pre-populate image for security
+        });
+        
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching podcast:", error);
-        toast.error("Failed to load podcast");
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load podcast data");
         navigate("/podcasts");
       }
     };
 
-    fetchPodcast();
+    fetchData();
   }, [id, navigate]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, files } = e.target;
+    if (name === "image" && files?.length > 0) {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (formData[key] !== null) {
-          formDataToSend.append(key, formData[key]);
-        }
-      });
+      
+      // Always send required fields
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("category_id", formData.category_id);
+      
+      // Only send optional fields if they have values
+      if (formData.link) {
+        formDataToSend.append("link", formData.link);
+      }
+      
+      if (formData.image) {
+        formDataToSend.append("image", formData.image);
+      }
 
       await api.put(`/podcasts/${id}/`, formDataToSend, {
         headers: {
@@ -104,44 +130,43 @@ const EditPodcast = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Category *</Form.Label>
-          <Form.Control
-            type="text"
-            name="category"
-            value={formData.category}
+          <Form.Select
+            name="category_id"
+            value={formData.category_id}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Language *</Form.Label>
-          <Form.Control
-            type="text"
-            name="language"
-            value={formData.language}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Website</Form.Label>
+          <Form.Label>Podcast Link</Form.Label>
           <Form.Control
             type="url"
-            name="website"
-            value={formData.website || ""}
+            name="link"
+            value={formData.link}
             onChange={handleChange}
+            placeholder="https://your-podcast-platform.com/episode"
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Social Media</Form.Label>
+          <Form.Label>Cover Image</Form.Label>
           <Form.Control
-            type="text"
-            name="social_media"
-            value={formData.social_media || ""}
+            type="file"
+            name="image"
             onChange={handleChange}
+            accept="image/*"
           />
+          <Form.Text className="text-muted">
+            Leave empty to keep current image
+          </Form.Text>
         </Form.Group>
 
         <div className="d-flex justify-content-end gap-2">
