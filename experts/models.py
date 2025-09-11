@@ -101,7 +101,7 @@ class ExpertProfile(models.Model):
             pass
         
         # Fallback to relative path if Cloudinary config fails
-        return "expert_profiles/default_profile.png"
+        return "/expert_profiles/default_profile.png"
 
     def save(self, *args, **kwargs):
         """Override save to handle any additional logic if needed"""
