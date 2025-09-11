@@ -31,35 +31,22 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
   };
 
   const getImageUrl = (expert) => {
-    // Debug logging
-    console.log('Expert data for image:', {
-      id: expert.id,
-      name: expert.name,
-      profile_picture: expert.profile_picture,
-      profile_picture_display_url: expert.profile_picture_display_url,
-      profile_picture_url: expert.profile_picture_url
-    });
-    
     // Prioritize profile_picture_display_url (new field for Cloudinary URL)
     if (expert.profile_picture_display_url && expert.profile_picture_display_url.startsWith('http')) {
-      console.log('Using profile_picture_display_url:', expert.profile_picture_display_url);
       return expert.profile_picture_display_url;
     }
     
     // Fallback to profile_picture_url (existing Cloudinary URL field)
     if (expert.profile_picture_url && expert.profile_picture_url.startsWith('http')) {
-      console.log('Using profile_picture_url:', expert.profile_picture_url);
       return expert.profile_picture_url;
     }
     
     // Fallback to profile_picture (if it somehow contains a URL, though it should be a file path now)
     if (expert.profile_picture && expert.profile_picture.startsWith('http')) {
-      console.log('Using profile_picture:', expert.profile_picture);
       return expert.profile_picture;
     }
     
     // Default placeholder if no valid image URL is found
-    console.log('Using default placeholder image');
     return "/logo192.png";
   };
 
