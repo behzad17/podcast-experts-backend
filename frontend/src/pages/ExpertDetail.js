@@ -77,10 +77,10 @@ const ExpertDetail = () => {
         <Card.Body className="p-4">
           <Row>
             <Col md={4}>
-              {expert.profile_picture_url && (
+              {(expert.profile_picture_display_url || expert.profile_picture_url) && (
                 <div className="expert-profile-image position-relative">
                   <img
-                    src={expert.profile_picture_url}
+                    src={expert.profile_picture_display_url || expert.profile_picture_url}
                     alt={expert.name}
                     className="img-fluid rounded-3"
                     style={{
