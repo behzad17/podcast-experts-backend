@@ -26,7 +26,7 @@ class CustomCloudinaryStorage(Storage):
             api_key=os.getenv('CLOUDINARY_API_KEY'),
             api_secret=os.getenv('CLOUDINARY_API_SECRET'),
         )
-        self.location = location or 'media'
+        self.location = location or ''
         self.base_url = base_url or 'https://res.cloudinary.com'
     
     def _open(self, name, mode='rb'):
@@ -55,13 +55,13 @@ class CustomCloudinaryStorage(Storage):
             # Upload to Cloudinary
             result = cloudinary.uploader.upload(
                 content,
-                public_id=f"{self.location}/{name}",
+                public_id=name,
                 resource_type="auto",
                 overwrite=True
             )
             
             # Return the public_id as the name
-            return f"{self.location}/{name}"
+            return name
             
         except Exception as e:
             # If Cloudinary upload fails, fall back to local storage
