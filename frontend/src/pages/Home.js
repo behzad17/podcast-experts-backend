@@ -92,9 +92,16 @@ const Home = () => {
   };
 
   const getPodcastImageUrl = (podcast) => {
+    // Prioritize image_display_url (Cloudinary URL)
+    if (podcast.image_display_url && podcast.image_display_url.startsWith("http")) {
+      return podcast.image_display_url;
+    }
+    
+    // Fallback to image (if it somehow contains a URL)
     if (podcast.image && podcast.image.startsWith("http")) {
       return podcast.image;
     }
+    
     return "/logo192.png";
   };
 
@@ -296,6 +303,7 @@ const Home = () => {
                         src={getPodcastImageUrl(podcast)}
                         alt={podcast.title}
                         className="podcast-image"
+                        onError={handleImageError}
                       />
                       <div className="podcast-overlay">
                         <FaPlay className="play-icon" />

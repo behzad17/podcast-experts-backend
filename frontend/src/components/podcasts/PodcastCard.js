@@ -46,6 +46,11 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
     return "/logo192.png";
   };
 
+  const handleImageError = (e) => {
+    // Set fallback image on error
+    e.target.src = "/logo192.png";
+  };
+
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
@@ -84,6 +89,7 @@ const PodcastCard = ({ podcast, currentUser, onEdit, onDelete }) => {
             alt={podcast.title}
             loading="lazy"
             className="podcast-image"
+            onError={handleImageError}
           />
 
           {/* Play Button Overlay */}
