@@ -281,3 +281,4 @@ cloudinary.config(
 
 # Cloudinary default image settings
 CLOUDINARY_DEFAULT_EXPERT_IMAGE = os.getenv('CLOUDINARY_DEFAULT_EXPERT_IMAGE', 'expert_profiles/default_profile.png')
+CLOUDINARY_DEFAULT_PODCAST_IMAGE = os.getenv('CLOUDINARY_DEFAULT_PODCAST_IMAGE', 'podcast_images/default_podcast.png')

@@ -97,11 +97,9 @@ class Podcast(models.Model):
 
     @property
     def image_url(self):
-        """Return podcast image URL or default image if no image exists"""
+        """Return image URL or default image if no image exists"""
         if self.image and hasattr(self.image, 'name') and self.image.name:
-            # Generate Cloudinary URL directly
             try:
-                # Remove leading slash if present and build URL via Cloudinary
                 clean_name = self.image.name.lstrip('/')
                 url, _ = cloudinary_url(clean_name, secure=True, resource_type="image")
                 if url:
@@ -111,14 +109,18 @@ class Podcast(models.Model):
         
         # Return a default placeholder image URL
         try:
-            url, _ = cloudinary_url("podcast_images/default_podcast.png", secure=True, resource_type="image")
+            from django.conf import settings
+            default_image = getattr(settings, 'CLOUDINARY_DEFAULT_PODCAST_IMAGE', 'podcast_images/default_podcast.png')
+            url, _ = cloudinary_url(default_image, secure=True, resource_type="image")
             if url:
                 return url
         except Exception:
             pass
         
         # Fallback to relative path if Cloudinary config fails
-        return "podcast_images/default_podcast.png"
+        from django.conf import settings
+        default_image = getattr(settings, 'CLOUDINARY_DEFAULT_PODCAST_IMAGE', 'podcast_images/default_podcast.png')
+        return f"/{default_image}"
 
     def save(self, *args, **kwargs):
         """Override save to handle any additional logic if needed"""
