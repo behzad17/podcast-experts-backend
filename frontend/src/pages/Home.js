@@ -80,6 +80,11 @@ const Home = () => {
     return "/logo192.png";
   };
 
+  const handleImageError = (e) => {
+    // Set fallback image on error
+    e.target.src = "/logo192.png";
+  };
+
   const getPodcastImageUrl = (podcast) => {
     if (podcast.image && podcast.image.startsWith("http")) {
       return podcast.image;
@@ -205,6 +210,7 @@ const Home = () => {
                           src={getExpertImage(expert)}
                           alt={expert.name}
                           className="expert-image"
+                          onError={handleImageError}
                         />
                         <div className="expert-badge">
                           <FaStar />

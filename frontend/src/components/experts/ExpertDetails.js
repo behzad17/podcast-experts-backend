@@ -3,6 +3,11 @@ import { Card, Badge, Button, Row, Col } from "react-bootstrap";
 import { FaStar, FaGlobe, FaShareAlt, FaEnvelope } from "react-icons/fa";
 
 const ExpertDetails = ({ expert, currentUser, onEdit }) => {
+  const handleImageError = (e) => {
+    // Set fallback image on error
+    e.target.src = "/logo192.png";
+  };
+
   return (
     <Card className="mb-4">
       <Row>
@@ -13,6 +18,7 @@ const ExpertDetails = ({ expert, currentUser, onEdit }) => {
               alt={expert.name}
               className="img-fluid rounded"
               style={{ maxWidth: "200px" }}
+              onError={handleImageError}
             />
           )}
         </Col>

@@ -50,6 +50,11 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
     return "/logo192.png";
   };
 
+  const handleImageError = (e) => {
+    // Set fallback image on error
+    e.target.src = "/logo192.png";
+  };
+
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
@@ -130,6 +135,7 @@ const ExpertCard = ({ expert, currentUser, onEdit, onDelete }) => {
             alt={expert.name}
             style={{ height: "100%", objectFit: "cover" }}
             className="rounded-end-3"
+            onError={handleImageError}
           />
         </div>
       </div>
