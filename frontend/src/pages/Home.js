@@ -63,12 +63,18 @@ const Home = () => {
 
   const getExpertImage = (expert) => {
     // Prioritize profile_picture_display_url (new field for Cloudinary URL)
-    if (expert.profile_picture_display_url && expert.profile_picture_display_url.startsWith("http")) {
+    if (
+      expert.profile_picture_display_url &&
+      expert.profile_picture_display_url.startsWith("http")
+    ) {
       return expert.profile_picture_display_url;
     }
 
     // Fallback to profile_picture_url (existing Cloudinary URL field)
-    if (expert.profile_picture_url && expert.profile_picture_url.startsWith("http")) {
+    if (
+      expert.profile_picture_url &&
+      expert.profile_picture_url.startsWith("http")
+    ) {
       return expert.profile_picture_url;
     }
 
@@ -354,8 +360,7 @@ const Home = () => {
                     for guests each week. Plus, join our premium expert
                     directory so podcasters can discover you.
                   </p>
-                  <div className="card-features">
-                  </div>
+                  <div className="card-features"></div>
                 </Card.Body>
               </Card>
             </Col>
@@ -372,8 +377,7 @@ const Home = () => {
                     reaches thousands of experts and podcasters looking for
                     collaboration opportunities.
                   </p>
-                  <div className="card-features">
-                  </div>
+                  <div className="card-features"></div>
                 </Card.Body>
               </Card>
             </Col>
