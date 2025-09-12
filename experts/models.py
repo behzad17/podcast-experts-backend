@@ -94,14 +94,18 @@ class ExpertProfile(models.Model):
         
         # Return a default placeholder image URL
         try:
-            url, _ = cloudinary_url("expert_profiles/default_profile.png", secure=True, resource_type="image")
+            from django.conf import settings
+            default_image = getattr(settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE', 'expert_profiles/default_profile.png')
+            url, _ = cloudinary_url(default_image, secure=True, resource_type="image")
             if url:
                 return url
         except Exception:
             pass
         
         # Fallback to relative path if Cloudinary config fails
-        return "/expert_profiles/default_profile.png"
+        from django.conf import settings
+        default_image = getattr(settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE', 'expert_profiles/default_profile.png')
+        return f"/{default_image}"
 
     def save(self, *args, **kwargs):
         """Override save to handle any additional logic if needed"""
