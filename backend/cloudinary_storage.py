@@ -51,13 +51,16 @@ class CustomCloudinaryStorage(Storage):
     
     def _save(self, name, content):
         """Save a file to Cloudinary"""
-        # Upload to Cloudinary
+        # Upload to Cloudinary with public access
         result = cloudinary.uploader.upload(
             content,
             public_id=name,
             resource_type="image",
             overwrite=True,
-            invalidate=True
+            invalidate=True,
+            use_filename=True,
+            unique_filename=False,
+            folder="expert_profiles"
         )
         
         # Return the public_id as the name
