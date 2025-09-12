@@ -51,31 +51,17 @@ class CustomCloudinaryStorage(Storage):
     
     def _save(self, name, content):
         """Save a file to Cloudinary"""
-        try:
-            # Upload to Cloudinary
-            result = cloudinary.uploader.upload(
-                content,
-                public_id=name,
-                resource_type="auto",
-                overwrite=True
-            )
-            
-            # Return the public_id as the name
-            return name
-            
-        except Exception as e:
-            # If Cloudinary upload fails, fall back to local storage
-            print(f"Cloudinary upload failed for {name}: {e}")
-            # Create local directory if it doesn't exist
-            local_path = os.path.join(settings.BASE_DIR, 'media', name)
-            os.makedirs(os.path.dirname(local_path), exist_ok=True)
-            
-            # Save locally as fallback
-            with open(local_path, 'wb') as f:
-                for chunk in content.chunks():
-                    f.write(chunk)
-            
-            return name
+        # Upload to Cloudinary
+        result = cloudinary.uploader.upload(
+            content,
+            public_id=name,
+            resource_type="image",
+            overwrite=True,
+            invalidate=True
+        )
+        
+        # Return the public_id as the name
+        return name
     
     def url(self, name):
         """Get the URL for a file"""
@@ -108,32 +94,17 @@ class CustomCloudinaryStorage(Storage):
         if not name:
             return False
         
-        # Check local file first
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            return True
-        
-        # Check Cloudinary (this is a simplified check)
+        # Check Cloudinary
         try:
-            cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
-            if cloud_name:
-                # Try to get file info from Cloudinary
-                result = cloudinary.api.resource(f"{name}")
-                return True
+            cloudinary.api.resource(name)
+            return True
         except:
-            pass
-        
-        return False
+            return False
     
     def size(self, name):
         """Get file size"""
         if not name:
             return 0
-        
-        # Check local file first
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            return os.path.getsize(local_path)
         
         # For Cloudinary files, we can't easily get size without API call
         return 0
@@ -143,12 +114,7 @@ class CustomCloudinaryStorage(Storage):
         if not name:
             return
         
-        # Delete local file if it exists
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            os.remove(local_path)
-        
-        # Try to delete from Cloudinary
+        # Delete from Cloudinary
         try:
             cloudinary.uploader.destroy(name)
         except:
@@ -156,21 +122,12 @@ class CustomCloudinaryStorage(Storage):
     
     def get_accessed_time(self, name):
         """Get last accessed time"""
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            return os.path.getatime(local_path)
         return None
     
     def get_created_time(self, name):
         """Get creation time"""
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            return os.path.getctime(local_path)
         return None
     
     def get_modified_time(self, name):
         """Get last modified time"""
-        local_path = os.path.join(settings.BASE_DIR, 'media', name)
-        if os.path.exists(local_path):
-            return os.path.getmtime(local_path)
         return None
