@@ -436,62 +436,11 @@ const About = () => {
                     </div>
                   </div>
                 </Col>
-                <Col lg={6} className="mb-4">
-                  <div className="support-info">
-                    <h5>Support</h5>
-                    <p>
-                      Need help? Our support team is here to assist you with any
-                      questions or issues you may have.
-                    </p>
-                    <Button
-                      variant="outline-primary"
-                      size="sm"
-                      className="support-btn"
-                    >
-                      Contact Support
-                    </Button>
-                  </div>
-                </Col>
               </Row>
             </div>
           </Col>
         </Row>
 
-        {/* Final CTA Section */}
-        <Row className="mb-5">
-          <Col>
-            <div className="final-cta-card-modern">
-              <div className="cta-content">
-                <h2 className="cta-title">Ready to Start Connecting?</h2>
-                <p className="cta-description">
-                  Join thousands of podcasters and experts who are already using
-                  CONNECT to create amazing content together.
-                </p>
-                <div className="cta-buttons">
-                  <Button
-                    as={Link}
-                    to="/register"
-                    variant="light"
-                    size="lg"
-                    className="cta-btn primary"
-                  >
-                    Join Now
-                    <FaArrowRight className="ms-2" />
-                  </Button>
-                  <Button
-                    as={Link}
-                    to="/"
-                    variant="outline-light"
-                    size="lg"
-                    className="cta-btn secondary"
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
       </Container>
 
       <style jsx>{`
@@ -891,8 +840,7 @@ const About = () => {
           padding: 3rem;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
-        .contact-info h5,
-        .support-info h5 {
+        .contact-info h5 {
           color: #333;
           font-weight: 700;
           margin-bottom: 1rem;
@@ -907,46 +855,6 @@ const About = () => {
         .contact-icon {
           color: #667eea;
           width: 16px;
-        }
-        .support-info p {
-          color: #666;
-          line-height: 1.5;
-          margin-bottom: 1rem;
-        }
-        .support-btn {
-          border-radius: 20px;
-          padding: 0.5rem 1.5rem;
-        }
-        .final-cta-card-modern {
-          background: linear-gradient(45deg, #667eea, #764ba2);
-          border-radius: 25px;
-          padding: 3rem;
-          text-align: center;
-          color: white;
-          box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-        }
-        .cta-title {
-          font-size: 2.5rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-        }
-        .cta-description {
-          font-size: 1.1rem;
-          opacity: 0.9;
-          margin-bottom: 2rem;
-          max-width: 600px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .cta-buttons .cta-btn {
-          margin: 0 0.5rem;
-          border-radius: 25px;
-          padding: 0.75rem 2rem;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-        .cta-buttons .cta-btn:hover {
-          transform: translateY(-2px);
         }
         @media (max-width: 768px) {
           .hero-title {
