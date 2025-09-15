@@ -452,6 +452,7 @@ const Podcasts = () => {
           display: flex;
           justify-content: space-around;
           margin-top: 1.5rem;
+          gap: 2rem;
         }
 
         .stat-item {
