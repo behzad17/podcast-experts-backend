@@ -158,21 +158,21 @@ const ExpertCreate = () => {
 
   const handleCategoryChange = (categoryId) => {
     const categoryIdInt = parseInt(categoryId);
-    setFormData(prev => {
+    setFormData((prev) => {
       const currentCategories = prev.category_ids || [];
       const isSelected = currentCategories.includes(categoryIdInt);
-      
+
       if (isSelected) {
         // Remove category
         return {
           ...prev,
-          category_ids: currentCategories.filter(id => id !== categoryIdInt)
+          category_ids: currentCategories.filter((id) => id !== categoryIdInt),
         };
       } else {
         // Add category
         return {
           ...prev,
-          category_ids: [...currentCategories, categoryIdInt]
+          category_ids: [...currentCategories, categoryIdInt],
         };
       }
     });
@@ -457,7 +457,7 @@ const ExpertCreate = () => {
                           <strong>Click to upload</strong> or drag and drop
                         </p>
                         <p className="upload-subtext">
-                          PNG, JPG, GIF up to 10MB
+                          jpg, jpeg, png, webp up to 10MB
                         </p>
                       </div>
                     </div>
@@ -631,13 +631,17 @@ const ExpertCreate = () => {
                     <div
                       key={category.id}
                       className={`category-option ${
-                        formData.category_ids?.includes(category.id) ? 'selected' : ''
+                        formData.category_ids?.includes(category.id)
+                          ? "selected"
+                          : ""
                       }`}
                       onClick={() => handleCategoryChange(category.id)}
                     >
                       <input
                         type="checkbox"
-                        checked={formData.category_ids?.includes(category.id) || false}
+                        checked={
+                          formData.category_ids?.includes(category.id) || false
+                        }
                         onChange={() => {}} // Handled by onClick
                         className="category-checkbox"
                       />

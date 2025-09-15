@@ -375,7 +375,7 @@ const PodcastCreate = () => {
                         type="file"
                         name="image"
                         onChange={handleChange}
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
                         className="image-input"
                       />
                       <div className="upload-placeholder">
@@ -384,7 +384,7 @@ const PodcastCreate = () => {
                           <strong>Click to upload</strong> or drag and drop
                         </p>
                         <p className="upload-subtext">
-                          PNG, JPG, GIF up to 10MB
+                          jpg, jpeg, png, webp up to 10MB
                         </p>
                       </div>
                     </div>
