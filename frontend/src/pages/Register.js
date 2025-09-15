@@ -547,8 +547,8 @@ const Register = () => {
         .hero-stats {
           display: flex;
           justify-content: center;
-          gap: 3rem;
-          margin-top: 2rem;
+          gap: 1.5rem;
+          margin-top: 1rem;
         }
 
         .stat-item {
@@ -556,13 +556,13 @@ const Register = () => {
         }
 
         .stat-number {
-          font-size: 2.5rem;
+          font-size: 1.25rem;
           color: #ffd700;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
 
         .stat-label {
-          font-size: 1rem;
+          font-size: 0.5rem;
           opacity: 0.9;
           font-weight: 500;
         }
@@ -1002,7 +1002,7 @@ const Register = () => {
           }
 
           .hero-stats {
-            gap: 2rem;
+            gap: 1rem;
           }
 
           .register-form-section {
@@ -1031,7 +1031,7 @@ const Register = () => {
 
           .hero-stats {
             flex-direction: column;
-            gap: 2rem;
+            gap: 1rem;
           }
 
           .register-form-section {
