@@ -85,8 +85,9 @@ const PodcastCreate = () => {
             type="file"
             name="cover_image"
             onChange={handleChange}
-            accept="image/*"
+            accept="image/jpeg,image/jpg,image/png,image/webp"
           />
+          <small className="text-muted">jpg, jpeg, png, webp up to 10MB</small>
         </Form.Group>
 
         <Button
