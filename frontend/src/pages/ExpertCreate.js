@@ -457,7 +457,7 @@ const ExpertCreate = () => {
                           <strong>Click to upload</strong> or drag and drop
                         </p>
                         <p className="upload-subtext">
-                          PNG, JPG, GIF up to 10MB
+                          jpg, jpeg, png, webp up to 10MB
                         </p>
                       </div>
                     </div>
