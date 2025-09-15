@@ -556,13 +556,13 @@ const Register = () => {
         }
 
         .stat-number {
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           color: #ffd700;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
         }
 
         .stat-label {
-          font-size: 0.5rem;
+          font-size: 0.8rem;
           opacity: 0.9;
           font-weight: 500;
         }
