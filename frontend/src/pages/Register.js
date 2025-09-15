@@ -934,7 +934,7 @@ const Register = () => {
         }
 
         .features-section {
-          margin-bottom: 5rem;
+          margin-bottom: 8rem;
         }
 
         .features-grid {
