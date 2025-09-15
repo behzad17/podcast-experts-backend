@@ -32,7 +32,7 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    user_type: "podcaster",
+    user_type: "expert",
   });
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
