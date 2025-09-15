@@ -17,8 +17,6 @@ import {
   FaCheckCircle,
   FaArrowRight,
   FaStar,
-  FaUsers,
-  FaRocket,
 } from "react-icons/fa";
 
 const Contact = () => {
@@ -547,34 +545,6 @@ const Contact = () => {
           </Col>
         </Row>
 
-        {/* Call to Action */}
-        <Row className="mb-5">
-          <Col>
-            <div className="cta-card">
-              <div className="cta-content">
-                <h2 className="cta-title">Still Have Questions?</h2>
-                <p className="cta-description">
-                  Can't find what you're looking for? Our team is here to help
-                  you get the most out of CONNECT.
-                </p>
-                <div className="cta-buttons">
-                  <Button variant="light" size="lg" className="cta-btn primary">
-                    <FaHeadset className="me-2" />
-                    Live Chat
-                  </Button>
-                  <Button
-                    variant="outline-light"
-                    size="lg"
-                    className="cta-btn secondary"
-                  >
-                    <FaEnvelope className="me-2" />
-                    Email Support
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
       </Container>
 
       <style jsx>{`
@@ -940,42 +910,6 @@ const Contact = () => {
           line-height: 1.6;
           margin: 0;
         }
-        .cta-card {
-          background: linear-gradient(45deg, #667eea, #764ba2);
-          border-radius: 25px;
-          padding: 3rem;
-          text-align: center;
-          color: white;
-          box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-        }
-        .cta-title {
-          font-size: 2.5rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-        }
-        .cta-description {
-          font-size: 1.1rem;
-          opacity: 0.9;
-          margin-bottom: 2rem;
-          max-width: 600px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .cta-buttons {
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-        .cta-btn {
-          border-radius: 25px;
-          padding: 0.75rem 2rem;
-          font-weight: 600;
-          transition: all 0.3s ease;
-        }
-        .cta-btn:hover {
-          transform: translateY(-2px);
-        }
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2rem;
@@ -1013,14 +947,6 @@ const Contact = () => {
           .faq-grid {
             grid-template-columns: 1fr;
           }
-          .cta-buttons {
-            flex-direction: column;
-            align-items: center;
-          }
-          .cta-btn {
-            width: 100%;
-            max-width: 300px;
-          }
         }
         @media (max-width: 576px) {
           .hero-title {
@@ -1050,12 +976,6 @@ const Contact = () => {
           }
           .contact-form-card {
             padding: 2rem;
-          }
-          .cta-card {
-            padding: 2rem;
-          }
-          .cta-title {
-            font-size: 2rem;
           }
         }
 
@@ -1097,13 +1017,6 @@ const Contact = () => {
             padding: 1.5rem;
           }
 
-          .cta-card {
-            padding: 1.5rem;
-          }
-
-          .cta-title {
-            font-size: 1.8rem;
-          }
 
           .method-icon {
             width: clamp(70px, 18vw, 80px);
