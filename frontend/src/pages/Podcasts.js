@@ -450,7 +450,7 @@ const Podcasts = () => {
 
         .hero-stats {
           display: flex;
-          justify-content: space-around;
+          justify-content: center;
           margin-top: 1.5rem;
           gap: 3rem;
         }
@@ -462,6 +462,11 @@ const Podcasts = () => {
 
         .stat-item {
           text-align: center;
+        }
+
+        /* Ensure boxes don't stretch and keep visible separation */
+        .hero-stats .stat-item {
+          flex: 0 0 auto;
         }
 
         .stat-number {
