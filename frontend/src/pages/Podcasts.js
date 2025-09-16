@@ -467,6 +467,17 @@ const Podcasts = () => {
         /* Ensure boxes don't stretch and keep visible separation */
         .hero-stats .stat-item {
           flex: 0 0 auto;
+          padding: 0.75rem 1rem; /* smaller box */
+          border-radius: 14px;
+        }
+
+        /* Slightly reduce typography inside boxes on this page */
+        .hero-stats .stat-number {
+          font-size: 1.6rem;
+        }
+
+        .hero-stats .stat-label {
+          font-size: 0.85rem;
         }
 
         .stat-number {
