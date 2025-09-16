@@ -452,7 +452,12 @@ const Podcasts = () => {
           display: flex;
           justify-content: space-around;
           margin-top: 1.5rem;
-          gap: 2rem;
+          gap: 3rem;
+        }
+
+        /* Fallback spacing for browsers with limited flex gap support */
+        .hero-stats .stat-item + .stat-item {
+          margin-left: 1.25rem;
         }
 
         .stat-item {
