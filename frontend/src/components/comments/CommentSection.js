@@ -16,6 +16,7 @@ const CommentSection = ({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
 
@@ -43,6 +44,56 @@ const CommentSection = ({
     }
   }, [fetchComments, initialComments]);
 
+  // Helper function to update a comment in nested structure
+  const updateCommentInTree = (commentsList, commentId, updater) => {
+    return commentsList.map((comment) => {
+      if (comment.id === commentId) {
+        return updater(comment);
+      }
+      if (comment.replies && comment.replies.length > 0) {
+        return {
+          ...comment,
+          replies: updateCommentInTree(comment.replies, commentId, updater),
+        };
+      }
+      return comment;
+    });
+  };
+
+  // Helper function to add a reply to a parent comment
+  const addReplyToParent = (commentsList, parentId, newReply) => {
+    return commentsList.map((comment) => {
+      if (comment.id === parentId) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), newReply],
+        };
+      }
+      if (comment.replies && comment.replies.length > 0) {
+        return {
+          ...comment,
+          replies: addReplyToParent(comment.replies, parentId, newReply),
+        };
+      }
+      return comment;
+    });
+  };
+
+  // Helper function to delete a comment from nested structure
+  const deleteCommentFromTree = (commentsList, commentId) => {
+    return commentsList
+      .filter((comment) => comment.id !== commentId)
+      .map((comment) => {
+        if (comment.replies && comment.replies.length > 0) {
+          return {
+            ...comment,
+            replies: deleteCommentFromTree(comment.replies, commentId),
+          };
+        }
+        return comment;
+      });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
@@ -59,7 +110,15 @@ const CommentSection = ({
       };
 
       const response = await api.post(endpoint, data);
-      setComments((prev) => [...prev, response.data]);
+
+      if (replyTo) {
+        // Add reply to parent comment's replies array
+        setComments((prev) => addReplyToParent(prev, replyTo, response.data));
+      } else {
+        // Add as new top-level comment
+        setComments((prev) => [response.data, ...prev]);
+      }
+
       setNewComment("");
       setReplyTo(null);
       setError("");
@@ -71,23 +130,31 @@ const CommentSection = ({
 
   const handleEdit = async (commentId, content) => {
     try {
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/edit_comment/`
-          : `/podcasts/${id}/comments/${commentId}/`;
+      let endpoint;
+      let data;
 
-      const data = {
-        content: content,
-      };
+      if (type === "expert") {
+        endpoint = `/experts/profiles/${id}/edit_comment/`;
+        data = {
+          comment_id: commentId,
+          content: content,
+        };
+      } else {
+        endpoint = `/podcasts/${id}/comments/${commentId}/`;
+        data = {
+          content: content,
+        };
+      }
 
       const response = await api.put(endpoint, data);
+
+      // Update comment in nested structure
       setComments((prev) =>
-        prev.map((comment) =>
-          comment.id === commentId ? response.data : comment
-        )
+        updateCommentInTree(prev, commentId, () => response.data)
       );
+
       setEditingComment(null);
-      setNewComment("");
+      setEditingContent("");
       setError("");
     } catch (error) {
       console.error("Error editing comment:", error);
@@ -97,13 +164,23 @@ const CommentSection = ({
 
   const handleDelete = async (commentId) => {
     try {
-      const endpoint =
-        type === "expert"
-          ? `/experts/profiles/${id}/delete_comment/`
-          : `/podcasts/${id}/comments/${commentId}/`;
+      let endpoint;
+      let data;
 
-      await api.delete(endpoint);
-      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+      if (type === "expert") {
+        endpoint = `/experts/profiles/${id}/delete_comment/`;
+        data = {
+          comment_id: commentId,
+        };
+        await api.delete(endpoint, { data });
+      } else {
+        endpoint = `/podcasts/${id}/comments/${commentId}/`;
+        await api.delete(endpoint);
+      }
+
+      // Remove comment from nested structure
+      setComments((prev) => deleteCommentFromTree(prev, commentId));
+
       setShowDeleteModal(false);
       setError("");
     } catch (error) {
@@ -112,88 +189,115 @@ const CommentSection = ({
     }
   };
 
-  const Comment = ({ comment }) => {
-    const isOwner = currentUser?.id === comment.user.id;
+  const startEditing = (comment) => {
+    setEditingComment(comment.id);
+    setEditingContent(comment.content);
+    setReplyTo(null); // Clear reply state when editing
+  };
+
+  const cancelEditing = () => {
+    setEditingComment(null);
+    setEditingContent("");
+  };
+
+  const Comment = ({ comment, depth = 0 }) => {
+    const userId =
+      typeof comment.user === "object" ? comment.user?.id : comment.user;
+    const username =
+      typeof comment.user === "object" ? comment.user?.username : "Unknown";
+    const isOwner = currentUser?.id === userId;
     const isEditing = editingComment === comment.id;
+    const isReply = depth > 0;
 
     return (
-      <Card className="mb-3">
-        <Card.Body>
-          <div className="d-flex justify-content-between align-items-start">
-            <div>
-              <h6 className="mb-1">{comment.user.username}</h6>
-              <small className="text-muted">
-                {moment(comment.created_at).fromNow()}
-              </small>
+      <div className={isReply ? "ms-4 mt-3" : ""}>
+        <Card className="mb-3">
+          <Card.Body>
+            <div className="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 className="mb-1">{username}</h6>
+                <small className="text-muted">
+                  {moment(comment.created_at).fromNow()}
+                </small>
+              </div>
+              {isOwner && (
+                <Dropdown>
+                  <Dropdown.Toggle variant="link" id={`dropdown-${comment.id}`}>
+                    <FaEllipsisV />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => startEditing(comment)}>
+                      <FaEdit /> Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        setCommentToDelete(comment);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      <FaTrash /> Delete
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
             </div>
-            {isOwner && (
-              <Dropdown>
-                <Dropdown.Toggle variant="link" id={`dropdown-${comment.id}`}>
-                  <FaEllipsisV />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setEditingComment(comment.id);
-                      setNewComment(comment.content);
-                    }}
-                  >
-                    <FaEdit /> Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setCommentToDelete(comment);
-                      setShowDeleteModal(true);
-                    }}
-                  >
-                    <FaTrash /> Delete
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            )}
-          </div>
-          {isEditing ? (
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEdit(comment.id, newComment);
-              }}
-            >
-              <Form.Control
-                type="text"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                className="mb-2"
-              />
-              <Button type="submit" size="sm" className="me-2">
-                Save
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => {
-                  setEditingComment(null);
-                  setNewComment("");
+            {isEditing ? (
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleEdit(comment.id, editingContent);
                 }}
               >
-                Cancel
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  value={editingContent}
+                  onChange={(e) => setEditingContent(e.target.value)}
+                  className="mb-2"
+                />
+                <Button type="submit" size="sm" className="me-2">
+                  Save
+                </Button>
+                <Button size="sm" variant="secondary" onClick={cancelEditing}>
+                  Cancel
+                </Button>
+              </Form>
+            ) : (
+              <p className="mt-2 mb-0">{comment.content}</p>
+            )}
+            {!isEditing && (
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 mt-2"
+                onClick={() => {
+                  setReplyTo(comment.id);
+                  setEditingComment(null); // Clear edit state when replying
+                  setEditingContent("");
+                }}
+              >
+                Reply
               </Button>
-            </Form>
-          ) : (
-            <p className="mt-2 mb-0">{comment.content}</p>
-          )}
-          <Button
-            variant="link"
-            size="sm"
-            className="p-0 mt-2"
-            onClick={() => setReplyTo(comment.id)}
-          >
-            Reply
-          </Button>
-        </Card.Body>
-      </Card>
+            )}
+          </Card.Body>
+        </Card>
+
+        {/* Render nested replies */}
+        {comment.replies && comment.replies.length > 0 && (
+          <div className="replies-container">
+            {comment.replies.map((reply) => (
+              <Comment key={reply.id} comment={reply} depth={depth + 1} />
+            ))}
+          </div>
+        )}
+      </div>
     );
   };
+
+  // Filter to show only top-level comments (no parent)
+  const topLevelComments = comments.filter(
+    (comment) => !comment.parent || comment.parent === null
+  );
 
   return (
     <div>
@@ -214,7 +318,12 @@ const CommentSection = ({
             {replyTo ? "Reply" : "Comment"}
           </Button>
           {replyTo && (
-            <Button variant="secondary" onClick={() => setReplyTo(null)}>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setReplyTo(null);
+              }}
+            >
               Cancel Reply
             </Button>
           )}
@@ -224,8 +333,8 @@ const CommentSection = ({
       {loading ? (
         <div>Loading comments...</div>
       ) : (
-        comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+        topLevelComments.map((comment) => (
+          <Comment key={comment.id} comment={comment} depth={0} />
         ))
       )}
 
