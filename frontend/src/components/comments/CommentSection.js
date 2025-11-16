@@ -87,6 +87,7 @@ const CommentSection = ({
         )
       );
       setEditingComment(null);
+      setNewComment("");
       setError("");
     } catch (error) {
       console.error("Error editing comment:", error);
@@ -131,7 +132,12 @@ const CommentSection = ({
                   <FaEllipsisV />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setEditingComment(comment.id)}>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setEditingComment(comment.id);
+                      setNewComment(comment.content);
+                    }}
+                  >
                     <FaEdit /> Edit
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -165,7 +171,10 @@ const CommentSection = ({
               <Button
                 size="sm"
                 variant="secondary"
-                onClick={() => setEditingComment(null)}
+                onClick={() => {
+                  setEditingComment(null);
+                  setNewComment("");
+                }}
               >
                 Cancel
               </Button>
