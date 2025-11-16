@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ListGroup, Badge } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import api from "../../api/axios";
 import {
   FaUser,
@@ -97,8 +98,8 @@ const MessageList = () => {
     <div className="conversations-list">
       {conversations.map((conversation) => (
         <div key={conversation.id} className="conversation-item">
-          <a
-            href={`/messages/${conversation.user.id}`}
+          <Link
+            to={`/messages/${conversation.user.id}`}
             className="conversation-link"
           >
             <div className="conversation-avatar">
@@ -134,7 +135,7 @@ const MessageList = () => {
                 </div>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
       ))}
     </div>

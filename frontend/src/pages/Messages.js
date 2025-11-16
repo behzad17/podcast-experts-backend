@@ -10,7 +10,7 @@ import {
   Badge,
   Dropdown,
 } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import MessageList from "../components/messages/MessageList";
 import ChatWindow from "../components/messages/ChatWindow";
 import api from "../api/axios";
@@ -31,6 +31,7 @@ import {
 
 const Messages = () => {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -85,7 +86,7 @@ const Messages = () => {
     setSearchResults([]);
     setUserType("");
     setSelectedCategory("");
-    window.location.href = `/messages/${user.id}`;
+    navigate(`/messages/${user.id}`);
   };
 
   const getExpertCategories = async (expertId) => {
