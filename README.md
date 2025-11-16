@@ -311,13 +311,59 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-### **Frontend (React)**
+## Frontend Deployment
+
+The frontend of **Podcast Experts** is built using **React** and compiled into production-ready static files using:
 
 ```bash
+npm run build
+
+The final build is served by the Django backend via WhiteNoise, allowing a single Heroku application to host both the backend API and the React UI.
+1. Building the Frontend Locally
+To generate the production build locally:
 cd frontend
 npm install
-npm start
-```
+npm run build
+This creates a build/ directory containing optimized static files.
+2. Serving the React Build with Django + WhiteNoise
+There are two ways to serve the React build:
+Option A — Copy React build into Django static files
+Place the entire build/ directory inside your Django project so that it is collected by collectstatic:
+/backend
+    /static
+    /staticfiles
+    /frontend_build   ← React build output placed here
+Option B — Configure Django to serve the build directly
+Update Django settings (STATICFILES_DIRS, TEMPLATES, and WhiteNoiseMiddleware) to point directly to the frontend/build folder.
+Both approaches work with WhiteNoise.
+
+3. Frontend Environment Variables
+The React application requires environment variables at build time.
+Required variables:
+Variable	Description
+REACT_APP_API_BASE_URL	URL of the deployed Django REST API
+REACT_APP_WEBSITE_URL	Public URL of the deployed frontend
+Example build with environment variables:
+REACT_APP_API_BASE_URL="https://your-api-url.com" \
+REACT_APP_WEBSITE_URL="https://your-frontend-url.com" \
+npm run build
+These values are embedded into the React build files.
+4. Deployment to Heroku
+This project uses one Heroku app to serve both backend and frontend.
+Step 1 — Commit the latest build
+git add frontend/build
+git commit -m "Add updated React production build"
+Step 2 — Push to Heroku
+git push heroku main
+Deployment process (automatic on Heroku):
+Backend dependencies installed
+Frontend dependencies installed (if configured)
+React app built (npm run build)
+Django collectstatic runs
+Static files served using WhiteNoise
+Final deployed application:
+https://your-heroku-app.herokuapp.com/
+All frontend routes (e.g., /login, /podcasts, /about) are handled through the compiled React build served by Django.
 
 ---
 
