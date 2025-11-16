@@ -318,52 +318,52 @@ The frontend of **Podcast Experts** is built using **React** and compiled into p
 ```bash
 npm run build
 
-The final build is served by the Django backend via WhiteNoise, allowing a single Heroku application to host both the backend API and the React UI.
-1. Building the Frontend Locally
-To generate the production build locally:
+In production, the compiled React build is served by the Django backend through WhiteNoise, allowing a single Heroku application to host both the API and the frontend.
+🚀 1. Local Production Build
+Generate the production build:
 cd frontend
 npm install
 npm run build
-This creates a build/ directory containing optimized static files.
-2. Serving the React Build with Django + WhiteNoise
-There are two ways to serve the React build:
-Option A — Copy React build into Django static files
-Place the entire build/ directory inside your Django project so that it is collected by collectstatic:
+A build/ folder is created containing minified and production-ready static assets.
+🗂 2. Serving the React Build with Django + WhiteNoise
+Two supported methods:
+A) Copy React build into Django static files
 /backend
     /static
     /staticfiles
-    /frontend_build   ← React build output placed here
-Option B — Configure Django to serve the build directly
-Update Django settings (STATICFILES_DIRS, TEMPLATES, and WhiteNoiseMiddleware) to point directly to the frontend/build folder.
-Both approaches work with WhiteNoise.
-
-3. Frontend Environment Variables
-The React application requires environment variables at build time.
-Required variables:
+    /frontend_build   ← React build output
+B) Serve the build folder directly
+Update Django settings:
+STATICFILES_DIRS
+TEMPLATES
+WhiteNoiseMiddleware
+Both methods work seamlessly with WhiteNoise.
+🔧 3. Frontend Environment Variables
+React requires environment variables at build time:
 Variable	Description
 REACT_APP_API_BASE_URL	URL of the deployed Django REST API
-REACT_APP_WEBSITE_URL	Public URL of the deployed frontend
-Example build with environment variables:
-REACT_APP_API_BASE_URL="https://your-api-url.com" \
-REACT_APP_WEBSITE_URL="https://your-frontend-url.com" \
+REACT_APP_WEBSITE_URL	Public frontend URL
+Example:
+REACT_APP_API_BASE_URL="https://your-api.com" \
+REACT_APP_WEBSITE_URL="https://your-frontend.com" \
 npm run build
-These values are embedded into the React build files.
-4. Deployment to Heroku
+These variables are embedded directly into the compiled React files.
+☁️ 4. Deploying to Heroku
 This project uses one Heroku app to serve both backend and frontend.
-Step 1 — Commit the latest build
+Step 1 — Include the latest build
 git add frontend/build
 git commit -m "Add updated React production build"
-Step 2 — Push to Heroku
+Step 2 — Deploy
 git push heroku main
-Deployment process (automatic on Heroku):
-Backend dependencies installed
-Frontend dependencies installed (if configured)
-React app built (npm run build)
-Django collectstatic runs
-Static files served using WhiteNoise
+What Heroku does automatically:
+Installs backend dependencies
+Installs frontend dependencies (if configured)
+Builds React (npm run build)
+Runs collectstatic
+Serves the app using WhiteNoise
 Final deployed application:
 https://your-heroku-app.herokuapp.com/
-All frontend routes (e.g., /login, /podcasts, /about) are handled through the compiled React build served by Django.
+All React routes (e.g., /login, /podcasts, /about) are handled entirely through the compiled React build served by Django.
 
 ---
 
