@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
@@ -19,6 +19,7 @@ const CommentSection = ({
   const [editingContent, setEditingContent] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const editTextareaRef = useRef(null);
 
   const fetchComments = useCallback(async () => {
     try {
@@ -43,6 +44,17 @@ const CommentSection = ({
       fetchComments();
     }
   }, [fetchComments, initialComments]);
+
+  // Handle cursor position when editing starts
+  useEffect(() => {
+    if (editingComment && editTextareaRef.current) {
+      const textarea = editTextareaRef.current;
+      // Set cursor to end of text
+      const length = textarea.value.length;
+      textarea.setSelectionRange(length, length);
+      textarea.focus();
+    }
+  }, [editingComment]);
 
   // Helper function to update a comment in nested structure
   const updateCommentInTree = (commentsList, commentId, updater) => {
@@ -193,6 +205,15 @@ const CommentSection = ({
     setReplyTo(null); // Clear reply state when editing
     setEditingComment(comment.id);
     setEditingContent(comment.content || "");
+    // Set cursor to end after state update
+    setTimeout(() => {
+      if (editTextareaRef.current) {
+        const textarea = editTextareaRef.current;
+        const length = textarea.value.length;
+        textarea.setSelectionRange(length, length);
+        textarea.focus();
+      }
+    }, 0);
   };
 
   const cancelEditing = () => {
@@ -255,12 +276,32 @@ const CommentSection = ({
                 }}
               >
                 <Form.Control
+                  ref={editTextareaRef}
                   key={`edit-textarea-${comment.id}`}
                   as="textarea"
                   rows={3}
                   value={editingContent}
                   onChange={(e) => {
-                    setEditingContent(e.target.value);
+                    const textarea = e.target;
+                    const cursorPosition = textarea.selectionStart;
+                    const newValue = textarea.value;
+                    setEditingContent(newValue);
+                    // Restore cursor position after state update
+                    // Use requestAnimationFrame to ensure DOM is updated
+                    requestAnimationFrame(() => {
+                      if (editTextareaRef.current) {
+                        // For normal typing, cursor moves forward naturally
+                        // For deletions, we need to adjust
+                        const adjustedPosition = Math.min(
+                          cursorPosition,
+                          newValue.length
+                        );
+                        editTextareaRef.current.setSelectionRange(
+                          adjustedPosition,
+                          adjustedPosition
+                        );
+                      }
+                    });
                   }}
                   className="mb-2"
                   autoFocus
