@@ -190,9 +190,9 @@ const CommentSection = ({
   };
 
   const startEditing = (comment) => {
-    setEditingComment(comment.id);
-    setEditingContent(comment.content);
     setReplyTo(null); // Clear reply state when editing
+    setEditingComment(comment.id);
+    setEditingContent(comment.content || "");
   };
 
   const cancelEditing = () => {
@@ -210,12 +210,17 @@ const CommentSection = ({
     const isReply = depth > 0;
 
     return (
-      <div className={isReply ? "ms-4 mt-3" : ""}>
-        <Card className="mb-3">
-          <Card.Body>
+      <div className={isReply ? "ms-4 mt-2" : "mb-3"}>
+        <Card className={isReply ? "border-start border-3" : ""}>
+          <Card.Body className={isReply ? "py-2" : ""}>
             <div className="d-flex justify-content-between align-items-start">
               <div>
-                <h6 className="mb-1">{username}</h6>
+                <h6
+                  className="mb-1"
+                  style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
+                >
+                  {username}
+                </h6>
                 <small className="text-muted">
                   {moment(comment.created_at).fromNow()}
                 </small>
@@ -243,17 +248,22 @@ const CommentSection = ({
             </div>
             {isEditing ? (
               <Form
+                key={`edit-form-${comment.id}`}
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleEdit(comment.id, editingContent);
                 }}
               >
                 <Form.Control
+                  key={`edit-textarea-${comment.id}`}
                   as="textarea"
                   rows={3}
                   value={editingContent}
-                  onChange={(e) => setEditingContent(e.target.value)}
+                  onChange={(e) => {
+                    setEditingContent(e.target.value);
+                  }}
                   className="mb-2"
+                  autoFocus
                 />
                 <Button type="submit" size="sm" className="me-2">
                   Save
@@ -263,7 +273,12 @@ const CommentSection = ({
                 </Button>
               </Form>
             ) : (
-              <p className="mt-2 mb-0">{comment.content}</p>
+              <p
+                className="mt-2 mb-0"
+                style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
+              >
+                {comment.content}
+              </p>
             )}
             {!isEditing && (
               <Button
@@ -279,17 +294,17 @@ const CommentSection = ({
                 Reply
               </Button>
             )}
+
+            {/* Render nested replies INSIDE the card */}
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="mt-3 pt-3 border-top">
+                {comment.replies.map((reply) => (
+                  <Comment key={reply.id} comment={reply} depth={depth + 1} />
+                ))}
+              </div>
+            )}
           </Card.Body>
         </Card>
-
-        {/* Render nested replies */}
-        {comment.replies && comment.replies.length > 0 && (
-          <div className="replies-container">
-            {comment.replies.map((reply) => (
-              <Comment key={reply.id} comment={reply} depth={depth + 1} />
-            ))}
-          </div>
-        )}
       </div>
     );
   };
