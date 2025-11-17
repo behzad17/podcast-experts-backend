@@ -495,6 +495,15 @@ Below is the collection of low-fidelity wireframes created for the platform:
 ![Wireframes](docs/design/wireframes/wireframes.png)
 
 
+## Agile Management (GitHub Project Board)
+
+This project is managed using Agile methodologies, including **GitHub Issues**, **Milestones**, **MoSCoW prioritisation**, and a **Kanban-style Project Board**.  
+All features, bugs, and development tasks are tracked as Issues and moved through the board columns from Backlog → To Do → In Progress → Review → Done.
+
+**Project Board Link:**  
+[View Project Board on GitHub](https://github.com/behzad17/podcast-experts-backend/projects)
+
+
 ## Contact
 
 - **Email:** info@connect-podcast-experts.com
