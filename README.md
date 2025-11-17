@@ -473,7 +473,27 @@ All React routes (e.g., /login, /podcasts, /about) are handled entirely through 
 
 > To add your own screenshots, place images in a `screenshots/` folder and update the links above.
 
----
+## Wireframes
+
+Below is the collection of low-fidelity wireframes created for the main pages of the application:
+
+![Wireframes](docs/design/wireframes/wireframes.png)
+
+These represent the structure of:
+- Home  
+- Registration  
+- Login  
+- Podcast List  
+- Podcast Detail  
+- ExpertCreate  
+- Expert Detail  
+- Messages / Inbox
+
+
+Below is the collection of low-fidelity wireframes created for the platform:
+
+![Wireframes](docs/design/wireframes/wireframes.png)
+
 
 ## Contact
 
