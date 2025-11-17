@@ -36,7 +36,123 @@ CONNECT is a platform where users can:
 
 The backend is built with Django and Django REST Framework. The frontend is built with React. Media files (like podcast images and expert profile pictures) are stored using Cloudinary.
 
+## 🎨 Design Process
+
+The design of the **Podcast Experts** platform follows a structured and user-centred approach.  
+The goal was to create an interface that is clean, intuitive, and accessible across all device sizes.
+
+### **1. Research & Planning**
+- Analysed common patterns in podcast and expert-listing platforms  
+- Defined the main user types: **Standard User** and **Expert**  
+- Identified key features: browsing podcasts, creating profiles, messaging, and expert discovery
+
+### **2. Wireframing**
+Low-fidelity wireframes were created to define the layout and structure of each main page before proceeding to development.  
+These wireframes helped visualise user flows and ensured consistent layout decisions across the platform.
+
+👉 Wireframes are located in:  
+`docs/design/wireframes/`
+
+### **3. Layout Structure**
+The layout is based on:
+- Clear separation between content areas  
+- Reusable UI components (cards, forms, modals, navbar)  
+- Mobile-first responsive design  
+- Prioritising readability and clarity over visual complexity  
+
+### **4. UX Considerations**
+- Clear navigation for new users  
+- Consistent form behaviour across all pages  
+- Immediate visual feedback for success and error states  
+- Simple card-based listings for podcasts and experts  
+- Accessible interactive elements (buttons, links, icons)
+
 ---
+
+## 🎨 Colour Palette
+
+The colour system focuses on simplicity, contrast, and readability.  
+It helps provide a professional and trustworthy visual identity.
+
+| Purpose | Colour | Hex |
+|--------|--------|------|
+| Primary Background | Dark Gray | **#1E1E1E** |
+| Primary Text | White | **#FFFFFF** |
+| Accent / Action | Blue | **#007BFF** |
+| Secondary Background | Light Gray | **#F5F5F5** |
+| Success | Green | **#28A745** |
+| Error | Red | **#DC3545** |
+
+**Design Goals:**  
+- Ensure WCAG-friendly contrast  
+- Make calls-to-action (CTAs) immediately visible  
+- Support a clean, modern look for both light and dark sections
+
+---
+
+## ✒️ Typography
+
+The platform uses a clean and modern sans-serif typeface designed for readability.
+
+### **Font Family:**  
+**Inter**, or fallback: `Arial`, `sans-serif`
+
+### **Hierarchy**
+- **Headings (H1, H2, H3):**  
+  - Weight: 600–700  
+  - Purpose: clear section breaks and logical page structure
+- **Body Text:**  
+  - Weight: 400  
+  - Purpose: comfortable long-form reading
+- **Buttons & Labels:**  
+  - Slightly bolder for emphasis (500–600)
+
+### **Spacing Rules**
+- Consistent vertical spacing between sections  
+- Generous padding around cards and form inputs  
+- Minimum 16px base font size for accessibility  
+
+---
+
+## 🎯 Project Goals
+
+The primary goals of the **Podcast Experts** platform are:
+
+### **1. User-Focused Goals**
+- Provide an easy way for users to discover podcasts and experts  
+- Allow users to create profiles and interact through messaging  
+- Ensure a smooth and consistent user experience across all devices  
+- Provide meaningful and clear feedback during form submission and navigation
+
+### **2. Technical Goals**
+- Build a modular and maintainable React frontend  
+- Create a secure Django REST API for authentication and CRUD operations  
+- Ensure proper validation on both frontend and backend  
+- Use GitHub Issues, Milestones, and Agile Kanban for planning and progress tracking
+
+### **3. Accessibility & Responsiveness**
+- Full responsiveness across desktop, tablet, and mobile  
+- Clear UI elements with sufficient contrast  
+- Form inputs designed for accessibility and usability  
+
+### **4. Platform Purpose**
+- Create a hub where users can easily browse podcasts  
+- Enable experts to showcase expertise and offer guidance  
+- Provide a reliable environment for communication between users and experts  
+
+---
+
+## 📁 File Locations (Documentation)
+
+- **Wireframes:**  
+  `docs/design/wireframes/`
+
+- **Design Document (PDF):**  
+  `docs/design/podcast_design_document_updated.pdf`
+
+---
+
+
 
 ## Main Features
 
