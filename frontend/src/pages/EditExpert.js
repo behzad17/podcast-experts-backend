@@ -3,7 +3,7 @@ import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
-import { FaImage, FaTimes } from "react-icons/fa";
+import { FaImage, FaTimes, FaTag } from "react-icons/fa";
 
 const EditExpert = () => {
   const navigate = useNavigate();
@@ -16,13 +16,29 @@ const EditExpert = () => {
     website: "",
     social_media: "",
     email: "",
+    category_ids: [],
   });
+  const [categories, setCategories] = useState([]);
   const [profilePicture, setProfilePicture] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/experts/categories/");
+        setCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        // Don't block the form if categories fail to load
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -43,8 +59,16 @@ const EditExpert = () => {
           return;
         }
 
+        // Extract category IDs from the categories array
+        const categoryIds = myProfileResponse.data.categories
+          ? myProfileResponse.data.categories.map((cat) => cat.id)
+          : [];
+
         // Use the my-profile endpoint to get the profile data
-        setFormData(myProfileResponse.data);
+        setFormData({
+          ...myProfileResponse.data,
+          category_ids: categoryIds,
+        });
 
         // Set image preview if profile picture exists
         if (myProfileResponse.data.profile_picture_url) {
@@ -125,6 +149,32 @@ const EditExpert = () => {
     setImagePreview(null);
   };
 
+  const handleCategoryChange = (categoryId) => {
+    const categoryIdInt = parseInt(categoryId);
+    setFormData((prev) => {
+      const currentCategories = prev.category_ids || [];
+      const isSelected = currentCategories.includes(categoryIdInt);
+
+      if (isSelected) {
+        // Remove category
+        return {
+          ...prev,
+          category_ids: currentCategories.filter((id) => id !== categoryIdInt),
+        };
+      } else {
+        // Add category
+        return {
+          ...prev,
+          category_ids: [...currentCategories, categoryIdInt],
+        };
+      }
+    });
+    // Clear category error if exists
+    if (errors.category_ids) {
+      setErrors({ ...errors, category_ids: "" });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -167,6 +217,13 @@ const EditExpert = () => {
 
       if (profilePicture) {
         submitData.append("profile_picture", profilePicture);
+      }
+
+      // Append category_ids if any are selected
+      if (formData.category_ids && formData.category_ids.length > 0) {
+        formData.category_ids.forEach((categoryId) => {
+          submitData.append("category_ids", categoryId);
+        });
       }
 
       console.log("Submitting to /experts/my-profile/");
@@ -322,6 +379,67 @@ const EditExpert = () => {
             value={formData.email || ""}
             onChange={handleChange}
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>
+            <FaTag className="me-2" />
+            Categories
+          </Form.Label>
+          <div className="d-flex flex-wrap gap-2 mt-2">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className={`border rounded p-2 ${
+                  formData.category_ids?.includes(category.id)
+                    ? "bg-primary text-white border-primary"
+                    : "bg-light border-secondary"
+                }`}
+                style={{
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                }}
+                onClick={() => handleCategoryChange(category.id)}
+                onMouseEnter={(e) => {
+                  if (!formData.category_ids?.includes(category.id)) {
+                    e.currentTarget.style.backgroundColor = "#e9ecef";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!formData.category_ids?.includes(category.id)) {
+                    e.currentTarget.style.backgroundColor = "";
+                  }
+                }}
+              >
+                <Form.Check
+                  type="checkbox"
+                  checked={
+                    formData.category_ids?.includes(category.id) || false
+                  }
+                  onChange={() => {}} // Handled by onClick
+                  label={category.name}
+                  className="mb-0"
+                  style={{ pointerEvents: "none" }}
+                />
+                {category.description && (
+                  <small className="d-block text-muted mt-1" style={{ fontSize: "0.75rem" }}>
+                    {category.description}
+                  </small>
+                )}
+              </div>
+            ))}
+          </div>
+          {categories.length === 0 && (
+            <Form.Text className="text-muted">
+              Loading categories...
+            </Form.Text>
+          )}
+          {errors.category_ids && (
+            <Form.Text className="text-danger">{errors.category_ids}</Form.Text>
+          )}
+          <Form.Text className="text-muted">
+            Select the categories that best describe your expertise areas
+          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3">
