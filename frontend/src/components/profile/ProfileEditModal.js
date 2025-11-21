@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import api from "../../api/axios";
+import { FaTag } from "react-icons/fa";
 
 const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
   const [formData, setFormData] = React.useState({
@@ -11,12 +12,33 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     website: "",
     social_media: "",
     profile_picture: null,
+    category_ids: [],
   });
+  const [categories, setCategories] = React.useState([]);
   const [errors, setErrors] = React.useState({});
   const [error, setError] = React.useState("");
 
   React.useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/experts/categories/");
+        setCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        // Don't block the form if categories fail to load
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  React.useEffect(() => {
     if (profile) {
+      // Extract category IDs from the categories array
+      const categoryIds = profile.categories
+        ? profile.categories.map((cat) => cat.id)
+        : [];
+
       setFormData({
         name: profile.name || "",
         bio: profile.bio || "",
@@ -25,6 +47,7 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
         website: profile.website || "",
         social_media: profile.social_media || "",
         profile_picture: null,
+        category_ids: categoryIds,
       });
     }
   }, [profile]);
@@ -40,6 +63,32 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     // Clear field-specific error when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    const categoryIdInt = parseInt(categoryId);
+    setFormData((prev) => {
+      const currentCategories = prev.category_ids || [];
+      const isSelected = currentCategories.includes(categoryIdInt);
+
+      if (isSelected) {
+        // Remove category
+        return {
+          ...prev,
+          category_ids: currentCategories.filter((id) => id !== categoryIdInt),
+        };
+      } else {
+        // Add category
+        return {
+          ...prev,
+          category_ids: [...currentCategories, categoryIdInt],
+        };
+      }
+    });
+    // Clear category error if exists
+    if (errors.category_ids) {
+      setErrors({ ...errors, category_ids: "" });
     }
   };
 
@@ -62,6 +111,10 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
       newErrors.experience_years = "Experience years must be a positive number";
     }
 
+    if (!formData.category_ids || formData.category_ids.length === 0) {
+      newErrors.category_ids = "At least one category is required";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -79,10 +132,21 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     try {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach((key) => {
+        // Skip category_ids here, we'll handle it separately
+        if (key === "category_ids") {
+          return;
+        }
         if (formData[key] !== null) {
           formDataToSend.append(key, formData[key]);
         }
       });
+
+      // Append category_ids separately (each ID as a separate entry)
+      if (formData.category_ids && formData.category_ids.length > 0) {
+        formData.category_ids.forEach((categoryId) => {
+          formDataToSend.append("category_ids", categoryId);
+        });
+      }
 
       const response = await api.patch(
         `/experts/${profile.id}/`,
@@ -216,6 +280,73 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               value={formData.social_media}
               onChange={handleChange}
             />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>
+              <FaTag className="me-2" />
+              Categories *
+            </Form.Label>
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className={`border rounded p-2 ${
+                    formData.category_ids?.includes(category.id)
+                      ? "bg-primary text-white border-primary"
+                      : "bg-light border-secondary"
+                  }`}
+                  style={{
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onClick={() => handleCategoryChange(category.id)}
+                  onMouseEnter={(e) => {
+                    if (!formData.category_ids?.includes(category.id)) {
+                      e.currentTarget.style.backgroundColor = "#e9ecef";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!formData.category_ids?.includes(category.id)) {
+                      e.currentTarget.style.backgroundColor = "";
+                    }
+                  }}
+                >
+                  <Form.Check
+                    type="checkbox"
+                    checked={
+                      formData.category_ids?.includes(category.id) || false
+                    }
+                    onChange={() => {}} // Handled by onClick
+                    label={category.name}
+                    className="mb-0"
+                    style={{ pointerEvents: "none" }}
+                  />
+                  {category.description && (
+                    <small
+                      className="d-block text-muted mt-1"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      {category.description}
+                    </small>
+                  )}
+                </div>
+              ))}
+            </div>
+            {categories.length === 0 && (
+              <Form.Text className="text-muted">
+                Loading categories...
+              </Form.Text>
+            )}
+            {errors.category_ids && (
+              <Form.Text className="text-danger d-block mt-1">
+                {errors.category_ids}
+              </Form.Text>
+            )}
+            <Form.Text className="text-muted">
+              Select at least one category that best describes your expertise
+              areas
+            </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
