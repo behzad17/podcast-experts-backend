@@ -89,6 +89,10 @@ const ExpertDetail = () => {
                       objectFit: "cover",
                       boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                     }}
+                    onError={(e) => {
+                      // Hide image if it fails to load (404 or other error)
+                      e.target.style.display = "none";
+                    }}
                   />
                   <div className="position-absolute bottom-0 end-0 p-2">
                     <LikeButton

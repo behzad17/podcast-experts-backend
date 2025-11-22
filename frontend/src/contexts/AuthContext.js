@@ -102,7 +102,10 @@ export const AuthProvider = ({ children }) => {
       console.log("✅ Auth state updated, user logged in");
       return { success: true };
     } catch (error) {
-      console.error("❌ Login error:", error);
+      // Only log non-401 errors to reduce console noise
+      if (error.response?.status !== 401) {
+        console.error("❌ Login error:", error);
+      }
       if (error.response) {
         if (error.response.status === 401) {
           return {

@@ -211,6 +211,10 @@ const Profile = () => {
                       height: "150px",
                       objectFit: "cover",
                     }}
+                    onError={(e) => {
+                      // Hide image if it fails to load (404 or other error)
+                      e.target.style.display = "none";
+                    }}
                   />
                 </div>
               )}

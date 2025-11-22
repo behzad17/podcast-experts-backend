@@ -75,6 +75,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Only clear auth data if it's not a refresh token request
         if (!originalRequest.url.includes("/users/token/refresh/")) {
+          // Suppress console errors for expected 401s during token refresh failures
+          if (refreshError.response?.status !== 401) {
+            console.error("Token refresh failed:", refreshError);
+          }
           localStorage.removeItem("token");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("userData");
