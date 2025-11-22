@@ -15,29 +15,54 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     category_ids: [],
   });
   const [categories, setCategories] = React.useState([]);
+  const [categoriesLoading, setCategoriesLoading] = React.useState(true);
   const [errors, setErrors] = React.useState({});
   const [error, setError] = React.useState("");
 
   React.useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await api.get("/experts/categories/");
-        setCategories(res.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        // Don't block the form if categories fail to load
-      }
-    };
+    // Fetch categories when modal is shown
+    if (show) {
+      const fetchCategories = async () => {
+        setCategoriesLoading(true);
+        try {
+          const res = await api.get("/experts/categories/");
+          console.log("Categories fetched:", res.data);
+          // Handle both array and object with results property
+          if (Array.isArray(res.data)) {
+            setCategories(res.data);
+          } else if (res.data.results && Array.isArray(res.data.results)) {
+            setCategories(res.data.results);
+          } else {
+            console.warn("Unexpected categories response format:", res.data);
+            setCategories([]);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+          console.error("Error response:", error.response);
+          // Don't block the form if categories fail to load, but set empty array
+          setCategories([]);
+        } finally {
+          setCategoriesLoading(false);
+        }
+      };
 
-    fetchCategories();
-  }, []);
+      fetchCategories();
+    }
+  }, [show]);
 
   React.useEffect(() => {
     if (profile) {
+      console.log("Profile data received:", profile);
+      console.log("Profile categories:", profile.categories);
+
       // Extract category IDs from the categories array
       const categoryIds = profile.categories
-        ? profile.categories.map((cat) => cat.id)
+        ? profile.categories.map((cat) =>
+            typeof cat === "object" ? cat.id : cat
+          )
         : [];
+
+      console.log("Extracted category IDs:", categoryIds);
 
       setFormData({
         name: profile.name || "",
@@ -335,9 +360,15 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
                 ))}
               </div>
             )}
-            {categories.length === 0 && (
+            {categoriesLoading && (
               <Form.Text className="text-muted">
                 Loading categories...
+              </Form.Text>
+            )}
+            {!categoriesLoading && categories.length === 0 && (
+              <Form.Text className="text-warning">
+                No categories available. Please refresh the page or contact
+                support.
               </Form.Text>
             )}
             {errors.category_ids && (
