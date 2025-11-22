@@ -19,6 +19,7 @@ const EditExpert = () => {
     category_ids: [],
   });
   const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
@@ -28,12 +29,26 @@ const EditExpert = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setCategoriesLoading(true);
       try {
         const res = await api.get("/experts/categories/");
-        setCategories(res.data);
+        console.log("Categories fetched in EditExpert:", res.data);
+        // Handle both array and object with results property
+        if (Array.isArray(res.data)) {
+          setCategories(res.data);
+        } else if (res.data.results && Array.isArray(res.data.results)) {
+          setCategories(res.data.results);
+        } else {
+          console.warn("Unexpected categories response format:", res.data);
+          setCategories([]);
+        }
       } catch (error) {
         console.error("Error fetching categories:", error);
-        // Don't block the form if categories fail to load
+        console.error("Error response:", error.response);
+        // Don't block the form if categories fail to load, but set empty array
+        setCategories([]);
+      } finally {
+        setCategoriesLoading(false);
       }
     };
 
@@ -59,10 +74,17 @@ const EditExpert = () => {
           return;
         }
 
+        console.log("Profile data received in EditExpert:", myProfileResponse.data);
+        console.log("Profile categories:", myProfileResponse.data.categories);
+        
         // Extract category IDs from the categories array
         const categoryIds = myProfileResponse.data.categories
-          ? myProfileResponse.data.categories.map((cat) => cat.id)
+          ? myProfileResponse.data.categories.map((cat) =>
+              typeof cat === "object" ? cat.id : cat
+            )
           : [];
+
+        console.log("Extracted category IDs:", categoryIds);
 
         // Use the my-profile endpoint to get the profile data
         setFormData({
@@ -126,6 +148,10 @@ const EditExpert = () => {
 
     if (!formData.experience_years || formData.experience_years < 0) {
       newErrors.experience_years = "Experience years must be a positive number";
+    }
+
+    if (!formData.category_ids || formData.category_ids.length === 0) {
+      newErrors.category_ids = "At least one category is required";
     }
 
     setErrors(newErrors);
@@ -384,61 +410,73 @@ const EditExpert = () => {
         <Form.Group className="mb-3">
           <Form.Label>
             <FaTag className="me-2" />
-            Categories
+            Categories *
           </Form.Label>
-          <div className="d-flex flex-wrap gap-2 mt-2">
-            {categories.map((category) => (
-              <div
-                key={category.id}
-                className={`border rounded p-2 ${
-                  formData.category_ids?.includes(category.id)
-                    ? "bg-primary text-white border-primary"
-                    : "bg-light border-secondary"
-                }`}
-                style={{
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                }}
-                onClick={() => handleCategoryChange(category.id)}
-                onMouseEnter={(e) => {
-                  if (!formData.category_ids?.includes(category.id)) {
-                    e.currentTarget.style.backgroundColor = "#e9ecef";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!formData.category_ids?.includes(category.id)) {
-                    e.currentTarget.style.backgroundColor = "";
-                  }
-                }}
-              >
-                <Form.Check
-                  type="checkbox"
-                  checked={
-                    formData.category_ids?.includes(category.id) || false
-                  }
-                  onChange={() => {}} // Handled by onClick
-                  label={category.name}
-                  className="mb-0"
-                  style={{ pointerEvents: "none" }}
-                />
-                {category.description && (
-                  <small className="d-block text-muted mt-1" style={{ fontSize: "0.75rem" }}>
-                    {category.description}
-                  </small>
-                )}
-              </div>
-            ))}
-          </div>
-          {categories.length === 0 && (
+          {categories.length > 0 && (
+            <div className="d-flex flex-wrap gap-2 mt-2">
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className={`border rounded p-2 ${
+                    formData.category_ids?.includes(category.id)
+                      ? "bg-primary text-white border-primary"
+                      : "bg-light border-secondary"
+                  }`}
+                  style={{
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onClick={() => handleCategoryChange(category.id)}
+                  onMouseEnter={(e) => {
+                    if (!formData.category_ids?.includes(category.id)) {
+                      e.currentTarget.style.backgroundColor = "#e9ecef";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!formData.category_ids?.includes(category.id)) {
+                      e.currentTarget.style.backgroundColor = "";
+                    }
+                  }}
+                >
+                  <Form.Check
+                    type="checkbox"
+                    checked={
+                      formData.category_ids?.includes(category.id) || false
+                    }
+                    onChange={() => {}} // Handled by onClick
+                    label={category.name}
+                    className="mb-0"
+                    style={{ pointerEvents: "none" }}
+                  />
+                  {category.description && (
+                    <small
+                      className="d-block text-muted mt-1"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      {category.description}
+                    </small>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {categoriesLoading && (
             <Form.Text className="text-muted">
               Loading categories...
             </Form.Text>
           )}
+          {!categoriesLoading && categories.length === 0 && (
+            <Form.Text className="text-warning">
+              No categories available. Please refresh the page or contact support.
+            </Form.Text>
+          )}
           {errors.category_ids && (
-            <Form.Text className="text-danger">{errors.category_ids}</Form.Text>
+            <Form.Text className="text-danger d-block mt-1">
+              {errors.category_ids}
+            </Form.Text>
           )}
           <Form.Text className="text-muted">
-            Select the categories that best describe your expertise areas
+            Select at least one category that best describes your expertise areas
           </Form.Text>
         </Form.Group>
 
