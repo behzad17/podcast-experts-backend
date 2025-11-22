@@ -287,52 +287,54 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               <FaTag className="me-2" />
               Categories *
             </Form.Label>
-            <div className="d-flex flex-wrap gap-2 mt-2">
-              {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className={`border rounded p-2 ${
-                    formData.category_ids?.includes(category.id)
-                      ? "bg-primary text-white border-primary"
-                      : "bg-light border-secondary"
-                  }`}
-                  style={{
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                  onClick={() => handleCategoryChange(category.id)}
-                  onMouseEnter={(e) => {
-                    if (!formData.category_ids?.includes(category.id)) {
-                      e.currentTarget.style.backgroundColor = "#e9ecef";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!formData.category_ids?.includes(category.id)) {
-                      e.currentTarget.style.backgroundColor = "";
-                    }
-                  }}
-                >
-                  <Form.Check
-                    type="checkbox"
-                    checked={
-                      formData.category_ids?.includes(category.id) || false
-                    }
-                    onChange={() => {}} // Handled by onClick
-                    label={category.name}
-                    className="mb-0"
-                    style={{ pointerEvents: "none" }}
-                  />
-                  {category.description && (
-                    <small
-                      className="d-block text-muted mt-1"
-                      style={{ fontSize: "0.75rem" }}
-                    >
-                      {category.description}
-                    </small>
-                  )}
-                </div>
-              ))}
-            </div>
+            {categories.length > 0 && (
+              <div className="d-flex flex-wrap gap-2 mt-2">
+                {categories.map((category) => (
+                  <div
+                    key={category.id}
+                    className={`border rounded p-2 ${
+                      formData.category_ids?.includes(category.id)
+                        ? "bg-primary text-white border-primary"
+                        : "bg-light border-secondary"
+                    }`}
+                    style={{
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    onClick={() => handleCategoryChange(category.id)}
+                    onMouseEnter={(e) => {
+                      if (!formData.category_ids?.includes(category.id)) {
+                        e.currentTarget.style.backgroundColor = "#e9ecef";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!formData.category_ids?.includes(category.id)) {
+                        e.currentTarget.style.backgroundColor = "";
+                      }
+                    }}
+                  >
+                    <Form.Check
+                      type="checkbox"
+                      checked={
+                        formData.category_ids?.includes(category.id) || false
+                      }
+                      onChange={() => {}} // Handled by onClick
+                      label={category.name}
+                      className="mb-0"
+                      style={{ pointerEvents: "none" }}
+                    />
+                    {category.description && (
+                      <small
+                        className="d-block text-muted mt-1"
+                        style={{ fontSize: "0.75rem" }}
+                      >
+                        {category.description}
+                      </small>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
             {categories.length === 0 && (
               <Form.Text className="text-muted">
                 Loading categories...
