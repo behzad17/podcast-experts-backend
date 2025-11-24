@@ -19,6 +19,7 @@ const Experts = () => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(12);
@@ -66,6 +67,7 @@ const Experts = () => {
         setError("Failed to load experts. Please try again later.");
       } finally {
         setLoading(false);
+        setInitialLoading(false);
       }
     };
 
@@ -114,7 +116,8 @@ const Experts = () => {
     );
   };
 
-  if (loading) {
+  // Only show full-page loading on initial load, not during search/filter
+  if (initialLoading) {
     return (
       <div className="experts-page-modern">
         <Container className="mt-4">
@@ -237,37 +240,49 @@ const Experts = () => {
           </Alert>
         )}
 
-        {experts.length > 0 ? (
-          <Row className="g-4 mb-5">
-            {experts.map((expert) => (
-              <Col key={expert.id} lg={4} md={6} sm={12}>
-                <ExpertCard
-                  expert={expert}
-                  currentUser={currentUser}
-                  onEdit={(expert) => navigate(`/experts/${expert.id}/edit`)}
-                  onDelete={handleDeleteExpert}
-                />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-icon">
-              <FaUserTie />
+        {/* Loading indicator for search/filter operations */}
+        {loading && !initialLoading && (
+          <div className="text-center mb-4">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
-            <h3 className="empty-title">No experts found</h3>
-            <p className="empty-message">
-              {searchTerm || selectedCategory
-                ? "Try adjusting your search or filter criteria"
-                : "Be the first to create an expert profile!"}
-            </p>
-            {currentUser && (
-              <Button variant="primary" onClick={handleCreateExpert}>
-                <FaPlus className="me-2" />
-                Create First Expert
-              </Button>
-            )}
+            <p className="mt-2 text-muted">Searching experts...</p>
           </div>
+        )}
+
+        {!loading && (
+          experts.length > 0 ? (
+            <Row className="g-4 mb-5">
+              {experts.map((expert) => (
+                <Col key={expert.id} lg={4} md={6} sm={12}>
+                  <ExpertCard
+                    expert={expert}
+                    currentUser={currentUser}
+                    onEdit={(expert) => navigate(`/experts/${expert.id}/edit`)}
+                    onDelete={handleDeleteExpert}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <FaUserTie />
+              </div>
+              <h3 className="empty-title">No experts found</h3>
+              <p className="empty-message">
+                {searchTerm || selectedCategory
+                  ? "Try adjusting your search or filter criteria"
+                  : "Be the first to create an expert profile!"}
+              </p>
+              {currentUser && (
+                <Button variant="primary" onClick={handleCreateExpert}>
+                  <FaPlus className="me-2" />
+                  Create First Expert
+                </Button>
+              )}
+            </div>
+          )
         )}
 
         {totalPages > 1 && (

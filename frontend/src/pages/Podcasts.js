@@ -28,6 +28,7 @@ const Podcasts = () => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(12);
@@ -91,6 +92,7 @@ const Podcasts = () => {
         }
       } finally {
         setLoading(false);
+        setInitialLoading(false);
       }
     };
 
@@ -210,7 +212,8 @@ const Podcasts = () => {
     }
   };
 
-  if (loading) {
+  // Only show full-page loading on initial load, not during search/filter
+  if (initialLoading) {
     return (
       <div className="podcasts-page-modern">
         <Container className="mt-4">
@@ -336,38 +339,48 @@ const Podcasts = () => {
           </Alert>
         )}
 
-        {/* Podcasts Grid */}
-        {podcasts.length > 0 ? (
-          <Row className="g-4 mb-5">
-            {podcasts.map((podcast) => (
-              <Col key={podcast.id} lg={3} md={4} sm={6}>
-                <PodcastCard
-                  podcast={podcast}
-                  currentUser={currentUser}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeletePodcast}
-                />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-icon">
-              <FaPodcast />
-            </div>
-            <h3 className="empty-title">No podcasts found</h3>
-            <p className="empty-message">
-              {searchQuery || selectedCategory
-                ? "Try adjusting your search or filter criteria"
-                : "Be the first to create an amazing podcast!"}
-            </p>
-            {currentUser && (
-              <Button variant="primary" onClick={handleCreatePodcast}>
-                <FaPlus className="me-2" />
-                Create First Podcast
-              </Button>
-            )}
+        {/* Loading indicator for search/filter operations */}
+        {loading && !initialLoading && (
+          <div className="text-center mb-4">
+            <Spinner animation="border" variant="primary" />
+            <p className="mt-2 text-muted">Searching podcasts...</p>
           </div>
+        )}
+
+        {/* Podcasts Grid */}
+        {!loading && (
+          podcasts.length > 0 ? (
+            <Row className="g-4 mb-5">
+              {podcasts.map((podcast) => (
+                <Col key={podcast.id} lg={3} md={4} sm={6}>
+                  <PodcastCard
+                    podcast={podcast}
+                    currentUser={currentUser}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeletePodcast}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <div className="empty-state">
+              <div className="empty-icon">
+                <FaPodcast />
+              </div>
+              <h3 className="empty-title">No podcasts found</h3>
+              <p className="empty-message">
+                {searchQuery || selectedCategory
+                  ? "Try adjusting your search or filter criteria"
+                  : "Be the first to create an amazing podcast!"}
+              </p>
+              {currentUser && (
+                <Button variant="primary" onClick={handleCreatePodcast}>
+                  <FaPlus className="me-2" />
+                  Create First Podcast
+                </Button>
+              )}
+            </div>
+          )
         )}
 
         {/* Pagination */}
