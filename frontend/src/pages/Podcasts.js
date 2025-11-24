@@ -68,12 +68,12 @@ const Podcasts = () => {
           page_size: pageSize,
         });
 
-        if (selectedCategory) {
-          params.append("category", selectedCategory);
+        if (searchQuery && searchQuery.trim()) {
+          params.append("search", searchQuery.trim());
         }
 
-        if (searchQuery.trim()) {
-          params.append("search", searchQuery.trim());
+        if (selectedCategory) {
+          params.append("category", selectedCategory);
         }
 
         const response = await api.get(`/podcasts/?${params}`);
@@ -102,7 +102,7 @@ const Podcasts = () => {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [currentPage, pageSize, selectedCategory, searchQuery]);
+  }, [currentPage, pageSize, searchQuery, selectedCategory]);
 
   useEffect(() => {
     // Get current user if token exists
