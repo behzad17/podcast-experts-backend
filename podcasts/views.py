@@ -31,6 +31,8 @@ class PodcastListView(generics.ListAPIView):
     ordering_fields = ['title', 'created_at', 'views']
 
     def get_queryset(self):
+        from django.db.models import Q
+        
         queryset = Podcast.objects.all()
         
         # Check if this is a featured request
@@ -41,9 +43,19 @@ class PodcastListView(generics.ListAPIView):
         if not self.request.user.is_staff:
             queryset = queryset.filter(is_approved=True)
         
+        # Handle category filter
         category_id = self.request.query_params.get('category', None)
         if category_id:
             queryset = queryset.filter(category__id=category_id)
+        
+        # Handle search filter
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(owner__user__username__icontains=search)
+            )
         
         return queryset
 
