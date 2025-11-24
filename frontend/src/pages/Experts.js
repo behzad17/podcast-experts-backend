@@ -50,8 +50,8 @@ const Experts = () => {
           page_size: pageSize,
         });
 
-        if (searchTerm) {
-          params.append("search", searchTerm);
+        if (searchTerm && searchTerm.trim()) {
+          params.append("search", searchTerm.trim());
         }
         if (selectedCategory) {
           params.append("category", selectedCategory);

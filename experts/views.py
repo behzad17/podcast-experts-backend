@@ -35,6 +35,8 @@ class ExpertListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
+        from django.db.models import Q
+        
         queryset = ExpertProfile.objects.all()
         
         # Check if this is a featured request
@@ -44,6 +46,21 @@ class ExpertListView(generics.ListAPIView):
         # Filter by approval status for non-staff users
         if not self.request.user.is_staff:
             queryset = queryset.filter(is_approved=True)
+        
+        # Handle category filter
+        category_id = self.request.query_params.get('category', None)
+        if category_id:
+            queryset = queryset.filter(categories__id=category_id)
+        
+        # Handle search filter
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(bio__icontains=search) |
+                Q(expertise__icontains=search) |
+                Q(user__username__icontains=search)
+            )
         
         return queryset
 

@@ -104,15 +104,33 @@ class PodcastViewSet(viewsets.ModelViewSet):
         return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
+        from django.db.models import Q
+        
         queryset = Podcast.objects.all()
         
         # Filter by approval status for non-staff users
         if not self.request.user.is_staff:
             queryset = queryset.filter(is_approved=True)
         
+        # Handle category filter
         category = self.request.query_params.get('category', None)
         if category:
-            queryset = queryset.filter(category__name=category)
+            # Try to filter by ID first, then by name
+            try:
+                category_id = int(category)
+                queryset = queryset.filter(category__id=category_id)
+            except (ValueError, TypeError):
+                queryset = queryset.filter(category__name=category)
+        
+        # Handle search filter
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(owner__user__username__icontains=search)
+            )
+        
         return queryset
 
     def list(self, request, *args, **kwargs):
