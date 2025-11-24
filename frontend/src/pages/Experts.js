@@ -96,6 +96,13 @@ const Experts = () => {
     setCurrentPage(1);
   };
 
+  const handleSearchKeyDown = (e) => {
+    // Prevent form submission on Enter key
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
+
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
     setCurrentPage(1);
@@ -178,6 +185,7 @@ const Experts = () => {
                 placeholder="Search experts by name, expertise, or description..."
                 value={searchTerm}
                 onChange={handleSearch}
+                onKeyDown={handleSearchKeyDown}
                 className="search-input"
               />
             </InputGroup>

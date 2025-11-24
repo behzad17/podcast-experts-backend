@@ -94,7 +94,12 @@ const Podcasts = () => {
       }
     };
 
-    fetchPodcasts();
+    // Debounce search query to avoid excessive API calls
+    const debounceTimer = setTimeout(() => {
+      fetchPodcasts();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
   }, [currentPage, pageSize, selectedCategory, searchQuery]);
 
   useEffect(() => {
@@ -127,6 +132,13 @@ const Podcasts = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleSearchKeyDown = (e) => {
+    // Prevent form submission on Enter key
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
   };
 
   const handleEditClick = (podcast) => {
@@ -271,6 +283,7 @@ const Podcasts = () => {
                 placeholder="Search podcasts by title, description, or creator..."
                 value={searchQuery}
                 onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
                 className="search-input"
               />
             </InputGroup>
