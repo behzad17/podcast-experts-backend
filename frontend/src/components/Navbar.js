@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Navbar as BootstrapNavbar,
@@ -8,10 +8,15 @@ import {
 } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
 import { useAuth } from "../contexts/AuthContext";
+import api from "../api/axios";
 
 function Navigation() {
   const { user, logout } = useAuth();
   const [expanded, setExpanded] = useState(false);
+  const [hasExpertProfile, setHasExpertProfile] = useState(false);
+  const [hasPodcasterProfile, setHasPodcasterProfile] = useState(false);
+  const [expertProfileId, setExpertProfileId] = useState(null);
+  const [profileCheckLoading, setProfileCheckLoading] = useState(true);
 
   const handleLogout = async () => {
     try {
@@ -25,6 +30,51 @@ function Navigation() {
   const closeNavbar = () => {
     setExpanded(false);
   };
+
+  // Check if user has expert and podcaster profiles
+  useEffect(() => {
+    const checkProfiles = async () => {
+      if (!user) {
+        setHasExpertProfile(false);
+        setHasPodcasterProfile(false);
+        setProfileCheckLoading(false);
+        return;
+      }
+
+      try {
+        // Check expert profile
+        try {
+          const expertResponse = await api.get("/experts/my-profile/");
+          setHasExpertProfile(true);
+          // Store expert profile ID for linking to public profile view
+          if (expertResponse.data?.id) {
+            setExpertProfileId(expertResponse.data.id);
+          }
+        } catch (error) {
+          if (error.response?.status === 404) {
+            setHasExpertProfile(false);
+            setExpertProfileId(null);
+          }
+        }
+
+        // Check podcaster profile
+        try {
+          await api.get("/podcasts/profiles/my_profile/");
+          setHasPodcasterProfile(true);
+        } catch (error) {
+          if (error.response?.status === 404) {
+            setHasPodcasterProfile(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking profiles:", error);
+      } finally {
+        setProfileCheckLoading(false);
+      }
+    };
+
+    checkProfiles();
+  }, [user]);
 
   return (
     <BootstrapNavbar
@@ -72,63 +122,61 @@ function Navigation() {
                 id="user-nav-dropdown"
                 align="end"
               >
-                {/* Profile link - different routes based on user type */}
-                {user.user_type === "expert" && (
+                {/* My Account - always visible for logged-in users */}
+                <NavDropdown.Item
+                  as={Link}
+                  to="/profile"
+                  onClick={closeNavbar}
+                >
+                  My Account
+                </NavDropdown.Item>
+
+                {/* Expert Profile Section */}
+                {hasExpertProfile ? (
                   <NavDropdown.Item
                     as={Link}
-                    to="/profile"
+                    to={expertProfileId ? `/experts/${expertProfileId}` : "/experts"}
                     onClick={closeNavbar}
                   >
-                    Profile
+                    My Expert Profile
+                  </NavDropdown.Item>
+                ) : (
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/experts/create"
+                    onClick={closeNavbar}
+                  >
+                    Become an Expert
                   </NavDropdown.Item>
                 )}
-                {user.user_type === "podcaster" && (
+
+                {/* Podcaster Profile Section */}
+                {hasPodcasterProfile ? (
                   <NavDropdown.Item
                     as={Link}
                     to="/podcaster/profile"
                     onClick={closeNavbar}
                   >
-                    Profile
+                    My Podcaster Profile
+                  </NavDropdown.Item>
+                ) : (
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/podcasts/profile/create"
+                    onClick={closeNavbar}
+                  >
+                    Become a Podcaster
                   </NavDropdown.Item>
                 )}
 
-                {/* My Podcasts / Dashboard */}
-                {user.user_type === "podcaster" && (
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/podcasts"
-                    onClick={closeNavbar}
-                  >
-                    My Podcasts
-                  </NavDropdown.Item>
-                )}
-                {user.user_type === "expert" && (
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/experts"
-                    onClick={closeNavbar}
-                  >
-                    My Profile
-                  </NavDropdown.Item>
-                )}
-
-                {/* Create links based on user type */}
-                {user.user_type === "podcaster" && (
+                {/* Create Podcast - only show if user has podcaster profile */}
+                {hasPodcasterProfile && (
                   <NavDropdown.Item
                     as={Link}
                     to="/podcasts/create"
                     onClick={closeNavbar}
                   >
                     Create Podcast
-                  </NavDropdown.Item>
-                )}
-                {user.user_type === "expert" && (
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/experts/create"
-                    onClick={closeNavbar}
-                  >
-                    Create Expert Profile
                   </NavDropdown.Item>
                 )}
 
