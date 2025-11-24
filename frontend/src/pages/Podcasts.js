@@ -14,7 +14,7 @@ import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import PodcastEditModal from "../components/podcasts/PodcastEditModal";
 import PodcastCard from "../components/podcasts/PodcastCard";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import {
   FaSearch,
   FaFilter,
@@ -41,6 +41,7 @@ const Podcasts = () => {
     description: "",
     link: "",
     image: null,
+    category_id: "",
   });
   const navigate = useNavigate();
 
@@ -135,6 +136,7 @@ const Podcasts = () => {
       description: podcast.description,
       link: podcast.link || "",
       image: null,
+      category_id: podcast.category?.id || "",
     });
     setShowEditModal(true);
   };
@@ -152,11 +154,20 @@ const Podcasts = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      Object.keys(editFormData).forEach((key) => {
-        if (editFormData[key] !== null) {
-          formData.append(key, editFormData[key]);
-        }
-      });
+      
+      // Always send required fields
+      formData.append("title", editFormData.title.trim());
+      formData.append("description", editFormData.description.trim());
+      formData.append("category_id", editFormData.category_id);
+      
+      // Only send optional fields if they have values
+      if (editFormData.link && editFormData.link.trim() !== "") {
+        formData.append("link", editFormData.link.trim());
+      }
+      
+      if (editFormData.image) {
+        formData.append("image", editFormData.image);
+      }
 
       const response = await api.put(
         `/podcasts/${editingPodcast.id}/`,
@@ -169,16 +180,21 @@ const Podcasts = () => {
       );
 
       setShowEditModal(false);
-      // Update only the edited podcast in the current page
+      
+      // Update the edited podcast in the current list
       setPodcasts(
         podcasts.map((p) =>
           p.id === editingPodcast.id ? { ...p, ...response.data } : p
         )
       );
+      
       toast.success("Podcast updated successfully");
     } catch (error) {
       console.error("Error updating podcast:", error);
-      toast.error(error.response?.data?.detail || "Failed to update podcast");
+      const errorMessage = error.response?.data?.detail || 
+                          error.response?.data?.message || 
+                          "Failed to update podcast";
+      toast.error(errorMessage);
     }
   };
 
@@ -386,6 +402,7 @@ const Podcasts = () => {
             onHide={() => setShowEditModal(false)}
             podcast={editingPodcast}
             formData={editFormData}
+            categories={categories}
             onChange={handleEditChange}
             onSubmit={handleEditSubmit}
           />

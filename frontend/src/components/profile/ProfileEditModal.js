@@ -1,7 +1,9 @@
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 import { FaTag } from "react-icons/fa";
+import { isValidUrl } from "../../utils/validation";
 
 const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
   const [formData, setFormData] = React.useState({
@@ -140,6 +142,22 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
       newErrors.category_ids = "At least one category is required";
     }
 
+    // URL validation for website (optional field)
+    if (formData.website && formData.website.trim() !== "") {
+      if (!isValidUrl(formData.website.trim())) {
+        newErrors.website =
+          "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
+    // URL validation for social_media (optional field, but if provided should be valid)
+    if (formData.social_media && formData.social_media.trim() !== "") {
+      if (!isValidUrl(formData.social_media.trim())) {
+        newErrors.social_media =
+          "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -148,6 +166,7 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
     e.preventDefault();
 
     if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
       return;
     }
 
@@ -156,15 +175,25 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
 
     try {
       const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        // Skip category_ids here, we'll handle it separately
-        if (key === "category_ids") {
-          return;
-        }
-        if (formData[key] !== null) {
-          formDataToSend.append(key, formData[key]);
-        }
-      });
+
+      // Always send required fields
+      formDataToSend.append("name", formData.name.trim());
+      formDataToSend.append("bio", formData.bio.trim());
+      formDataToSend.append("expertise", formData.expertise.trim());
+      formDataToSend.append("experience_years", formData.experience_years);
+
+      // Only send optional fields if they have values
+      if (formData.website && formData.website.trim() !== "") {
+        formDataToSend.append("website", formData.website.trim());
+      }
+
+      if (formData.social_media && formData.social_media.trim() !== "") {
+        formDataToSend.append("social_media", formData.social_media.trim());
+      }
+
+      if (formData.profile_picture) {
+        formDataToSend.append("profile_picture", formData.profile_picture);
+      }
 
       // Append category_ids separately (each ID as a separate entry)
       if (formData.category_ids && formData.category_ids.length > 0) {
@@ -183,6 +212,7 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
         }
       );
 
+      toast.success("Profile updated successfully");
       onUpdate(response.data);
       onHide();
     } catch (error) {
@@ -203,14 +233,16 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
           });
           setErrors(fieldErrors);
         } else {
-          setError(
-            errorData.detail || "Failed to update profile. Please try again."
-          );
+          const errorMsg =
+            errorData.detail || "Failed to update profile. Please try again.";
+          setError(errorMsg);
+          toast.error(errorMsg);
         }
       } else {
-        setError(
-          "An error occurred while updating your profile. Please try again."
-        );
+        const errorMsg =
+          "An error occurred while updating your profile. Please try again.";
+        setError(errorMsg);
+        toast.error(errorMsg);
       }
     }
   };
@@ -293,18 +325,27 @@ const ProfileEditModal = ({ show, onHide, profile, onUpdate }) => {
               name="website"
               value={formData.website}
               onChange={handleChange}
+              isInvalid={!!errors.website}
+              placeholder="https://example.com"
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.website}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Social Media</Form.Label>
             <Form.Control
-              as="textarea"
-              rows={2}
+              type="text"
               name="social_media"
               value={formData.social_media}
               onChange={handleChange}
+              isInvalid={!!errors.social_media}
+              placeholder="https://linkedin.com/in/yourprofile or https://twitter.com/yourhandle"
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.social_media}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">

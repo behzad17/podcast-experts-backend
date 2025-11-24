@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Form, Alert, Badge } from "react-bootstrap";
 import { FaEnvelope, FaPaperPlane, FaTimes } from "react-icons/fa";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 import "./MessageButton.css";
 
 const MessageButton = ({
@@ -18,11 +19,27 @@ const MessageButton = ({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const MIN_MESSAGE_LENGTH = 2;
+
+  const validateMessage = (content) => {
+    const trimmed = content.trim();
+    if (!trimmed) {
+      return "Message cannot be empty";
+    }
+    if (trimmed.length < MIN_MESSAGE_LENGTH) {
+      return `Message must be at least ${MIN_MESSAGE_LENGTH} characters`;
+    }
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!message.trim()) {
-      setError("Please enter a message");
+    // Validate message
+    const validationError = validateMessage(message);
+    if (validationError) {
+      setError(validationError);
+      toast.error(validationError);
       return;
     }
 
@@ -35,6 +52,7 @@ const MessageButton = ({
         content: message.trim(),
       });
 
+      toast.success("Message sent successfully");
       setSuccess(true);
       setMessage("");
 
@@ -45,13 +63,11 @@ const MessageButton = ({
       }, 2000);
     } catch (error) {
       console.error("Error sending message:", error);
-      if (error.response?.data?.detail) {
-        setError(error.response.data.detail);
-      } else if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Failed to send message. Please try again.");
-      }
+      const errorMsg = error.response?.data?.detail || 
+                     error.response?.data?.message || 
+                     "Failed to send message. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setIsLoading(false);
     }
@@ -152,12 +168,22 @@ const MessageButton = ({
                   as="textarea"
                   rows={5}
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    // Clear error when user starts typing
+                    if (error) {
+                      setError("");
+                    }
+                  }}
                   placeholder={`Type your message to ${targetUsername}...\n\nYou can ask questions, request collaboration, or simply introduce yourself.`}
                   maxLength={1000}
                   disabled={isLoading}
                   className="message-textarea"
+                  isInvalid={!!error}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {error}
+                </Form.Control.Feedback>
                 <div className="d-flex justify-content-between align-items-center mt-2">
                   <Form.Text className="text-muted">
                     <small>
@@ -190,7 +216,7 @@ const MessageButton = ({
             <Button
               variant="primary"
               onClick={handleSubmit}
-              disabled={isLoading || !message.trim()}
+              disabled={isLoading || !message.trim() || message.trim().length < MIN_MESSAGE_LENGTH}
               className="px-4 send-message-btn"
             >
               {isLoading ? (

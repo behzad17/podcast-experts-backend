@@ -3,6 +3,7 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
+import { isValidUrl } from "../utils/validation";
 import {
   FaMicrophone,
   FaPlus,
@@ -32,6 +33,7 @@ const PodcastCreate = () => {
   });
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [needsProfile, setNeedsProfile] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -87,20 +89,70 @@ const PodcastCreate = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    // Clear errors when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
     setError("");
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Title validation
+    if (!formData.title.trim()) {
+      newErrors.title = "Title is required";
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = "Title must be at least 3 characters";
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required";
+    } else if (formData.description.trim().length < 10) {
+      newErrors.description = "Description must be at least 10 characters";
+    }
+
+    // Category validation
+    if (!formData.category_id) {
+      newErrors.category_id = "Category is required";
+    }
+
+    // Link validation (optional field, but if provided must be valid URL)
+    if (formData.link && formData.link.trim() !== "") {
+      if (!isValidUrl(formData.link.trim())) {
+        newErrors.link = "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
     setIsLoading(true);
+    setError("");
+    setErrors({});
 
     try {
       // Create FormData to handle file uploads
       const submitData = new FormData();
-      submitData.append("title", formData.title);
-      submitData.append("description", formData.description);
-      submitData.append("link", formData.link);
+      submitData.append("title", formData.title.trim());
+      submitData.append("description", formData.description.trim());
       submitData.append("category_id", formData.category_id);
+
+      // Only append link if it's provided and not empty
+      if (formData.link && formData.link.trim() !== "") {
+        submitData.append("link", formData.link.trim());
+      }
 
       if (formData.image) {
         submitData.append("image", formData.image);
@@ -117,7 +169,27 @@ const PodcastCreate = () => {
       );
       navigate("/podcasts");
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred");
+      console.error("Error creating podcast:", error);
+      
+      // Handle field-specific validation errors from backend
+      if (error.response?.data && typeof error.response.data === "object") {
+        const backendErrors = {};
+        Object.keys(error.response.data).forEach((key) => {
+          if (Array.isArray(error.response.data[key])) {
+            backendErrors[key] = error.response.data[key][0];
+          } else {
+            backendErrors[key] = error.response.data[key];
+          }
+        });
+        if (Object.keys(backendErrors).length > 0) {
+          setErrors(backendErrors);
+        } else {
+          setError(error.response?.data?.message || error.response?.data?.detail || "An error occurred while creating the podcast");
+        }
+      } else {
+        setError(error.response?.data?.message || error.response?.data?.detail || "An error occurred while creating the podcast");
+      }
+      toast.error(error.response?.data?.message || error.response?.data?.detail || "Failed to create podcast");
     } finally {
       setIsLoading(false);
     }
@@ -271,10 +343,13 @@ const PodcastCreate = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!errors.title}
                   placeholder="Enter your podcast title..."
                   className="form-input"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.title}
+                </Form.Control.Feedback>
                 <small className="form-help">
                   Choose a catchy, memorable title that reflects your content
                 </small>
@@ -292,10 +367,13 @@ const PodcastCreate = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!errors.description}
                   placeholder="Describe what your podcast is about, who it's for, and what listeners can expect..."
                   className="form-input"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
                 <small className="form-help">
                   Write a compelling description that will attract your target
                   audience
@@ -312,7 +390,7 @@ const PodcastCreate = () => {
                   name="category_id"
                   value={formData.category_id}
                   onChange={handleChange}
-                  required
+                  isInvalid={!!errors.category_id}
                   className="form-select"
                 >
                   <option value="">Select a category</option>
@@ -322,6 +400,9 @@ const PodcastCreate = () => {
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.category_id}
+                </Form.Control.Feedback>
                 <small className="form-help">
                   Choose the category that best fits your podcast content
                 </small>
@@ -338,9 +419,13 @@ const PodcastCreate = () => {
                   name="link"
                   value={formData.link}
                   onChange={handleChange}
+                  isInvalid={!!errors.link}
                   placeholder="https://your-podcast-platform.com/episode"
                   className="form-input"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.link}
+                </Form.Control.Feedback>
                 <small className="form-help">
                   Optional: Link to your podcast on other platforms
                 </small>

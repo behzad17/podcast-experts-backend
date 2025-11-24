@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Form, Button, Badge } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 import {
   FaUser,
   FaUserTie,
@@ -15,12 +16,15 @@ import {
 const ChatWindow = ({ userId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [messageError, setMessageError] = useState("");
   const [otherUser, setOtherUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user: currentUser } = useAuth();
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  const MIN_MESSAGE_LENGTH = 2;
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -70,16 +74,37 @@ const ChatWindow = ({ userId }) => {
     }
   }, [userId]);
 
+  const validateMessage = (content) => {
+    const trimmed = content.trim();
+    if (!trimmed) {
+      return "Message cannot be empty";
+    }
+    if (trimmed.length < MIN_MESSAGE_LENGTH) {
+      return `Message must be at least ${MIN_MESSAGE_LENGTH} characters`;
+    }
+    return null;
+  };
+
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      if (!newMessage.trim() || !userId || isSubmitting) return;
+      if (!userId || isSubmitting) return;
+
+      // Validate message
+      const validationError = validateMessage(newMessage);
+      if (validationError) {
+        setMessageError(validationError);
+        toast.error(validationError);
+        return;
+      }
+
+      setMessageError("");
 
       try {
         setIsSubmitting(true);
         await api.post("/user_messages/", {
           receiver_id: userId,
-          content: newMessage,
+          content: newMessage.trim(),
         });
 
         // Clear input immediately for better UX
@@ -88,12 +113,19 @@ const ChatWindow = ({ userId }) => {
         // Refetch messages to show the new message
         await fetchMessages();
 
+        // Show success toast
+        toast.success("Message sent successfully");
+
         // Refocus input after sending
         setTimeout(() => {
           inputRef.current?.focus();
         }, 100);
       } catch (error) {
         console.error("Error sending message:", error);
+        const errorMsg = error.response?.data?.detail || 
+                        error.response?.data?.message || 
+                        "Failed to send message. Please try again.";
+        toast.error(errorMsg);
         // Keep the message in input if sending failed
       } finally {
         setIsSubmitting(false);
@@ -104,7 +136,11 @@ const ChatWindow = ({ userId }) => {
 
   const handleInputChange = useCallback((e) => {
     setNewMessage(e.target.value);
-  }, []);
+    // Clear error when user starts typing
+    if (messageError) {
+      setMessageError("");
+    }
+  }, [messageError]);
 
   const formatTimestamp = useCallback((timestamp) => {
     if (!timestamp) return "";
@@ -251,12 +287,18 @@ const ChatWindow = ({ userId }) => {
               placeholder="Type a message..."
               className="message-input"
               disabled={isSubmitting}
+              isInvalid={!!messageError}
             />
+            {messageError && (
+              <Form.Control.Feedback type="invalid" className="d-block mt-1">
+                {messageError}
+              </Form.Control.Feedback>
+            )}
             <Button
               type="submit"
               variant="primary"
               className="send-btn"
-              disabled={!newMessage.trim() || isSubmitting}
+              disabled={!newMessage.trim() || newMessage.trim().length < MIN_MESSAGE_LENGTH || isSubmitting}
             >
               {isSubmitting ? (
                 <div className="spinner-border spinner-border-sm" role="status">

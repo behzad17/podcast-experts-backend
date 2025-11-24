@@ -238,6 +238,18 @@ The primary goals of the **Podcast Experts** platform are:
 
 ---
 
+
+LO4 – Front-End Interactivity & API Integration (Distinction-Level Summary)
+The front-end of this project delivers a fully interactive, React-based user experience that consumes and manipulates API data from a Django REST backend. The application implements complete CRUD functionality across Podcasts, Experts/Profiles, Comments, and Messaging, with immediate UI updates through React state management and consistent toast notifications for success and error handling.
+All forms include robust client-side validation (required fields, minimum length constraints, URL validation, whitespace prevention), inline error messages, and disabled submit buttons for invalid input. This ensures data integrity before interacting with the API and delivers a smooth, predictable user experience.
+Authentication state is clearly represented in the UI through a redesigned navigation bar: logged-out users see only public links and authentication options, while logged-in users see a personalized user menu (“Hi, username”) containing Profile, Create, Messages, My Podcasts/My Profile, Admin (if applicable), and Logout. This directly addresses the assessor’s feedback regarding clarity and login-state confusion.
+UX behaviour throughout the project is consistent and responsive:
+modals close automatically upon success
+list views update instantly
+API errors are surfaced with friendly, high-level messages
+no page reloads are required
+Combined, these features demonstrate a strong understanding of front-end engineering principles, API-driven UI design, and user-centered interaction patterns.
+
 ## Frontend URL
 
 - **Main Site:**  

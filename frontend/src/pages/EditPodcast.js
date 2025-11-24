@@ -3,6 +3,7 @@ import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
+import { isValidUrl } from "../utils/validation";
 
 const EditPodcast = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const EditPodcast = () => {
     image: null,
   });
   const [categories, setCategories] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,21 +74,65 @@ const EditPodcast = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    // Clear errors when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Title validation
+    if (!formData.title.trim()) {
+      newErrors.title = "Title is required";
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = "Title must be at least 3 characters";
+    }
+
+    // Description validation
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required";
+    } else if (formData.description.trim().length < 10) {
+      newErrors.description = "Description must be at least 10 characters";
+    }
+
+    // Category validation
+    if (!formData.category_id) {
+      newErrors.category_id = "Category is required";
+    }
+
+    // Link validation (optional field, but if provided must be valid URL)
+    if (formData.link && formData.link.trim() !== "") {
+      if (!isValidUrl(formData.link.trim())) {
+        newErrors.link = "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Please fix the errors in the form");
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       
       // Always send required fields
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
+      formDataToSend.append("title", formData.title.trim());
+      formDataToSend.append("description", formData.description.trim());
       formDataToSend.append("category_id", formData.category_id);
       
       // Only send optional fields if they have values
-      if (formData.link) {
-        formDataToSend.append("link", formData.link);
+      if (formData.link && formData.link.trim() !== "") {
+        formDataToSend.append("link", formData.link.trim());
       }
       
       if (formData.image) {
@@ -102,6 +148,21 @@ const EditPodcast = () => {
       navigate(`/podcasts/${id}`);
     } catch (error) {
       console.error("Error updating podcast:", error);
+      
+      // Handle field-specific validation errors from backend
+      if (error.response?.data && typeof error.response.data === "object" && !error.response.data.detail) {
+        const backendErrors = {};
+        Object.keys(error.response.data).forEach((key) => {
+          if (Array.isArray(error.response.data[key])) {
+            backendErrors[key] = error.response.data[key][0];
+          } else {
+            backendErrors[key] = error.response.data[key];
+          }
+        });
+        if (Object.keys(backendErrors).length > 0) {
+          setErrors(backendErrors);
+        }
+      }
       
       // Handle specific error cases
       if (error.response?.status === 401) {
@@ -142,8 +203,11 @@ const EditPodcast = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.title}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.title}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -154,8 +218,11 @@ const EditPodcast = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.description}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.description}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -164,7 +231,7 @@ const EditPodcast = () => {
             name="category_id"
             value={formData.category_id}
             onChange={handleChange}
-            required
+            isInvalid={!!errors.category_id}
           >
             <option value="">Select a category</option>
             {categories.map((category) => (
@@ -173,6 +240,9 @@ const EditPodcast = () => {
               </option>
             ))}
           </Form.Select>
+          <Form.Control.Feedback type="invalid">
+            {errors.category_id}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -182,8 +252,12 @@ const EditPodcast = () => {
             name="link"
             value={formData.link}
             onChange={handleChange}
+            isInvalid={!!errors.link}
             placeholder="https://your-podcast-platform.com/episode"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.link}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">

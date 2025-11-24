@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 import moment from "moment";
 
 const CommentSection = ({
@@ -14,12 +15,16 @@ const CommentSection = ({
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [error, setError] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [editError, setEditError] = useState("");
   const [loading, setLoading] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
   const [editingContent, setEditingContent] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
   const editTextareaRef = useRef(null);
+
+  const MIN_COMMENT_LENGTH = 3;
 
   const fetchComments = useCallback(async () => {
     try {
@@ -106,9 +111,30 @@ const CommentSection = ({
       });
   };
 
+  const validateComment = (content) => {
+    const trimmed = content.trim();
+    if (!trimmed) {
+      return "Comment cannot be empty";
+    }
+    if (trimmed.length < MIN_COMMENT_LENGTH) {
+      return `Comment must be at least ${MIN_COMMENT_LENGTH} characters`;
+    }
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
+
+    // Validate comment
+    const validationError = validateComment(newComment);
+    if (validationError) {
+      setCommentError(validationError);
+      toast.error(validationError);
+      return;
+    }
+
+    setCommentError("");
+    setError("");
 
     try {
       const endpoint =
@@ -117,7 +143,7 @@ const CommentSection = ({
           : `/podcasts/${id}/comments/`;
 
       const data = {
-        content: newComment,
+        content: newComment.trim(),
         ...(replyTo && { parent: replyTo }),
       };
 
@@ -126,9 +152,11 @@ const CommentSection = ({
       if (replyTo) {
         // Add reply to parent comment's replies array
         setComments((prev) => addReplyToParent(prev, replyTo, response.data));
+        toast.success("Reply posted successfully");
       } else {
         // Add as new top-level comment
         setComments((prev) => [response.data, ...prev]);
+        toast.success("Comment posted successfully");
       }
 
       setNewComment("");
@@ -136,11 +164,27 @@ const CommentSection = ({
       setError("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      setError("Failed to post comment");
+      const errorMsg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Failed to post comment";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
   const handleEdit = async (commentId, content) => {
+    // Validate edited comment
+    const validationError = validateComment(content);
+    if (validationError) {
+      setEditError(validationError);
+      toast.error(validationError);
+      return;
+    }
+
+    setEditError("");
+    setError("");
+
     try {
       let endpoint;
       let data;
@@ -149,12 +193,12 @@ const CommentSection = ({
         endpoint = `/experts/profiles/${id}/edit_comment/`;
         data = {
           comment_id: commentId,
-          content: content,
+          content: content.trim(),
         };
       } else {
         endpoint = `/podcasts/${id}/comments/${commentId}/`;
         data = {
-          content: content,
+          content: content.trim(),
         };
       }
 
@@ -168,9 +212,15 @@ const CommentSection = ({
       setEditingComment(null);
       setEditingContent("");
       setError("");
+      toast.success("Comment updated successfully");
     } catch (error) {
       console.error("Error editing comment:", error);
-      setError("Failed to edit comment");
+      const errorMsg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Failed to edit comment";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -195,9 +245,15 @@ const CommentSection = ({
 
       setShowDeleteModal(false);
       setError("");
+      toast.success("Comment deleted successfully");
     } catch (error) {
       console.error("Error deleting comment:", error);
-      setError("Failed to delete comment");
+      const errorMsg =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        "Failed to delete comment";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -282,36 +338,43 @@ const CommentSection = ({
                   rows={3}
                   value={editingContent}
                   onChange={(e) => {
-                    const textarea = e.target;
-                    const cursorPosition = textarea.selectionStart;
-                    const newValue = textarea.value;
-                    setEditingContent(newValue);
-                    // Restore cursor position after state update
-                    // Use requestAnimationFrame to ensure DOM is updated
-                    requestAnimationFrame(() => {
-                      if (editTextareaRef.current) {
-                        // For normal typing, cursor moves forward naturally
-                        // For deletions, we need to adjust
-                        const adjustedPosition = Math.min(
-                          cursorPosition,
-                          newValue.length
-                        );
-                        editTextareaRef.current.setSelectionRange(
-                          adjustedPosition,
-                          adjustedPosition
-                        );
-                      }
-                    });
+                    // Simple state update - let React handle cursor position naturally
+                    setEditingContent(e.target.value);
+                    // Clear error when user starts typing
+                    if (editError) {
+                      setEditError("");
+                    }
                   }}
+                  isInvalid={!!editError}
                   className="mb-2"
                   autoFocus
                 />
-                <Button type="submit" size="sm" className="me-2">
-                  Save
-                </Button>
-                <Button size="sm" variant="secondary" onClick={cancelEditing}>
-                  Cancel
-                </Button>
+                <Form.Control.Feedback type="invalid">
+                  {editError}
+                </Form.Control.Feedback>
+                <div className="mt-2">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="me-2"
+                    disabled={
+                      !editingContent.trim() ||
+                      editingContent.trim().length < MIN_COMMENT_LENGTH
+                    }
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      cancelEditing();
+                      setEditError("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </Form>
             ) : (
               <p
@@ -365,12 +428,28 @@ const CommentSection = ({
             rows={3}
             placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={(e) => {
+              setNewComment(e.target.value);
+              // Clear error when user starts typing
+              if (commentError) {
+                setCommentError("");
+              }
+            }}
+            isInvalid={!!commentError}
             className="mb-2"
           />
+          <Form.Control.Feedback type="invalid">
+            {commentError}
+          </Form.Control.Feedback>
         </Form.Group>
         <div className="d-flex gap-2">
-          <Button type="submit" disabled={!newComment.trim()}>
+          <Button
+            type="submit"
+            disabled={
+              !newComment.trim() ||
+              newComment.trim().length < MIN_COMMENT_LENGTH
+            }
+          >
             {replyTo ? "Reply" : "Comment"}
           </Button>
           {replyTo && (
@@ -378,6 +457,7 @@ const CommentSection = ({
               variant="secondary"
               onClick={() => {
                 setReplyTo(null);
+                setCommentError("");
               }}
             >
               Cancel Reply

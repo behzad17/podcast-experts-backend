@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
 import { FaImage, FaTimes, FaTag } from "react-icons/fa";
+import { isValidUrl } from "../utils/validation";
 
 const EditExpert = () => {
   const navigate = useNavigate();
@@ -154,6 +155,20 @@ const EditExpert = () => {
       newErrors.category_ids = "At least one category is required";
     }
 
+    // URL validation for website (optional field)
+    if (formData.website && formData.website.trim() !== "") {
+      if (!isValidUrl(formData.website.trim())) {
+        newErrors.website = "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
+    // URL validation for social_media (optional field, but if provided should be valid)
+    if (formData.social_media && formData.social_media.trim() !== "") {
+      if (!isValidUrl(formData.social_media.trim())) {
+        newErrors.social_media = "Please enter a valid URL (e.g., https://example.com)";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -229,12 +244,12 @@ const EditExpert = () => {
       submitData.append("expertise", formData.expertise);
       submitData.append("experience_years", formData.experience_years);
 
-      if (formData.website) {
-        submitData.append("website", formData.website);
+      if (formData.website && formData.website.trim() !== "") {
+        submitData.append("website", formData.website.trim());
       }
 
-      if (formData.social_media) {
-        submitData.append("social_media", formData.social_media);
+      if (formData.social_media && formData.social_media.trim() !== "") {
+        submitData.append("social_media", formData.social_media.trim());
       }
 
       if (formData.email) {
@@ -282,11 +297,12 @@ const EditExpert = () => {
           setErrors(fieldErrors);
         } else {
           setError(errorData.detail || "Failed to update profile");
+          toast.error(errorData.detail || "Failed to update profile");
         }
       } else {
-        setError(
-          "An error occurred while updating your profile. Please try again."
-        );
+        const errorMsg = "An error occurred while updating your profile. Please try again.";
+        setError(errorMsg);
+        toast.error(errorMsg);
       }
     } finally {
       setLoading(false);
@@ -384,7 +400,12 @@ const EditExpert = () => {
             name="website"
             value={formData.website || ""}
             onChange={handleChange}
+            isInvalid={!!errors.website}
+            placeholder="https://example.com"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.website}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -394,7 +415,12 @@ const EditExpert = () => {
             name="social_media"
             value={formData.social_media || ""}
             onChange={handleChange}
+            isInvalid={!!errors.social_media}
+            placeholder="https://linkedin.com/in/yourprofile or https://twitter.com/yourhandle"
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.social_media}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">

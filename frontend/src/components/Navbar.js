@@ -4,8 +4,9 @@ import {
   Navbar as BootstrapNavbar,
   Nav,
   Container,
-  Button,
+  NavDropdown,
 } from "react-bootstrap";
+import { FaUser } from "react-icons/fa";
 import { useAuth } from "../contexts/AuthContext";
 
 function Navigation() {
@@ -44,6 +45,7 @@ function Navigation() {
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
+            {/* Public links - visible to everyone */}
             <Nav.Link as={Link} to="/podcasts" onClick={closeNavbar}>
               Podcasts
             </Nav.Link>
@@ -56,53 +58,111 @@ function Navigation() {
             <Nav.Link as={Link} to="/contact" onClick={closeNavbar}>
               Contact
             </Nav.Link>
-            {user && (
-              <>
+          </Nav>
+          <Nav>
+            {user ? (
+              // User dropdown menu when logged in
+              <NavDropdown
+                title={
+                  <span>
+                    <FaUser className="me-1" />
+                    Hi, {user.username}
+                  </span>
+                }
+                id="user-nav-dropdown"
+                align="end"
+              >
+                {/* Profile link - different routes based on user type */}
                 {user.user_type === "expert" && (
-                  <Nav.Link as={Link} to="/profile" onClick={closeNavbar}>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/profile"
+                    onClick={closeNavbar}
+                  >
                     Profile
-                  </Nav.Link>
+                  </NavDropdown.Item>
                 )}
                 {user.user_type === "podcaster" && (
-                  <>
-                    <Nav.Link as={Link} to="/podcaster/profile" onClick={closeNavbar}>
-                      Profile
-                    </Nav.Link>
-                    <Nav.Link
-                      as={Link}
-                      to="/podcasts/create"
-                      onClick={closeNavbar}
-                    >
-                      Create Podcast
-                    </Nav.Link>
-                  </>
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/podcaster/profile"
+                    onClick={closeNavbar}
+                  >
+                    Profile
+                  </NavDropdown.Item>
+                )}
+
+                {/* My Podcasts / Dashboard */}
+                {user.user_type === "podcaster" && (
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/podcasts"
+                    onClick={closeNavbar}
+                  >
+                    My Podcasts
+                  </NavDropdown.Item>
                 )}
                 {user.user_type === "expert" && (
-                  <Nav.Link
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/experts"
+                    onClick={closeNavbar}
+                  >
+                    My Profile
+                  </NavDropdown.Item>
+                )}
+
+                {/* Create links based on user type */}
+                {user.user_type === "podcaster" && (
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/podcasts/create"
+                    onClick={closeNavbar}
+                  >
+                    Create Podcast
+                  </NavDropdown.Item>
+                )}
+                {user.user_type === "expert" && (
+                  <NavDropdown.Item
                     as={Link}
                     to="/experts/create"
                     onClick={closeNavbar}
                   >
                     Create Expert Profile
-                  </Nav.Link>
+                  </NavDropdown.Item>
                 )}
-                {user.is_admin && (
-                  <Nav.Link as={Link} to="/admin" onClick={closeNavbar}>
-                    Admin Dashboard
-                  </Nav.Link>
-                )}
-                <Nav.Link as={Link} to="/messages" onClick={closeNavbar}>
+
+                {/* Messages */}
+                <NavDropdown.Item
+                  as={Link}
+                  to="/messages"
+                  onClick={closeNavbar}
+                >
                   Messages
-                </Nav.Link>
-              </>
-            )}
-          </Nav>
-          <Nav>
-            {user ? (
-              <Button variant="outline-light" onClick={handleLogout}>
-                Logout
-              </Button>
+                </NavDropdown.Item>
+
+                {/* Admin Dashboard */}
+                {user.is_admin && (
+                  <>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item
+                      as={Link}
+                      to="/admin"
+                      onClick={closeNavbar}
+                    >
+                      Admin Dashboard
+                    </NavDropdown.Item>
+                  </>
+                )}
+
+                {/* Logout */}
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
             ) : (
+              // Login/Register links when logged out
               <>
                 <Nav.Link as={Link} to="/login" onClick={closeNavbar}>
                   Login
