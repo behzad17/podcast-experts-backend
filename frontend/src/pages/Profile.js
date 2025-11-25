@@ -47,6 +47,8 @@ const Profile = () => {
         if (userData?.user_type === "expert") {
           try {
             const response = await api.get("/experts/my-profile/");
+            console.log("Expert profile API response:", response.data);
+            console.log("profile_picture_display_url:", response.data?.profile_picture_display_url);
             setProfile(response.data);
           } catch (error) {
             if (error.response?.status === 404) {
@@ -200,7 +202,21 @@ const Profile = () => {
               </Button>
             </Card.Header>
             <Card.Body>
-              {profile.profile_picture_display_url && (
+              {/* Debug info - remove after fixing */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="mb-3 p-2 bg-light rounded">
+                  <small>
+                    <strong>Debug:</strong> profile_picture_display_url = {profile.profile_picture_display_url ? 
+                      `"${profile.profile_picture_display_url.substring(0, 50)}..."` : 
+                      "null/undefined"}
+                  </small>
+                </div>
+              )}
+              
+              {profile.profile_picture_display_url && 
+               typeof profile.profile_picture_display_url === 'string' &&
+               profile.profile_picture_display_url.trim() !== "" && 
+               (profile.profile_picture_display_url.startsWith("http://") || profile.profile_picture_display_url.startsWith("https://")) && (
                 <div className="text-center mb-4">
                   <img
                     src={profile.profile_picture_display_url}
@@ -212,10 +228,27 @@ const Profile = () => {
                       objectFit: "cover",
                     }}
                     onError={(e) => {
+                      // Log error for debugging
+                      console.error("Failed to load profile image:", profile.profile_picture_display_url, e);
                       // Hide image if it fails to load (404 or other error)
                       e.target.style.display = "none";
                     }}
+                    onLoad={() => {
+                      console.log("Profile image loaded successfully:", profile.profile_picture_display_url);
+                    }}
                   />
+                </div>
+              )}
+              
+              {/* Show message if image URL is missing or invalid */}
+              {(!profile.profile_picture_display_url || 
+                (typeof profile.profile_picture_display_url === 'string' && profile.profile_picture_display_url.trim() === "") ||
+                !profile.profile_picture_display_url.startsWith("http")) && 
+               currentUser?.user_type === "expert" && (
+                <div className="text-center mb-4">
+                  <Alert variant="info" className="d-inline-block">
+                    No profile picture available. Please upload one in Edit Profile.
+                  </Alert>
                 </div>
               )}
 
