@@ -92,7 +92,40 @@ class ExpertProfileSerializer(serializers.ModelSerializer):
 
     def get_profile_picture_display_url(self, obj):
         """Return Cloudinary URL for profile picture"""
-        return obj.profile_picture_url
+        if not obj:
+            return None
+        
+        # Try to get URL from the model property first
+        url = obj.profile_picture_url
+        
+        # If property returned a valid URL (starts with http/https), return it
+        if url and isinstance(url, str) and (url.startswith('http://') or url.startswith('https://')):
+            return url
+        
+        # If property returned empty string or None, try alternative methods
+        if obj.profile_picture:
+            # If it's a file field with a url attribute, use that
+            if hasattr(obj.profile_picture, 'url'):
+                file_url = obj.profile_picture.url
+                if file_url and (file_url.startswith('http://') or file_url.startswith('https://')):
+                    return file_url
+            
+            # If it has a name, try to generate Cloudinary URL
+            if hasattr(obj.profile_picture, 'name') and obj.profile_picture.name:
+                try:
+                    from cloudinary.utils import cloudinary_url
+                    clean_name = str(obj.profile_picture.name).lstrip('/')
+                    # Remove any leading path separators
+                    if clean_name.startswith('expert_profiles/'):
+                        clean_name = clean_name
+                    cloudinary_url_result, _ = cloudinary_url(clean_name, secure=True, resource_type="image")
+                    if cloudinary_url_result and (cloudinary_url_result.startswith('http://') or cloudinary_url_result.startswith('https://')):
+                        return cloudinary_url_result
+                except Exception:
+                    pass
+        
+        # Return None if no valid URL could be generated
+        return None
 
     def get_likes_count(self, obj):
         return obj.get_likes_count()
