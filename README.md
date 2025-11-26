@@ -16,6 +16,8 @@ A full-stack web application for discovering, sharing, and managing contact betw
 - [User Stories](#user-stories)
 - [Frontend Pages Overview](#frontend-pages-overview)
 - [Design & UX](#design--ux)
+- [Screenshots](#screenshots)
+- [Wireframes](#wireframes)
 - [Models Explained](#models-explained)
 - [How the Site Works](#how-the-site-works)
 - [LO4 – Front-End Interactivity](#lo4--front-end-interactivity--api-integration-distinction-level-summary)
@@ -28,13 +30,12 @@ A full-stack web application for discovering, sharing, and managing contact betw
 - [Testing](#testing)
 - [Project Management](#project-management-agile)
 - [Future Improvements](#future-improvements)
-- [Screenshots](#screenshots)
-- [Wireframes](#wireframes)
 - [Contact](#contact)
 - [License](#license)
 - [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
 - [Conclusion](#conclusion)
+
 
 
 ## Project Overview
@@ -292,6 +293,42 @@ To improve user experience beyond basic functionality:
 These decisions directly address previous feedback about UX clarity and user feedback.
 
 ---
+
+## 📸 Screenshots
+
+### Home Page
+![Home Page](screenshots/homepage.png)  
+Shows the main podcasts list with category filters, search, and responsive card layout.
+
+### Podcast Detail
+![Podcast Detail](screenshots/podcast_detail.png)  
+Displays a single podcast with comments, likes, and CRUD operations for comments (edit/delete for the owner).
+
+### Admin Panel
+![Admin Panel](screenshots/admin_panel.png)  
+Demonstrates Django Admin managing podcasts, experts and users, and verifies that data from the React frontend is correctly stored.
+
+### Mobile Navigation
+![Mobile Navigation](screenshots/mobile_nav.png)  
+Shows the responsive navbar and hamburger menu, with login-aware links and mobile-friendly navigation.
+
+
+## 🗂 Wireframes
+
+Low-fidelity wireframes were created early in the design process to define layout, navigation flow, and key interactions before building the React frontend.
+
+![Wireframes](docs/design/wireframes/wireframes.png)
+
+These wireframes cover the core user journeys:
+
+- **Home / Podcast List** – card layout, search area, category filters  
+- **Registration / Login** – simple input flow with clear labels  
+- **Podcast Detail** – image, description, comments section and action buttons  
+- **Expert Create / Expert Detail** – fields for bio, links, categories and profile image  
+- **Messages / Inbox** – two-column chat layout with thread list + active conversation  
+- **Contact Page** – form structure and supporting content  
+
+These wireframes guided the structure, spacing, and interactive elements now present in the final React UI and directly support LO2 (design choices) and LO4 (frontend behaviour).
 
 ## Models Explained
 
@@ -1118,43 +1155,6 @@ Analytics dashboard for podcasters and experts
 Social media integrations and deep links
 Podcast episode management
 Expert verification / endorsement system
-
-
-## 📸 Screenshots
-
-### Home Page
-![Home Page](screenshots/homepage.png)  
-Shows the main podcasts list with category filters, search, and responsive card layout.
-
-### Podcast Detail
-![Podcast Detail](screenshots/podcast_detail.png)  
-Displays a single podcast with comments, likes, and CRUD operations for comments (edit/delete for the owner).
-
-### Admin Panel
-![Admin Panel](screenshots/admin_panel.png)  
-Demonstrates Django Admin managing podcasts, experts and users, and verifies that data from the React frontend is correctly stored.
-
-### Mobile Navigation
-![Mobile Navigation](screenshots/mobile_nav.png)  
-Shows the responsive navbar and hamburger menu, with login-aware links and mobile-friendly navigation.
-
-
-## 🗂 Wireframes
-
-Low-fidelity wireframes were created early in the design process to define layout, navigation flow, and key interactions before building the React frontend.
-
-![Wireframes](docs/design/wireframes/wireframes.png)
-
-These wireframes cover the core user journeys:
-
-- **Home / Podcast List** – card layout, search area, category filters  
-- **Registration / Login** – simple input flow with clear labels  
-- **Podcast Detail** – image, description, comments section and action buttons  
-- **Expert Create / Expert Detail** – fields for bio, links, categories and profile image  
-- **Messages / Inbox** – two-column chat layout with thread list + active conversation  
-- **Contact Page** – form structure and supporting content  
-
-These wireframes guided the structure, spacing, and interactive elements now present in the final React UI and directly support LO2 (design choices) and LO4 (frontend behaviour).
 
 
 ## 📞 Contact
