@@ -16,33 +16,17 @@ A full-stack web application for discovering, sharing, and managing contact betw
 - [User Stories](#user-stories)
 - [Frontend Pages Overview](#frontend-pages-overview)
 - [Design & UX](#design--ux)
-  - [Design Process & File Locations](#design-process--file-locations)
-  - [Colour Palette](#colour-palette)
-  - [Typography](#typography)
-  - [UX Enhancements](#ux-enhancements)
 - [Models Explained](#models-explained)
 - [How the Site Works](#how-the-site-works)
-- [LO4 – Front-End Interactivity & API Integration](#lo4--front-end-interactivity--api-integration-distinction-level-summary)
+- [LO4 – Front-End Interactivity](#lo4--front-end-interactivity--api-integration-distinction-level-summary)
 - [Frontend Architecture & React Features](#frontend-architecture--react-features)
-  - [React Hooks Usage](#react-hooks-usage)
-  - [Advanced JavaScript Features](#advanced-javascript-features)
-  - [Reusable Components](#reusable-components)
-- [Frontend URL](#frontend-url)
-- [Admin Panel URL](#admin-panel-url)
 - [API Endpoints](#api-endpoints)
-- [How to Use the Site](#how-to-use-the-site)
-- [Environment Variables](#environment-variables)
-- [Installation (Local Setup)](#installation-local-setup)
-- [Deployment](#deployment)
-  - [Frontend Build & Deployment](#frontend-build--deployment)
-  - [Backend Deployment Guide](#backend-deployment-guide)
 - [CRUD Operations](#crud-operations)
-  - [Overall CRUD Overview](#overall-crud-overview)
+- [Environment Variables](#environment-variables)
+- [Installation](#installation-local-setup)
+- [Deployment](#deployment)
 - [Testing](#testing)
-  - [Backend API Testing](#backend-api-testing)
-  - [Frontend Manual Testing](#frontend-manual-testing)
-  - [API Testing (Postman, Browser, Django Admin)](#api-testing-postman-browser-django-admin)
-- [Project Management (Agile)](#project-management-agile)
+- [Project Management](#project-management-agile)
 - [Future Improvements](#future-improvements)
 - [Screenshots](#screenshots)
 - [Wireframes](#wireframes)
@@ -50,91 +34,186 @@ A full-stack web application for discovering, sharing, and managing contact betw
 - [License](#license)
 - [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
+- [Conclusion](#conclusion)
 
----
 
 ## Project Overview
 
-CONNECT is a platform where users can:
+CONNECT is a full-stack platform designed to connect podcasters with experts and specialists across different fields. The application allows users to discover podcasts, explore expert profiles, communicate through messaging, and manage content through a clean, responsive React interface backed by a Django REST API.
 
-- Discover and browse podcasts  
-- Create and manage their own podcasts (for podcasters)  
-- Comment on and like podcasts  
-- Communicate with experts and other users via messaging  
-- Browse expert profiles and connect with industry specialists  
-- Access comprehensive About and Contact pages  
+The system provides:
 
-The backend is built with **Django** and **Django REST Framework (DRF)**.  
-The frontend is built with **React** and consumes the REST API via Axios.  
-Media files (podcast images, expert pictures) are stored using **Cloudinary**.
+- A public directory of podcasts and experts  
+- Authenticated features such as comments, likes, bookmarks, messaging, and profile management  
+- Full CRUD functionality for podcasts, expert profiles, and comments  
+- A modern, mobile-friendly UI with real-time updates through React state  
+- Centralised media storage using Cloudinary  
+- A single deployed Heroku application serving both backend API and frontend build  
 
----
+This combination of technologies results in an end-to-end, production-style application that integrates user roles, media, authentication, CRUD operations, and interactive UX.
+
 
 ## 🎯 Project Goals
 
 ### 1. User-Focused Goals
-
-- Provide an easy way for users to discover podcasts and experts  
-- Allow users to create profiles and interact through messaging  
-- Offer a smooth, consistent user experience across all devices  
-- Provide meaningful and clear feedback during navigation and form submission  
+- Enable visitors to easily browse podcasts and discover experts in different fields.  
+- Provide a smooth and intuitive experience for creating podcasts, managing expert profiles, commenting, liking, and messaging.  
+- Ensure users always know their authentication state with a clear and dynamic navbar.  
+- Deliver consistent feedback through toast notifications, inline validation, and instant UI updates.
 
 ### 2. Technical Goals
-
-- Build a modular and maintainable React frontend using reusable components  
-- Expose a secure Django REST API for authentication and CRUD operations  
-- Implement full validation on both frontend and backend  
-- Use GitHub Issues, Milestones, and a Kanban board for Agile project management  
+- Build a modular and maintainable frontend using React, reusable components, and modern JavaScript practices.  
+- Implement a secure Django REST API with JWT authentication.  
+- Provide complete CRUD operations across podcasts, experts, comments, likes, messages, and profiles.  
+- Maintain a clean codebase with separation of concerns between frontend and backend.  
+- Use GitHub Issues, Milestones and a Kanban board to follow an Agile workflow.
 
 ### 3. Accessibility & Responsiveness
-
-- Full responsiveness across desktop, tablet, and mobile  
-- Clear UI elements with sufficient contrast  
-- Accessible form inputs, labels, and buttons  
+- Ensure the interface works seamlessly on mobile, tablet, and desktop.  
+- Follow WCAG-friendly contrast and typography guidelines.  
+- Provide accessible form elements, clear focus states and descriptive labels.
 
 ### 4. Platform Purpose
+- Create a hub where podcasters can publish and present their content.  
+- Allow experts to showcase their knowledge and be discovered by podcasters who need them.  
+- Provide a reliable space for direct communication through a built-in messaging system.
 
-- Create a hub where podcasters can showcase content  
-- Enable experts to present their expertise and be discovered  
-- Provide a reliable environment for communication between users and experts  
-
----
 
 ## 👥 User Stories
 
-A selection of key user stories implemented in this project:
-
-- As a **visitor**, I can browse podcasts so that I can discover interesting content.  
-- As a **visitor**, I can view expert profiles so that I can learn about their expertise.  
-- As a **user**, I can register and log in so that I can access additional features.  
-- As a **podcaster**, I can create new podcasts so that I can share content with listeners.  
-- As a **podcaster**, I can edit or delete my podcasts so that I can maintain up-to-date information.  
-- As an **expert**, I can create and edit my expert profile so that others can see my skills and contact me.  
-- As a **user**, I can leave comments on a podcast so that I can give feedback and start discussions.  
-- As a **user**, I can reply to and edit my comments so that I can correct or extend my input.  
-- As a **user**, I can send messages to other users/experts so that I can communicate privately.  
-- As a **user**, I can bookmark podcasts or experts so that I can easily return to them later.  
-- As a **user**, I can clearly see when I’m logged in and access a user menu with relevant options.  
-- As an **admin**, I can manage users, podcasts, comments, and experts through the admin panel.
+The following user stories define the core functionality of the CONNECT platform.  
+They are grouped by user type for clarity and follow the standard format:  
+**As a [role], I want to [action], so that [benefit].**
 
 ---
+
+### 🔹 Visitor (Unauthenticated User)
+- As a visitor, I want to browse podcasts so that I can discover interesting content.  
+- As a visitor, I want to view expert profiles so that I can learn about their background and expertise.  
+- As a visitor, I want to view podcast details so that I can understand the content before registering.
+
+---
+
+### 🔹 Registered User
+- As a user, I want to register and log in so that I can access member-only features.  
+- As a user, I want to clearly see when I am logged in so that I understand which actions are available to me.  
+- As a user, I want to comment on podcasts so that I can share feedback and join discussions.  
+- As a user, I want to reply to comments so that I can participate in conversations.  
+- As a user, I want to edit or delete my own comments so that I can correct mistakes.  
+- As a user, I want to send messages to other users or experts so that I can communicate privately.  
+- As a user, I want to bookmark podcasts and experts so that I can easily return to them.
+
+---
+
+### 🔹 Podcaster
+- As a podcaster, I want to create new podcasts so that I can share my content with others.  
+- As a podcaster, I want to edit my podcasts so that I can update information when necessary.  
+- As a podcaster, I want to delete my podcasts so that I can manage my content effectively.  
+- As a podcaster, I want others to comment and interact with my podcast so that engagement increases.
+
+---
+
+### 🔹 Expert
+- As an expert, I want to create a detailed expert profile so that podcasters can discover me.  
+- As an expert, I want to update my expertise, bio, and social links so that my information remains accurate.  
+- As an expert, I want to receive messages from users so that I can connect with podcasters who need my skills.
+
+---
+
+### 🔹 Admin (Django Admin)
+- As an admin, I want to manage users, podcasts, experts, comments and messages so that the platform remains safe and functional.  
+- As an admin, I want visibility of all entries so that I can troubleshoot issues and moderate content.
+
+---
+
+These user stories form the basis of the platform’s features and guided the design, development, and testing of the CONNECT application.
+
 
 ## 🗺 Frontend Pages Overview
 
-The main React pages and their roles:
-
-- **Home / Podcasts List** – Displays all podcasts with category-based filtering and search.  
-- **Podcast Detail Page** – Shows full podcast information, comments, likes, and actions.  
-- **Podcast Create / Edit Pages** – Forms for creating and updating podcasts (podcaster-only).  
-- **Experts List** – Directory of experts with category filters.  
-- **Expert Detail Page** – Detailed information about a single expert, plus option to send a message.  
-- **Profile Page** – Allows logged-in users to view their profile and open the Profile Edit modal.  
-- **Messages / Inbox** – Displays conversations and allows near real-time chat using polling.  
-- **Auth Pages (Login / Register)** – Authentication flows for users.  
-- **About Page** – Explains the purpose and background of the platform.  
-- **Contact Page** – Provides a form and information for contacting the site owner.  
+The React frontend consists of several pages and components that work together to provide a smooth, interactive experience for both visitors and authenticated users. Each page communicates with the Django REST API via Axios and updates the UI using React state.
 
 ---
+
+### 🔹 Public Pages
+
+#### **Home / Podcasts List**
+- Displays all podcasts in a responsive card layout.
+- Supports category filtering and keyword search.
+- Fetches data from `/api/podcasts/` and updates instantly when filters change.
+
+#### **Podcast Detail**
+- Shows full podcast information including image, description, category and link.
+- Includes comments, replies, likes and bookmark actions.
+- Interactive features (comment, like, reply, edit, delete) are all connected to the API.
+
+#### **Experts List**
+- Lists all expert profiles.
+- Supports category-based filtering.
+- Fetches from `/api/experts/`.
+
+#### **Expert Detail**
+- Displays an expert’s bio, expertise areas, social links and profile picture.
+- Allows users to send a message directly to the expert.
+
+#### **About & Contact Pages**
+- Provides background information and a contact form.
+- Contact form sends data to the backend and shows confirmation toasts.
+
+---
+
+### 🔹 Authentication Pages
+
+#### **Login**
+- Validates credentials and sends POST request to `/api/auth/login/`.
+- On success: stores tokens, updates navbar and redirects user.
+
+#### **Register**
+- Contains validation (password match, strong password, required fields).
+- Creates a new user via `/api/auth/register/` and logs them in automatically.
+
+---
+
+### 🔹 User Pages
+
+#### **Profile Page**
+- Displays the user’s information (role, email, profile details).
+- Includes the **Profile Edit Modal**, allowing updates to bio, links, categories and profile picture.
+
+#### **My Podcasts / My Profile**
+- Podcasters see a list of their own podcasts with edit/delete actions.
+- Experts see buttons to manage their expert profile.
+
+---
+
+### 🔹 Content Creation / Editing Pages
+
+#### **Podcast Create / Edit**
+- Forms for podcasters to create or update podcasts.
+- Includes inline validation for required fields and URL format.
+- On submission: sends data via POST/PUT and updates UI instantly.
+
+#### **Expert Profile Create / Edit**
+- Allows experts to build a rich profile with categories, links and images.
+- Validates input and uploads profile pictures to Cloudinary.
+
+---
+
+### 🔹 Messaging System
+
+#### **Inbox (Messages List)**
+- Displays all message threads fetched from `/api/messages/`.
+- React polling keeps messages updated without page reloads.
+
+#### **Conversation View**
+- Chat-like layout showing messages between two users.
+- Allows sending new messages via POST and updates messages instantly.
+- Shows toast notifications for success and errors.
+
+---
+
+All pages are built with reusable components, React hooks, Axios integration and responsive layout, supporting LO4 for interactive front-end development.
+
 
 ## Design & UX
 
@@ -216,84 +295,309 @@ These decisions directly address previous feedback about UX clarity and user fee
 
 ## Models Explained
 
-### 1. `CustomUser`
-
-- Custom user model for authentication  
-- Roles: listener, podcaster, expert, admin  
-
-### 2. `PodcasterProfile`
-
-- Linked one-to-one with `CustomUser`  
-- Stores podcaster bio, website, social links  
-
-### 3. `ExpertProfile`
-
-- Linked one-to-one with `CustomUser`  
-- Contains expertise areas, bio, website, social media, featured flag  
-- Profile picture stored via Cloudinary  
-
-### 4. `Category`
-
-- Used to categorise podcasts and experts  
-- Supports filtering and discovery  
-
-### 5. `Podcast`
-
-- Represents podcast entries  
-- Fields: title, description, owner, category, image, link, approval, featured, timestamps  
-- Full CRUD (owner-only editing & deletion)  
-
-### 6. `PodcastComment`
-
-- Nested comments and replies  
-- Owner-only editing and deletion  
-
-### 7. `PodcastLike`
-
-- Tracks which users like which podcasts  
-
-### 8. `UserMessage`
-
-- Direct messages between users and experts  
-- Conversation-level interactions  
-
-### 9. `Bookmark`
-
-- Users can bookmark podcasts and experts  
+Below is an overview of the main Django models powering the CONNECT platform.  
+Each model includes its purpose, key fields and the CRUD operations supported via the REST API.
 
 ---
+
+### 🔹 1. `CustomUser`
+The system uses a fully custom user model extending Django’s `AbstractUser`.
+
+**Purpose:**  
+Authentication, user identity, and role handling (listener, podcaster, expert, admin).
+
+**Key Features:**  
+- JWT authentication (login/register/logout)  
+- Roles determine access (e.g., only podcasters can create podcasts)  
+- Auto-linked to profile models (PodcasterProfile / ExpertProfile)
+
+**CRUD:**  
+- Create (via registration)  
+- Read (profile page)  
+- Update (profile edit modal)  
+- Delete (not exposed to users)
+
+---
+
+### 🔹 2. `PodcasterProfile`
+Linked one-to-one with `CustomUser`.
+
+**Purpose:**  
+Holds extra information for users who create podcasts.
+
+**Fields:**  
+- Bio, website, social links  
+- One-to-one `user` field  
+
+**CRUD:**  
+- Read (Profile page)  
+- Update (Profile Edit Modal)
+
+---
+
+### 🔹 3. `ExpertProfile`
+One of the central models in the platform.
+
+**Purpose:**  
+Allows experts to showcase their experience and be discovered by podcasters.
+
+**Fields:**  
+- Bio, expertise areas  
+- Website, LinkedIn, social links  
+- Profile image (stored in Cloudinary)  
+- Categories (many-to-many)  
+- Featured flag  
+- One-to-one with `CustomUser`
+
+**CRUD:**  
+- Create (expert profile setup)  
+- Read (experts list + detail page)  
+- Update (Profile Edit Modal)  
+- Delete (optional—API supports it)
+
+---
+
+### 🔹 4. `Category`
+A shared model used for both Podcasts and Experts.
+
+**Purpose:**  
+Enables filtering and discovery by domain or topic.
+
+**Fields:**  
+- `name` (unique)  
+- Many-to-many links to podcasts and expert profiles
+
+**CRUD:**  
+- Admin-only (not editable by users)
+
+---
+
+### 🔹 5. `Podcast`
+The core content model.
+
+**Purpose:**  
+Represents a podcast entry created by a podcaster.
+
+**Fields:**  
+- Title, description, external link  
+- Category (foreign key)  
+- Image (Cloudinary upload)  
+- `owner` (the podcaster)  
+- Boolean flags: `featured`, `approved`  
+- Timestamps
+
+**CRUD:**  
+- Create (podcasters only)  
+- Read (public list + detail)  
+- Update (owner only — via Podcast Edit Modal)  
+- Delete (owner only)
+
+---
+
+### 🔹 6. `PodcastComment`
+Supports comments + threaded replies.
+
+**Purpose:**  
+Enable community interaction on podcast pages.
+
+**Fields:**  
+- Text  
+- Author (user)  
+- Parent comment (for replies)  
+- Podcast (foreign key)  
+- Timestamps
+
+**CRUD:**  
+- Create (logged-in users)  
+- Read (podcast detail page)  
+- Update (owner only)  
+- Delete (owner only)
+
+---
+
+### 🔹 7. `PodcastLike`
+Tracks which user liked which podcast.
+
+**Purpose:**  
+Like/unlike functionality and like counts.
+
+**Fields:**  
+- User  
+- Podcast
+
+**CRUD:**  
+- Create (like)  
+- Delete (unlike)
+
+---
+
+### 🔹 8. `UserMessage`
+This model powers the messaging system.
+
+**Purpose:**  
+Allow users and experts to communicate privately.
+
+**Fields:**  
+- Sender  
+- Receiver  
+- Text content  
+- Timestamp  
+- Conversation key (optional/thread grouping)
+
+**CRUD:**  
+- Create (sending a message)  
+- Read (inbox + conversation threads)  
+- Update: not allowed (messages immutable)  
+- Delete: not implemented (kept for history)
+
+---
+
+### 🔹 9. `Bookmark`
+Allows users to bookmark podcasts and experts.
+
+**Purpose:**  
+Quick navigation back to saved content.
+
+**Fields:**  
+- User  
+- Podcast (optional)  
+- Expert (optional)
+
+**CRUD:**  
+- Create (bookmark action)  
+- Delete (remove bookmark)
+
 
 ## How the Site Works
 
-- **Browse Podcasts:** Anyone can access lists and detail pages.  
-- **Register/Login:** Required to create podcasts, comment, like, and message.  
-- **Podcasters:** Can create and manage their own podcasts.  
-- **Experts:** Can create and maintain expert profiles.  
-- **Users:** Can comment, reply, like, and bookmark content.  
-- **Messaging:** Users and experts can exchange direct messages.  
-- **Admin:** Manages all data in Django Admin.  
-- **Responsive:** Layout works across desktop, tablet, and mobile.  
+The CONNECT platform follows a clear end-to-end flow, combining a Django REST API backend with an interactive React frontend.
+
+### 1. Users & Roles
+There are three main user types:
+- **Visitors:** Can browse podcasts and expert profiles.
+- **Registered Users:** Can comment, like, message, create podcasts (if set as podcaster), and bookmark content.
+- **Experts:** Can create/edit an expert profile and receive messages from podcasters and listeners.
+
+### 2. React Frontend → Django REST API
+The frontend communicates with the backend exclusively through REST API calls using Axios.  
+Every interactive action triggers an API request:
+
+- Fetch podcasts and experts  
+- Submit login/register forms  
+- Create/edit/delete podcasts  
+- Create/edit/delete comments  
+- Like/unlike a podcast  
+- Send messages and load conversations  
+- Update user or expert profiles (via modals)
+
+Responses from the API immediately update the UI using React state, keeping the interface dynamic without full page reloads.
+
+### 3. Authentication Flow
+- When a user logs in, the backend returns **JWT access + refresh tokens**.
+- Axios interceptors automatically attach tokens to protected requests.
+- The navbar updates to show a login-aware dropdown (`Hi, username`), improving clarity of authentication state.
+
+### 4. Media Handling (Cloudinary)
+- Podcast images and expert profile pictures are uploaded through the API.
+- Django handles uploads using a custom Cloudinary storage backend.
+- The frontend receives and displays Cloudinary URLs instantly after any update.
+
+### 5. Messaging System
+- Users can open their inbox and see all conversations.
+- Selecting a conversation loads its message thread.
+- Sending a message triggers a POST request and updates the chat window immediately.
+- Polling is used to refresh new messages in near real time.
+
+### 6. Comments & Interactions
+- Each podcast has a comments section:
+  - Nested replies  
+  - Edit/delete for the owner  
+  - Live refresh after any action  
+- Likes (reactions) update instantly and reflect current user state.
+
+### 7. Administration
+Django Admin provides full backend control for staff users:
+- Manage users, podcasts, experts, comments, messages, categories
+- Inspect database data for debugging or moderation
+
+### 8. Responsive & Accessible UI
+- Mobile navigation uses a collapsing hamburger menu.
+- Buttons, forms and links follow consistent spacing and typography.
+- Toast notifications provide clear user feedback for all CRUD actions.
 
 ---
+
+This section clearly explains how users interact with the system, how the frontend and backend communicate, and how the application functions as a complete end-to-end product.
+
 
 ## LO4 – Front-End Interactivity & API Integration (Distinction-Level Summary)
 
-The front-end of this project delivers a fully interactive, React-based user experience that consumes and manipulates API data from a Django REST backend. The application implements complete CRUD functionality across **Podcasts**, **Experts/Profiles**, **Comments**, and **Messaging**, with immediate UI updates through React state management and consistent toast notifications for success and error handling.
+The CONNECT frontend is a fully interactive React application that consumes and manipulates data from the Django REST API in real time. It demonstrates complete CRUD flows for podcasts, experts, comments and messages, with clear user feedback and no full-page reloads.
 
-All forms include robust client-side validation (required fields, minimum length constraints, URL validation, whitespace prevention), inline error messages, and disabled submit buttons for invalid input. This ensures data integrity before interacting with the API and delivers a smooth, predictable user experience.
+### Interactive UI + API Integration
 
-Authentication state is clearly represented through a redesigned navigation bar: logged-out users see only public navigation and authentication options, while logged-in users see a personalized user menu (`Hi, username`) containing **Profile**, **Create**, **Messages**, **My Podcasts/My Profile**, **Admin** (if applicable), and **Logout**. This directly addresses earlier assessor feedback regarding unclear login state.
+- The **Home / Podcasts List** page fetches podcast data from `/api/podcasts/` using Axios and updates the UI when:
+  - The user changes **category filters**.
+  - The user performs a **search**.
+  - A new podcast is created or an existing one is updated/deleted.
+- The **Podcast Detail** page loads a single podcast, its comments and reactions, and allows users to:
+  - Add comments and replies.
+  - Edit and delete their own comments.
+  - Like/unlike the podcast, with the like count updated instantly.
 
-UX behaviour is consistent and responsive:
+All of these actions are wired to the API through `async/await` Axios calls and React state updates.
 
-- Modals close automatically when actions succeed  
-- List views update instantly after CRUD operations  
-- API errors are surfaced with friendly, high-level messages  
-- No full page reloads are required  
+### Modals and Inline Editing
 
-Together, these features demonstrate strong competence in front-end engineering, API-driven UI design, and user-centred interaction patterns.
+- **`PodcastEditModal`** enables **in-place editing** of podcasts without leaving the list view.  
+  - On success, the modal closes automatically, a toast notification appears, and the list is updated immediately.
+- **`ProfileEditModal`** allows users and experts to update their profile data (bio, social links, categories, profile picture) directly from the profile page.
+  - Validation errors are shown inline below each field.
+  - Successful updates trigger toasts and UI refresh.
+
+These modals provide clear examples of LO4: interactive components that directly manipulate API data.
+
+### Messaging & Near Real-Time Behaviour
+
+- The **Messages / Inbox** page lists conversations fetched from `/api/messages/`.
+- Selecting a conversation opens a chat-like interface which **polls the API** periodically to check for new messages.
+- Sending a message:
+  - Calls the API via Axios.
+  - Immediately appends the new message to the chat window.
+  - Shows a success toast or an error toast if something goes wrong.
+
+This demonstrates interactive, stateful UI that responds to API changes in near real time.
+
+### Validation, Error Handling & Feedback
+
+Across the frontend:
+
+- Forms (login, registration, podcast create/edit, expert profile, comments, messages) implement:
+  - **Required field checks**
+  - **Minimum length checks**
+  - **URL validation** for external links
+  - Basic whitespace checks (no empty-only-space submissions)
+- Errors from the API (4xx/5xx) are:
+  - Parsed and shown as **inline error messages** or
+  - Displayed as **toast notifications** (react-toastify) with clear, user-friendly wording.
+- Submit buttons are **disabled while invalid or during submission**, preventing duplicate requests and improving UX.
+
+### Navigation & Login State
+
+- The **Navbar** is fully aware of the authentication state:
+  - Logged-out users see links like *Home*, *Login*, *Register*.
+  - Logged-in users see: *Hi, username* with a dropdown for *Profile*, *My Podcasts / My Profile*, *Create*, *Messages*, and *Logout*.  
+  - Admin users see an extra link to the **Django admin**.
+- On mobile, a **hamburger menu** is used. It auto-closes after selecting a link, improving usability on small screens.
 
 ---
+
+These features collectively demonstrate:
+
+- A modern, **interactive front-end** that manipulates API data (LO4 overall).  
+- **Clear feedback and error handling** for all key user actions (LO4.4).  
+- A working system with **no critical functional defects** and consistent behaviour across devices (LO4.5).  
+
 
 ## Frontend Architecture & React Features
 
@@ -351,46 +655,98 @@ Staff users only.
 
 ## API Endpoints
 
-### Podcasts
-
-- `GET /api/podcasts/` – List podcasts  
-- `GET /api/podcasts/<id>/` – Podcast detail  
-- `POST /api/podcasts/create/` – Create podcast  
-- `PUT /api/podcasts/<id>/` – Update podcast  
-- `DELETE /api/podcasts/<id>/` – Delete podcast  
-- `GET /api/podcasts/categories/` – List categories  
-
-### Comments
-
-- `GET /api/podcasts/<id>/comments/` – List comments for a podcast  
-- `POST /api/podcasts/<id>/comments/` – Create comment/reply  
-
-### Reactions
-
-- `GET /api/podcasts/<id>/reactions/`  
-- `POST /api/podcasts/<id>/reactions/`  
-- `DELETE /api/podcasts/<id>/reactions/<reaction_id>/`  
-
-### Experts
-
-- `GET /api/experts/`  
-- `GET /api/experts/<id>/`  
-- `POST /api/experts/`  
-- `PUT /api/experts/<id>/`  
-- `DELETE /api/experts/<id>/`  
-
-### Authentication
-
-- `POST /api/auth/register/`  
-- `POST /api/auth/login/`  
-- `POST /api/auth/logout/`  
-
-### User Messages
-
-- `GET /api/messages/`  
-- `POST /api/messages/`  
+Below is an overview of the main API endpoints used by the React frontend.  
+All endpoints return JSON and follow RESTful conventions, supporting full CRUD functionality across the system.
 
 ---
+
+### 🔹 Podcasts API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| GET | `/api/podcasts/` | Retrieve all podcasts (public list). Supports filtering/search in frontend. |
+| GET | `/api/podcasts/<id>/` | Retrieve a single podcast including likes and comments. |
+| POST | `/api/podcasts/create/` | Create a new podcast (podcasters only). |
+| PUT | `/api/podcasts/<id>/` | Update an existing podcast (owner only). |
+| DELETE | `/api/podcasts/<id>/` | Delete a podcast (owner only). |
+| GET | `/api/podcasts/categories/` | Get all categories for filtering and creation forms. |
+
+---
+
+### 🔹 Comments API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| GET | `/api/podcasts/<id>/comments/` | Retrieve all comments + threaded replies for the podcast. |
+| POST | `/api/podcasts/<id>/comments/` | Add a comment or reply (logged-in users). |
+| PUT | `/api/comments/<id>/` | Edit a comment (owner only). |
+| DELETE | `/api/comments/<id>/` | Delete a comment (owner only). |
+
+---
+
+### 🔹 Reactions (Likes) API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| GET | `/api/podcasts/<id>/reactions/` | Retrieve like count and whether the user has liked it. |
+| POST | `/api/podcasts/<id>/reactions/` | Like a podcast (logged-in users). |
+| DELETE | `/api/podcasts/<id>/reactions/<reaction_id>/` | Remove like. |
+
+---
+
+### 🔹 Experts API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| GET | `/api/experts/` | Retrieve list of all experts. |
+| GET | `/api/experts/<id>/` | Retrieve detailed information about a single expert. |
+| POST | `/api/experts/` | Create an expert profile (expert users). |
+| PUT | `/api/experts/<id>/` | Update expert profile (owner only). |
+| DELETE | `/api/experts/<id>/` | Delete expert profile (optional). |
+
+---
+
+### 🔹 Authentication API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| POST | `/api/auth/register/` | Register a new user and create default profile. |
+| POST | `/api/auth/login/` | Log in user and return JWT tokens. |
+| POST | `/api/auth/logout/` | Log out user (token invalidation in frontend). |
+
+---
+
+### 🔹 User Messaging API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| GET | `/api/messages/` | Retrieve inbox (conversation list). |
+| GET | `/api/messages/<id>/` | Retrieve all messages in a conversation thread. |
+| POST | `/api/messages/` | Send a new message to another user. |
+
+---
+
+### 🔹 Bookmarks API
+
+| Method | Endpoint | Purpose |
+|--------|----------|----------|
+| POST | `/api/bookmarks/` | Bookmark a podcast or expert. |
+| DELETE | `/api/bookmarks/<id>/` | Remove a bookmark. |
+| GET | `/api/bookmarks/` | Retrieve user’s bookmarks (optional). |
+
+---
+
+### 🔹 Admin API (Django Admin)
+Accessible only to superusers via:
+
+Allows staff users to manage all models:  
+Users, Podcasts, Experts, Comments, Likes, Messages, Categories, Bookmarks.
+
+---
+
+These endpoints support the frontend’s full interactivity and directly fulfil LO3.7 (CRUD) and LO3.10 (API testing and verification).
+
+
 
 ## How to Use the Site
 
@@ -410,7 +766,6 @@ Staff users only.
 
 Create a `.env` file in the project root and add values similar to:
 
-```bash
 # Django Settings
 SECRET_KEY=your-actual-secret-key-here
 DEBUG=True
@@ -431,11 +786,11 @@ CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 
 
+
 ## 🛠 Installation (Local Setup)
 
 ### Backend (Django + DRF)
 
-```bash
 git clone <repository-url>
 cd podcast-experts-backend
 python -m venv venv
@@ -447,7 +802,7 @@ python manage.py migrate
 python manage.py loaddata db_backup_cleaned.json   # optional sample data
 python manage.py createsuperuser
 python manage.py runserver
-```
+
 
 The API will be available at:  
 **http://127.0.0.1:8000/**
@@ -467,11 +822,11 @@ The project is deployed on **Heroku**, using:
 
 ### Build React locally:
 
-```bash
+
 cd frontend
 npm install
 npm run build
-```
+
 
 React generates a production-ready folder:  
 `frontend/build/`
@@ -491,7 +846,6 @@ backend/
 
 #### **Option B — Serve React build directly (recommended)**
 
-```python
 STATICFILES_DIRS = [ BASE_DIR / 'frontend/build' ]
 TEMPLATES[0]['DIRS'] = [ BASE_DIR / 'frontend/build' ]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
@@ -501,7 +855,6 @@ MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 ### React Environment Variables (set at build time)
 
-```bash
 REACT_APP_API_BASE_URL="https://your-api.com" \
 REACT_APP_WEBSITE_URL="https://your-frontend.com" \
 npm run build
@@ -511,11 +864,10 @@ npm run build
 
 ## ☁️ Deploy to Heroku
 
-```bash
 git add frontend/build
 git commit -m "Add updated React production build"
 git push heroku main
-```
+
 
 Heroku will:
 - Install backend dependencies  
@@ -531,17 +883,15 @@ https://your-heroku-app.herokuapp.com/
 
 ---
 
-## 🔧 Backend Deployment Settings
+ ## Backend Deployment Settings
 
 Install required packages:
 
-```bash
 pip install gunicorn whitenoise dj-database-url psycopg[binary] django-cors-headers
-```
+
 
 ### `settings.py`
 
-```python
 import dj_database_url, os
 
 DEBUG = False
@@ -575,6 +925,52 @@ heroku run python manage.py createsuperuser
 ---
 
 ## 📦 CRUD Operations
+
+### Overall CRUD Overview
+
+The CONNECT platform supports full Create, Read, Update, and Delete functionality across its main data models.  
+CRUD operations are implemented through the Django REST Framework backend and consumed by the fully interactive React frontend using Axios.
+
+This section summarises how each part of the system supports CRUD:
+
+#### 🔹 Podcasts
+- **Create:** Podcasters can create new podcast entries via a React form with inline validation.  
+- **Read:** All users (including visitors) can browse and filter podcasts.  
+- **Update:** Owners can edit their own podcasts through the Podcast Edit Modal (React).  
+- **Delete:** Owners can delete their own podcasts, with confirmation dialogs and toast notifications.
+
+#### 🔹 Expert Profiles
+- **Create:** Experts can create a rich profile (bio, expertise, links, categories).  
+- **Read:** Public list + detailed expert page.  
+- **Update:** Profiles can be edited via the Profile Edit Modal.  
+- **Delete:** Optional – supported by the API where allowed.
+
+#### 🔹 Comments & Replies
+- **Create:** Users can post comments and reply to others.  
+- **Read:** Comments load dynamically on the podcast detail page.  
+- **Update:** Users can edit their own comments.  
+- **Delete:** Users can delete their own comments.
+
+#### 🔹 Likes (Reactions)
+- **Create:** Users can like/unlike podcasts.  
+- **Read:** Like count displayed on podcast cards and detail pages.  
+- **Delete:** Unlike = DELETE action in the API.
+
+#### 🔹 User Messaging
+- **Create:** Users can start conversations by sending messages to experts or other users.  
+- **Read:** Inbox fetches all message threads; chat window polls for updates.  
+- **Update:** Messages are immutable (design choice).  
+- **Delete:** Not implemented (messages remain for history).
+
+#### 🔹 User Profiles
+- **Create:** Automatically created when a new user registers.  
+- **Read:** Profile page displays username, role, and profile info.  
+- **Update:** Editable via Profile Edit Modal.  
+- **Delete:** Not supported (account deletion outside project scope).
+
+---
+
+**This overview supports LO3.7 (CRUD on persistent data) and LO4 (interactive frontend with API integration).**
 
 ### Podcasts CRUD
 
@@ -620,7 +1016,6 @@ heroku run python manage.py createsuperuser
 | Update | Profile edit modal | ✅ |
 | Delete | Not in scope | ❌ |
 
----
 
 ## 🧪 Testing
 
@@ -651,17 +1046,59 @@ heroku run python manage.py createsuperuser
 - Responsive design → navbar and hamburger menu work correctly on mobile.
 ---
 
-### API Testing Tools
+### API Testing (Postman, Browser, Django Admin)
 
-- **Postman**  
-- **Browser DevTools**  
-- **Django Admin**
+To ensure that the REST API behaves correctly and that the React frontend consumes it reliably, the following tools and workflows were used.
 
-Ensures requirements for:
-- **LO3.7** CRUD on API  
-- **LO3.10** Endpoint testing  
-- **LO4.4** Error handling  
-- **LO4.5** No functional defects  
+#### Postman
+
+Postman was used to:
+
+- Test **authentication endpoints** (`/api/auth/register/`, `/api/auth/login/`, `/api/auth/logout/`) for:
+  - Correct status codes (201 on register, 200 on login, 401 for invalid credentials).
+  - Correct response payloads (JWT tokens, error messages).
+- Test **CRUD endpoints** for podcasts, experts, comments and messages:
+  - `GET`, `POST`, `PUT`, `DELETE` on `/api/podcasts/` and `/api/experts/`.
+  - Validation errors (e.g. missing fields, invalid URLs).
+- Verify **permission rules**:
+  - Unauthenticated users receive `401` on protected endpoints.
+  - Non-owners receive `403` when trying to update/delete other users’ content.
+
+This confirms that the API contract is correct and matches the behaviour expected by the React frontend.
+
+#### Browser & DevTools
+
+In the browser (Chrome DevTools):
+
+- Network tab was used to inspect all **Axios requests** from the React app:
+  - Check request URLs, methods, headers (including JWT Authorization header), and payloads.
+  - Confirm response status codes and JSON payloads.
+- Verified that:
+  - Form submissions send the correct data to the API.
+  - Error responses (4xx/5xx) are correctly translated into **toast notifications** and inline error messages in the UI.
+  - No full-page reload occurs; updates happen via React state.
+
+This ensures that the **front-end interactivity is correctly wired** to the API and that users receive clear feedback.
+
+#### Django Admin
+
+Django Admin was used to:
+
+- Confirm that data created through the React frontend is actually **persisted in the database**.
+- Manually inspect podcasts, expert profiles, comments, likes and messages.
+- Perform spot-checks when debugging permissions, validation rules, or unexpected API responses.
+
+This provides an additional layer of verification on top of automated API tests.
+
+---
+
+These testing activities demonstrate that:
+
+- **LO3.7** – CRUD operations on persistent data are implemented and verifiable via the API.  
+- **LO3.10** – API endpoints have been systematically tested using Postman, the browser, and Django Admin.  
+- **LO4.4** – Errors are handled gracefully and surfaced to the user through clear UI messages.  
+- **LO4.5** – No major functional defects remain in the submitted version of the application.  
+  
 
 # Project Management (Agile)
 This project followed an Agile-inspired workflow using GitHub:
@@ -686,37 +1123,39 @@ Expert verification / endorsement system
 ## 📸 Screenshots
 
 ### Home Page
-![Home Page](screenshots/homepage.png)
+![Home Page](screenshots/homepage.png)  
+Shows the main podcasts list with category filters, search, and responsive card layout.
 
 ### Podcast Detail
-![Podcast Detail](screenshots/podcast_detail.png)
+![Podcast Detail](screenshots/podcast_detail.png)  
+Displays a single podcast with comments, likes, and CRUD operations for comments (edit/delete for the owner).
 
 ### Admin Panel
-![Admin Panel](screenshots/admin_panel.png)
+![Admin Panel](screenshots/admin_panel.png)  
+Demonstrates Django Admin managing podcasts, experts and users, and verifies that data from the React frontend is correctly stored.
 
 ### Mobile Navigation
-![Mobile Navigation](screenshots/mobile_nav.png)
+![Mobile Navigation](screenshots/mobile_nav.png)  
+Shows the responsive navbar and hamburger menu, with login-aware links and mobile-friendly navigation.
 
----
 
 ## 🗂 Wireframes
 
-Low-fidelity wireframes for the main pages:
+Low-fidelity wireframes were created early in the design process to define layout, navigation flow, and key interactions before building the React frontend.
 
 ![Wireframes](docs/design/wireframes/wireframes.png)
 
-These cover:
-- Home  
-- Registration  
-- Login  
-- Podcast List  
-- Podcast Detail  
-- Expert Create  
-- Expert Detail  
-- Messages / Inbox  
-- Contact  
+These wireframes cover the core user journeys:
 
----
+- **Home / Podcast List** – card layout, search area, category filters  
+- **Registration / Login** – simple input flow with clear labels  
+- **Podcast Detail** – image, description, comments section and action buttons  
+- **Expert Create / Expert Detail** – fields for bio, links, categories and profile image  
+- **Messages / Inbox** – two-column chat layout with thread list + active conversation  
+- **Contact Page** – form structure and supporting content  
+
+These wireframes guided the structure, spacing, and interactive elements now present in the final React UI and directly support LO2 (design choices) and LO4 (frontend behaviour).
+
 
 ## 📞 Contact
 
@@ -754,3 +1193,10 @@ Cloudinary
 Bootstrap
 Code Institute (project structure & assessment style)
 All testers and contributors who helped improve the platform
+
+## 🧩 Conclusion
+
+CONNECT – Find Experts for Podcasts is a fully implemented, full-stack web platform combining a modern React frontend with a secure Django REST API backend. The application delivers complete CRUD functionality across podcasts, experts, comments, messages and profiles, while providing a smooth and interactive user experience supported by real-time updates, validation, and responsive design.
+
+The project demonstrates strong front-end engineering, robust API integration, and a production-grade deployment pipeline using Heroku, Cloudinary and WhiteNoise.  
+Together, these components form a complete end-to-end solution that fulfils all core learning outcomes and reflects industry-standard development practices.
