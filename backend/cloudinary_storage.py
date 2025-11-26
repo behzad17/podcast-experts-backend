@@ -67,28 +67,34 @@ class CustomCloudinaryStorage(Storage):
             unique_filename=True,  # Ensure unique filenames to avoid conflicts
         )
         
-        # Return the public_id that Cloudinary actually used (from result)
-        # This ensures we store the correct path that matches what Cloudinary has
+        # Extract the public_id and secure_url from Cloudinary's response
         stored_public_id = result.get('public_id', public_id)
         secure_url = result.get('secure_url', '')
-        print(f"✅ Cloudinary upload successful:")
+        
+        # Debug logging
+        print("✅ Cloudinary upload successful:")
         print(f"   - Input name: {name}")
         print(f"   - Public ID: {stored_public_id}")
         print(f"   - Secure URL: {secure_url}")
-        return stored_public_id
+        
+        # For this project, we store the full secure_url in the DB for simplicity and reliability.
+        # This ensures the URL always works without needing to reconstruct it from public_id.
+        # If secure_url is not available, fall back to public_id (for legacy compatibility).
+        return secure_url or stored_public_id
     
     def url(self, name):
         """Get the URL for a file"""
         if not name:
             return ''
         
-        # Check if it's already a Cloudinary URL
-        if name.startswith('http'):
+        # If name is already a full URL (new uploads store secure_url), return it as-is
+        if name.startswith('http://') or name.startswith('https://'):
             return name
         
-        # Try to construct Cloudinary URL via SDK using the stored public_id
+        # For legacy values where name is a public_id (not a full URL),
+        # construct the Cloudinary URL using the SDK
+        # Do NOT force version "v1" - let Cloudinary use the actual version
         try:
-            # The name stored in DB should be the public_id (e.g., "expert_profiles/photo.jpg")
             url, _ = cloudinary_url(name, secure=True, resource_type="image")
             if url:
                 print(f"✅ Generated Cloudinary URL: {url} from public_id: {name}")
