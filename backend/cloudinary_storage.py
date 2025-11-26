@@ -51,45 +51,59 @@ class CustomCloudinaryStorage(Storage):
     
     def _save(self, name, content):
         """Save a file to Cloudinary"""
+        # The 'name' parameter comes from the model's upload_to (e.g., "expert_profiles/photo.jpg")
+        # Use this directly as the public_id, but ensure it doesn't have leading/trailing slashes
+        public_id = name.strip('/')
+        
         # Upload to Cloudinary with public access
+        # Note: We use public_id directly, not folder parameter, to avoid duplication
         result = cloudinary.uploader.upload(
             content,
-            public_id=name,
+            public_id=public_id,
             resource_type="image",
             overwrite=True,
             invalidate=True,
             use_filename=True,
-            unique_filename=False,
-            folder="expert_profiles"
+            unique_filename=True,  # Ensure unique filenames to avoid conflicts
         )
         
-        # Return the public_id as the name
-        return name
+        # Return the public_id that Cloudinary actually used (from result)
+        # This ensures we store the correct path that matches what Cloudinary has
+        stored_public_id = result.get('public_id', public_id)
+        secure_url = result.get('secure_url', '')
+        print(f"✅ Cloudinary upload successful:")
+        print(f"   - Input name: {name}")
+        print(f"   - Public ID: {stored_public_id}")
+        print(f"   - Secure URL: {secure_url}")
+        return stored_public_id
     
     def url(self, name):
         """Get the URL for a file"""
         if not name:
             return ''
         
-        # Check if it's a Cloudinary URL
+        # Check if it's already a Cloudinary URL
         if name.startswith('http'):
             return name
         
-        # Check if it's a local file
+        # Try to construct Cloudinary URL via SDK using the stored public_id
+        try:
+            # The name stored in DB should be the public_id (e.g., "expert_profiles/photo.jpg")
+            url, _ = cloudinary_url(name, secure=True, resource_type="image")
+            if url:
+                print(f"✅ Generated Cloudinary URL: {url} from public_id: {name}")
+                return url
+        except Exception as e:
+            print(f"⚠️ Error generating Cloudinary URL for {name}: {e}")
+        
+        # Check if it's a local file (fallback)
         local_path = os.path.join(settings.BASE_DIR, 'media', name)
         if os.path.exists(local_path):
             # Return local URL
             return f"/media/{name}"
         
-        # Try to construct Cloudinary URL via SDK
-        try:
-            url, _ = cloudinary_url(name, secure=True, resource_type="image")
-            if url:
-                return url
-        except Exception:
-            pass
-        
-        # Fallback to local URL
+        # Final fallback
+        print(f"⚠️ Could not generate URL for {name}, using fallback")
         return f"/media/{name}"
     
     def exists(self, name):

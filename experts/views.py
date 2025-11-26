@@ -162,13 +162,27 @@ class MyExpertProfileView(generics.RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         # Handle profile picture upload
         profile_picture = self.request.FILES.get('profile_picture')
+        instance = self.get_object()
+        
         if profile_picture:
-            # Delete old profile picture if it exists
-            instance = self.get_object()
+            # Log before deletion
             if instance.profile_picture:
+                print(f"🗑️ Deleting old profile picture: {instance.profile_picture.name}")
                 instance.profile_picture.delete()
+            
+            print(f"📤 Uploading new profile picture: {profile_picture.name} ({profile_picture.size} bytes)")
 
-        serializer.save(user=self.request.user)
+        # Save the instance (this will trigger the storage backend to upload to Cloudinary)
+        saved_instance = serializer.save(user=self.request.user)
+        
+        # Log after save to verify the file was saved correctly
+        if saved_instance.profile_picture:
+            print(f"✅ Profile picture saved:")
+            print(f"   - Stored name: {saved_instance.profile_picture.name}")
+            print(f"   - URL: {saved_instance.profile_picture.url}")
+            print(f"   - Display URL (from serializer): {saved_instance.profile_picture.url}")
+        else:
+            print(f"⚠️ No profile picture after save")
 
 
 class ExpertStatsView(APIView):
@@ -407,7 +421,28 @@ class ExpertProfileUpdateView(generics.UpdateAPIView):
         return ExpertProfile.objects.filter(user=self.request.user)
 
     def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+        # Handle profile picture upload
+        profile_picture = self.request.FILES.get('profile_picture')
+        instance = self.get_object()
+        
+        if profile_picture:
+            # Log before deletion
+            if instance.profile_picture:
+                print(f"🗑️ [ExpertProfileUpdateView] Deleting old profile picture: {instance.profile_picture.name}")
+                instance.profile_picture.delete()
+            
+            print(f"📤 [ExpertProfileUpdateView] Uploading new profile picture: {profile_picture.name} ({profile_picture.size} bytes)")
+
+        # Save the instance (this will trigger the storage backend to upload to Cloudinary)
+        saved_instance = serializer.save(user=self.request.user)
+        
+        # Log after save to verify the file was saved correctly
+        if saved_instance.profile_picture:
+            print(f"✅ [ExpertProfileUpdateView] Profile picture saved:")
+            print(f"   - Stored name: {saved_instance.profile_picture.name}")
+            print(f"   - URL: {saved_instance.profile_picture.url}")
+        else:
+            print(f"⚠️ [ExpertProfileUpdateView] No profile picture after save")
 
 
 class ExpertCategoryViewSet(viewsets.ModelViewSet):
