@@ -1,5 +1,8 @@
 # CONNECT (Find Experts For Podcasts)
 
+## Repository
+https://github.com/behzad17/podcast-experts-backend
+
 A full-stack web application for discovering, sharing, and managing contact between podcasters and experts. The platform provides a convenient and reliable way for experts and specialists to connect with podcasters and content creators.
 
 - **Backend:** Django + Django REST Framework  
@@ -80,7 +83,7 @@ This combination of technologies results in an end-to-end, production-style appl
 - Provide a reliable space for direct communication through a built-in messaging system.
 
 
-## 👥 User Stories
+##  User Stories
 
 The following user stories define the core functionality of the CONNECT platform.  
 They are grouped by user type for clarity and follow the standard format:  
@@ -88,7 +91,7 @@ They are grouped by user type for clarity and follow the standard format:
 
 ---
 
-### 🔹 Visitor (Unauthenticated User)
+###  Visitor (Unauthenticated User)
 - As a visitor, I want to browse podcasts so that I can discover interesting content.  
 - As a visitor, I want to view expert profiles so that I can learn about their background and expertise.  
 - As a visitor, I want to view podcast details so that I can understand the content before registering.
@@ -130,7 +133,7 @@ They are grouped by user type for clarity and follow the standard format:
 These user stories form the basis of the platform’s features and guided the design, development, and testing of the CONNECT application.
 
 
-## 🗺 Frontend Pages Overview
+##  Frontend Pages Overview
 
 The React frontend consists of several pages and components that work together to provide a smooth, interactive experience for both visitors and authenticated users. Each page communicates with the Django REST API via Axios and updates the UI using React state.
 
@@ -294,23 +297,34 @@ These decisions directly address previous feedback about UX clarity and user fee
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
+
+### Website in Devices (Responsive Overview)
+![Website in Devices](docs/screenshots/website_in_devices.jpg)  
+Shows the CONNECT interface displayed on desktop, tablet and mobile devices.
+
 
 ### Home Page
-![Home Page](screenshots/homepage.png)  
+![Home Page](docs/screenshots/homepage.png)  
 Shows the main podcasts list with category filters, search, and responsive card layout.
 
 ### Podcast Detail
-![Podcast Detail](screenshots/podcast_detail.png)  
+![Podcast Detail](docs/screenshots/podcast_detail.png)  
 Displays a single podcast with comments, likes, and CRUD operations for comments (edit/delete for the owner).
 
+### Desktop – Expert Detail
+![Expert Detail](docs/screenshots/expert_detail.png)
+
 ### Admin Panel
-![Admin Panel](screenshots/admin_panel.png)  
+![Admin Panel](docs/screenshots/admin_panel.png)  
 Demonstrates Django Admin managing podcasts, experts and users, and verifies that data from the React frontend is correctly stored.
 
 ### Mobile Navigation
-![Mobile Navigation](screenshots/mobile_nav.png)  
+![Mobile Navigation](docs/screenshots/mobile_nav.png)  
 Shows the responsive navbar and hamburger menu, with login-aware links and mobile-friendly navigation.
+
+### Mobile – Home Page
+![Mobile Home](docs/screenshots/mobile_home.png)
 
 
 ## 🗂 Wireframes
@@ -337,7 +351,7 @@ Each model includes its purpose, key fields and the CRUD operations supported vi
 
 ---
 
-### 🔹 1. `CustomUser`
+###  1. `CustomUser`
 The system uses a fully custom user model extending Django’s `AbstractUser`.
 
 **Purpose:**  
@@ -356,7 +370,7 @@ Authentication, user identity, and role handling (listener, podcaster, expert, a
 
 ---
 
-### 🔹 2. `PodcasterProfile`
+###  2. `PodcasterProfile`
 Linked one-to-one with `CustomUser`.
 
 **Purpose:**  
@@ -372,7 +386,7 @@ Holds extra information for users who create podcasts.
 
 ---
 
-### 🔹 3. `ExpertProfile`
+###  3. `ExpertProfile`
 One of the central models in the platform.
 
 **Purpose:**  
@@ -394,7 +408,7 @@ Allows experts to showcase their experience and be discovered by podcasters.
 
 ---
 
-### 🔹 4. `Category`
+###  4. `Category`
 A shared model used for both Podcasts and Experts.
 
 **Purpose:**  
@@ -409,7 +423,7 @@ Enables filtering and discovery by domain or topic.
 
 ---
 
-### 🔹 5. `Podcast`
+###  5. `Podcast`
 The core content model.
 
 **Purpose:**  
@@ -431,7 +445,7 @@ Represents a podcast entry created by a podcaster.
 
 ---
 
-### 🔹 6. `PodcastComment`
+###  6. `PodcastComment`
 Supports comments + threaded replies.
 
 **Purpose:**  
@@ -452,7 +466,7 @@ Enable community interaction on podcast pages.
 
 ---
 
-### 🔹 7. `PodcastLike`
+###  7. `PodcastLike`
 Tracks which user liked which podcast.
 
 **Purpose:**  
@@ -468,7 +482,7 @@ Like/unlike functionality and like counts.
 
 ---
 
-### 🔹 8. `UserMessage`
+###  8. `UserMessage`
 This model powers the messaging system.
 
 **Purpose:**  
@@ -489,20 +503,6 @@ Allow users and experts to communicate privately.
 
 ---
 
-### 🔹 9. `Bookmark`
-Allows users to bookmark podcasts and experts.
-
-**Purpose:**  
-Quick navigation back to saved content.
-
-**Fields:**  
-- User  
-- Podcast (optional)  
-- Expert (optional)
-
-**CRUD:**  
-- Create (bookmark action)  
-- Delete (remove bookmark)
 
 
 ## How the Site Works
@@ -763,17 +763,8 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 
 ---
 
-### 🔹 Bookmarks API
 
-| Method | Endpoint | Purpose |
-|--------|----------|----------|
-| POST | `/api/bookmarks/` | Bookmark a podcast or expert. |
-| DELETE | `/api/bookmarks/<id>/` | Remove a bookmark. |
-| GET | `/api/bookmarks/` | Retrieve user’s bookmarks (optional). |
-
----
-
-### 🔹 Admin API (Django Admin)
+###  Admin API (Django Admin)
 Accessible only to superusers via:
 
 Allows staff users to manage all models:  
@@ -793,9 +784,8 @@ These endpoints support the frontend’s full interactivity and directly fulfil 
 4. Click a podcast to see details, comments, and likes.  
 5. Create your own podcast (as a podcaster).  
 6. Comment on podcasts and interact with experts.  
-7. Bookmark favourite content.  
-8. Explore expert profiles and send messages.  
-9. Use the responsive navigation on all devices.  
+7. Explore expert profiles and send messages.  
+8. Use the responsive navigation on all devices.  
 
 ---
 
@@ -817,6 +807,7 @@ EMAIL_HOST_PASSWORD=your-gmail-app-password
 # Frontend URL
 FRONTEND_URL=http://localhost:3000
 
+
 # Cloudinary Configuration
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
@@ -824,7 +815,7 @@ CLOUDINARY_API_SECRET=your-api-secret
 
 
 
-## 🛠 Installation (Local Setup)
+##  Installation (Local Setup)
 
 ### Backend (Django + DRF)
 
@@ -846,7 +837,7 @@ The API will be available at:
 
 ---
 
-## 🚀 Deployment
+##  Deployment
 
 The project is deployed on **Heroku**, using:
 - Gunicorn  
@@ -855,7 +846,7 @@ The project is deployed on **Heroku**, using:
 
 ---
 
-## 🧱 Frontend Build & Deployment (React)
+##  Frontend Build & Deployment (React)
 
 ### Build React locally:
 
@@ -874,28 +865,17 @@ React generates a production-ready folder:
 
 #### **Option A — Copy React build into Django**
 
-```
 backend/
   static/
   staticfiles/
   frontend_build/   ← place the React build here
-```
+
 
 #### **Option B — Serve React build directly (recommended)**
 
 STATICFILES_DIRS = [ BASE_DIR / 'frontend/build' ]
 TEMPLATES[0]['DIRS'] = [ BASE_DIR / 'frontend/build' ]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-```
-
----
-
-### React Environment Variables (set at build time)
-
-REACT_APP_API_BASE_URL="https://your-api.com" \
-REACT_APP_WEBSITE_URL="https://your-frontend.com" \
-npm run build
-```
 
 ---
 
@@ -914,9 +894,8 @@ Heroku will:
 - Serve via WhiteNoise  
 
 Final app URL:
-```
-https://your-heroku-app.herokuapp.com/
-```
+
+https://podcast-backend-4e5439705bd3.herokuapp.com
 
 ---
 
@@ -940,7 +919,7 @@ DATABASES = {
 }
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-```
+
 
 ### Procfile
 
@@ -950,18 +929,18 @@ web: gunicorn backend.wsgi
 
 ### First-time deployment
 
-```bash
+
 heroku create your-app-name
 heroku config:set SECRET_KEY="..."
 heroku config:set DATABASE_URL="..."
 git push heroku main
-heroku run python manage.py migrate
+heroku run python3 manage.py migrate
 heroku run python manage.py createsuperuser
-```
+
 
 ---
 
-## 📦 CRUD Operations
+## CRUD Operations
 
 ### Overall CRUD Overview
 
@@ -970,36 +949,36 @@ CRUD operations are implemented through the Django REST Framework backend and co
 
 This section summarises how each part of the system supports CRUD:
 
-#### 🔹 Podcasts
+####  Podcasts
 - **Create:** Podcasters can create new podcast entries via a React form with inline validation.  
 - **Read:** All users (including visitors) can browse and filter podcasts.  
 - **Update:** Owners can edit their own podcasts through the Podcast Edit Modal (React).  
 - **Delete:** Owners can delete their own podcasts, with confirmation dialogs and toast notifications.
 
-#### 🔹 Expert Profiles
+####  Expert Profiles
 - **Create:** Experts can create a rich profile (bio, expertise, links, categories).  
 - **Read:** Public list + detailed expert page.  
 - **Update:** Profiles can be edited via the Profile Edit Modal.  
 - **Delete:** Optional – supported by the API where allowed.
 
-#### 🔹 Comments & Replies
+####  Comments & Replies
 - **Create:** Users can post comments and reply to others.  
 - **Read:** Comments load dynamically on the podcast detail page.  
 - **Update:** Users can edit their own comments.  
 - **Delete:** Users can delete their own comments.
 
-#### 🔹 Likes (Reactions)
+####  Likes (Reactions)
 - **Create:** Users can like/unlike podcasts.  
 - **Read:** Like count displayed on podcast cards and detail pages.  
 - **Delete:** Unlike = DELETE action in the API.
 
-#### 🔹 User Messaging
+####  User Messaging
 - **Create:** Users can start conversations by sending messages to experts or other users.  
 - **Read:** Inbox fetches all message threads; chat window polls for updates.  
 - **Update:** Messages are immutable (design choice).  
 - **Delete:** Not implemented (messages remain for history).
 
-#### 🔹 User Profiles
+####  User Profiles
 - **Create:** Automatically created when a new user registers.  
 - **Read:** Profile page displays username, role, and profile info.  
 - **Update:** Editable via Profile Edit Modal.  
@@ -1137,14 +1116,69 @@ These testing activities demonstrate that:
 - **LO4.5** – No major functional defects remain in the submitted version of the application.  
   
 
-# Project Management (Agile)
-This project followed an Agile-inspired workflow using GitHub:
-GitHub Issues to track features, bugs, and tasks
-MoSCoW prioritisation to separate Must/Should/Could/Won’t-have items
-Milestones to group work into meaningful releases
-Kanban Project Board to visualise progress from Backlog → To Do → In Progress → Done
-Project Board:
-GitHub Project Board
+## Project Management (Agile)
+
+This project followed an Agile-inspired workflow using GitHub Projects, GitHub Issues, and Milestones.  
+All tasks, bugs, design decisions, and development progress were tracked visually through a Kanban board.
+
+---
+
+###  Agile Documentation Links
+
+- **GitHub Project Board:**  
+https://github.com/users/behzad17/projects/6
+- **Milestones:**  
+https://github.com/behzad17/podcast-experts-backend/milestones
+- **Issues:**  
+https://github.com/behzad17/podcast-experts-backend/issues
+Additional internal Agile documentation is available in:  
+`docs/agile/`
+
+---
+
+##  Agile Board Screenshots
+
+Below are screenshots demonstrating how Agile was used throughout development.
+
+### Agile Board – Columns (ToDo → In Progress → In Review → Done)
+
+![Agile Board Full](docs/agile/agile1.png)
+
+---
+
+
+![Agile Columns](docs/agile/agile2.png)
+
+---
+
+
+![Agile Early Stage](docs/agile/agile3.png)
+
+---
+
+
+![Agile Backlog](docs/agile/agile4.png)
+
+---
+
+
+![Agile Mid Progress](docs/agile/agile5.png)
+
+---
+
+
+
+## 📌 How Agile Was Applied
+
+- **GitHub Issues** were created for each feature, bug, or task  
+- **Milestones** represented major phases (Design, Core Features, UI Improvements, Documentation, etc.)  
+- **Kanban Board** visualised progress from:  
+  **Backlog → To Do → In Progress → In Review → Done**  
+- Tasks were continuously updated and moved based on development progress  
+- All issues were assigned to milestones and linked to commits or pull requests  
+
+This structured approach ensured clear visibility of progress, traceability, and alignment with Code Institute’s Agile requirements.
+
 
 # Future Improvements
 Automated unit and integration tests
@@ -1159,31 +1193,14 @@ Expert verification / endorsement system
 
 ## 📞 Contact
 
-- **Email:** info@connect-podcast-experts.com  
+- **Email:** info@bjcode.se  
 - **Website:** https://podcast-backend-4e5439705bd3.herokuapp.com/  
-- **Location:** Stockholm, Sweden  
+- **Location:** Gotenburg , Sweden  
 - Support is also available via the Contact page.
 
 ---
 
-## 📄 License
 
-This project is licensed under the **MIT License** – see the `LICENSE` file for details.
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a feature branch:  
-   ```bash
-   git checkout -b feature/AmazingFeature
-
-3. Commit your changes:
-git commit -m "Add some AmazingFeature"
-4. Push the branch:
-git push origin feature/AmazingFeature
-5. Open a Pull Request
 
 
 # Acknowledgments
@@ -1193,10 +1210,3 @@ Cloudinary
 Bootstrap
 Code Institute (project structure & assessment style)
 All testers and contributors who helped improve the platform
-
-## 🧩 Conclusion
-
-CONNECT – Find Experts for Podcasts is a fully implemented, full-stack web platform combining a modern React frontend with a secure Django REST API backend. The application delivers complete CRUD functionality across podcasts, experts, comments, messages and profiles, while providing a smooth and interactive user experience supported by real-time updates, validation, and responsive design.
-
-The project demonstrates strong front-end engineering, robust API integration, and a production-grade deployment pipeline using Heroku, Cloudinary and WhiteNoise.  
-Together, these components form a complete end-to-end solution that fulfils all core learning outcomes and reflects industry-standard development practices.
