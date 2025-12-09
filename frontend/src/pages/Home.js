@@ -1043,6 +1043,10 @@ const Home = () => {
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
           background: white;
+          height: 450px;
+          min-height: 450px;
+          display: flex;
+          flex-direction: column;
         }
 
         .expert-card-modern:hover {
@@ -1053,10 +1057,23 @@ const Home = () => {
         .expert-card-modern.compact {
           padding: 0.75rem;
           text-align: center;
+          height: 450px;
+          min-height: 450px;
+          display: flex;
+          flex-direction: column;
         }
 
         .expert-card-modern.compact .expert-card-header {
           padding: 0.75rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .expert-card-modern.compact .expert-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .expert-card-modern.compact .expert-image-container {
@@ -1093,6 +1110,7 @@ const Home = () => {
           padding: 0.75rem;
           flex-direction: column;
           gap: 0.5rem;
+          margin-top: auto;
         }
 
         .expert-card-modern.compact .btn-primary-modern {
