@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 
 // Move Comment component outside to prevent recreation on every render
+// Custom comparison function: only re-render if props relevant to THIS comment change
 const Comment = React.memo(
   ({
     comment,
@@ -37,7 +38,7 @@ const Comment = React.memo(
     const isEditing = editingComment === comment.id;
     const isReply = depth > 0;
 
-    // Ref callback to store ref for this specific comment's textarea
+    // Stable ref callback - editTextareaRefs is a ref object (stable), included for linter
     const setTextareaRef = useCallback(
       (element) => {
         if (element) {
@@ -46,24 +47,28 @@ const Comment = React.memo(
           delete editTextareaRefs.current[comment.id];
         }
       },
-      [comment.id, editTextareaRefs]
+      [comment.id, editTextareaRefs] // editTextareaRefs is stable, but included for linter
     );
 
-    // Focus textarea only when editing starts for THIS comment
+    // Focus textarea only when editing STARTS for THIS comment (not on every render)
+    const prevIsEditingRef = useRef(false);
     useEffect(() => {
-      if (isEditing) {
+      // Only focus when transitioning from not editing to editing
+      if (isEditing && !prevIsEditingRef.current) {
         const textarea = editTextareaRefs.current[comment.id];
         if (textarea) {
-          // Use requestAnimationFrame to ensure DOM is ready
-          requestAnimationFrame(() => {
-            if (textarea && document.activeElement !== textarea) {
+          // Use setTimeout to ensure DOM is fully ready
+          const timeoutId = setTimeout(() => {
+            if (textarea) {
               const length = textarea.value.length;
               textarea.focus();
               textarea.setSelectionRange(length, length);
             }
-          });
+          }, 0);
+          return () => clearTimeout(timeoutId);
         }
       }
+      prevIsEditingRef.current = isEditing;
     }, [isEditing, comment.id, editTextareaRefs]);
 
     return (
@@ -109,10 +114,33 @@ const Comment = React.memo(
                   ref={setTextareaRef}
                   as="textarea"
                   rows={3}
-                  value={editingContent}
+                  value={editingContent || ""}
                   onChange={(e) => {
-                    // Simple state update - React handles cursor position naturally
-                    onEditChange(e.target.value);
+                    const textarea = e.target;
+                    // Preserve cursor position before state update
+                    const cursorPosition = textarea.selectionStart;
+                    const value = e.target.value;
+
+                    // Update state
+                    onEditChange(value);
+
+                    // Restore cursor position after React re-renders
+                    // Use requestAnimationFrame to ensure DOM is updated
+                    requestAnimationFrame(() => {
+                      const currentTextarea =
+                        editTextareaRefs.current[comment.id];
+                      if (currentTextarea && currentTextarea === textarea) {
+                        // Calculate new cursor position (handle text insertion/deletion)
+                        const newPosition = Math.min(
+                          cursorPosition,
+                          value.length
+                        );
+                        currentTextarea.setSelectionRange(
+                          newPosition,
+                          newPosition
+                        );
+                      }
+                    });
                   }}
                   isInvalid={!!editError}
                   className="mb-2"
@@ -192,6 +220,42 @@ const Comment = React.memo(
         </Card>
       </div>
     );
+  },
+  // Custom comparison: only re-render if props relevant to THIS specific comment change
+  (prevProps, nextProps) => {
+    // If comment data changed, re-render
+    if (
+      prevProps.comment.id !== nextProps.comment.id ||
+      prevProps.comment.content !== nextProps.comment.content ||
+      prevProps.comment.user !== nextProps.comment.user
+    ) {
+      return false; // Re-render
+    }
+
+    // If this comment is being edited, re-render when editingContent changes
+    const isEditing = nextProps.editingComment === nextProps.comment.id;
+    if (isEditing) {
+      if (
+        prevProps.editingContent !== nextProps.editingContent ||
+        prevProps.editingComment !== nextProps.editingComment ||
+        prevProps.editError !== nextProps.editError
+      ) {
+        return false; // Re-render
+      }
+    } else {
+      // If not editing, ignore editingContent changes
+      if (prevProps.editingComment !== nextProps.editingComment) {
+        return false; // Re-render (to show/hide edit form)
+      }
+    }
+
+    // If currentUser changed, re-render (affects ownership)
+    if (prevProps.currentUser?.id !== nextProps.currentUser?.id) {
+      return false; // Re-render
+    }
+
+    // Otherwise, skip re-render
+    return true; // Don't re-render
   }
 );
 
