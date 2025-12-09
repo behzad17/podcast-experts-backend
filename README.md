@@ -35,8 +35,6 @@ A full-stack web application for discovering, sharing, and managing contact betw
 - [Project Management](#project-management-agile)
 - [Future Improvements](#future-improvements)
 - [Contact](#contact)
-- [License](#license)
-- [Contributing](#contributing)
 - [Acknowledgments](#acknowledgments)
 - [Conclusion](#conclusion)
 
@@ -47,7 +45,7 @@ CONNECT is a full-stack platform designed to connect podcasters with experts and
 The system provides:
 
 - A public directory of podcasts and experts
-- Authenticated features such as comments, likes, bookmarks, messaging, and profile management
+- Authenticated features such as comments, likes, messaging, and profile management
 - Full CRUD functionality for podcasts, expert profiles, and comments
 - A modern, mobile-friendly UI with real-time updates through React state
 - Centralised media storage using Cloudinary
@@ -55,7 +53,7 @@ The system provides:
 
 This combination of technologies results in an end-to-end, production-style application that integrates user roles, media, authentication, CRUD operations, and interactive UX.
 
-## 🎯 Project Goals
+##  Project Goals
 
 ### 1. User-Focused Goals
 
@@ -108,7 +106,7 @@ They are grouped by user type for clarity and follow the standard format:
 - As a user, I want to reply to comments so that I can participate in conversations.
 - As a user, I want to edit or delete my own comments so that I can correct mistakes.
 - As a user, I want to send messages to other users or experts so that I can communicate privately.
-- As a user, I want to bookmark podcasts and experts so that I can easily return to them.
+
 
 ---
 
@@ -155,7 +153,7 @@ The React frontend consists of several pages and components that work together t
 #### **Podcast Detail**
 
 - Shows full podcast information including image, description, category and link.
-- Includes comments, replies, likes and bookmark actions.
+- Includes comments, replies, likes actions.
 - Interactive features (comment, like, reply, edit, delete) are all connected to the API.
 
 #### **Experts List**
@@ -547,6 +545,14 @@ Allow users and experts to communicate privately.
 - Update: not allowed (messages immutable)
 - Delete: not implemented (kept for history)
 
+### Bookmark Model (Feature Under Development)
+
+Within the database schema there is a `Bookmark` model intended to let users save podcast entries or expert profiles for quick access later. The table includes references to the user, the podcast and the expert, and it is designed to power bookmarking functionality across the platform.
+
+> **Current status:** In the present release this model exists in the backend but there are no API endpoints or frontend interface to use it. Bookmarking podcasts or experts is therefore **not yet available**, and this capability is earmarked for a future development phase.
+
+
+
 ## How the Site Works
 
 The CONNECT platform follows a clear end-to-end flow, combining a Django REST API backend with an interactive React frontend.
@@ -556,7 +562,7 @@ The CONNECT platform follows a clear end-to-end flow, combining a Django REST AP
 There are three main user types:
 
 - **Visitors:** Can browse podcasts and expert profiles.
-- **Registered Users:** Can comment, like, message, create podcasts (if set as podcaster), and bookmark content.
+- **Registered Users:** Can comment, like, message, create podcasts (if set as podcaster).
 - **Experts:** Can create/edit an expert profile and receive messages from podcasters and listeners.
 
 ### 2. React Frontend → Django REST API
@@ -796,7 +802,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 Accessible only to superusers via:
 
 Allows staff users to manage all models:  
-Users, Podcasts, Experts, Comments, Likes, Messages, Categories, Bookmarks.
+Users, Podcasts, Experts, Comments, Likes, Messages, Categories.
 
 These endpoints support the frontend’s full interactivity and directly fulfil LO3.7 (CRUD) and LO3.10 (API testing and verification).
 
@@ -898,7 +904,7 @@ STATICFILES_DIRS = [ BASE_DIR / 'frontend/build' ]
 TEMPLATES[0]['DIRS'] = [ BASE_DIR / 'frontend/build' ]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
-## ☁️ Deploy to Heroku
+##  Deploy to Heroku
 
 git add frontend/build
 git commit -m "Add updated React production build"
@@ -938,9 +944,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ### Procfile
 
-```
 web: gunicorn backend.wsgi
-```
+
 
 ### First-time deployment
 
@@ -951,7 +956,6 @@ git push heroku main
 heroku run python3 manage.py migrate
 heroku run python manage.py createsuperuser
 
----
 
 ## CRUD Operations
 
@@ -1066,7 +1070,7 @@ This section summarises how each part of the system supports CRUD:
 
 ![Postman – Login](docs/screenshots/postman-login.png)
 ![Postman – Login](docs/screenshots/postman-unauthorized-create.png)
-![Postman – Login](docs/screenshots/postman-register.png.png)
+![Postman – Login](docs/screenshots/postman-register.png)
 ![Postman – Login](docs/screenshots/postman-update-podcast.png)
 ![Postman – Login](docs/screenshots/postman-delete-podcast.png)
 ![Postman – Login](docs/screenshots/postman-list-podcasts.png)
@@ -1083,16 +1087,16 @@ This section summarises how each part of the system supports CRUD:
 - Comments CRUD → create/edit/delete with inline validation and toasts.
 - Messages → send via chat window and modal with success/error toasts.
 - Responsive design → navbar and hamburger menu work correctly on mobile.
-  ![UI – Podcast Create](docs/screenshots/ui-register.png)
-  ![UI – Podcast Create](docs/screenshots/ui-login-navbar.png)
-  ![UI – Podcast Create](docs/screenshots/ui-podcast-create-toast.png)
-  ![UI – Podcast Create](docs/screenshots/ui-podcast-update.png)
-  ![UI – Podcast Create](docs/screenshots/ui-podcast-delete-modal.png)
-  ![UI – Podcast Create](docs/screenshots/ui-search-filter.png)
-  ![UI – Podcast Create](docs/screenshots/ui-comments-crud.png)
-  v![UI – Podcast Create](docs/screenshots/ui-comments-crud2.png)
-  ![UI – Podcast Create](docs/screenshots/ui-message-send.png)
-  ![UI – Podcast Create](docs/screenshots/ui-expert-profile-edit.png)
+  ![UI – Podcast register](docs/screenshots/ui-register.png)
+  ![UI – Podcast login](docs/screenshots/ui-login-navbar.png)
+  ![UI – Podcast create](docs/screenshots/ui-podcast-create-toast.png)
+  ![UI – Podcast update](docs/screenshots/ui-podcast-update.png)
+  ![UI – Podcast delete](docs/screenshots/ui-podcast-delete-modal.png)
+  ![UI – Podcast filter](docs/screenshots/ui-search-filter.png)
+  ![UI – Podcast comments](docs/screenshots/ui-comments-crud.png)
+  !![UI – Podcast comments](docs/screenshots/ui-comments-crud2.png)
+  ![UI – Podcast message](docs/screenshots/ui-message-send.png)
+  ![UI – Podcast expert edit](docs/screenshots/ui-expert-profile-edit.png)
 
 ### API Testing (Postman, Browser, Django Admin)
 
@@ -1173,7 +1177,7 @@ These testing activities demonstrate that:
 ![UI – Podcast Create](docs/screenshots/admin-persistence-comments.png)
 ![UI – Podcast Create](docs/screenshots/admin-persistence-messages.png)
 
-##  Validator Testing
+## Validator Testing
 
 ### Python (PEP8) — flake8
 
@@ -1259,10 +1263,10 @@ Expert verification / endorsement system
 
 - **Email:** info@bjcode.se
 - **Website:** https://podcast-backend-4e5439705bd3.herokuapp.com/
-- **Location:** Gotenburg , Sweden
+- **Location:** Gothenburg , Sweden
 - Support is also available via the Contact page.
 
----
+
 
 # Acknowledgments
 
