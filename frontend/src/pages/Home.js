@@ -958,6 +958,7 @@ const Home = () => {
         /* Section Styling */
         .section-modern {
           margin-bottom: 5rem;
+          padding: 0 2rem;
         }
 
         .section-header {
@@ -1563,6 +1564,9 @@ const Home = () => {
         }
 
         @media (max-width: 991px) {
+          .section-modern {
+            padding: 0 1.5rem;
+          }
           .features-row-5 {
             flex-wrap: wrap;
           }
@@ -2213,6 +2217,7 @@ const Home = () => {
 
           .section-modern {
             margin-bottom: 3rem;
+            padding: 0 1rem;
           }
 
           /* Expert cards mobile adjustments */
