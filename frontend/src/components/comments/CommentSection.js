@@ -1,9 +1,201 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
 import { toast } from "react-toastify";
 import moment from "moment";
+
+// Move Comment component outside to prevent recreation on every render
+const Comment = React.memo(
+  ({
+    comment,
+    depth = 0,
+    currentUser,
+    editingComment,
+    editingContent,
+    editError,
+    editTextareaRefs,
+    onStartEditing,
+    onCancelEditing,
+    onEditSubmit,
+    onEditChange,
+    onDelete,
+    onReply,
+    MIN_COMMENT_LENGTH,
+  }) => {
+    const userId =
+      typeof comment.user === "object" ? comment.user?.id : comment.user;
+    const username =
+      typeof comment.user === "object" ? comment.user?.username : "Unknown";
+    const isOwner = currentUser?.id === userId;
+    const isEditing = editingComment === comment.id;
+    const isReply = depth > 0;
+
+    // Ref callback to store ref for this specific comment's textarea
+    const setTextareaRef = useCallback(
+      (element) => {
+        if (element) {
+          editTextareaRefs.current[comment.id] = element;
+        } else {
+          delete editTextareaRefs.current[comment.id];
+        }
+      },
+      [comment.id, editTextareaRefs]
+    );
+
+    // Focus textarea only when editing starts for THIS comment
+    useEffect(() => {
+      if (isEditing) {
+        const textarea = editTextareaRefs.current[comment.id];
+        if (textarea) {
+          // Use requestAnimationFrame to ensure DOM is ready
+          requestAnimationFrame(() => {
+            if (textarea && document.activeElement !== textarea) {
+              const length = textarea.value.length;
+              textarea.focus();
+              textarea.setSelectionRange(length, length);
+            }
+          });
+        }
+      }
+    }, [isEditing, comment.id, editTextareaRefs]);
+
+    return (
+      <div className={isReply ? "ms-4 mt-2" : "mb-3"}>
+        <Card className={isReply ? "border-start border-3" : ""}>
+          <Card.Body className={isReply ? "py-2" : ""}>
+            <div className="d-flex justify-content-between align-items-start">
+              <div>
+                <h6
+                  className="mb-1"
+                  style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
+                >
+                  {username}
+                </h6>
+                <small className="text-muted">
+                  {moment(comment.created_at).fromNow()}
+                </small>
+              </div>
+              {isOwner && (
+                <Dropdown>
+                  <Dropdown.Toggle variant="link" id={`dropdown-${comment.id}`}>
+                    <FaEllipsisV />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => onStartEditing(comment)}>
+                      <FaEdit /> Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => onDelete(comment)}>
+                      <FaTrash /> Delete
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
+            </div>
+            {isEditing ? (
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onEditSubmit(comment.id);
+                }}
+              >
+                <Form.Control
+                  ref={setTextareaRef}
+                  as="textarea"
+                  rows={3}
+                  value={editingContent}
+                  onChange={(e) => {
+                    // Simple state update - React handles cursor position naturally
+                    onEditChange(e.target.value);
+                  }}
+                  isInvalid={!!editError}
+                  className="mb-2"
+                />
+                <Form.Control.Feedback type="invalid">
+                  {editError}
+                </Form.Control.Feedback>
+                <div className="mt-2">
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="me-2"
+                    disabled={
+                      !editingContent.trim() ||
+                      editingContent.trim().length < MIN_COMMENT_LENGTH
+                    }
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      onCancelEditing();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            ) : (
+              <p
+                className="mt-2 mb-0"
+                style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
+              >
+                {comment.content}
+              </p>
+            )}
+            {!isEditing && (
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 mt-2"
+                onClick={() => {
+                  onReply(comment.id);
+                }}
+              >
+                Reply
+              </Button>
+            )}
+
+            {/* Render nested replies INSIDE the card */}
+            {comment.replies && comment.replies.length > 0 && (
+              <div className="mt-3 pt-3 border-top">
+                {comment.replies.map((reply) => (
+                  <Comment
+                    key={reply.id}
+                    comment={reply}
+                    depth={depth + 1}
+                    currentUser={currentUser}
+                    editingComment={editingComment}
+                    editingContent={editingContent}
+                    editError={editError}
+                    editTextareaRefs={editTextareaRefs}
+                    onStartEditing={onStartEditing}
+                    onCancelEditing={onCancelEditing}
+                    onEditSubmit={onEditSubmit}
+                    onEditChange={onEditChange}
+                    onDelete={onDelete}
+                    onReply={onReply}
+                    MIN_COMMENT_LENGTH={MIN_COMMENT_LENGTH}
+                  />
+                ))}
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  }
+);
+
+Comment.displayName = "Comment";
 
 const CommentSection = ({
   type,
@@ -22,7 +214,9 @@ const CommentSection = ({
   const [editingContent, setEditingContent] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const editTextareaRef = useRef(null);
+
+  // Use a ref object to store refs for each comment's textarea
+  const editTextareaRefs = useRef({});
 
   const MIN_COMMENT_LENGTH = 3;
 
@@ -44,28 +238,24 @@ const CommentSection = ({
     }
   }, [id, type]);
 
-  useEffect(() => {
-    if (!initialComments.length) {
-      fetchComments();
-    }
-  }, [fetchComments, initialComments]);
+  // Track if we've initialized from props to avoid overwriting local state
+  const hasInitializedRef = useRef(false);
 
-  // Handle cursor position when editing starts (only once when editing begins)
+  // Initialize comments from props on mount or when they change significantly
   useEffect(() => {
-    if (editingComment && editTextareaRef.current) {
-      const textarea = editTextareaRef.current;
-      // Set cursor to end of text only when editing starts
-      const length = textarea.value.length;
-      // Use setTimeout to ensure DOM is fully ready and React has finished rendering
-      const timeoutId = setTimeout(() => {
-        if (textarea && document.activeElement !== textarea) {
-          textarea.focus();
-          textarea.setSelectionRange(length, length);
-        }
-      }, 0);
-      return () => clearTimeout(timeoutId);
+    if (initialComments.length > 0 && !hasInitializedRef.current) {
+      setComments(initialComments);
+      hasInitializedRef.current = true;
     }
-  }, [editingComment]); // Only run when editingComment changes (start/stop editing)
+  }, [initialComments]);
+
+  // Only fetch if we don't have initial comments
+  useEffect(() => {
+    if (initialComments.length === 0 && !hasInitializedRef.current) {
+      fetchComments();
+      hasInitializedRef.current = true;
+    }
+  }, [fetchComments, initialComments.length]);
 
   // Helper function to update a comment in nested structure
   const updateCommentInTree = (commentsList, commentId, updater) => {
@@ -179,9 +369,21 @@ const CommentSection = ({
     }
   };
 
-  const handleEdit = async (commentId, content) => {
+  const handleEditChange = useCallback(
+    (value) => {
+      setEditingContent(value);
+      if (editError) {
+        setEditError("");
+      }
+    },
+    [editError]
+  );
+
+  const handleEditSubmit = async (commentId) => {
+    const contentToSave = editingContent;
+
     // Validate edited comment
-    const validationError = validateComment(content);
+    const validationError = validateComment(contentToSave);
     if (validationError) {
       setEditError(validationError);
       toast.error(validationError);
@@ -199,12 +401,12 @@ const CommentSection = ({
         endpoint = `/experts/profiles/${id}/edit_comment/`;
         data = {
           comment_id: commentId,
-          content: content.trim(),
+          content: contentToSave.trim(),
         };
       } else {
         endpoint = `/podcasts/${id}/comments/${commentId}/`;
         data = {
-          content: content.trim(),
+          content: contentToSave.trim(),
         };
       }
 
@@ -263,157 +465,35 @@ const CommentSection = ({
     }
   };
 
-  const startEditing = (comment) => {
+  const startEditing = useCallback((comment) => {
     setReplyTo(null); // Clear reply state when editing
     setEditingComment(comment.id);
     setEditingContent(comment.content || "");
-    // Cursor position will be handled by useEffect when editingComment changes
-  };
+  }, []);
 
-  const cancelEditing = () => {
+  const cancelEditing = useCallback(() => {
     setEditingComment(null);
     setEditingContent("");
-  };
+    setEditError("");
+  }, []);
 
-  const Comment = ({ comment, depth = 0 }) => {
-    const userId =
-      typeof comment.user === "object" ? comment.user?.id : comment.user;
-    const username =
-      typeof comment.user === "object" ? comment.user?.username : "Unknown";
-    const isOwner = currentUser?.id === userId;
-    const isEditing = editingComment === comment.id;
-    const isReply = depth > 0;
+  const handleReply = useCallback((commentId) => {
+    setReplyTo(commentId);
+    setEditingComment(null); // Clear edit state when replying
+    setEditingContent("");
+  }, []);
 
-    return (
-      <div className={isReply ? "ms-4 mt-2" : "mb-3"}>
-        <Card className={isReply ? "border-start border-3" : ""}>
-          <Card.Body className={isReply ? "py-2" : ""}>
-            <div className="d-flex justify-content-between align-items-start">
-              <div>
-                <h6
-                  className="mb-1"
-                  style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
-                >
-                  {username}
-                </h6>
-                <small className="text-muted">
-                  {moment(comment.created_at).fromNow()}
-                </small>
-              </div>
-              {isOwner && (
-                <Dropdown>
-                  <Dropdown.Toggle variant="link" id={`dropdown-${comment.id}`}>
-                    <FaEllipsisV />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => startEditing(comment)}>
-                      <FaEdit /> Edit
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => {
-                        setCommentToDelete(comment);
-                        setShowDeleteModal(true);
-                      }}
-                    >
-                      <FaTrash /> Delete
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              )}
-            </div>
-            {isEditing ? (
-              <Form
-                key={`edit-form-${comment.id}`}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleEdit(comment.id, editingContent);
-                }}
-              >
-                <Form.Control
-                  ref={editTextareaRef}
-                  as="textarea"
-                  rows={3}
-                  value={editingContent}
-                  onChange={(e) => {
-                    // Simple state update - let React handle cursor position naturally
-                    // DO NOT manipulate cursor here - React handles it automatically
-                    setEditingContent(e.target.value);
-                    // Clear error when user starts typing
-                    if (editError) {
-                      setEditError("");
-                    }
-                  }}
-                  isInvalid={!!editError}
-                  className="mb-2"
-                />
-                <Form.Control.Feedback type="invalid">
-                  {editError}
-                </Form.Control.Feedback>
-                <div className="mt-2">
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="me-2"
-                    disabled={
-                      !editingContent.trim() ||
-                      editingContent.trim().length < MIN_COMMENT_LENGTH
-                    }
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => {
-                      cancelEditing();
-                      setEditError("");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            ) : (
-              <p
-                className="mt-2 mb-0"
-                style={{ fontSize: isReply ? "0.9rem" : "1rem" }}
-              >
-                {comment.content}
-              </p>
-            )}
-            {!isEditing && (
-              <Button
-                variant="link"
-                size="sm"
-                className="p-0 mt-2"
-                onClick={() => {
-                  setReplyTo(comment.id);
-                  setEditingComment(null); // Clear edit state when replying
-                  setEditingContent("");
-                }}
-              >
-                Reply
-              </Button>
-            )}
-
-            {/* Render nested replies INSIDE the card */}
-            {comment.replies && comment.replies.length > 0 && (
-              <div className="mt-3 pt-3 border-top">
-                {comment.replies.map((reply) => (
-                  <Comment key={reply.id} comment={reply} depth={depth + 1} />
-                ))}
-              </div>
-            )}
-          </Card.Body>
-        </Card>
-      </div>
-    );
-  };
+  const handleDeleteClick = useCallback((comment) => {
+    setCommentToDelete(comment);
+    setShowDeleteModal(true);
+  }, []);
 
   // Filter to show only top-level comments (no parent)
-  const topLevelComments = comments.filter(
-    (comment) => !comment.parent || comment.parent === null
-  );
+  const topLevelComments = useMemo(() => {
+    return comments.filter(
+      (comment) => !comment.parent || comment.parent === null
+    );
+  }, [comments]);
 
   return (
     <div>
@@ -467,7 +547,23 @@ const CommentSection = ({
         <div>Loading comments...</div>
       ) : (
         topLevelComments.map((comment) => (
-          <Comment key={comment.id} comment={comment} depth={0} />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            depth={0}
+            currentUser={currentUser}
+            editingComment={editingComment}
+            editingContent={editingContent}
+            editError={editError}
+            editTextareaRefs={editTextareaRefs}
+            onStartEditing={startEditing}
+            onCancelEditing={cancelEditing}
+            onEditSubmit={handleEditSubmit}
+            onEditChange={handleEditChange}
+            onDelete={handleDeleteClick}
+            onReply={handleReply}
+            MIN_COMMENT_LENGTH={MIN_COMMENT_LENGTH}
+          />
         ))
       )}
 
