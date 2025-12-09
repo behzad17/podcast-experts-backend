@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Form, Button, Card, Alert, Modal, Dropdown } from "react-bootstrap";
 import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/axios";
@@ -56,13 +56,14 @@ const CommentSection = ({
       const textarea = editTextareaRef.current;
       // Set cursor to end of text only when editing starts
       const length = textarea.value.length;
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        if (textarea) {
-          textarea.setSelectionRange(length, length);
+      // Use setTimeout to ensure DOM is fully ready and React has finished rendering
+      const timeoutId = setTimeout(() => {
+        if (textarea && document.activeElement !== textarea) {
           textarea.focus();
+          textarea.setSelectionRange(length, length);
         }
-      });
+      }, 0);
+      return () => clearTimeout(timeoutId);
     }
   }, [editingComment]); // Only run when editingComment changes (start/stop editing)
 
@@ -335,6 +336,7 @@ const CommentSection = ({
                   value={editingContent}
                   onChange={(e) => {
                     // Simple state update - let React handle cursor position naturally
+                    // DO NOT manipulate cursor here - React handles it automatically
                     setEditingContent(e.target.value);
                     // Clear error when user starts typing
                     if (editError) {
@@ -343,7 +345,6 @@ const CommentSection = ({
                   }}
                   isInvalid={!!editError}
                   className="mb-2"
-                  autoFocus={isEditing}
                 />
                 <Form.Control.Feedback type="invalid">
                   {editError}
