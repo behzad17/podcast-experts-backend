@@ -4,17 +4,10 @@ exclude =
     .venv,
     frontend,
     */migrations/*,
-    manage.py,
-    debug_*.py,
-    test_*.py,
-    simple_cloudinary_test.py,
-    test_cloudinary_models.py,
-    test_django_cloudinary.py,
-    test_model_upload.py,
-    test_upload.py
+    manage.py
 max-line-length = 119
 extend-ignore =
-    W291,  
-    W293,  
-    W391   
+    W291,
+    W293,
+    W391
 
