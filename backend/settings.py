@@ -242,8 +242,8 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # Frontend URL for email verification - Auto-detect environment
-if (os.getenv('ENVIRONMENT') == 'production' or 
-    'heroku' in os.getenv('DATABASE_URL', '')):
+if (os.getenv('ENVIRONMENT') == 'production' or
+        'heroku' in os.getenv('DATABASE_URL', '')):
     # For Heroku deployment, use the same domain but ensure https protocol
     FRONTEND_URL = "https://podcast-backend-4e5439705bd3.herokuapp.com"
 else:

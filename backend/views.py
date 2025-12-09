@@ -142,8 +142,10 @@ This message was sent from the CONNECT platform contact form.
         
         return JsonResponse({
             'success': True,
-            'message': ('Your message has been sent successfully! '
-                       'We\'ll get back to you soon.')
+            'message': (
+                'Your message has been sent successfully! '
+                'We\'ll get back to you soon.'
+            )
         })
         
     except json.JSONDecodeError:
@@ -158,6 +160,8 @@ This message was sent from the CONNECT platform contact form.
         
         return JsonResponse({
             'success': False,
-            'error': ('An error occurred while sending your message. '
-                     'Please try again later.')
+            'error': (
+                'An error occurred while sending your message. '
+                'Please try again later.'
+            )
         }, status=500)

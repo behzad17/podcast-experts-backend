@@ -78,4 +78,4 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS('Initial data setup completed successfully')
-        ) 
+        )

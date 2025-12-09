@@ -1,9 +1,10 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Podcast, Category, PodcasterProfile
-from .serializers import PodcastSerializer, CategorySerializer, PodcasterProfileSerializer
+from .models import Podcast, PodcasterProfile
+from .serializers import PodcastSerializer
 from django.shortcuts import get_object_or_404
+
 
 class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
@@ -49,6 +50,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
             podcast.likes.create(user=user)
             return Response({'status': 'liked'})
 
+
 class ReactionView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -80,4 +82,4 @@ class ReactionView(viewsets.ModelViewSet):
         else:
             # Like
             podcast.reactions.create(user=user, reaction_type='like')
-            return Response({'status': 'liked'}) 
+            return Response({'status': 'liked'})

@@ -8,4 +8,4 @@ router.register(r'reactions', ReactionView, basename='reaction')
 
 urlpatterns = [
     path('', include(router.urls)),
-] 
+]

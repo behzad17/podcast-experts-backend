@@ -8,7 +8,6 @@ from django.conf import settings
 from django.core.files.storage import Storage
 from django.core.files.base import File
 from django.utils.deconstruct import deconstructible
-from urllib.parse import urlparse
 from cloudinary.utils import cloudinary_url
 
 
@@ -121,7 +120,7 @@ class CustomCloudinaryStorage(Storage):
         try:
             cloudinary.api.resource(name)
             return True
-        except:
+        except Exception:
             return False
     
     def size(self, name):
@@ -140,7 +139,7 @@ class CustomCloudinaryStorage(Storage):
         # Delete from Cloudinary
         try:
             cloudinary.uploader.destroy(name)
-        except:
+        except Exception:
             pass
     
     def get_accessed_time(self, name):
