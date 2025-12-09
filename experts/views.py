@@ -88,8 +88,8 @@ class ExpertProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         obj = super().get_object()
-        if (not obj.is_approved and not self.request.user.is_staff and 
-            obj.user != self.request.user):
+        if (not obj.is_approved and not self.request.user.is_staff and
+                obj.user != self.request.user):
             raise PermissionDenied("This profile is not approved yet.")
         return obj
 
@@ -178,12 +178,12 @@ class MyExpertProfileView(generics.RetrieveUpdateAPIView):
         # Log after save to verify the file was saved correctly
         # This confirms that the DB value is the secure Cloudinary URL and .url returns the same URL
         if saved_instance.profile_picture:
-            print(f"✅ [MyExpertProfileView] Profile picture saved:")
+            print("✅ [MyExpertProfileView] Profile picture saved:")
             print(f"   - DB stored value (instance.profile_picture.name): {saved_instance.profile_picture.name}")
             print(f"   - URL from .url property: {saved_instance.profile_picture.url}")
             print(f"   - Values match: {saved_instance.profile_picture.name == saved_instance.profile_picture.url}")
         else:
-            print(f"⚠️ [MyExpertProfileView] No profile picture after save")
+            print("⚠️ [MyExpertProfileView] No profile picture after save")
 
 
 class ExpertStatsView(APIView):
@@ -432,7 +432,10 @@ class ExpertProfileUpdateView(generics.UpdateAPIView):
                 print(f"🗑️ [ExpertProfileUpdateView] Deleting old profile picture: {instance.profile_picture.name}")
                 instance.profile_picture.delete()
             
-            print(f"📤 [ExpertProfileUpdateView] Uploading new profile picture: {profile_picture.name} ({profile_picture.size} bytes)")
+            print(
+                f"📤 [ExpertProfileUpdateView] Uploading new profile picture: "
+                f"{profile_picture.name} ({profile_picture.size} bytes)"
+            )
 
         # Save the instance (this will trigger the storage backend to upload to Cloudinary)
         saved_instance = serializer.save(user=self.request.user)
@@ -440,12 +443,12 @@ class ExpertProfileUpdateView(generics.UpdateAPIView):
         # Log after save to verify the file was saved correctly
         # This confirms that the DB value is the secure Cloudinary URL and .url returns the same URL
         if saved_instance.profile_picture:
-            print(f"✅ [ExpertProfileUpdateView] Profile picture saved:")
+            print("✅ [ExpertProfileUpdateView] Profile picture saved:")
             print(f"   - DB stored value (instance.profile_picture.name): {saved_instance.profile_picture.name}")
             print(f"   - URL from .url property: {saved_instance.profile_picture.url}")
             print(f"   - Values match: {saved_instance.profile_picture.name == saved_instance.profile_picture.url}")
         else:
-            print(f"⚠️ [ExpertProfileUpdateView] No profile picture after save")
+            print("⚠️ [ExpertProfileUpdateView] No profile picture after save")
 
 
 class ExpertCategoryViewSet(viewsets.ModelViewSet):

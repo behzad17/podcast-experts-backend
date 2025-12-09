@@ -7,4 +7,4 @@ router.register('', MessageViewSet, basename='message')
 
 urlpatterns = [
     path('', include(router.urls)),
-] 
+]

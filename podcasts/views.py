@@ -16,7 +16,6 @@ from .serializers import (
     CategorySerializer,
     PodcastCommentSerializer,
 )
-from rest_framework.decorators import action
 
 
 class IsPodcastOwner(permissions.BasePermission):

@@ -5,7 +5,6 @@ from cloudinary.utils import cloudinary_url
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.conf import settings
 
 User = get_user_model()
 
@@ -95,7 +94,10 @@ class ExpertProfile(models.Model):
         # Return a default placeholder image URL
         try:
             from django.conf import settings
-            default_image = getattr(settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE', 'expert_profiles/default_profile.png')
+            default_image = getattr(
+                settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE',
+                'expert_profiles/default_profile.png'
+            )
             url, _ = cloudinary_url(default_image, secure=True, resource_type="image")
             if url:
                 return url
@@ -104,13 +106,17 @@ class ExpertProfile(models.Model):
         
         # Fallback to relative path if Cloudinary config fails
         from django.conf import settings
-        default_image = getattr(settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE', 'expert_profiles/default_profile.png')
+        default_image = getattr(
+            settings, 'CLOUDINARY_DEFAULT_EXPERT_IMAGE',
+            'expert_profiles/default_profile.png'
+        )
         return f"/{default_image}"
 
     def save(self, *args, **kwargs):
         """Override save to handle any additional logic if needed"""
         # Call the parent save method
         super().save(*args, **kwargs)
+
 
 class ExpertRating(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)
@@ -120,6 +126,7 @@ class ExpertRating(models.Model):
 
     class Meta:
         unique_together = ('expert', 'user')
+
 
 class ExpertComment(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE, related_name='comments')
@@ -135,12 +142,14 @@ class ExpertComment(models.Model):
     def __str__(self):
         return f'Comment by {self.user.username} on {self.expert.name}\'s profile'
 
+
 class FavoriteExperts(models.Model):
     user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user.username} favorite {self.expert.user.username}"
+
 
 class ExpertReaction(models.Model):
     expert = models.ForeignKey(ExpertProfile, on_delete=models.CASCADE, related_name='reactions')
@@ -154,5 +163,4 @@ class ExpertReaction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} {self.reaction_type}d {self.expert.name}"
-
 

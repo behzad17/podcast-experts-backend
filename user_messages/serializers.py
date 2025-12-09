@@ -55,4 +55,4 @@ class MessageSerializer(serializers.ModelSerializer):
             sender=sender,
             receiver=receiver,
             **validated_data
-        ) 
+        )

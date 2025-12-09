@@ -1,17 +1,20 @@
 from django.contrib import admin
 from .models import Category, PodcasterProfile, Podcast, PodcastComment
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'description')
 
+
 @admin.register(PodcasterProfile)
 class PodcasterProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'created_at', 'updated_at')
     search_fields = ('user__username', 'bio')
     list_filter = ('created_at', 'updated_at')
+
 
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
@@ -36,6 +39,7 @@ class PodcastAdmin(admin.ModelAdmin):
         updated = queryset.update(is_featured=False)
         self.message_user(request, f"{updated} podcasts were unfeatured.")
     unfeature_podcasts.short_description = "Unfeature selected podcasts"
+
 
 @admin.register(PodcastComment)
 class PodcastCommentAdmin(admin.ModelAdmin):

@@ -45,4 +45,4 @@ urlpatterns = [
          name='expert-categories'),
     path('', include(router.urls)),
     path('profiles/<int:expert_pk>/', include(expert_router.urls)),
-] 
+]

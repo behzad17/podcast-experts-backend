@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import UserProfile, CustomUser
 
+
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'email_verified', 'is_staff')
@@ -9,7 +10,15 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('email',)}),
-        ('Status', {'fields': ('email_verified', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (
+            'Status',
+            {
+                'fields': (
+                    'email_verified', 'is_active', 'is_staff', 'is_superuser',
+                    'groups', 'user_permissions'
+                )
+            }
+        ),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
@@ -20,5 +29,6 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('username', 'email')
     ordering = ('username',)
+
 
 admin.site.register(UserProfile)

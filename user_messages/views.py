@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [permissions.IsAuthenticated]
