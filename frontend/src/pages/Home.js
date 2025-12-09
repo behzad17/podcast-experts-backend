@@ -619,8 +619,8 @@ const Home = () => {
             </p>
           </div>
 
-          <Row className="g-4">
-            <Col lg={4} md={6}>
+          <Row className="g-4 features-row-5">
+            <Col lg={2} md={6} className="feature-col-5">
               <div className="feature-card-modern">
                 <div className="feature-icon">
                   <FaMicrophone />
@@ -636,7 +636,7 @@ const Home = () => {
               </div>
             </Col>
 
-            <Col lg={4} md={6}>
+            <Col lg={2} md={6} className="feature-col-5">
               <div className="feature-card-modern">
                 <div className="feature-icon">
                   <FaUserTie />
@@ -652,7 +652,7 @@ const Home = () => {
               </div>
             </Col>
 
-            <Col lg={4} md={6}>
+            <Col lg={2} md={6} className="feature-col-5">
               <div className="feature-card-modern">
                 <div className="feature-icon">
                   <FaComments />
@@ -668,23 +668,7 @@ const Home = () => {
               </div>
             </Col>
 
-            <Col lg={4} md={6}>
-              <div className="feature-card-modern">
-                <div className="feature-icon">
-                  <FaBookmark />
-                </div>
-                <h3 className="feature-title">Bookmark System</h3>
-                <p className="feature-description">
-                  Save and organize your favorite experts and podcasts for easy
-                  access
-                </p>
-                <div className="feature-tags">
-                  <span className="tag">Quick Access</span>
-                </div>
-              </div>
-            </Col>
-
-            <Col lg={4} md={6}>
+            <Col lg={2} md={6} className="feature-col-5">
               <div className="feature-card-modern">
                 <div className="feature-icon">
                   <FaChartLine />
@@ -700,7 +684,7 @@ const Home = () => {
               </div>
             </Col>
 
-            <Col lg={4} md={6}>
+            <Col lg={2} md={6} className="feature-col-5">
               <div className="feature-card-modern">
                 <div className="feature-icon">
                   <FaGlobe />
@@ -1565,6 +1549,29 @@ const Home = () => {
         }
 
         /* Features Section */
+        /* Features row with 5 cards */
+        .features-row-5 {
+          display: flex;
+          flex-wrap: nowrap;
+        }
+
+        @media (min-width: 992px) {
+          .features-row-5 .feature-col-5 {
+            flex: 0 0 20%;
+            max-width: 20%;
+          }
+        }
+
+        @media (max-width: 991px) {
+          .features-row-5 {
+            flex-wrap: wrap;
+          }
+          .features-row-5 .feature-col-5 {
+            flex: 0 0 50%;
+            max-width: 50%;
+          }
+        }
+
         .feature-card-modern {
           background: white;
           border-radius: 20px;
