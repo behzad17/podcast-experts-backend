@@ -739,7 +739,7 @@ const Home = () => {
           padding: 2.7rem 0;
           color: white;
           overflow: hidden;
-          min-height: 23vh;
+          min-height: 18vh;
           display: flex;
           align-items: center;
           border-radius: 10px;
@@ -768,7 +768,7 @@ const Home = () => {
           padding: 0.75rem 1.5rem;
           border-radius: 50px;
           backdrop-filter: blur(10px);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           font-weight: 600;
           color: white;
           border: 1px solid rgba(255, 255, 255, 0.3);
@@ -779,9 +779,9 @@ const Home = () => {
         }
 
         .hero-title {
-          font-size: 3rem;
+          font-size: 2.5rem;
           font-weight: 800;
-          margin-bottom: 1.2rem;
+          margin-bottom: 1rem;
           line-height: 1.2;
           color: white;
         }
@@ -794,8 +794,8 @@ const Home = () => {
         }
 
         .hero-subtitle {
-          font-size: 1.1rem;
-          margin-bottom: 1.5rem;
+          font-size: 1rem;
+          margin-bottom: 1.2rem;
           color: rgba(255, 255, 255, 0.9);
           line-height: 1.6;
         }
@@ -2016,7 +2016,7 @@ const Home = () => {
         @media (max-width: 768px) {
           .hero-section {
             padding: 1.7rem 0;
-            min-height: 21vh;
+            min-height: 16vh;
           }
 
           .hero-text-section {
@@ -2030,7 +2030,7 @@ const Home = () => {
           }
 
           .hero-title {
-            font-size: 2.1rem;
+            font-size: 1.8rem;
           }
 
           .hero-actions {
