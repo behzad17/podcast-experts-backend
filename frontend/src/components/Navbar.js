@@ -131,8 +131,8 @@ function Navigation() {
                   My Account
                 </NavDropdown.Item>
 
-                {/* Expert Profile Section */}
-                {hasExpertProfile ? (
+                {/* Expert Profile Section - only show if user already has expert profile */}
+                {hasExpertProfile && (
                   <NavDropdown.Item
                     as={Link}
                     to={expertProfileId ? `/experts/${expertProfileId}` : "/experts"}
@@ -140,32 +140,16 @@ function Navigation() {
                   >
                     My Expert Profile
                   </NavDropdown.Item>
-                ) : (
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/experts/create"
-                    onClick={closeNavbar}
-                  >
-                    Become an Expert
-                  </NavDropdown.Item>
                 )}
 
-                {/* Podcaster Profile Section */}
-                {hasPodcasterProfile ? (
+                {/* Podcaster Profile Section - only show if user already has podcaster profile */}
+                {hasPodcasterProfile && (
                   <NavDropdown.Item
                     as={Link}
                     to="/podcaster/profile"
                     onClick={closeNavbar}
                   >
                     My Podcaster Profile
-                  </NavDropdown.Item>
-                ) : (
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/podcasts/profile/create"
-                    onClick={closeNavbar}
-                  >
-                    Become a Podcaster
                   </NavDropdown.Item>
                 )}
 
