@@ -88,7 +88,7 @@ function Navigation() {
         <BootstrapNavbar.Brand
           as={Link}
           to="/"
-          style={{ fontSize: "2rem", fontWeight: "600" }}
+          style={{ fontSize: "3rem", fontWeight: "700", color: "#fecb00" }}
         >
           CONNECT
         </BootstrapNavbar.Brand>
@@ -123,11 +123,7 @@ function Navigation() {
                 align="end"
               >
                 {/* My Account - always visible for logged-in users */}
-                <NavDropdown.Item
-                  as={Link}
-                  to="/profile"
-                  onClick={closeNavbar}
-                >
+                <NavDropdown.Item as={Link} to="/profile" onClick={closeNavbar}>
                   My Account
                 </NavDropdown.Item>
 
@@ -135,7 +131,11 @@ function Navigation() {
                 {hasExpertProfile && (
                   <NavDropdown.Item
                     as={Link}
-                    to={expertProfileId ? `/experts/${expertProfileId}` : "/experts"}
+                    to={
+                      expertProfileId
+                        ? `/experts/${expertProfileId}`
+                        : "/experts"
+                    }
                     onClick={closeNavbar}
                   >
                     My Expert Profile
