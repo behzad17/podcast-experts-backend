@@ -1567,6 +1567,10 @@ const Home = () => {
           .section-modern {
             padding: 0 1.5rem;
           }
+          .description-section,
+          .trust-section {
+            padding: 0 1.5rem !important;
+          }
           .features-row-5 {
             flex-wrap: wrap;
           }
@@ -1636,7 +1640,7 @@ const Home = () => {
         /* Trust Section */
         .trust-section {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-          padding: 5rem 0;
+          padding: 5rem 2rem;
           border-radius: 30px;
           margin: 3rem 0;
         }
@@ -1688,7 +1692,7 @@ const Home = () => {
         /* Enhanced Description Cards */
         .description-section {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-          padding: 5rem 0;
+          padding: 5rem 2rem;
           border-radius: 30px;
           margin: 3rem 0;
         }
@@ -2082,7 +2086,7 @@ const Home = () => {
           }
 
           .trust-section {
-            padding: 3rem 0;
+            padding: 3rem 1rem;
             margin: 2rem 0;
           }
 
@@ -2101,7 +2105,7 @@ const Home = () => {
           }
 
           .description-section {
-            padding: 3rem 0;
+            padding: 3rem 1rem;
             margin: 2rem 0;
           }
 
@@ -2218,6 +2222,11 @@ const Home = () => {
           .section-modern {
             margin-bottom: 3rem;
             padding: 0 1rem;
+          }
+
+          .description-section,
+          .trust-section {
+            padding: 0 1rem !important;
           }
 
           /* Expert cards mobile adjustments */
