@@ -50,16 +50,21 @@ const CommentSection = ({
     }
   }, [fetchComments, initialComments]);
 
-  // Handle cursor position when editing starts
+  // Handle cursor position when editing starts (only once when editing begins)
   useEffect(() => {
     if (editingComment && editTextareaRef.current) {
       const textarea = editTextareaRef.current;
-      // Set cursor to end of text
+      // Set cursor to end of text only when editing starts
       const length = textarea.value.length;
-      textarea.setSelectionRange(length, length);
-      textarea.focus();
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (textarea) {
+          textarea.setSelectionRange(length, length);
+          textarea.focus();
+        }
+      });
     }
-  }, [editingComment]);
+  }, [editingComment]); // Only run when editingComment changes (start/stop editing)
 
   // Helper function to update a comment in nested structure
   const updateCommentInTree = (commentsList, commentId, updater) => {
@@ -261,15 +266,7 @@ const CommentSection = ({
     setReplyTo(null); // Clear reply state when editing
     setEditingComment(comment.id);
     setEditingContent(comment.content || "");
-    // Set cursor to end after state update
-    setTimeout(() => {
-      if (editTextareaRef.current) {
-        const textarea = editTextareaRef.current;
-        const length = textarea.value.length;
-        textarea.setSelectionRange(length, length);
-        textarea.focus();
-      }
-    }, 0);
+    // Cursor position will be handled by useEffect when editingComment changes
   };
 
   const cancelEditing = () => {
@@ -333,7 +330,6 @@ const CommentSection = ({
               >
                 <Form.Control
                   ref={editTextareaRef}
-                  key={`edit-textarea-${comment.id}`}
                   as="textarea"
                   rows={3}
                   value={editingContent}
@@ -347,7 +343,7 @@ const CommentSection = ({
                   }}
                   isInvalid={!!editError}
                   className="mb-2"
-                  autoFocus
+                  autoFocus={isEditing}
                 />
                 <Form.Control.Feedback type="invalid">
                   {editError}
