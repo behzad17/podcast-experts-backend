@@ -480,7 +480,7 @@ Like/unlike functionality and like counts.
 - Create (like)  
 - Delete (unlike)
 
----
+
 
 ###  8. `UserMessage`
 This model powers the messaging system.
@@ -500,8 +500,6 @@ Allow users and experts to communicate privately.
 - Read (inbox + conversation threads)  
 - Update: not allowed (messages immutable)  
 - Delete: not implemented (kept for history)
-
----
 
 
 
@@ -562,7 +560,7 @@ Django Admin provides full backend control for staff users:
 - Buttons, forms and links follow consistent spacing and typography.
 - Toast notifications provide clear user feedback for all CRUD actions.
 
----
+
 
 This section clearly explains how users interact with the system, how the frontend and backend communicate, and how the application functions as a complete end-to-end product.
 
@@ -627,7 +625,6 @@ Across the frontend:
   - Admin users see an extra link to the **Django admin**.
 - On mobile, a **hamburger menu** is used. It auto-closes after selecting a link, improving usability on small screens.
 
----
 
 These features collectively demonstrate:
 
@@ -679,7 +676,7 @@ These patterns help keep the code DRY, readable, and maintainable.
 
 Frontend and backend are served from the same Heroku application.
 
----
+
 
 ## Admin Panel URL
 
@@ -688,14 +685,14 @@ Frontend and backend are served from the same Heroku application.
 
 Staff users only.
 
----
+
 
 ## API Endpoints
 
 Below is an overview of the main API endpoints used by the React frontend.  
 All endpoints return JSON and follow RESTful conventions, supporting full CRUD functionality across the system.
 
----
+
 
 ### 🔹 Podcasts API
 
@@ -708,7 +705,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | DELETE | `/api/podcasts/<id>/` | Delete a podcast (owner only). |
 | GET | `/api/podcasts/categories/` | Get all categories for filtering and creation forms. |
 
----
+
 
 ### 🔹 Comments API
 
@@ -719,7 +716,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | PUT | `/api/comments/<id>/` | Edit a comment (owner only). |
 | DELETE | `/api/comments/<id>/` | Delete a comment (owner only). |
 
----
+
 
 ### 🔹 Reactions (Likes) API
 
@@ -729,7 +726,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | POST | `/api/podcasts/<id>/reactions/` | Like a podcast (logged-in users). |
 | DELETE | `/api/podcasts/<id>/reactions/<reaction_id>/` | Remove like. |
 
----
+
 
 ### 🔹 Experts API
 
@@ -741,7 +738,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | PUT | `/api/experts/<id>/` | Update expert profile (owner only). |
 | DELETE | `/api/experts/<id>/` | Delete expert profile (optional). |
 
----
+
 
 ### 🔹 Authentication API
 
@@ -751,7 +748,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | POST | `/api/auth/login/` | Log in user and return JWT tokens. |
 | POST | `/api/auth/logout/` | Log out user (token invalidation in frontend). |
 
----
+
 
 ### 🔹 User Messaging API
 
@@ -761,7 +758,7 @@ All endpoints return JSON and follow RESTful conventions, supporting full CRUD f
 | GET | `/api/messages/<id>/` | Retrieve all messages in a conversation thread. |
 | POST | `/api/messages/` | Send a new message to another user. |
 
----
+
 
 
 ###  Admin API (Django Admin)
@@ -770,7 +767,7 @@ Accessible only to superusers via:
 Allows staff users to manage all models:  
 Users, Podcasts, Experts, Comments, Likes, Messages, Categories, Bookmarks.
 
----
+
 
 These endpoints support the frontend’s full interactivity and directly fulfil LO3.7 (CRUD) and LO3.10 (API testing and verification).
 
@@ -787,7 +784,7 @@ These endpoints support the frontend’s full interactivity and directly fulfil 
 7. Explore expert profiles and send messages.  
 8. Use the responsive navigation on all devices.  
 
----
+
 
 ## Environment Variables
 
@@ -835,7 +832,7 @@ python manage.py runserver
 The API will be available at:  
 **http://127.0.0.1:8000/**
 
----
+
 
 ##  Deployment
 
@@ -877,7 +874,7 @@ STATICFILES_DIRS = [ BASE_DIR / 'frontend/build' ]
 TEMPLATES[0]['DIRS'] = [ BASE_DIR / 'frontend/build' ]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
----
+
 
 ## ☁️ Deploy to Heroku
 
@@ -897,7 +894,7 @@ Final app URL:
 
 https://podcast-backend-4e5439705bd3.herokuapp.com
 
----
+
 
  ## Backend Deployment Settings
 
@@ -1046,7 +1043,13 @@ This section summarises how each part of the system supports CRUD:
 | Delete podcast | 204 | ✅ |
 | List podcasts | JSON list | ✅ |
 
----
+![Postman – Login](docs/screenshots/postman-login.png)
+![Postman – Login](docs/screenshots/postman-unauthorized-create.png)
+![Postman – Login](docs/screenshots/postman-register.png.png)
+![Postman – Login](docs/screenshots/postman-update-podcast.png)
+![Postman – Login](docs/screenshots/postman-delete-podcast.png)
+![Postman – Login](docs/screenshots/postman-list-podcasts.png)
+
 
 ### Frontend Testing
 
@@ -1060,7 +1063,17 @@ This section summarises how each part of the system supports CRUD:
 - Comments CRUD → create/edit/delete with inline validation and toasts.
 - Messages → send via chat window and modal with success/error toasts.
 - Responsive design → navbar and hamburger menu work correctly on mobile.
----
+![UI – Podcast Create](docs/screenshots/ui-register.png)
+![UI – Podcast Create](docs/screenshots/ui-login-navbar.png)
+![UI – Podcast Create](docs/screenshots/ui-podcast-create-toast.png)
+![UI – Podcast Create](docs/screenshots/ui-podcast-update.png)
+![UI – Podcast Create](docs/screenshots/ui-podcast-delete-modal.png)
+![UI – Podcast Create](docs/screenshots/ui-search-filter.png)
+![UI – Podcast Create](docs/screenshots/ui-comments-crud.png)
+v![UI – Podcast Create](docs/screenshots/ui-comments-crud2.png)
+![UI – Podcast Create](docs/screenshots/ui-message-send.png)
+![UI – Podcast Create](docs/screenshots/ui-expert-profile-edit.png)
+
 
 ### API Testing (Postman, Browser, Django Admin)
 
@@ -1096,6 +1109,8 @@ In the browser (Chrome DevTools):
 
 This ensures that the **front-end interactivity is correctly wired** to the API and that users receive clear feedback.
 
+![UI – Podcast Create](documentation/screenshots/devtools-axios-request.png)
+
 #### Django Admin
 
 Django Admin was used to:
@@ -1108,12 +1123,35 @@ This provides an additional layer of verification on top of automated API tests.
 
 ---
 
+#### Automation Status
+
+Currently, the CONNECT platform does **not** have an automated test suite (unit tests or integration tests). All testing is performed manually through:
+
+- Postman for API endpoint validation
+- Browser DevTools for frontend-backend integration verification
+- Django Admin for database persistence confirmation
+- Manual UI testing for user flows and interactions
+
+**Future improvements** include implementing automated unit and integration tests using:
+- Django's test framework for backend API testing
+- React Testing Library or Jest for frontend component testing
+- Integration tests to verify end-to-end workflows
+
+This will improve test coverage, reduce manual testing effort, and enable continuous integration workflows.
+
+---
+
 These testing activities demonstrate that:
 
 - **LO3.7** – CRUD operations on persistent data are implemented and verifiable via the API.  
 - **LO3.10** – API endpoints have been systematically tested using Postman, the browser, and Django Admin.  
 - **LO4.4** – Errors are handled gracefully and surfaced to the user through clear UI messages.  
 - **LO4.5** – No major functional defects remain in the submitted version of the application.  
+
+![UI – Podcast Create](docs/screenshots/admin-persistence-podcasts.png)
+![UI – Podcast Create](docs/screenshots/admin-persistence-experts.png)
+![UI – Podcast Create](docs/screenshots/admin-persistence-comments.png)
+![UI – Podcast Create](docs/screenshots/admin-persistence-messages.png)
   
 
 ## Project Management (Agile)
