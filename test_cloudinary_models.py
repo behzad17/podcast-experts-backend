@@ -15,13 +15,11 @@ sys.path.insert(0, str(project_root))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
+
 def test_cloudinary_in_models():
     print("🔍 Testing Cloudinary Integration in Models...")
     
     try:
-        from podcasts.models import Podcast
-        from experts.models import ExpertProfile
-        
         print("✅ Models imported successfully")
         
         # Test Cloudinary configuration
@@ -30,10 +28,11 @@ def test_cloudinary_in_models():
         api_key = os.getenv('CLOUDINARY_API_KEY')
         api_secret = os.getenv('CLOUDINARY_API_SECRET')
         
-        print(f"Cloudinary Config:")
+        print("Cloudinary Config:")
         print(f"  Cloud Name: {cloud_name}")
         print(f"  API Key: {api_key}")
-        print(f"  API Secret: {'*' * len(api_secret) if api_secret else 'NOT SET'}")
+        secret_display = '*' * len(api_secret) if api_secret else 'NOT SET'
+        print(f"  API Secret: {secret_display}")
         
         # Test if Cloudinary is configured
         if all([cloud_name, api_key, api_secret]):
@@ -58,7 +57,7 @@ def test_cloudinary_in_models():
                     folder="test_uploads"
                 )
                 
-                print(f"✅ Test upload successful!")
+                print("✅ Test upload successful!")
                 print(f"   URL: {result['url']}")
                 print(f"   Public ID: {result['public_id']}")
                 
@@ -80,6 +79,7 @@ def test_cloudinary_in_models():
         import traceback
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     print("🚀 Cloudinary Models Integration Test")

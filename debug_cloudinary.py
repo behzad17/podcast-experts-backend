@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+
 def debug_cloudinary():
     print("🔍 Debugging Cloudinary Configuration...")
     
@@ -16,7 +17,9 @@ def debug_cloudinary():
     
     print(f"Cloud Name: '{cloud_name}' (length: {len(cloud_name) if cloud_name else 0})")
     print(f"API Key: '{api_key}' (length: {len(api_key) if api_key else 0})")
-    print(f"API Secret: '{'*' * len(api_secret) if api_secret else 'NOT SET'}' (length: {len(api_secret) if api_secret else 0})")
+    secret_display = '*' * len(api_secret) if api_secret else 'NOT SET'
+    secret_length = len(api_secret) if api_secret else 0
+    print(f"API Secret: '{secret_display}' (length: {secret_length})")
     
     # Check for common issues
     if cloud_name:
@@ -57,7 +60,7 @@ def debug_cloudinary():
             print(f"URL test error: {e}")
     
     # Try different cloud name variations
-    print(f"\n🔄 Testing cloud name variations...")
+    print("\n🔄 Testing cloud name variations...")
     variations = [
         cloud_name,
         cloud_name.lower() if cloud_name else None,
@@ -70,6 +73,7 @@ def debug_cloudinary():
         if var:
             test_url = f"https://res.cloudinary.com/{var}/image/upload/v1/test"
             print(f"Testing: {var} -> {test_url}")
+
 
 if __name__ == "__main__":
     print("🚀 Cloudinary Debug Tool")

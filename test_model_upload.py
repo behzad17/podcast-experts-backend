@@ -15,12 +15,12 @@ sys.path.insert(0, str(project_root))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
+
 def test_model_cloudinary_upload():
     print("🔍 Testing Model-Level Cloudinary Integration...")
     
     try:
         from podcasts.models import Podcast, PodcasterProfile
-        from experts.models import ExpertProfile
         from django.core.files.base import ContentFile
         from users.models import CustomUser
         
@@ -96,6 +96,7 @@ def test_model_cloudinary_upload():
         import traceback
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     print("🚀 Model-Level Cloudinary Integration Test")

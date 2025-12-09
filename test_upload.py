@@ -15,6 +15,7 @@ sys.path.insert(0, str(project_root))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
+
 def test_file_upload():
     print("🔍 Testing File Upload through Django Cloudinary...")
     
@@ -22,20 +23,20 @@ def test_file_upload():
         from django.core.files.base import ContentFile
         from django.core.files.storage import default_storage
         
-        print(f"✅ Django storage imported")
+        print("✅ Django storage imported")
         print(f"Default storage: {default_storage}")
         
         # Create a test file content
         test_content = b"This is a test file for Cloudinary upload"
         test_filename = "test_upload.txt"
         
-        print(f"\n📤 Testing file upload...")
+        print("\n📤 Testing file upload...")
         print(f"File name: {test_filename}")
         print(f"Content length: {len(test_content)} bytes")
         
         # Upload the file
         file_path = default_storage.save(test_filename, ContentFile(test_content))
-        print(f"✅ File uploaded successfully!")
+        print("✅ File uploaded successfully!")
         print(f"Stored path: {file_path}")
         
         # Get the URL
@@ -51,9 +52,9 @@ def test_file_upload():
         print(f"File size: {file_size} bytes")
         
         # Clean up - delete the file
-        print(f"\n🧹 Cleaning up test file...")
+        print("\n🧹 Cleaning up test file...")
         default_storage.delete(file_path)
-        print(f"✅ Test file deleted")
+        print("✅ Test file deleted")
         
         return True
         
@@ -62,6 +63,7 @@ def test_file_upload():
         import traceback
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     print("🚀 Django File Upload Test")
