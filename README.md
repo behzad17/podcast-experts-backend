@@ -1173,6 +1173,20 @@ These testing activities demonstrate that:
 ![UI – Podcast Create](docs/screenshots/admin-persistence-comments.png)
 ![UI – Podcast Create](docs/screenshots/admin-persistence-messages.png)
 
+##  Validator Testing
+
+### Python (PEP8) — flake8
+
+The project was validated using **flake8**.
+
+No significant issues were found and the codebase meets PEP8 standards.
+
+**Screenshot:**
+
+[View flake8 validation screenshot](./docs/screenshots/flake8-validation.png)
+
+---
+
 ## Project Management (Agile)
 
 This project followed an Agile-inspired workflow using GitHub Projects, GitHub Issues, and Milestones.  
