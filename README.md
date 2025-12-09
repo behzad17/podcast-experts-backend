@@ -1183,7 +1183,7 @@ No significant issues were found and the codebase meets PEP8 standards.
 
 **Screenshot:**
 
-[View flake8 validation screenshot](./docs/screenshots/flake8-validation.png)
+![flake8 validation screenshot](./docs/screenshots/flake8-validation.png)
 
 ---
 
