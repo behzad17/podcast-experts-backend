@@ -739,7 +739,7 @@ const Home = () => {
           padding: 2.7rem 0;
           color: white;
           overflow: hidden;
-          min-height: 18vh;
+          min-height: auto; /* Match content height; avoid extra vertical space */
           display: flex;
           align-items: center;
           border-radius: 10px;
@@ -2016,7 +2016,7 @@ const Home = () => {
         @media (max-width: 768px) {
           .hero-section {
             padding: 1.7rem 0;
-            min-height: 16vh;
+            min-height: auto; /* Match content height on mobile too */
           }
 
           .hero-text-section {
